@@ -1,0 +1,72 @@
+# ---------------------------------------------------------------------------
+# Secret dan kredensial — JANGAN pernah commit
+# ---------------------------------------------------------------------------
+.env
+.env*
+!.env.example
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+credentials.json
+service-account*.json
+secrets/
+
+# ---------------------------------------------------------------------------
+# Node / npm
+# ---------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.pnp
+.pnp.*
+.yarn/cache/
+.yarn/install-state.gz
+
+# ---------------------------------------------------------------------------
+# Expo / React Native
+# ---------------------------------------------------------------------------
+.expo/
+.expo-shared/
+dist/
+web-build/
+expo-env.d.ts
+*.orig.*
+ios/
+android/
+eas-build-local-nodejs/
+
+# ---------------------------------------------------------------------------
+# Supabase
+# ---------------------------------------------------------------------------
+supabase/.temp/
+supabase/.branches/
+supabase/.env
+supabase/functions/.env
+
+# ---------------------------------------------------------------------------
+# Build, artefak, dan test
+# ---------------------------------------------------------------------------
+build/
+coverage/
+.nyc_output/
+*.apk
+*.aab
+*.ipa
+*.hbc
+
+# ---------------------------------------------------------------------------
+# Editor dan sistem operasi
+# ---------------------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
