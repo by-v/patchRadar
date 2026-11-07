@@ -61,12 +61,12 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Jika ada remote, hubungkan dan push; jika tidak, catat bahwa repo masih lokal.
 - **Memenuhi:** `NFR-03`, `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] `git status` bersih setelah commit.
-  - [ ] `git log --oneline` menampilkan satu commit.
-  - [ ] `git check-ignore -v .env` mengembalikan aturan dari `.gitignore`.
-  - [ ] Tidak ada `node_modules`, `.env`, atau file keystore di `git ls-files`.
+  - [x] `git status` bersih setelah commit.
+  - [x] `git log --oneline` menampilkan satu commit.
+  - [x] `git check-ignore -v .env` mengembalikan aturan dari `.gitignore`.
+  - [x] Tidak ada `node_modules`, `.env`, atau file keystore di `git ls-files`.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
 
 ### T-D0-02 — Siapkan akun, proyek Supabase, dan CLI
@@ -81,11 +81,11 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Catat versi CLI dan batas kuota yang terlihat di dashboard.
 - **Memenuhi:** `NFR-15`, `R-08`
 - **Kriteria selesai (AC):**
-  - [ ] `supabase projects list` menampilkan proyek.
-  - [ ] `supabase --version` tercatat.
-  - [ ] Tidak ada kredensial yang masuk ke repo.
+  - [x] `supabase projects list` menampilkan proyek.
+  - [x] `supabase --version` tercatat.
+  - [x] Tidak ada kredensial yang masuk ke repo.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
 
 ### T-D0-03 — Buat token GitHub read-only sebagai secret server
