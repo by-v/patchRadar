@@ -100,11 +100,11 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Periksa repo dengan `git grep` untuk memastikan token tidak ada.
 - **Memenuhi:** `FR-03`, `NFR-03`, `R-01` (asumsi `A-16`)
 - **Kriteria selesai (AC):**
-  - [ ] Permintaan GitHub dengan token mengembalikan 200.
-  - [ ] Secret terlihat di dashboard Supabase, bukan di repo.
-  - [ ] `git grep -i "ghp_\|github_pat_"` tidak menemukan token.
+  - [x] Permintaan GitHub dengan token mengembalikan 200.
+  - [x] Secret terlihat di dashboard Supabase, bukan di repo.
+  - [x] `git grep -i "ghp_\|github_pat_"` tidak menemukan token.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
 
 ### T-D0-04 — Siapkan akun EAS, perangkat Android, dan mode pengembang
