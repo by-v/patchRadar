@@ -119,13 +119,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Pastikan iPhone dan PC dapat saling terhubung (jaringan yang sama atau mode tunnel Expo) agar aplikasi dari `T-D0-05` dapat dibuka lewat Expo Go.
 - **Memenuhi:** `NFR-10`, `NFR-13`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] `eas whoami` menampilkan akun.
-  - [ ] Expo Go terpasang di iPhone.
-  - [ ] Aplikasi Expo dari `T-D0-05` terbuka di Expo Go dan versi iOS tercatat (diverifikasi di akhir `T-D0-05`).
+  - [x] `eas whoami` menampilkan akun.
+  - [x] Expo Go terpasang di iPhone.
+  - [x] Aplikasi Expo dari `T-D0-05` terbuka di Expo Go dan versi iOS tercatat (diverifikasi di akhir `T-D0-05`).
 - **Catatan verifikasi:** AC (3) baru dapat dicentang setelah `T-D0-05` selesai; `T-D0-04` ditutup setelah verifikasi tersebut.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `eas whoami` dan `npx expo whoami` menampilkan akun `codebyv10`.
+  - Expo Go terpasang di iPhone X (iOS 16.7.16) dan login dengan akun Expo yang sama.
+  - Aplikasi `T-D0-05` berhasil dibuka di Expo Go lewat QR `npx expo start --lan` (`exp://192.168.1.27:8081`).
+  - Model dan versi perangkat dicatat di `docs/environment.md`.
+  - “Enter URL manually” tidak tersedia di Expo Go iOS versi ini; pembukaan memakai pemindaian QR lewat aplikasi Kamera.
 
 ### T-D0-05 — Inisialisasi aplikasi Expo TypeScript dengan Expo Router
 - **Tipe:** `[AGENT]`
@@ -140,14 +145,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Catat versi Expo SDK, React Native, Node, dan iOS di `docs/`.
 - **Memenuhi:** `NFR-13` (fondasi), `FR-17` (shell navigasi)
 - **Kriteria selesai (AC):**
-  - [ ] `npm run typecheck` atau `npx tsc --noEmit` lulus.
-  - [ ] `npx expo-doctor` tidak melaporkan masalah kritis.
-  - [ ] Aplikasi Expo terbuka di Expo Go pada iPhone dan versi iOS tercatat (sekaligus memverifikasi AC (3) `T-D0-04`).
-  - [ ] Catatan versi iOS tersimpan di `docs/`.
+  - [x] `npm run typecheck` atau `npx tsc --noEmit` lulus.
+  - [x] `npx expo-doctor` tidak melaporkan masalah kritis.
+  - [x] Aplikasi Expo terbuka di Expo Go pada iPhone dan versi iOS tercatat (sekaligus memverifikasi AC (3) `T-D0-04`).
+  - [x] Catatan versi iOS tersimpan di `docs/`.
 - **Catatan verifikasi:** Verifikasi APK Android dilakukan terpisah di `T-W2-08` dan `T-W4-03` memakai emulator Android atau HP Android pinjaman.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Scaffold dibuat dengan `npx create-expo-app@latest app` (template default SDK 58, TypeScript, Expo Router).
+  - Contoh bawaan dihapus (`explore`, `hint-row`, `external-link`, `web-badge`, `collapsible`); tab awal menjadi **Pindai** (`src/app/index.tsx`) dan **Riwayat** (`src/app/riwayat.tsx`).
+  - `app.json` memakai nama `PatchRadar`, slug `patchradar`, scheme `patchradar`.
+  - `npx tsc --noEmit` lulus, `npx expo-doctor` lulus 20/20, `npx expo lint` lulus, export bundle iOS berhasil.
+  - Aplikasi dibuka di Expo Go pada iPhone X (iOS 16.7.16); versi lingkungan dicatat di `docs/environment.md`.
+  - Hook `use-color-scheme.web.ts` diperbaiki memakai `useSyncExternalStore` agar aturan lint React 19 lulus tanpa mengubah perilaku.
+  - Verifikasi APK Android tetap dilakukan terpisah pada `T-W2-08`/`T-W4-03`.
 
 ### T-D0-06 — Konfigurasi lint, TypeScript strict, dan unit test
 - **Tipe:** `[AGENT]`
@@ -1335,7 +1347,7 @@ Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requi
 | FR-14 | `T-W1-10` |
 | FR-15 | `T-W1-07`, `T-W2-04` |
 | FR-16 | `T-W2-04`, `T-W2-05` |
-| FR-17 | `T-W2-01`, `T-W2-02`, `T-W2-04`, `T-W2-09` |
+| FR-17 | `T-D0-05`, `T-W2-01`, `T-W2-02`, `T-W2-04`, `T-W2-09` |
 | FR-18 | `T-W2-05` |
 | FR-19 | `T-W1-02`, `T-W1-08`, `T-W2-05` |
 | FR-20 | `T-W2-06`, `T-W3-01`, `T-W3-02` |
