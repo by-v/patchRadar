@@ -312,12 +312,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Simpan subset fixture dan isi log.
 - **Memenuhi:** `FR-08`, `FR-09`, `R-05`
 - **Kriteria selesai (AC):**
-  - [ ] Feed berhasil diunduh dan diparse.
-  - [ ] Jumlah entri serta field wajib tercatat.
-  - [ ] Strategi `STALE` > 24 jam diputuskan berdasarkan hasil.
+  - [x] Feed berhasil diunduh dan diparse.
+  - [x] Jumlah entri serta field wajib tercatat.
+  - [x] Strategi `STALE` > 24 jam diputuskan berdasarkan hasil.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Script: `scripts/probe-kev.mjs`; fixture: `fixtures/kev/subset.json` (metadata + 25 entri perwakilan) dan `fixtures/kev/license.txt`.
+  - Feed `https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`: 200 `application/json`, **1.832.349 byte**, 562 ms, sha256 `47e0406b2be5…`, `catalogVersion=2026.11.06`, `dateReleased=2026-11-06T19:44:45Z`.
+  - `count` yang dideklarasikan 1.769 sama dengan jumlah entri nyata; lima field wajib ada di seluruh 1.769 entri; semua `cveID` valid (1.769/1.769 CVE-only).
+  - `knownRansomwareCampaignUse`: 361 `Known`, 1.408 `Unknown`; 291 vendor unik; `dateAdded` berkisar 2021-11-03 s.d. 2026-11-06.
+  - Lisensi: CC0 1.0 Universal di `https://www.cisa.gov/sites/default/files/licenses/kev/license.txt`; tautan pihak ketiga tetap mengikuti kebijakannya; logo/seal CISA/DHS tidak boleh dipakai.
+  - `STALE`: snapshot katalog, jadi umur dihitung dari `fetched_at`/`updated_at` salinan lokal. Salinan > 24 jam memicu refresh; gagal refresh dengan salinan lama → `STALE`; belum ada salinan → `kev=false` + warning parsial.
+  - Akses feed dari region Supabase belum diuji `[PERLU DIVERIFIKASI]`.
 
 ### T-W1-05 — Uji EPSS per CVE dan batch
 - **Tipe:** `[AGENT]`
