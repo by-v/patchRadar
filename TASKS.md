@@ -478,13 +478,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Tulis unit test termasuk kasus severity kosong dan alias tidak lengkap.
 - **Memenuhi:** `FR-11`, `FR-12`, `NFR-16`, `R-03`, `R-04`
 - **Kriteria selesai (AC):**
-  - [ ] Tabel pemetaan severity diuji untuk setiap level.
-  - [ ] Advisory tanpa severity menjadi `UNKNOWN`, bukan ditebak.
-  - [ ] Alias GHSA–CVE cocok pada fixture.
-  - [ ] Flag direct/transitive/dev benar pada fixture 500 paket.
+  - [x] Tabel pemetaan severity diuji untuk setiap level.
+  - [x] Advisory tanpa severity menjadi `UNKNOWN`, bukan ditebak.
+  - [x] Alias GHSA–CVE cocok pada fixture.
+  - [x] Flag direct/transitive/dev benar pada fixture 500 paket.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/functions/scan/lib/severity.ts`, `classify.ts`, `severity.test.ts`, `classify.test.ts`. Tidak ada API Node dan tidak ada panggilan jaringan; modul aman untuk Deno.
+  - Urutan severity tegas: `severity` terstruktur CVSS_V3 (skor dasar dihitung dari vektor) → `database_specific.severity` (termasuk saat hanya CVSS_V4; `MODERATE` → `MEDIUM`) → `UNKNOWN`. CVSS_V3 yang valid selalu menang atas `database_specific`. Advisory tanpa sumber severity tidak ditebak.
+  - Alias dari `id` + `aliases` dinormalisasi huruf besar, hanya pola GHSA/CVE yang diterima, lalu dideduplikasi dan diurutkan; helper `advisoryMatchesId` dipakai untuk pencocokan KEV/EPSS tanpa peka huruf besar/kecil. Advisory GHSA tanpa CVE menghasilkan daftar CVE kosong (R-04).
+  - Klasifikasi memakai flag hasil parser (`direct`/`devOnly`), bukan menebak dari nama; `classifyPackages` menambah `transitive` dan `packageTags` menghasilkan tag `langsung`/`transitif` + `dev`.
+  - Buffer test: 13 test baru. `node --test supabase/functions/scan/lib/*.test.ts` → 52 lulus. Typecheck strict modul baru lulus. `npm run lint`, `npm run typecheck`, dan `npm test -- --ci` di `app/` lulus.
 
 ### T-W1-10 — Implementasi mesin label, skor, alasan, dan pengurutan
 - **Tipe:** `[AGENT]`
