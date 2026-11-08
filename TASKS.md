@@ -504,13 +504,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Uji seluruh contoh PRD §11.5 dan kasus batas ambang.
 - **Memenuhi:** `FR-13`, `FR-14`, `NFR-16`, `R-11`
 - **Kriteria selesai (AC):**
-  - [ ] Semua skenario tabel PRD §11.5 menghasilkan label dan skor yang sama.
-  - [ ] 100% temuan pada fixture mendapat alasan tidak kosong.
-  - [ ] Urutan stabil saat skor dan EPSS sama.
-  - [ ] Unit test lulus.
+  - [x] Semua skenario tabel PRD §11.5 menghasilkan label dan skor yang sama.
+  - [x] 100% temuan pada fixture mendapat alasan tidak kosong.
+  - [x] Urutan stabil saat skor dan EPSS sama.
+  - [x] Unit test lulus.
 - **Estimasi:** 2,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/functions/scan/lib/priority-config.ts` (satu tempat untuk `EPSS_FIX_NOW_THRESHOLD=0,10`, `EPSS_SCHEDULE_THRESHOLD=0,05`, daftar severity SCHEDULE, bobot skor severity, faktor/batas EPSS, batas skor, peringkat label, dan `ENGINE_VERSION`), `label.ts`, `score.ts`, `reason.ts`, `sort.ts`, serta `label.test.ts`, `score.test.ts`, `reason.test.ts`, `sort.test.ts`.
+  - Label diterapkan berurutan: KEV → Critical + EPSS ≥ 0,10 → HIGH/CRITICAL → EPSS ≥ 0,05 → MONITOR. Ambang inklusif; EPSS `null`/tidak tersedia/tidak valid diperlakukan 0 dan dijepit ke 0–1. Skor = poin severity + `min(35, epss × 100 × 0,35)`, dibatasi 100, dibulatkan satu desimal; skor tidak menentukan label.
+  - Alasan satu kalimat Indonesia memakai templat PRD §11.6; tidak menyebut KEV saat `kev=false` dan tidak menyebut EPSS saat `epssAvailable=false`. Persen desimal memakai koma (mis. `6,2%`).
+  - Pengurutan: label → KEV → skor turun → EPSS turun → nama paket A–Z → versi → OSV id. `sortFindings` menyalin daftar sehingga masukan tidak berubah.
+  - Buffer test: 23 test baru. Skenario A–F PRD §11.5 lulus untuk label, skor, alasan, dan urutan; batas tepat 0,10/0,05 dan di bawahnya diuji; seluruh 40 advisory fixture menghasilkan alasan tidak kosong. `node --test supabase/functions/scan/lib/*.test.ts` → 75 lulus. Typecheck strict modul+test lulus. `npm run lint`, `npm run typecheck`, dan `npm test -- --ci` di `app/` lulus.
 
 ### T-W1-11 — Edge Function `scan` tahap 1: validasi, fetch, dan error terstandar
 - **Tipe:** `[AGENT]`
