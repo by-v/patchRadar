@@ -439,12 +439,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Tambahkan timeout, cache dalam request, dan pemetaan 404/429.
 - **Memenuhi:** `FR-05`, `FR-19`, `NFR-16`, `R-12`
 - **Kriteria selesai (AC):**
-  - [ ] Unit test mencakup `^`, `~`, exact, range majemuk, dan prerelease.
-  - [ ] Spesifikasi non-registry dilewati dengan warning, bukan crash.
-  - [ ] Timeout/404/429 menghasilkan hasil parsial atau error terklasifikasi.
+  - [x] Unit test mencakup `^`, `~`, exact, range majemuk, dan prerelease.
+  - [x] Spesifikasi non-registry dilewati dengan warning, bukan crash.
+  - [x] Timeout/404/429 menghasilkan hasil parsial atau error terklasifikasi.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File produksi (tanpa API Node): `supabase/functions/scan/lib/semver.ts` dan `npm-registry.ts`.
+  - Test: `supabase/functions/scan/lib/semver.test.ts` dan `npm-registry.test.ts`; dijalankan dengan `node --test supabase/functions/scan/lib/*.test.ts` (Node 24 type stripping).
+  - Hasil: **21/21 test baru lulus**; total 39/39 test edge lulus. Typecheck edge lulus dengan `tsc` strict dari `app/node_modules`.
+  - `semver.ts` mendukung perbandingan versi, `^`, `~`, exact, wildcard (`x`/`*`), range majemuk, hyphen, OR (`||`), dan aturan prerelease npm. `maxSatisfying` memilih versi tertinggi dan mengabaikan string tidak valid.
+  - `npm-registry.ts`: `NpmRegistryClient` dengan default `https://registry.npmjs.org`, timeout 5.000 ms via `AbortController`, cache packument + hasil resolusi per instance (satu klien per request scan, termasuk cache kegagalan), nama scoped di-encode (`@types/node` → `@types%2Fnode`), dan dukungan dist-tag (`latest`, `next`, dst.).
+  - Pemetaan error: 404 → `NOT_FOUND` (tidak retryable); 429 → `RATE_LIMITED` (retryable, `retryAfterMs` dari header); timeout → `TIMEOUT` (retryable); 5xx/jaringan → retryable; 4xx lain → `HTTP_ERROR` (tidak retryable); JSON/struktur rusak → `INVALID_RESPONSE`; non-registry → `NON_REGISTRY_SPEC`; tanpa versi cocok → `NO_MATCHING_VERSION`.
+  - `resolveMany` memproses dependensi langsung dengan konkurensi terbatas (default 6), mengumpulkan `resolved`, `warnings`, `failed`, dan `partial` tanpa menghentikan paket lain. Spesifikasi `git`/`file`/`workspace`/URL hanya menjadi warning.
+  - Unit test tidak melakukan panggilan jaringan nyata; `fetch` selalu disuntikkan lewat `fetchImpl`, termasuk kasus timeout dengan fetch palsu yang menghormati `AbortSignal`.
+  - Cache dan timeout berlaku per instance/request; pengukuran latensi registry nyata bukan bagian tugas ini dan tetap dicatat saat uji integrasi.
 
 ### T-W1-09 — Normalisasi severity dan klasifikasi paket
 - **Tipe:** `[AGENT]`
