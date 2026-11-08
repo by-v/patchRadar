@@ -527,16 +527,40 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   2. Ambil metadata default branch serta manifest dari GitHub dengan token server.
   3. Petakan `400/403/404/413/429/502/504` dan `requestId` sesuai PRD §9.4/§12.
   4. Kembalikan respons manifest-only yang sesuai bentuk kontrak §9.
-  5. Uji lokal dengan `supabase functions serve`.
+  5. Uji dengan fetch tiruan untuk seluruh jalur validasi/pemetaan error (Docker tidak tersedia), lalu deploy `scan --use-api` dan jalankan uji integrasi remote.
 - **Memenuhi:** `FR-01`, `FR-02`, `FR-03`, `FR-24`, `NFR-02`, `NFR-04`, `NFR-12`, `R-02`
 - **Kriteria selesai (AC):**
-  - [ ] Repo valid mengembalikan 200 dengan `scanId` dan `requestId`.
-  - [ ] URL tidak valid, host lain, path tambahan, repo privat, dan repo tidak ada menghasilkan kode yang benar.
-  - [ ] Tidak ada fetch ke host selain GitHub.
-  - [ ] Log mencatat durasi fetch tanpa data sensitif.
+  - [x] Repo valid mengembalikan 200 dengan `scanId` dan `requestId`.
+  - [x] URL tidak valid, host lain, path tambahan, repo privat, dan repo tidak ada menghasilkan kode yang benar.
+  - [x] Tidak ada fetch ke host selain GitHub.
+  - [x] Log mencatat durasi fetch tanpa data sensitif.
+  - [x] Seluruh jalur validasi dan pemetaan error diuji dengan fetch tiruan yang gagal bila host di luar allowlist.
+  - [x] Uji integrasi remote mencatat status dan `requestId` tiap kasus.
 - **Estimasi:** 2,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/functions/scan/contract.ts`, `validate.ts`, `errors.ts`, `github.ts`, `handler.ts`, `index.ts`, `validate.test.ts`, `github.test.ts`, `handler.test.ts`, dan `scripts/probe-scan.mjs`. `TASKS.md` dan `docs/due-diligence-log.md` diperbarui. `docs/PRD.md` tidak diubah.
+  - Validasi hanya menerima `https://github.com/{pemilik}/{repo}` persis; menolak skema lain, userinfo, port, host lain/IP/localhost, `/tree`/`/blob`/query/fragmen/trailing slash, encoding persen, karakter kontrol, dot, panjang berlebih, dan huruf campuran menipu (mis. `GitHub.com`).
+  - Fetch dibatasi allowlist `api.github.com` + `raw.githubusercontent.com`; redirect 3xx tidak diikuti; setiap fetch memakai `AbortController` (timeout 8 dtk); body dibatasi 5 MB dan 2.000 paket (413). Token hanya dikirim ke `api.github.com`, tidak ke `raw.githubusercontent.com`.
+  - Log hanya `requestId`, `owner`, `repo`, `status`, `githubMs`, `totalMs`; token dan isi manifest tidak pernah dicatat atau dikembalikan.
+  - Unit test: 30 test baru (total suite 105) lulus; typecheck `strict` + `noUncheckedIndexedAccess` lulus; `app` lint/typecheck/test lulus.
+  - Docker tidak tersedia: langkah 5 diganti unit test fetch tiruan + deploy `scan --use-api --yes` (JWT aktif) + `node scripts/probe-scan.mjs`. Lihat Catatan Keputusan 9 November 2026.
+  - Hasil uji integrasi remote (status/`requestId`):
+
+    | Kasus | Status | Hasil | `requestId` |
+    |---|---|---|---|
+    | `axios/axios` (lockfile v3) | 200 | `LOCKFILE`, v3, 679 paket | `req_43508a45d36e4cdb8c85804031085f25` |
+    | `lodash/lodash` (lockfile v1 → fallback) | 200 | `PACKAGE_JSON`, estimated, 27 paket | `req_e5a85122f9e14549a2e826aeada4f265` |
+    | `expressjs/express` (tanpa lockfile) | 200 | `PACKAGE_JSON`, 44 paket | `req_082f8871f6624b22b3c37507761b2bc9` |
+    | Repo tidak ada | 404 | `REPO_NOT_FOUND_OR_PRIVATE` | `req_acafc7336b9544de8202002f04e49504` |
+    | `bukan-url` | 400 | `INVALID_URL` | `req_82d6c881b43040f4a00a8bbcab0889e4` |
+    | `https://gitlab.com/lodash/lodash` | 400 | `INVALID_URL` | `req_9f9a5a76cdbf4727b6aa6b08d22f3f25` |
+    | Path tambahan | 400 | `INVALID_URL` | `req_777fe7b59b2449c59161b522caae5c78` |
+    | `https://GitHub.com/...` | 400 | `INVALID_URL` | `req_8e5ba791da39455a8100a6a359c383d7` |
+    | Tanpa JWT | 401 | ditolak gateway (JWT aktif) | — |
+
+  - 403 repo privat belum dapat dipicu remote (tidak ada repo privat yang boleh diuji); pemetaan 403 privat dan 403 rate-limit (`x-ratelimit-remaining: 0`) dicakup unit test. GitHub tidak membedakan 404 “tidak ada” dan 404 privat, sehingga memakai kode gabungan PRD.
+  - Respons memakai bentuk manifest-only: `findings: []`, `summary.affectedPackages=0`, `summary.findingCount=0`, `sourceStatus` hanya `{github:"OK"}`, `persisted:false` sampai pengayaan/penyimpanan pada tugas berikutnya.
 
 ### T-W1-12a — OSV batch, cache, dan penyusunan findings dasar
 - **Tipe:** `[AGENT]`
@@ -1515,6 +1539,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 9 November 2026 | `T-W1-05`, `T-W1-12c` | EPSS: kirim maksimal 100 CVE per request dan **selalu** sertakan parameter `cve`; tanpa parameter itu seluruh basis dikembalikan. Respons `total=0`/`data=[]` untuk permintaan tidak kosong diperlakukan sebagai **kegagalan** (warning, `partial=true`), bukan "tidak ada skor". Gunakan `limit` eksplisit atau paginasi karena default 100. CVE tanpa skor tetap `null`. Perilaku 429/5xx masih `[PERLU DIVERIFIKASI]`. | Pengamatan `T-W1-05`: 134 CVE (URL 2.047 byte) mengembalikan HTTP 200 dengan `total=0`; tanpa `cve` API mengembalikan 401.956 entri; 101 CVE hanya mengembalikan 100 data dengan `limit` default. | Ya — instruksi pengembang, 9 November 2026 |
 | 9 November 2026 | `T-W1-04` | KEV: `knownRansomwareCampaignUse` bernilai `Known`/`Unknown`, bukan boolean; hanya `Known` dipetakan ke `true`. Logo/seal CISA/DHS tidak boleh dipakai. Akses feed dari region Supabase masih `[PERLU DIVERIFIKASI]` dan diuji di `T-W1-12d`. | Pengamatan `T-W1-04`: 361 `Known` + 1.408 `Unknown`; lisensi CC0 1.0 melarang pemakaian logo/seal sebagai endorsement; akses regional belum diukur. | Ya — instruksi pengembang, 9 November 2026 |
 | 9 November 2026 | `T-W1-03`, `T-W1-12c` | OSV: batas nyata **1.000 query/request**; chunk 50 dipakai untuk membatasi ukuran respons. Detail advisory diambil terpisah karena respons batch hanya berisi `id` + `modified`. Severity fallback ke `database_specific` bila advisory hanya memuat CVSS_V4. | Pengamatan `T-W1-03`: 1.000 query → 200, 1.001 → 400 `too many queries`; respons batch tanpa severity/aliases; 5/40 advisory hanya CVSS_V4. | Ya — instruksi pengembang, 9 November 2026 |
+| 9 November 2026 | `T-W1-11` | Docker tidak tersedia, sehingga langkah 5 `[AGENT]` “uji lokal dengan `supabase functions serve`” diganti dengan (a) unit test memakai fetch tiruan untuk seluruh jalur validasi dan pemetaan error, dan (b) deploy fungsi `scan` ke proyek remote dengan `--use-api` lalu uji integrasi memakai skrip. AC tugas disesuaikan: jalur validasi/error diuji dengan fetch tiruan, dan hasil uji integrasi remote (status + `requestId`) dicatat. | Docker tidak terpasang di mesin pengembang; deploy remote berbasis API sudah terbukti pada `T-W1-07b`. | Ya — instruksi pengembang, 9 November 2026 |
 
 ---
 
