@@ -201,12 +201,16 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Tambahkan satu baris verifikasi awal ke due-diligence log.
 - **Memenuhi:** `NFR-03`, `NFR-16`
 - **Kriteria selesai (AC):**
-  - [ ] `docs/environment.md` memuat seluruh versi dan perangkat.
-  - [ ] `git grep -i "service_role\|ghp_\|github_pat_\|BEGIN PRIVATE KEY"` tidak menemukan secret.
-  - [ ] Daftar secret dan lokasinya terdokumentasi tanpa nilainya.
+  - [x] `docs/environment.md` memuat seluruh versi dan perangkat.
+  - [x] `git grep -i "service_role\|ghp_\|github_pat_\|BEGIN PRIVATE KEY"` tidak menemukan secret.
+  - [x] Daftar secret dan lokasinya terdokumentasi tanpa nilainya.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `docs/environment.md` memuat Node 24.21.0, npm 11.11.1, Expo SDK ~58.0.23, React Native 0.88.1, Supabase CLI 3.0.0, EAS CLI 27.5.0, dan perangkat iPhone X (iOS 16.7.16).
+  - Daftar secret tanpa nilai ditambahkan: `GITHUB_TOKEN` (secret Edge Function), `SUPABASE_SERVICE_ROLE_KEY` (server-side), kredensial EAS (dikelola EAS; keystore tidak di repo), serta catatan bahwa anon key bersifat publik.
+  - `git grep` dijalankan dengan dan tanpa `--untracked`; tiga kecocokan hanya berupa teks kriteria di `TASKS.md` dan komentar peran `service_role` di `supabase/config.toml`, bukan nilai secret.
+  - Baris verifikasi awal ditambahkan ke `docs/due-diligence-log.md`; pemindaian akan diulang sebelum build rilis.
 
 ---
 
@@ -1388,7 +1392,7 @@ Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requi
 | NFR-13 | `T-D0-04`, `T-D0-05`, `T-W2-01`, `T-W2-07`, `T-W2-08`, `T-W2-09`, `T-W4-03`, `T-W4-08` |
 | NFR-14 (S) | `T-W3-10` |
 | NFR-15 | `T-D0-02`, `T-W1-13`, `T-W3-04`, `T-W3-10` |
-| NFR-16 | `T-D0-06`, `T-W1-07`, `T-W1-08`, `T-W1-09`, `T-W1-10`, `T-W3-01` |
+| NFR-16 | `T-D0-06`, `T-D0-07`, `T-W1-07`, `T-W1-08`, `T-W1-09`, `T-W1-10`, `T-W3-01` |
 | NFR-17 | `T-W1-07b`, `T-W1-12d`, `T-W1-14` |
 
 ### Risiko (R)

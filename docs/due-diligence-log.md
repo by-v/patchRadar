@@ -11,3 +11,4 @@ Aturan:
 
 | Tanggal | Sumber | Yang dicek | Hasil | Keputusan |
 |---|---|---|---|---|
+| 9 November 2026 | Repo lokal (`git grep`, termasuk `--untracked`) | Pola `service_role`, `ghp_`, `github_pat_`, `BEGIN PRIVATE KEY` | Tidak ada nilai secret; hanya rujukan teks di `TASKS.md` dan komentar `supabase/config.toml` | Baseline bersih; pemindaian diulang sebelum build rilis (`T-W4-01`) |
