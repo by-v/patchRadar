@@ -390,13 +390,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Tulis unit test untuk semua jalur.
 - **Memenuhi:** `FR-04`, `FR-05`, `FR-12`, `FR-15`, `NFR-16`, `R-07`
 - **Kriteria selesai (AC):**
-  - [ ] Unit test lulus untuk v2, v3, v1, lockfile rusak, dan tanpa lockfile.
-  - [ ] Jumlah paket unik sama dengan hasil `count-packages.mjs`.
-  - [ ] Paket dev-only dan transitif memiliki flag yang benar.
-  - [ ] Input tanpa `package.json` menghasilkan error terklasifikasi, bukan exception mentah.
+  - [x] Unit test lulus untuk v2, v3, v1, lockfile rusak, dan tanpa lockfile.
+  - [x] Jumlah paket unik sama dengan hasil `count-packages.mjs`.
+  - [x] Paket dev-only dan transitif memiliki flag yang benar.
+  - [x] Input tanpa `package.json` menghasilkan error terklasifikasi, bukan exception mentah.
 - **Estimasi:** 3 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File produksi (tanpa API Node): `supabase/functions/scan/lib/lockfile.ts`, `package-json.ts`, `dedupe.ts`.
+  - Test: `supabase/functions/scan/lib/lockfile.test.ts`, `package-json.test.ts`, `dedupe.test.ts`; dijalankan dengan `node --test supabase/functions/scan/lib/*.test.ts` (Node 24 type stripping).
+  - Hasil: **18/18 test lulus**. Mencakup v3 (`small-100`, `medium-500`, `large-1500`), v2 inline, v1 fixture, lockfile rusak, tanpa lockfile, tanpa `package.json`, package.json rusak, entri link/workspace/tanpa versi, dedupe, dan fallback range.
+  - Jumlah unik parser sama dengan `count-packages.mjs`: **107 / 491 / 1.409**. Flag `direct`, `devOnly`, dan `parentPackage` diuji pada paket langsung produksi (`express`), langsung dev (`nodemon`, `webpack`, `vite`), transitif (`body-parser`), dan nested (`safe-buffer@5.1.2` → parent `basic-auth`).
+  - `devOnly` hanya dari `dev === true`; dedupe menggabungkan `direct` dengan OR dan `devOnly` dengan AND. `parentPackage` diambil dari path `node_modules/.../node_modules/...`.
+  - Fallback `package.json` hanya dependensi langsung, `estimated=true`, memakai `resolvedVersions` bila diberikan atau batas bawah range; `*`/`latest` dan spesifikasi `git`/`file`/`workspace`/URL dilewati dengan warning.
+  - Error terklasifikasi: `NO_PACKAGE_JSON`, `INVALID_PACKAGE_JSON`, `INVALID_MANIFEST_INPUT` (semua `retryable=false`), bukan exception.
+  - Typecheck edge function lulus memakai `tsc` dari `app/node_modules` dengan `--strict --noUncheckedIndexedAccess --lib ES2022,DOM --types node --allowImportingTsExtensions`.
+  - Benchmark lokal parser (median 5 run): small 0,84 ms; medium 2,42 ms; large 5,28 ms. Ini bukan CPU time Supabase; pengukuran platform tetap di `T-W1-07b`.
 
 ### T-W1-07b — Spike CPU dan wall time parser di Supabase
 - **Tipe:** `[AGENT]`
