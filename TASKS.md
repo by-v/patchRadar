@@ -258,13 +258,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Simpan fixture respons dan keputusan.
 - **Memenuhi:** `FR-05`, `FR-19`, `R-12`
 - **Kriteria selesai (AC):**
-  - [ ] Resolusi `^`, `~`, dan versi exact terdokumentasi dengan contoh nyata.
-  - [ ] Perilaku paket scoped dan prerelease tercatat.
-  - [ ] Spesifikasi non-registry diputuskan untuk dilewati.
-  - [ ] Log due diligence terisi.
+  - [x] Resolusi `^`, `~`, dan versi exact terdokumentasi dengan contoh nyata.
+  - [x] Perilaku paket scoped dan prerelease tercatat.
+  - [x] Spesifikasi non-registry diputuskan untuk dilewati.
+  - [x] Log due diligence terisi.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Script: `scripts/probe-npm.mjs` (packument ringkas `application/vnd.npm.install-v1+json`, resolver range komparator semver sederhana khusus probe).
+  - Fixture: `fixtures/npm/express.json` (290 versi, 342.878 byte), `types-node.json` (2.382 versi, 2.334.287 byte), `react.json` (3.003 versi, 2.967.104 byte), `not-found.json` (21 byte), `summary.json`. Disimpan sebagai byte respons terdekompresi (bukan pretty-print) dan dapat dibaca ulang.
+  - Ukuran/waktu: express 342.878 B/221 ms, `@types/node` 2.334.287 B/347 ms, react 2.967.104 B/129 ms; semua `content-encoding: br`.
+  - Resolusi: `express ^4.18.0→4.22.3` (15 kandidat), `~4.18.0→4.18.3` (4), `4.18.2→4.18.2`; `@types/node ^22.0.0→22.20.5` (161); `react ^19.0.0→19.3.1`; exact prerelease `19.3.0-canary-ff8f88fc-20260915` cocok.
+  - Scoped memakai `@types%2Fnode`; dist-tag `latest-4`=`4.22.3`; prerelease diabaikan pada range biasa (2.860 prerelease react) dan hanya dipakai bila range menyebutkannya.
+  - 404 `{"error":"Not found"}` 21 byte; 429 tidak terpicu selama probe `[PERLU DIVERIFIKASI]`; spesifikasi `git+`, `file:`, dan `workspace:` diputuskan dilewati dan ditandai estimasi.
 
 ### T-W1-03 — Uji OSV.dev batch, severity, dan alias
 - **Tipe:** `[AGENT]`
