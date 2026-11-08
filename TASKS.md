@@ -338,12 +338,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Simpan fixture dan keputusan fallback parsial.
 - **Memenuhi:** `FR-10`, `R-05`
 - **Kriteria selesai (AC):**
-  - [ ] Format respons dan batas query tercatat dari pengamatan.
-  - [ ] Perilaku CVE tanpa skor menghasilkan `null`, bukan angka karangan.
-  - [ ] Keputusan cache/parsial tercatat.
+  - [x] Format respons dan batas query tercatat dari pengamatan.
+  - [x] Perilaku CVE tanpa skor menghasilkan `null`, bukan angka karangan.
+  - [x] Keputusan cache/parsial tercatat.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Script: `scripts/probe-epss.mjs`; fixture: `fixtures/epss/single.json`, `batch-3.json`, `batch-limits.json`, `missing.json`, `summary.json`.
+  - Format: `epss` dan `percentile` berupa string desimal 0–1; `CVE-2021-44228` → `0.999990000` / `1.000000000` pada `2026-11-08`; body 203 byte; `Cache-Control: public, max-age=86400`.
+  - Batch: 3 CVE → `total=3`; urutan `data` tidak mengikuti urutan permintaan, jadi pemetaan harus per `cve`.
+  - Default `limit=100`: 100 CVE → 100 data; 101 CVE → `total=101` tetapi data 100; `&limit=1000` mengembalikan seluruh 101/120/133 data.
+  - Batas praktis berupa panjang URL: 133 CVE (2.032 byte) berhasil; **134 CVE (2.047 byte) mengembalikan 200 dengan `total=0`/`data=[]`**, bukan error. 150/200/250 juga `total=0`. Karena itu chunk maksimum ditetapkan 100 CVE dan hasil `total=0` untuk permintaan tidak kosong diperlakukan sebagai kegagalan, bukan "semua CVE tidak punya skor".
+  - CVE tanpa skor: `CVE-9999-99999` → 200 `total=0`; dipetakan `epss=null`, `percentile=null`, `available=false`. `?cve=` atau tanpa `cve` justru mengembalikan seluruh basis (401.956 entri) sehingga parameter `cve` wajib selalu dikirim.
+  - Cache/parsial: cache per CVE 24 jam (termasuk hasil kosong); request gagal + cache ada → pakai cache + parsial; tanpa cache → `null` + `epssAvailable=false`. 429/5xx tidak terpicu `[PERLU DIVERIFIKASI]`.
 
 ### T-W1-06 — Buat fixture lockfile ±100, ±500, dan ±1.500 paket
 - **Tipe:** `[AGENT]`

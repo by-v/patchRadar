@@ -1,0 +1,57 @@
+{
+  "unknownCve": {
+    "cve": "CVE-9999-99999",
+    "status": 200,
+    "total": 0,
+    "dataLength": 0,
+    "record": {
+      "cve": "CVE-9999-99999",
+      "epss": null,
+      "percentile": null,
+      "date": null,
+      "available": false
+    }
+  },
+  "mixedKnownUnknown": {
+    "status": 200,
+    "total": 1,
+    "records": [
+      {
+        "cve": "CVE-2021-44228",
+        "epss": 0.99999,
+        "percentile": 1,
+        "date": "2026-11-08",
+        "available": true
+      },
+      {
+        "cve": "CVE-9999-99999",
+        "epss": null,
+        "percentile": null,
+        "date": null,
+        "available": false
+      }
+    ]
+  },
+  "malformedCve": {
+    "status": 200,
+    "total": 0,
+    "dataLength": 0,
+    "textPreview": "{\"status\":\"OK\",\"status-code\":200,\"version\":\"1.0\",\"access\":\"public\",\"total\":0,\"offset\":0,\"limit\":100,\"data\":[]}\n"
+  },
+  "emptyCveParam": {
+    "status": 200,
+    "total": 401956,
+    "dataLength": 1,
+    "limit": 1
+  },
+  "noCveParam": {
+    "status": 200,
+    "total": 401956,
+    "dataLength": 1,
+    "limit": 1
+  },
+  "invalidPath": {
+    "status": 404,
+    "textPreview": "{\"status\":\"Not Found\",\"status-code\":404,\"version\":\"1.0\",\"access\":\"private\",\"message\":\"errorNotFound\",\"data\":[]}\n"
+  }
+}

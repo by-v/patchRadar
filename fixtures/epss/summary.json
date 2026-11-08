@@ -1,0 +1,412 @@
+{
+  "probedAt": "2026-11-08T20:41:53Z",
+  "endpoint": "https://api.first.org/data/v1/epss",
+  "single": {
+    "status": 200,
+    "bytes": 203,
+    "durationMs": 164,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "content-length": "169",
+      "cache-control": "public, max-age=86400, s-maxage=86400",
+      "x-total": "1",
+      "x-access": "public, max-age=86400, s-maxage=86400"
+    },
+    "response": {
+      "status": "OK",
+      "status-code": 200,
+      "version": "1.0",
+      "access": "public",
+      "total": 1,
+      "offset": 0,
+      "limit": 100,
+      "data": [
+        {
+          "cve": "CVE-2021-44228",
+          "epss": "0.999990000",
+          "percentile": "1.000000000",
+          "date": "2026-11-08"
+        }
+      ]
+    },
+    "record": {
+      "cve": "CVE-2021-44228",
+      "epss": 0.99999,
+      "percentile": 1,
+      "date": "2026-11-08",
+      "available": true
+    }
+  },
+  "batch3": {
+    "status": 200,
+    "bytes": 388,
+    "durationMs": 32,
+    "total": 3,
+    "dataLength": 3,
+    "records": [
+      {
+        "cve": "CVE-2021-44228",
+        "epss": 0.99999,
+        "percentile": 1,
+        "date": "2026-11-08",
+        "available": true
+      },
+      {
+        "cve": "CVE-2021-45046",
+        "epss": 0.99977,
+        "percentile": 0.99979,
+        "date": "2026-11-08",
+        "available": true
+      },
+      {
+        "cve": "CVE-2020-1472",
+        "epss": 0.99389,
+        "percentile": 0.9994,
+        "date": "2026-11-08",
+        "available": true
+      }
+    ]
+  },
+  "limitTrials": [
+    {
+      "requested": 50,
+      "extraQuery": null,
+      "urlLength": 799,
+      "status": 200,
+      "total": 50,
+      "dataLength": 50,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 4772,
+      "durationMs": 34,
+      "error": null,
+      "missingFromResponse": 0
+    },
+    {
+      "requested": 100,
+      "extraQuery": null,
+      "urlLength": 1542,
+      "status": 200,
+      "total": 100,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9416,
+      "durationMs": 31,
+      "error": null,
+      "missingFromResponse": 0
+    },
+    {
+      "requested": 101,
+      "extraQuery": null,
+      "urlLength": 1557,
+      "status": 200,
+      "total": 101,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9417,
+      "durationMs": 27,
+      "error": null,
+      "missingFromResponse": 1
+    },
+    {
+      "requested": 120,
+      "extraQuery": null,
+      "urlLength": 1840,
+      "status": 200,
+      "total": 120,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9422,
+      "durationMs": 30,
+      "error": null,
+      "missingFromResponse": 20
+    },
+    {
+      "requested": 130,
+      "extraQuery": null,
+      "urlLength": 1988,
+      "status": 200,
+      "total": 130,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9415,
+      "durationMs": 43,
+      "error": null,
+      "missingFromResponse": 30
+    },
+    {
+      "requested": 131,
+      "extraQuery": null,
+      "urlLength": 2003,
+      "status": 200,
+      "total": 131,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9414,
+      "durationMs": 33,
+      "error": null,
+      "missingFromResponse": 31
+    },
+    {
+      "requested": 132,
+      "extraQuery": null,
+      "urlLength": 2017,
+      "status": 200,
+      "total": 132,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9414,
+      "durationMs": 35,
+      "error": null,
+      "missingFromResponse": 32
+    },
+    {
+      "requested": 133,
+      "extraQuery": null,
+      "urlLength": 2032,
+      "status": 200,
+      "total": 133,
+      "dataLength": 100,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 9413,
+      "durationMs": 40,
+      "error": null,
+      "missingFromResponse": 33
+    },
+    {
+      "requested": 134,
+      "extraQuery": null,
+      "urlLength": 2047,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 111,
+      "durationMs": 30,
+      "error": null,
+      "missingFromResponse": 134
+    },
+    {
+      "requested": 140,
+      "extraQuery": null,
+      "urlLength": 2137,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 111,
+      "durationMs": 32,
+      "error": null,
+      "missingFromResponse": 140
+    },
+    {
+      "requested": 150,
+      "extraQuery": null,
+      "urlLength": 2287,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 111,
+      "durationMs": 27,
+      "error": null,
+      "missingFromResponse": 150
+    },
+    {
+      "requested": 200,
+      "extraQuery": null,
+      "urlLength": 3022,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 111,
+      "durationMs": 26,
+      "error": null,
+      "missingFromResponse": 200
+    },
+    {
+      "requested": 250,
+      "extraQuery": null,
+      "urlLength": 3758,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 100,
+      "bytes": 111,
+      "durationMs": 27,
+      "error": null,
+      "missingFromResponse": 250
+    }
+  ],
+  "limitTrialsLargeParam": [
+    {
+      "requested": 101,
+      "extraQuery": "&limit=1000",
+      "urlLength": 1568,
+      "status": 200,
+      "total": 101,
+      "dataLength": 101,
+      "offset": 0,
+      "limit": 1000,
+      "bytes": 9510,
+      "durationMs": 26,
+      "error": null,
+      "missingFromResponse": 0
+    },
+    {
+      "requested": 120,
+      "extraQuery": "&limit=1000",
+      "urlLength": 1851,
+      "status": 200,
+      "total": 120,
+      "dataLength": 120,
+      "offset": 0,
+      "limit": 1000,
+      "bytes": 11275,
+      "durationMs": 747,
+      "error": null,
+      "missingFromResponse": 0
+    },
+    {
+      "requested": 133,
+      "extraQuery": "&limit=1000",
+      "urlLength": 2043,
+      "status": 200,
+      "total": 133,
+      "dataLength": 133,
+      "offset": 0,
+      "limit": 1000,
+      "bytes": 12481,
+      "durationMs": 757,
+      "error": null,
+      "missingFromResponse": 0
+    },
+    {
+      "requested": 134,
+      "extraQuery": "&limit=1000",
+      "urlLength": 2058,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 1000,
+      "bytes": 112,
+      "durationMs": 951,
+      "error": null,
+      "missingFromResponse": 134
+    },
+    {
+      "requested": 150,
+      "extraQuery": "&limit=1000",
+      "urlLength": 2298,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 1000,
+      "bytes": 112,
+      "durationMs": 30,
+      "error": null,
+      "missingFromResponse": 150
+    },
+    {
+      "requested": 200,
+      "extraQuery": "&limit=1000",
+      "urlLength": 3033,
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "offset": 0,
+      "limit": 1000,
+      "bytes": 112,
+      "durationMs": 27,
+      "error": null,
+      "missingFromResponse": 200
+    }
+  ],
+  "missingCases": {
+    "unknownCve": {
+      "cve": "CVE-9999-99999",
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "record": {
+        "cve": "CVE-9999-99999",
+        "epss": null,
+        "percentile": null,
+        "date": null,
+        "available": false
+      }
+    },
+    "mixedKnownUnknown": {
+      "status": 200,
+      "total": 1,
+      "records": [
+        {
+          "cve": "CVE-2021-44228",
+          "epss": 0.99999,
+          "percentile": 1,
+          "date": "2026-11-08",
+          "available": true
+        },
+        {
+          "cve": "CVE-9999-99999",
+          "epss": null,
+          "percentile": null,
+          "date": null,
+          "available": false
+        }
+      ]
+    },
+    "malformedCve": {
+      "status": 200,
+      "total": 0,
+      "dataLength": 0,
+      "textPreview": "{\"status\":\"OK\",\"status-code\":200,\"version\":\"1.0\",\"access\":\"public\",\"total\":0,\"offset\":0,\"limit\":100,\"data\":[]}\n"
+    },
+    "emptyCveParam": {
+      "status": 200,
+      "total": 401956,
+      "dataLength": 1,
+      "limit": 1
+    },
+    "noCveParam": {
+      "status": 200,
+      "total": 401956,
+      "dataLength": 1,
+      "limit": 1
+    },
+    "invalidPath": {
+      "status": 404,
+      "textPreview": "{\"status\":\"Not Found\",\"status-code\":404,\"version\":\"1.0\",\"access\":\"private\",\"message\":\"errorNotFound\",\"data\":[]}\n"
+    }
+  },
+  "outputFormat": {
+    "epssType": "string desimal 0-1 (contoh \"0.999990000\")",
+    "percentileType": "string desimal 0-1 (contoh \"1.000000000\")",
+    "date": "YYYY-MM-DD",
+    "missingRecord": "Tidak ada entri di data → epss=null, percentile=null, available=false"
+  },
+  "cacheDecision": {
+    "basis": "Cache-Control: public, max-age=86400, s-maxage=86400 pada respons nyata",
+    "ttlSeconds": 86400,
+    "policy": "Cache per CVE selama 24 jam; hasil kosong juga disimpan sebagai negatif. Jika request gagal dan cache ada, pakai nilai cache + tandai parsial; jika tidak ada cache, epss=null + epssAvailable=false."
+  },
+  "rateLimit": {
+    "status429Observed": false,
+    "note": "Tidak ada header rate-limit khusus; 429 tidak terpicu selama probe normal. Perlakukan 429/5xx sebagai error sementara dengan backoff."
+  }
+}

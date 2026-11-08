@@ -1,0 +1,36 @@
+{
+  "status": 200,
+  "bytes": 203,
+  "durationMs": 164,
+  "headers": {
+    "content-type": "application/json; charset=utf-8",
+    "content-length": "169",
+    "cache-control": "public, max-age=86400, s-maxage=86400",
+    "x-total": "1",
+    "x-access": "public, max-age=86400, s-maxage=86400"
+  },
+  "response": {
+    "status": "OK",
+    "status-code": 200,
+    "version": "1.0",
+    "access": "public",
+    "total": 1,
+    "offset": 0,
+    "limit": 100,
+    "data": [
+      {
+        "cve": "CVE-2021-44228",
+        "epss": "0.999990000",
+        "percentile": "1.000000000",
+        "date": "2026-11-08"
+      }
+    ]
+  },
+  "record": {
+    "cve": "CVE-2021-44228",
+    "epss": 0.99999,
+    "percentile": 1,
+    "date": "2026-11-08",
+    "available": true
+  }
+}
