@@ -1,0 +1,49 @@
+{
+  "capturedAt": "2026-11-08T20:09:57Z",
+  "authenticated": false,
+  "usesRestQuota": false,
+  "cases": [
+    {
+      "name": "redirect-renamed-repo-raw",
+      "url": "https://raw.githubusercontent.com/facebookincubator/create-react-app/HEAD/package.json",
+      "status": 200,
+      "location": null,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 1802,
+      "followedStatus": 200,
+      "followedFinalUrl": "https://raw.githubusercontent.com/facebookincubator/create-react-app/HEAD/package.json"
+    },
+    {
+      "name": "redirect-renamed-repo-web",
+      "url": "https://github.com/facebookincubator/create-react-app",
+      "status": 301,
+      "location": "https://github.com/react/create-react-app",
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 0,
+      "followedStatus": 200,
+      "followedFinalUrl": "https://github.com/react/create-react-app",
+      "followedContentType": "text/html; charset=utf-8",
+      "followedBytes": 364709
+    },
+    {
+      "name": "no-manifest-package-json",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/HEAD/package.json",
+      "status": 404,
+      "location": null,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 14,
+      "followedStatus": 404,
+      "followedFinalUrl": "https://raw.githubusercontent.com/torvalds/linux/HEAD/package.json"
+    },
+    {
+      "name": "no-manifest-package-lock",
+      "url": "https://raw.githubusercontent.com/torvalds/linux/HEAD/package-lock.json",
+      "status": 404,
+      "location": null,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 14,
+      "followedStatus": 404,
+      "followedFinalUrl": "https://raw.githubusercontent.com/torvalds/linux/HEAD/package-lock.json"
+    }
+  ]
+}

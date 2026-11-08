@@ -1,0 +1,67 @@
+{
+  "capturedAt": "2026-11-08T20:08:43Z",
+  "authenticated": false,
+  "start": {
+    "status": 200,
+    "rateLimit": {
+      "limit": "60",
+      "remaining": "52",
+      "used": "8",
+      "reset": "1794169780",
+      "resource": "core",
+      "retryAfter": null
+    }
+  },
+  "requestCount": 52,
+  "lastSuccessBeforeBlock": {
+    "status": 200,
+    "rateLimit": {
+      "limit": "60",
+      "remaining": "0",
+      "used": "60",
+      "reset": "1794169780",
+      "resource": "core",
+      "retryAfter": null
+    }
+  },
+  "blockedRepo": {
+    "status": 403,
+    "message": "API rate limit exceeded for <ip>. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+    "documentationUrl": "https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting",
+    "rateLimit": {
+      "limit": "60",
+      "remaining": "0",
+      "used": "60",
+      "reset": "1794169780",
+      "resource": "core",
+      "retryAfter": null
+    },
+    "bodyPreview": "{\"message\":\"API rate limit exceeded for <ip>. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting\"}\n"
+  },
+  "blockedMissingRepo": {
+    "status": 403,
+    "message": "API rate limit exceeded for <ip>. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)",
+    "rateLimit": {
+      "limit": "60",
+      "remaining": "0",
+      "used": "60",
+      "reset": "1794169780",
+      "resource": "core",
+      "retryAfter": null
+    }
+  },
+  "rawAfterBlock": {
+    "status": 200,
+    "bytes": 6662,
+    "sha256": "42d569add47da844a669326de3580616bc7ba3d745350eebb80d288d7ec9fa41",
+    "contentType": "text/plain; charset=utf-8",
+    "rateLimit": {
+      "limit": null,
+      "remaining": null,
+      "used": null,
+      "reset": null,
+      "resource": null,
+      "retryAfter": null
+    }
+  }
+}

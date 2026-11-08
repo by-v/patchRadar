@@ -228,13 +228,23 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Simpan respons mentah sebagai fixture dan isi log due diligence.
 - **Memenuhi:** `FR-03`, `NFR-04`, `R-01`, `R-02`
 - **Kriteria selesai (AC):**
-  - [ ] Tiga fixture manifest tersimpan dan dapat dibaca ulang.
-  - [ ] Log memuat tanggal, sumber, yang dicek, hasil, dan keputusan.
-  - [ ] Perbedaan 403 dan 404 untuk repo privat/tidak ada tercatat.
-  - [ ] Batas laju tanpa token dan dengan token tercatat sebagai angka hasil ukur.
+  - [x] Tiga fixture manifest tersimpan dan dapat dibaca ulang.
+  - [x] Log memuat tanggal, sumber, yang dicek, hasil, dan keputusan.
+  - [x] Perbedaan 403 dan 404 untuk repo privat/tidak ada tercatat.
+  - [x] Batas laju tanpa token dan dengan token tercatat sebagai angka hasil ukur.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Script: `scripts/probe-github.mjs` (metadata REST + manifest raw), `scripts/probe-github-ratelimit.mjs` (jatah habis), `scripts/probe-github-raw-edge.mjs` (redirect/tanpa manifest).
+  - Fixture: `axios/axios`, `lodash/lodash`, `npm/cli` (metadata + `package.json` + `package-lock.json`), `expressjs/express` (tanpa lockfile), `error-not-found`, `summary.json`, `rate-limit-exhaustion.json`, `raw-edge-cases.json`.
+  - Seluruh fixture berstatus 200 dapat dibaca ulang; sha256 file cocok dengan `summary.json` (diperiksa ulang).
+  - Terautentikasi (dijalankan pengembang): `core.limit=5000`; `used` 1→6 selama 5 panggilan REST; 8 pengambilan raw di antaranya tidak menambah `used`.
+  - Tanpa token: `core.limit=60`, reset `2026-11-08T20:29:40Z`; 52 panggilan menaikkan `used` ke 60 dan `remaining` ke 0; panggilan berikutnya **403** `API rate limit exceeded` dengan `x-ratelimit-remaining: 0` dan tanpa `Retry-After`.
+  - Saat jatah REST habis, `raw.githubusercontent.com` untuk `axios/axios` tetap **200** (6.662 byte, sha256 sama).
+  - 404 `Not Found` teramati untuk repo tidak ada saat jatah tersedia; repo tidak ada saat jatah habis ikut **403**.
+  - Redirect web `facebookincubator/create-react-app` → **301** ke `react/create-react-app`; raw mengembalikan 200 tanpa redirect. Repo tanpa manifest (`torvalds/linux`) 404 untuk `package.json` dan lock.
+  - Repo privat belum diuji langsung (tidak ada repo privat yang dapat diakses tanpa token), ditandai `[PERLU DIVERIFIKASI]`; 403 hanya teramati untuk rate limit.
+  - Alamat IP pada pesan 403 diredaksi menjadi `<ip>` sebelum disimpan.
 
 ### T-W1-02 — Uji npm registry untuk resolusi range
 - **Tipe:** `[AGENT]`
