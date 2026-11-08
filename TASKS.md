@@ -424,7 +424,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] Ada keputusan tertulis: pipeline satu fungsi cukup, atau daftar optimasi/pemecahan yang akan dipakai.
   - [x] Batas CPU platform dikutip dari dokumentasi Supabase saat ini beserta tanggal akses.
 - **Estimasi:** 1,5 jam
-- [!] Tugas selesai — menunggu keputusan pengembang: wall time sudah terukur, tetapi CPU platform tidak dapat diukur dari CLI/API pada runtime ini.
+- [x] Tugas selesai — diterima memakai batas atas wall time untuk kode sinkron (CPU time ≤ wall time); pengukuran CPU platform dipindahkan ke `T-W1-12d` dan `T-W1-14`.
 - **Catatan hasil:**
   - File: `supabase/functions/cpu-spike/index.ts` (sementara, sudah dihapus dari remote), `scripts/probe-cpu-supabase.mjs`, `docs/due-diligence-log.md`.
   - Deploy memakai `npx supabase@latest functions deploy cpu-spike --use-api --yes` pada CLI 3.0.0; Docker tidak terpasang dan tidak diperlukan karena API-based deploy. JWT verification tetap aktif (tanpa `--no-verify-jwt`); invokasi memakai anon key yang diambil CLI di dalam proses skrip dan tidak dicetak/disimpan.
@@ -436,7 +436,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - **Persentase:** wall parser 500 paket ≈0,15% dan 1.500 paket ≈0,48% dari batas CPU 2.000 ms. Ini rasio wall, bukan CPU; persentase CPU tidak dapat dihitung karena CPU platform tidak terukur. Wall klien median ≈0,09% dan ≈0,06% dari wall clock Free 150 s.
   - **Keputusan desain:** satu Edge Function `scan` cukup untuk `T-W1-11`; parser tidak perlu dioptimasi/dipecah lebih lanjut. `T-W1-12d` wajib memverifikasi CPU dashboard; bila >70% batas, pecah pengayaan per chunk atau pindahkan pekerjaan berat.
   - **Pembersihan remote:** `functions delete cpu-spike` sukses; `functions list` sesudahnya mengembalikan `{"functions":[]}`. Tidak ada migrasi, secrets, atau perubahan fungsi lain.
-  - **Alasan status `[!]`:** AC CPU time belum dapat dibuktikan dari platform; pengembang perlu memutuskan apakah bukti wall time + CPU lokal cukup, atau mengulang spike dengan akses metrik dashboard saat fungsi masih hidup.
+  - **Penerimaan dengan batas atas:** untuk kode sinkron seperti parser dan handler ini, CPU time tidak dapat melebihi wall time, sehingga wall time dipakai sebagai batas atas CPU. Pada fixture 1.409 paket: parser ≤ **12,412 ms** dan seluruh handler ≤ **212,529 ms** (≈**10,6%** dari batas 2.000 ms). Ini bukan hasil pengukuran CPU; angka CPU tidak diklaim. Pengukuran CPU platform yang sebenarnya dipindahkan ke `T-W1-12d` (log wall sinkron per tahap + pemeriksaan metrik dashboard oleh pengembang) dan `T-W1-14` (keputusan gerbang CPU).
 
 ### T-W1-08 — Implementasi resolver semver dan klien npm registry
 - **Tipe:** `[AGENT]`
@@ -610,6 +610,8 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] OSV gagal total menghasilkan 502 tanpa baris scan sukses.
   - [ ] KEV tidak tersedia menghasilkan parsial atau `STALE`, bukan crash.
   - [ ] Log memuat durasi per sumber dan CPU time.
+  - [ ] Log wall time per tahap sinkron: parse KEV, pencocokan alias, penyusunan findings, skor/label, dan serialisasi respons; jumlah wall time tahap sinkron dihitung dan dicatat sebagai batas atas CPU pipeline.
+  - [ ] `[MANUAL]` Pengembang memeriksa metrik fungsi `scan` di dashboard Supabase dan melaporkan apakah CPU time ditampilkan; hasilnya dicatat di `docs/due-diligence-log.md`.
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -631,6 +633,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] Gerbang anonymous sign-in tercatat akan diputuskan pada `T-W3-03`.
   - [ ] Target p95 dan batas atas final tertulis di `docs/week1-gate.md`.
   - [ ] CPU time < batas platform, atau mitigasi R-15 dipilih dan dicatat.
+  - [ ] Keputusan CPU memakai batas atas sinkron (jumlah wall time tahap sinkron) dan hasil metrik dashboard `T-W1-12d`; bila batas atas > 70% dari 2 s untuk fixture 500 paket, pekerjaan dipecah per chunk atau dipindahkan (R-15).
   - [ ] Tidak ada blocker tanpa rencana tindak lanjut.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
