@@ -1,0 +1,942 @@
+{
+  "probedAt": "2026-11-08T20:15:34Z",
+  "endpoint": "https://api.osv.dev/v1",
+  "batch": {
+    "status": 200,
+    "queryCount": 50,
+    "resultCount": 50,
+    "bytes": 17237,
+    "durationMs": 912,
+    "vulnsInBatchIncludeDetail": false,
+    "vulnerablePairs": 46,
+    "neutralPairs": 4,
+    "totalFindings": 239,
+    "uniqueAdvisories": 133
+  },
+  "details": {
+    "requested": 40,
+    "succeeded": 40,
+    "failures": [],
+    "advisoriesWithCveAlias": 39,
+    "ghsaWithCveAlias": 39,
+    "ghsaWithoutCveAlias": 1
+  },
+  "severityRows": [
+    {
+      "id": "GHSA-29mw-wpgm-hmr9",
+      "cveIds": [
+        "CVE-2020-28500"
+      ],
+      "ghsaIds": [
+        "GHSA-29mw-wpgm-hmr9"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssV3Score": 5.3,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.17.21"
+      ]
+    },
+    {
+      "id": "GHSA-35jh-r3h4-6jhm",
+      "cveIds": [
+        "CVE-2021-23337"
+      ],
+      "ghsaIds": [
+        "GHSA-35jh-r3h4-6jhm"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+      "cvssV3Score": 7.2,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.17.21"
+      ]
+    },
+    {
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "cveIds": [
+        "CVE-2026-4800"
+      ],
+      "ghsaIds": [
+        "GHSA-r5fr-rjxr-66jc"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssV3Score": 8.1,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.18.0"
+      ]
+    },
+    {
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "cveIds": [
+        "CVE-2025-13465"
+      ],
+      "ghsaIds": [
+        "GHSA-xxjr-mmjv-4gpg"
+      ],
+      "structuredTypes": [
+        "CVSS_V3",
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssV3Score": 6.5,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.17.23",
+        "4.18.0"
+      ]
+    },
+    {
+      "id": "GHSA-p6mc-m468-83gw",
+      "cveIds": [
+        "CVE-2020-8203"
+      ],
+      "ghsaIds": [
+        "GHSA-p6mc-m468-83gw"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H",
+      "cvssV3Score": 7.4,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.17.19",
+        "4.17.20"
+      ]
+    },
+    {
+      "id": "GHSA-xvch-5gv4-984h",
+      "cveIds": [
+        "CVE-2021-44906"
+      ],
+      "ghsaIds": [
+        "GHSA-xvch-5gv4-984h"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssV3Score": 9.8,
+      "cvssBucket": "CRITICAL",
+      "databaseSpecificSeverity": "CRITICAL",
+      "normalizedLevel": "CRITICAL",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.2.6",
+        "0.2.4"
+      ]
+    },
+    {
+      "id": "GHSA-vh95-rmgr-6w4m",
+      "cveIds": [
+        "CVE-2020-7598"
+      ],
+      "ghsaIds": [
+        "GHSA-vh95-rmgr-6w4m"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+      "cvssV3Score": 5.6,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "0.2.1",
+        "1.2.3"
+      ]
+    },
+    {
+      "id": "GHSA-3g43-6gmg-66jw",
+      "cveIds": [
+        "CVE-2026-44495"
+      ],
+      "ghsaIds": [
+        "GHSA-3g43-6gmg-66jw"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:L",
+      "cvssV3Score": 7,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.2",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-3p68-rc4w-qgx5",
+      "cveIds": [
+        "CVE-2025-62718"
+      ],
+      "ghsaIds": [
+        "GHSA-3p68-rc4w-qgx5"
+      ],
+      "structuredTypes": [
+        "CVSS_V3",
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "cvssV3Score": 4.8,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.0",
+        "0.31.0"
+      ]
+    },
+    {
+      "id": "GHSA-43fc-jf86-j433",
+      "cveIds": [
+        "CVE-2026-25639"
+      ],
+      "ghsaIds": [
+        "GHSA-43fc-jf86-j433"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssV3Score": 7.5,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.13.5",
+        "0.30.3"
+      ]
+    },
+    {
+      "id": "GHSA-5c9x-8gcm-mpgx",
+      "cveIds": [
+        "CVE-2026-42034"
+      ],
+      "ghsaIds": [
+        "GHSA-5c9x-8gcm-mpgx"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssV3Score": 5.3,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-62hf-57xw-28j9",
+      "cveIds": [
+        "CVE-2026-42039"
+      ],
+      "ghsaIds": [
+        "GHSA-62hf-57xw-28j9"
+      ],
+      "structuredTypes": [
+        "CVSS_V3",
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssV3Score": 7.5,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-6chq-wfr3-2hj9",
+      "cveIds": [
+        "CVE-2026-42035"
+      ],
+      "ghsaIds": [
+        "GHSA-6chq-wfr3-2hj9"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssV3Score": 7.4,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-7q8q-rj6j-mhjq",
+      "cveIds": [
+        "CVE-2026-67319"
+      ],
+      "ghsaIds": [
+        "GHSA-7q8q-rj6j-mhjq"
+      ],
+      "structuredTypes": [
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": null,
+      "cvssV3Score": null,
+      "cvssBucket": "UNKNOWN",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "database_specific.severity",
+      "fixedVersions": [
+        "0.33.0",
+        "1.18.0"
+      ]
+    },
+    {
+      "id": "GHSA-898c-q2cr-xwhg",
+      "cveIds": [
+        "CVE-2026-44490"
+      ],
+      "ghsaIds": [
+        "GHSA-898c-q2cr-xwhg"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+      "cvssV3Score": 4.8,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ]
+    },
+    {
+      "id": "GHSA-cph5-m8f7-6c5x",
+      "cveIds": [
+        "CVE-2021-3749"
+      ],
+      "ghsaIds": [
+        "GHSA-cph5-m8f7-6c5x"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssV3Score": 7.5,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "0.21.2"
+      ]
+    },
+    {
+      "id": "GHSA-fvcv-3m26-pcqx",
+      "cveIds": [
+        "CVE-2026-40175"
+      ],
+      "ghsaIds": [
+        "GHSA-fvcv-3m26-pcqx"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "cvssV3Score": 4.8,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.0",
+        "0.31.0"
+      ]
+    },
+    {
+      "id": "GHSA-hfxv-24rg-xrqf",
+      "cveIds": [
+        "CVE-2026-44496"
+      ],
+      "ghsaIds": [
+        "GHSA-hfxv-24rg-xrqf"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+      "cvssV3Score": 7.5,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ]
+    },
+    {
+      "id": "GHSA-j5f8-grm9-p9fc",
+      "cveIds": [
+        "CVE-2026-44486"
+      ],
+      "ghsaIds": [
+        "GHSA-j5f8-grm9-p9fc"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssV3Score": 7.5,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ]
+    },
+    {
+      "id": "GHSA-jr5f-v2jv-69x6",
+      "cveIds": [
+        "CVE-2025-27152"
+      ],
+      "ghsaIds": [
+        "GHSA-jr5f-v2jv-69x6"
+      ],
+      "structuredTypes": [
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": null,
+      "cvssV3Score": null,
+      "cvssBucket": "UNKNOWN",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "database_specific.severity",
+      "fixedVersions": [
+        "1.8.2",
+        "0.30.0"
+      ]
+    },
+    {
+      "id": "GHSA-m7pr-hjqh-92cm",
+      "cveIds": [
+        "CVE-2026-42038"
+      ],
+      "ghsaIds": [
+        "GHSA-m7pr-hjqh-92cm"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
+      "cvssV3Score": 6.8,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-mmx7-hfxf-jppx",
+      "cveIds": [
+        "CVE-2026-67316"
+      ],
+      "ghsaIds": [
+        "GHSA-mmx7-hfxf-jppx"
+      ],
+      "structuredTypes": [
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": null,
+      "cvssV3Score": null,
+      "cvssBucket": "UNKNOWN",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "database_specific.severity",
+      "fixedVersions": [
+        "1.18.0",
+        "0.33.0"
+      ]
+    },
+    {
+      "id": "GHSA-p92q-9vqr-4j8v",
+      "cveIds": [
+        "CVE-2026-44487"
+      ],
+      "ghsaIds": [
+        "GHSA-p92q-9vqr-4j8v"
+      ],
+      "structuredTypes": [
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": null,
+      "cvssV3Score": null,
+      "cvssBucket": "UNKNOWN",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "database_specific.severity",
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ]
+    },
+    {
+      "id": "GHSA-pf86-5x62-jrwf",
+      "cveIds": [
+        "CVE-2026-42033"
+      ],
+      "ghsaIds": [
+        "GHSA-pf86-5x62-jrwf"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+      "cvssV3Score": 7.4,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-pjwm-pj3p-43mv",
+      "cveIds": [
+        "CVE-2026-44492"
+      ],
+      "ghsaIds": [
+        "GHSA-pjwm-pj3p-43mv"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+      "cvssV3Score": 8.6,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ]
+    },
+    {
+      "id": "GHSA-pmwg-cvhr-8vh7",
+      "cveIds": [
+        "CVE-2026-42043"
+      ],
+      "ghsaIds": [
+        "GHSA-pmwg-cvhr-8vh7"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+      "cvssV3Score": 7.2,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-vf2m-468p-8v99",
+      "cveIds": [
+        "CVE-2026-42036"
+      ],
+      "ghsaIds": [
+        "GHSA-vf2m-468p-8v99"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+      "cvssV3Score": 5.3,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-w9j2-pvgh-6h63",
+      "cveIds": [
+        "CVE-2026-42041"
+      ],
+      "ghsaIds": [
+        "GHSA-w9j2-pvgh-6h63"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+      "cvssV3Score": 4.8,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-wf5p-g6vw-rhxx",
+      "cveIds": [
+        "CVE-2023-45857"
+      ],
+      "ghsaIds": [
+        "GHSA-wf5p-g6vw-rhxx"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+      "cvssV3Score": 6.5,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.6.0",
+        "0.28.0"
+      ]
+    },
+    {
+      "id": "GHSA-xhjh-pmcv-23jw",
+      "cveIds": [
+        "CVE-2026-42040"
+      ],
+      "ghsaIds": [
+        "GHSA-xhjh-pmcv-23jw"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+      "cvssV3Score": 3.7,
+      "cvssBucket": "LOW",
+      "databaseSpecificSeverity": "LOW",
+      "normalizedLevel": "LOW",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-xx6v-rp6x-q39c",
+      "cveIds": [
+        "CVE-2026-42042"
+      ],
+      "ghsaIds": [
+        "GHSA-xx6v-rp6x-q39c"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+      "cvssV3Score": 5.4,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ]
+    },
+    {
+      "id": "GHSA-4w2v-q235-vp99",
+      "cveIds": [
+        "CVE-2020-28168"
+      ],
+      "ghsaIds": [
+        "GHSA-4w2v-q235-vp99"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+      "cvssV3Score": 5.9,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "0.21.1"
+      ]
+    },
+    {
+      "id": "GHSA-r683-j2x4-v87g",
+      "cveIds": [
+        "CVE-2022-0235"
+      ],
+      "ghsaIds": [
+        "GHSA-r683-j2x4-v87g"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "cvssV3Score": 8.8,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "3.1.1",
+        "2.6.7"
+      ]
+    },
+    {
+      "id": "GHSA-w7rc-rwvf-8q5r",
+      "cveIds": [
+        "CVE-2020-15168"
+      ],
+      "ghsaIds": [
+        "GHSA-w7rc-rwvf-8q5r"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:L",
+      "cvssV3Score": 2.6,
+      "cvssBucket": "LOW",
+      "databaseSpecificSeverity": "LOW",
+      "normalizedLevel": "LOW",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "2.6.1",
+        "3.0.0-beta.9"
+      ]
+    },
+    {
+      "id": "GHSA-5c6j-r48x-rmvq",
+      "cveIds": [],
+      "ghsaIds": [
+        "GHSA-5c6j-r48x-rmvq"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssV3Score": 8.1,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "7.0.3"
+      ]
+    },
+    {
+      "id": "GHSA-m5mm-p8h7-m29v",
+      "cveIds": [
+        "CVE-2026-115754",
+        "CVE-2026-115897"
+      ],
+      "ghsaIds": [
+        "GHSA-m5mm-p8h7-m29v"
+      ],
+      "structuredTypes": [
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": null,
+      "cvssV3Score": null,
+      "cvssBucket": "UNKNOWN",
+      "databaseSpecificSeverity": "LOW",
+      "normalizedLevel": "LOW",
+      "source": "database_specific.severity",
+      "fixedVersions": [
+        "7.1.3"
+      ]
+    },
+    {
+      "id": "GHSA-hxcc-f52p-wc94",
+      "cveIds": [
+        "CVE-2020-7660"
+      ],
+      "ghsaIds": [
+        "GHSA-hxcc-f52p-wc94"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "cvssV3Score": 8.1,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "3.1.0"
+      ]
+    },
+    {
+      "id": "GHSA-qw6h-vgh9-j6wx",
+      "cveIds": [
+        "CVE-2024-43796"
+      ],
+      "ghsaIds": [
+        "GHSA-qw6h-vgh9-j6wx"
+      ],
+      "structuredTypes": [
+        "CVSS_V3",
+        "CVSS_V4"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:L",
+      "cvssV3Score": 5,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "LOW",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.20.0",
+        "5.0.0"
+      ]
+    },
+    {
+      "id": "GHSA-rv95-896h-c2vc",
+      "cveIds": [
+        "CVE-2024-29041"
+      ],
+      "ghsaIds": [
+        "GHSA-rv95-896h-c2vc"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "cvssV3Score": 6.1,
+      "cvssBucket": "MEDIUM",
+      "databaseSpecificSeverity": "MODERATE",
+      "normalizedLevel": "MEDIUM",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "4.19.2",
+        "5.0.0-beta.3"
+      ]
+    },
+    {
+      "id": "GHSA-9c47-m6qq-7p4h",
+      "cveIds": [
+        "CVE-2022-46175"
+      ],
+      "ghsaIds": [
+        "GHSA-9c47-m6qq-7p4h"
+      ],
+      "structuredTypes": [
+        "CVSS_V3"
+      ],
+      "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:L/A:H",
+      "cvssV3Score": 7.1,
+      "cvssBucket": "HIGH",
+      "databaseSpecificSeverity": "HIGH",
+      "normalizedLevel": "HIGH",
+      "source": "CVSS_V3",
+      "fixedVersions": [
+        "2.2.2",
+        "1.0.2"
+      ]
+    }
+  ],
+  "chunkBoundary": [
+    {
+      "queryCount": 100,
+      "status": 200,
+      "bytes": 34461,
+      "resultCount": 100,
+      "error": null
+    },
+    {
+      "queryCount": 200,
+      "status": 200,
+      "bytes": 68909,
+      "resultCount": 200,
+      "error": null
+    },
+    {
+      "queryCount": 1000,
+      "status": 200,
+      "bytes": 344493,
+      "resultCount": 1000,
+      "error": null
+    },
+    {
+      "queryCount": 1001,
+      "status": 400,
+      "bytes": 39,
+      "resultCount": null,
+      "error": "{\"code\":3,\"message\":\"too many queries\"}"
+    }
+  ],
+  "neutral": {
+    "package": "left-pad",
+    "version": "1.3.0",
+    "status": 200,
+    "findingCount": 0
+  },
+  "rateLimit": {
+    "status429Observed": false,
+    "status5xxObserved": false,
+    "note": "Tidak terpicu selama probe normal; perlakukan 429/5xx sebagai error sementara dengan backoff."
+  }
+}

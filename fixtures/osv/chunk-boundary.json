@@ -1,0 +1,33 @@
+{
+  "capturedAt": "2026-11-08T20:15:34Z",
+  "trials": [
+    {
+      "queryCount": 100,
+      "status": 200,
+      "bytes": 34461,
+      "resultCount": 100,
+      "error": null
+    },
+    {
+      "queryCount": 200,
+      "status": 200,
+      "bytes": 68909,
+      "resultCount": 200,
+      "error": null
+    },
+    {
+      "queryCount": 1000,
+      "status": 200,
+      "bytes": 344493,
+      "resultCount": 1000,
+      "error": null
+    },
+    {
+      "queryCount": 1001,
+      "status": 400,
+      "bytes": 39,
+      "resultCount": null,
+      "error": "{\"code\":3,\"message\":\"too many queries\"}"
+    }
+  ]
+}

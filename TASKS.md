@@ -284,13 +284,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Simpan fixture dan keputusan pemetaan severity.
 - **Memenuhi:** `FR-06`, `FR-11`, `R-03`, `R-04`
 - **Kriteria selesai (AC):**
-  - [ ] Batch 50 query berhasil atau batas sebenarnya tercatat.
-  - [ ] Contoh severity dari `severity`, `database_specific`, dan CVSS dibandingkan.
-  - [ ] Alias GHSA–CVE terdokumentasi.
-  - [ ] Fixture netral (tanpa advisory) dan rentan tersimpan.
+  - [x] Batch 50 query berhasil atau batas sebenarnya tercatat.
+  - [x] Contoh severity dari `severity`, `database_specific`, dan CVSS dibandingkan.
+  - [x] Alias GHSA–CVE terdokumentasi.
+  - [x] Fixture netral (tanpa advisory) dan rentan tersimpan.
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Script: `scripts/probe-osv.mjs` (querybatch, detail `GET /v1/vulns/{id}`, parser CVSS v3.1 untuk membandingkan bucket, uji batas chunk).
+  - Fixture: `fixtures/osv/batch-50.json`, `advisory-details.json`, `advisory-raw.json`, `chunk-boundary.json`, `neutral.json`, `summary.json`.
+  - Batch 50: 200, 50 hasil, 17.237 byte, 698 ms; 46 paket rentan/4 tanpa temuan; 239 temuan dan 133 advisory unik. Respons batch **hanya** berisi `id` + `modified`, jadi detail harus diambil terpisah.
+  - Batas query terukur: 100/200/1.000 query → 200; **1.001 query → 400** `{"code":3,"message":"too many queries"}`. Chunk 50 dipertahankan untuk membatasi ukuran respons.
+  - Detail 40/40 berhasil. 39 advisory punya alias `CVE-*`; satu GHSA tanpa CVE (`GHSA-5c6j-r48x-rmvq`) tetap punya CVSS 8.1 HIGH dan `fixed=7.0.3`, sehingga KEV/EPSS tidak bisa dicocokkan (R-04).
+  - Severity 35/40 dari CVSS_V3 (2,6–9,8): Critical 1, High 17, Medium 15, Low 2. Lima advisory hanya memuat CVSS_V4, sehingga memakai `database_specific.severity` (Medium 2, High 2, Low 1). Label GitHub `MODERATE` dinormalisasi ke `MEDIUM`.
+  - Contoh alias/fixed: `GHSA-29mw-wpgm-hmr9`/`CVE-2020-28500`/`4.17.21`, `GHSA-35jh-r3h4-6jhm`/`CVE-2021-23337`/`4.17.21`, `GHSA-xxjr-mmjv-4gpg`/`CVE-2025-13465`/`4.17.23`+`4.18.0`.
+  - Fixture netral: `left-pad@1.3.0` 200 tanpa `vulns`. 429/5xx tidak terpicu selama probe `[PERLU DIVERIFIKASI]`; rencana tetap backoff dan error sementara.
 
 ### T-W1-04 — Uji unduhan dan parsing CISA KEV
 - **Tipe:** `[AGENT]`

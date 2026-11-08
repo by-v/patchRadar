@@ -1,0 +1,3182 @@
+{
+  "capturedAt": "2026-11-08T20:15:29Z",
+  "requested": 40,
+  "succeeded": 40,
+  "failures": [],
+  "details": [
+    {
+      "id": "GHSA-29mw-wpgm-hmr9",
+      "aliases": [
+        "CVE-2020-28500"
+      ],
+      "cveIds": [
+        "CVE-2020-28500"
+      ],
+      "ghsaIds": [
+        "GHSA-29mw-wpgm-hmr9"
+      ],
+      "summary": "Regular Expression Denial of Service (ReDoS) in lodash",
+      "published": "2022-01-06T20:30:46Z",
+      "modified": "2025-09-29T21:12:31.102523Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+        "cvssV3Score": 5.3,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.17.21"
+      ],
+      "affected": [
+        {
+          "package": "lodash",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.17.21"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-es",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.17.21"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.trimend",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "last_affected": "4.5.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.trim",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "last_affected": "4.5.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-rails",
+          "ecosystem": "RubyGems",
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.17.21"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 20
+        }
+      ],
+      "referencesCount": 20,
+      "bytes": 4846,
+      "durationMs": 273
+    },
+    {
+      "id": "GHSA-35jh-r3h4-6jhm",
+      "aliases": [
+        "CVE-2021-23337"
+      ],
+      "cveIds": [
+        "CVE-2021-23337"
+      ],
+      "ghsaIds": [
+        "GHSA-35jh-r3h4-6jhm"
+      ],
+      "summary": "Command Injection in lodash",
+      "published": "2021-05-06T16:05:51Z",
+      "modified": "2026-10-17T02:55:38.085813876Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H",
+        "cvssV3Score": 7.2,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.17.21"
+      ],
+      "affected": [
+        {
+          "package": "lodash",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "4.17.21"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-es",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "4.17.21"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.template",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "4.5.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-template",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "1.0.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-rails",
+          "ecosystem": "RubyGems",
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "4.17.21"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 55
+        }
+      ],
+      "referencesCount": 17,
+      "bytes": 4178,
+      "durationMs": 328
+    },
+    {
+      "id": "GHSA-r5fr-rjxr-66jc",
+      "aliases": [
+        "CVE-2026-4800"
+      ],
+      "cveIds": [
+        "CVE-2026-4800"
+      ],
+      "ghsaIds": [
+        "GHSA-r5fr-rjxr-66jc"
+      ],
+      "summary": "lodash vulnerable to Code Injection via `_.template` imports key names",
+      "published": "2026-04-01T23:51:12Z",
+      "modified": "2026-10-17T02:56:15.633068434Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssV3Score": 8.1,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.18.0"
+      ],
+      "affected": [
+        {
+          "package": "lodash",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-es",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-amd",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.template",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 6,
+      "bytes": 3703,
+      "durationMs": 299
+    },
+    {
+      "id": "GHSA-xxjr-mmjv-4gpg",
+      "aliases": [
+        "CVE-2025-13465"
+      ],
+      "cveIds": [
+        "CVE-2025-13465"
+      ],
+      "ghsaIds": [
+        "GHSA-xxjr-mmjv-4gpg"
+      ],
+      "summary": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
+      "published": "2026-01-21T23:01:22Z",
+      "modified": "2026-11-04T03:15:10.832238351Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3",
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+          "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:L/VA:L/SC:H/SI:H/SA:H/E:P"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+        "cvssV3Score": 6.5,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.17.23",
+        "4.18.0"
+      ],
+      "affected": [
+        {
+          "package": "lodash",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.17.23"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-amd",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.17.23"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-es",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.17.23"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.omit",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.unset",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "fixed": "4.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 93,
+      "bytes": 9734,
+      "durationMs": 278
+    },
+    {
+      "id": "GHSA-p6mc-m468-83gw",
+      "aliases": [
+        "CVE-2020-8203"
+      ],
+      "cveIds": [
+        "CVE-2020-8203"
+      ],
+      "ghsaIds": [
+        "GHSA-p6mc-m468-83gw"
+      ],
+      "summary": "Prototype Pollution in lodash",
+      "published": "2020-07-15T19:15:48Z",
+      "modified": "2025-08-12T21:56:17.174859Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:H",
+        "cvssV3Score": 7.4,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.17.19",
+        "4.17.20"
+      ],
+      "affected": [
+        {
+          "package": "lodash",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "3.7.0"
+                },
+                {
+                  "fixed": "4.17.19"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-es",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "3.7.0"
+                },
+                {
+                  "fixed": "4.17.20"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.pick",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "4.0.0"
+                },
+                {
+                  "last_affected": "4.4.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.set",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "3.7.0"
+                },
+                {
+                  "last_affected": "4.3.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.setwith",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "4.3.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.update",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "4.10.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash.updatewith",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "last_affected": "4.10.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "lodash-rails",
+          "ecosystem": "RubyGems",
+          "ranges": [
+            {
+              "type": "ECOSYSTEM",
+              "events": [
+                {
+                  "introduced": "3.7.0"
+                },
+                {
+                  "fixed": "4.17.19"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 24
+        }
+      ],
+      "referencesCount": 12,
+      "bytes": 4949,
+      "durationMs": 267
+    },
+    {
+      "id": "GHSA-xvch-5gv4-984h",
+      "aliases": [
+        "CVE-2021-44906"
+      ],
+      "cveIds": [
+        "CVE-2021-44906"
+      ],
+      "ghsaIds": [
+        "GHSA-xvch-5gv4-984h"
+      ],
+      "summary": "Prototype Pollution in minimist",
+      "published": "2022-03-18T00:01:09Z",
+      "modified": "2026-03-13T22:11:59.523514Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssV3Score": 9.8,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "CRITICAL",
+        "normalizedLevel": "CRITICAL",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.2.6",
+        "0.2.4"
+      ],
+      "affected": [
+        {
+          "package": "minimist",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.2.6"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "minimist",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.2.4"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 15,
+      "bytes": 2615,
+      "durationMs": 286
+    },
+    {
+      "id": "GHSA-vh95-rmgr-6w4m",
+      "aliases": [
+        "CVE-2020-7598"
+      ],
+      "cveIds": [
+        "CVE-2020-7598"
+      ],
+      "ghsaIds": [
+        "GHSA-vh95-rmgr-6w4m"
+      ],
+      "summary": "Prototype Pollution in minimist",
+      "published": "2020-04-03T21:48:32Z",
+      "modified": "2026-03-13T22:11:31.390433Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:L",
+        "cvssV3Score": 5.6,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "0.2.1",
+        "1.2.3"
+      ],
+      "affected": [
+        {
+          "package": "minimist",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.2.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "minimist",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.2.3"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 9,
+      "bytes": 2615,
+      "durationMs": 445
+    },
+    {
+      "id": "GHSA-3g43-6gmg-66jw",
+      "aliases": [
+        "CVE-2026-44495"
+      ],
+      "cveIds": [
+        "CVE-2026-44495"
+      ],
+      "ghsaIds": [
+        "GHSA-3g43-6gmg-66jw"
+      ],
+      "summary": "axios Vulnerable to Credential Theft and Response Hijacking via Prototype Pollution Gadget in Config Merge",
+      "published": "2026-05-29T16:07:31Z",
+      "modified": "2026-09-10T03:51:04.440180855Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:L/A:L",
+        "cvssV3Score": 7,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.2",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0.19.0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 15622,
+      "durationMs": 438
+    },
+    {
+      "id": "GHSA-3p68-rc4w-qgx5",
+      "aliases": [
+        "CVE-2025-62718"
+      ],
+      "cveIds": [
+        "CVE-2025-62718"
+      ],
+      "ghsaIds": [
+        "GHSA-3p68-rc4w-qgx5"
+      ],
+      "summary": "Axios has a NO_PROXY Hostname Normalization Bypass that Leads to SSRF",
+      "published": "2026-04-09T17:32:19Z",
+      "modified": "2026-09-10T03:50:42.452672741Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3",
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+          "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+        "cvssV3Score": 4.8,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.0",
+        "0.31.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 11,
+      "bytes": 5129,
+      "durationMs": 264
+    },
+    {
+      "id": "GHSA-43fc-jf86-j433",
+      "aliases": [
+        "CVE-2026-25639"
+      ],
+      "cveIds": [
+        "CVE-2026-25639"
+      ],
+      "ghsaIds": [
+        "GHSA-43fc-jf86-j433"
+      ],
+      "summary": "Axios is Vulnerable to Denial of Service via __proto__ Key in mergeConfig",
+      "published": "2026-02-09T17:46:14Z",
+      "modified": "2026-09-10T03:50:34.100599628Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "cvssV3Score": 7.5,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.13.5",
+        "0.30.3"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.13.5"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.30.3"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 9,
+      "bytes": 5058,
+      "durationMs": 637
+    },
+    {
+      "id": "GHSA-5c9x-8gcm-mpgx",
+      "aliases": [
+        "CVE-2026-42034"
+      ],
+      "cveIds": [
+        "CVE-2026-42034"
+      ],
+      "ghsaIds": [
+        "GHSA-5c9x-8gcm-mpgx"
+      ],
+      "summary": "Axios' HTTP adapter-streamed uploads bypass maxBodyLength when maxRedirects: 0",
+      "published": "2026-05-05T00:33:25Z",
+      "modified": "2026-09-10T03:50:45.707956373Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+        "cvssV3Score": 5.3,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 2953,
+      "durationMs": 262
+    },
+    {
+      "id": "GHSA-62hf-57xw-28j9",
+      "aliases": [
+        "CVE-2026-42039"
+      ],
+      "cveIds": [
+        "CVE-2026-42039"
+      ],
+      "ghsaIds": [
+        "GHSA-62hf-57xw-28j9"
+      ],
+      "summary": "Axios: unbounded recursion in toFormData causes DoS via deeply nested request data",
+      "published": "2026-05-05T00:34:32Z",
+      "modified": "2026-09-10T03:50:45.703789635Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3",
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+          "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "cvssV3Score": 7.5,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 5,
+      "bytes": 4490,
+      "durationMs": 455
+    },
+    {
+      "id": "GHSA-6chq-wfr3-2hj9",
+      "aliases": [
+        "CVE-2026-42035"
+      ],
+      "cveIds": [
+        "CVE-2026-42035"
+      ],
+      "ghsaIds": [
+        "GHSA-6chq-wfr3-2hj9"
+      ],
+      "summary": "Axios: Header Injection via Prototype Pollution",
+      "published": "2026-05-05T00:25:47Z",
+      "modified": "2026-09-10T03:51:04.772235088Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "cvssV3Score": 7.4,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 5739,
+      "durationMs": 439
+    },
+    {
+      "id": "GHSA-7q8q-rj6j-mhjq",
+      "aliases": [
+        "CVE-2026-67319"
+      ],
+      "cveIds": [
+        "CVE-2026-67319"
+      ],
+      "ghsaIds": [
+        "GHSA-7q8q-rj6j-mhjq"
+      ],
+      "summary": "Axios: Nested axios option objects can consume polluted prototype values",
+      "published": "2026-07-20T22:37:31Z",
+      "modified": "2026-09-10T03:51:10.872027953Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N"
+        ],
+        "cvssV3Vector": null,
+        "cvssV3Score": null,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "database_specific.severity"
+      },
+      "fixedVersions": [
+        "0.33.0",
+        "1.18.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0.8.0"
+                },
+                {
+                  "fixed": "0.33.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 11,
+      "bytes": 13357,
+      "durationMs": 273
+    },
+    {
+      "id": "GHSA-898c-q2cr-xwhg",
+      "aliases": [
+        "CVE-2026-44490"
+      ],
+      "cveIds": [
+        "CVE-2026-44490"
+      ],
+      "ghsaIds": [
+        "GHSA-898c-q2cr-xwhg"
+      ],
+      "summary": "axios has DoS & Header Injection via Prototype Pollution Read-Side Gadgets in axios merge functions",
+      "published": "2026-05-29T15:54:57Z",
+      "modified": "2026-09-10T03:51:04.811379218Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:L",
+        "cvssV3Score": 4.8,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.16.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.32.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 4,
+      "bytes": 8414,
+      "durationMs": 622
+    },
+    {
+      "id": "GHSA-cph5-m8f7-6c5x",
+      "aliases": [
+        "CVE-2021-3749"
+      ],
+      "cveIds": [
+        "CVE-2021-3749"
+      ],
+      "ghsaIds": [
+        "GHSA-cph5-m8f7-6c5x"
+      ],
+      "summary": "axios Inefficient Regular Expression Complexity vulnerability",
+      "published": "2021-09-01T18:23:02Z",
+      "modified": "2026-09-10T03:49:08.788547249Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "cvssV3Score": 7.5,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "0.21.2"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.21.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 17,
+      "bytes": 2970,
+      "durationMs": 253
+    },
+    {
+      "id": "GHSA-fvcv-3m26-pcqx",
+      "aliases": [
+        "CVE-2026-40175"
+      ],
+      "cveIds": [
+        "CVE-2026-40175"
+      ],
+      "ghsaIds": [
+        "GHSA-fvcv-3m26-pcqx"
+      ],
+      "summary": "Axios has Unrestricted Cloud Metadata Exfiltration via Header Injection Chain",
+      "published": "2026-04-10T19:47:16Z",
+      "modified": "2026-09-10T03:50:44.273401032Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+        "cvssV3Score": 4.8,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.0",
+        "0.31.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 11,
+      "bytes": 5735,
+      "durationMs": 441
+    },
+    {
+      "id": "GHSA-hfxv-24rg-xrqf",
+      "aliases": [
+        "CVE-2026-44496"
+      ],
+      "cveIds": [
+        "CVE-2026-44496"
+      ],
+      "ghsaIds": [
+        "GHSA-hfxv-24rg-xrqf"
+      ],
+      "summary": "Axios: Regular Expression Denial of Service (ReDoS) via Cookie Name Injection",
+      "published": "2026-06-04T14:24:06Z",
+      "modified": "2026-09-10T03:50:49.732285826Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H",
+        "cvssV3Score": 7.5,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.16.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.32.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 4,
+      "bytes": 12016,
+      "durationMs": 272
+    },
+    {
+      "id": "GHSA-j5f8-grm9-p9fc",
+      "aliases": [
+        "CVE-2026-44486"
+      ],
+      "cveIds": [
+        "CVE-2026-44486"
+      ],
+      "ghsaIds": [
+        "GHSA-j5f8-grm9-p9fc"
+      ],
+      "summary": "Axios: Proxy-Authorization header leaks to redirect target when proxy is re-evaluated to direct connection",
+      "published": "2026-06-04T14:15:01Z",
+      "modified": "2026-09-10T03:50:50.017253448Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssV3Score": 7.5,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.16.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.32.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 7,
+      "bytes": 7483,
+      "durationMs": 261
+    },
+    {
+      "id": "GHSA-jr5f-v2jv-69x6",
+      "aliases": [
+        "CVE-2025-27152"
+      ],
+      "cveIds": [
+        "CVE-2025-27152"
+      ],
+      "ghsaIds": [
+        "GHSA-jr5f-v2jv-69x6"
+      ],
+      "summary": "axios Requests Vulnerable To Possible SSRF and Credential Leakage via Absolute URL",
+      "published": "2025-03-07T15:16:00Z",
+      "modified": "2026-09-10T03:50:56.787685282Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N/E:P"
+        ],
+        "cvssV3Vector": null,
+        "cvssV3Score": null,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "database_specific.severity"
+      },
+      "fixedVersions": [
+        "1.8.2",
+        "0.30.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.8.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.30.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 8,
+      "bytes": 4492,
+      "durationMs": 264
+    },
+    {
+      "id": "GHSA-m7pr-hjqh-92cm",
+      "aliases": [
+        "CVE-2026-42038"
+      ],
+      "cveIds": [
+        "CVE-2026-42038"
+      ],
+      "ghsaIds": [
+        "GHSA-m7pr-hjqh-92cm"
+      ],
+      "summary": "Axios: no_proxy bypass via IP alias allows SSRF",
+      "published": "2026-05-05T00:40:17Z",
+      "modified": "2026-09-10T03:51:06.293033204Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
+        "cvssV3Score": 6.8,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 3535,
+      "durationMs": 264
+    },
+    {
+      "id": "GHSA-mmx7-hfxf-jppx",
+      "aliases": [
+        "CVE-2026-67316"
+      ],
+      "cveIds": [
+        "CVE-2026-67316"
+      ],
+      "ghsaIds": [
+        "GHSA-mmx7-hfxf-jppx"
+      ],
+      "summary": "Axios: Prototype pollution gadgets can alter axios request construction",
+      "published": "2026-07-20T22:25:07Z",
+      "modified": "2026-09-10T03:50:52.753640421Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N"
+        ],
+        "cvssV3Vector": null,
+        "cvssV3Score": null,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "database_specific.severity"
+      },
+      "fixedVersions": [
+        "1.18.0",
+        "0.33.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.18.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.33.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 11,
+      "bytes": 9818,
+      "durationMs": 291
+    },
+    {
+      "id": "GHSA-p92q-9vqr-4j8v",
+      "aliases": [
+        "CVE-2026-44487"
+      ],
+      "cveIds": [
+        "CVE-2026-44487"
+      ],
+      "ghsaIds": [
+        "GHSA-p92q-9vqr-4j8v"
+      ],
+      "summary": "Axios: Proxy-Authorization Credential Leak to Origin Server Across HTTP-to-HTTPS Redirect in Axios Node.js HTTP Adapter",
+      "published": "2026-06-04T14:19:53Z",
+      "modified": "2026-09-10T03:51:09.218790313Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N"
+        ],
+        "cvssV3Vector": null,
+        "cvssV3Score": null,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "database_specific.severity"
+      },
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.16.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.32.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 5,
+      "bytes": 10147,
+      "durationMs": 359
+    },
+    {
+      "id": "GHSA-pf86-5x62-jrwf",
+      "aliases": [
+        "CVE-2026-42033"
+      ],
+      "cveIds": [
+        "CVE-2026-42033"
+      ],
+      "ghsaIds": [
+        "GHSA-pf86-5x62-jrwf"
+      ],
+      "summary": "Axios: Prototype Pollution Gadgets - Response Tampering, Data Exfiltration, and Request Hijacking",
+      "published": "2026-05-05T00:26:29Z",
+      "modified": "2026-09-10T03:51:06.658921258Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "cvssV3Score": 7.4,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 14978,
+      "durationMs": 298
+    },
+    {
+      "id": "GHSA-pjwm-pj3p-43mv",
+      "aliases": [
+        "CVE-2026-44492"
+      ],
+      "cveIds": [
+        "CVE-2026-44492"
+      ],
+      "ghsaIds": [
+        "GHSA-pjwm-pj3p-43mv"
+      ],
+      "summary": "axios's shouldBypassProxy does not recognize IPv4-mapped IPv6 addresses, allowing NO_PROXY bypass (incomplete fix for CVE-2025-62718)",
+      "published": "2026-05-29T15:59:30Z",
+      "modified": "2026-09-10T03:51:06.693575938Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N",
+        "cvssV3Score": 8.6,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.16.0",
+        "0.32.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.15.0"
+                },
+                {
+                  "fixed": "1.16.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.32.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 38,
+      "bytes": 13389,
+      "durationMs": 302
+    },
+    {
+      "id": "GHSA-pmwg-cvhr-8vh7",
+      "aliases": [
+        "CVE-2026-42043"
+      ],
+      "cveIds": [
+        "CVE-2026-42043"
+      ],
+      "ghsaIds": [
+        "GHSA-pmwg-cvhr-8vh7"
+      ],
+      "summary": "Axios: Incomplete Fix for CVE-2025-62718 — NO_PROXY Protection Bypassed via RFC 1122 Loopback Subnet (127.0.0.0/8) in Axios 1.15.0",
+      "published": "2026-05-05T00:20:58Z",
+      "modified": "2026-09-10T03:51:06.691311805Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N",
+        "cvssV3Score": 7.2,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 31554,
+      "durationMs": 387
+    },
+    {
+      "id": "GHSA-vf2m-468p-8v99",
+      "aliases": [
+        "CVE-2026-42036"
+      ],
+      "cveIds": [
+        "CVE-2026-42036"
+      ],
+      "ghsaIds": [
+        "GHSA-vf2m-468p-8v99"
+      ],
+      "summary": "Axios: HTTP adapter streamed responses bypass maxContentLength",
+      "published": "2026-05-05T00:26:57Z",
+      "modified": "2026-09-10T03:50:47.671121168Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:L",
+        "cvssV3Score": 5.3,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 2645,
+      "durationMs": 263
+    },
+    {
+      "id": "GHSA-w9j2-pvgh-6h63",
+      "aliases": [
+        "CVE-2026-42041"
+      ],
+      "cveIds": [
+        "CVE-2026-42041"
+      ],
+      "ghsaIds": [
+        "GHSA-w9j2-pvgh-6h63"
+      ],
+      "summary": "Axios: Authentication Bypass via Prototype Pollution Gadget in `validateStatus` Merge Strategy",
+      "published": "2026-05-05T00:21:39Z",
+      "modified": "2026-09-10T03:50:47.772907977Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N",
+        "cvssV3Score": 4.8,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 9049,
+      "durationMs": 271
+    },
+    {
+      "id": "GHSA-wf5p-g6vw-rhxx",
+      "aliases": [
+        "CVE-2023-45857"
+      ],
+      "cveIds": [
+        "CVE-2023-45857"
+      ],
+      "ghsaIds": [
+        "GHSA-wf5p-g6vw-rhxx"
+      ],
+      "summary": "Axios Cross-Site Request Forgery Vulnerability",
+      "published": "2023-11-08T21:30:37Z",
+      "modified": "2026-09-10T03:49:47.742398623Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+        "cvssV3Score": 6.5,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.6.0",
+        "0.28.0"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.6.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0.8.1"
+                },
+                {
+                  "fixed": "0.28.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 12,
+      "bytes": 2310,
+      "durationMs": 256
+    },
+    {
+      "id": "GHSA-xhjh-pmcv-23jw",
+      "aliases": [
+        "CVE-2026-42040"
+      ],
+      "cveIds": [
+        "CVE-2026-42040"
+      ],
+      "ghsaIds": [
+        "GHSA-xhjh-pmcv-23jw"
+      ],
+      "summary": "Axios: Null Byte Injection via Reverse-Encoding in AxiosURLSearchParams",
+      "published": "2026-05-05T00:18:03Z",
+      "modified": "2026-09-10T03:50:48.032269033Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N",
+        "cvssV3Score": 3.7,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "LOW",
+        "normalizedLevel": "LOW",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 7739,
+      "durationMs": 260
+    },
+    {
+      "id": "GHSA-xx6v-rp6x-q39c",
+      "aliases": [
+        "CVE-2026-42042"
+      ],
+      "cveIds": [
+        "CVE-2026-42042"
+      ],
+      "ghsaIds": [
+        "GHSA-xx6v-rp6x-q39c"
+      ],
+      "summary": "Axios: XSRF Token Cross-Origin Leakage via Prototype Pollution Gadget in `withXSRFToken` Boolean Coercion",
+      "published": "2026-05-05T00:25:22Z",
+      "modified": "2026-09-10T03:51:07.425895085Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N",
+        "cvssV3Score": 5.4,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "1.15.1",
+        "0.31.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "1.0.0"
+                },
+                {
+                  "fixed": "1.15.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.31.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 7711,
+      "durationMs": 263
+    },
+    {
+      "id": "GHSA-4w2v-q235-vp99",
+      "aliases": [
+        "CVE-2020-28168"
+      ],
+      "cveIds": [
+        "CVE-2020-28168"
+      ],
+      "ghsaIds": [
+        "GHSA-4w2v-q235-vp99"
+      ],
+      "summary": "Axios vulnerable to Server-Side Request Forgery",
+      "published": "2021-01-04T20:59:40Z",
+      "modified": "2026-09-10T03:49:13.774730802Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "cvssV3Score": 5.9,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "0.21.1"
+      ],
+      "affected": [
+        {
+          "package": "axios",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "0.21.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 10,
+      "bytes": 2015,
+      "durationMs": 261
+    },
+    {
+      "id": "GHSA-r683-j2x4-v87g",
+      "aliases": [
+        "CVE-2022-0235"
+      ],
+      "cveIds": [
+        "CVE-2022-0235"
+      ],
+      "ghsaIds": [
+        "GHSA-r683-j2x4-v87g"
+      ],
+      "summary": "node-fetch forwards secure headers to untrusted sites",
+      "published": "2022-01-21T23:55:52Z",
+      "modified": "2023-11-08T04:07:30.211593Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.0/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "cvssV3Score": 8.8,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "3.1.1",
+        "2.6.7"
+      ],
+      "affected": [
+        {
+          "package": "node-fetch",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "3.0.0"
+                },
+                {
+                  "fixed": "3.1.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "node-fetch",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "2.6.7"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 10,
+      "bytes": 2272,
+      "durationMs": 272
+    },
+    {
+      "id": "GHSA-w7rc-rwvf-8q5r",
+      "aliases": [
+        "CVE-2020-15168"
+      ],
+      "cveIds": [
+        "CVE-2020-15168"
+      ],
+      "ghsaIds": [
+        "GHSA-w7rc-rwvf-8q5r"
+      ],
+      "summary": "The `size` option isn't honored after following a redirect in node-fetch",
+      "published": "2020-09-10T17:46:21Z",
+      "modified": "2026-07-08T06:00:29.567074454Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:R/S:U/C:N/I:N/A:L",
+        "cvssV3Score": 2.6,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "LOW",
+        "normalizedLevel": "LOW",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "2.6.1",
+        "3.0.0-beta.9"
+      ],
+      "affected": [
+        {
+          "package": "node-fetch",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "2.0.0"
+                },
+                {
+                  "fixed": "2.6.1"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "node-fetch",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "3.0.0-beta.1"
+                },
+                {
+                  "fixed": "3.0.0-beta.9"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 5,
+      "bytes": 2814,
+      "durationMs": 273
+    },
+    {
+      "id": "GHSA-5c6j-r48x-rmvq",
+      "aliases": [],
+      "cveIds": [],
+      "ghsaIds": [
+        "GHSA-5c6j-r48x-rmvq"
+      ],
+      "summary": "Serialize JavaScript is Vulnerable to RCE via RegExp.flags and Date.prototype.toISOString()",
+      "published": "2026-02-28T02:50:45Z",
+      "modified": "2026-09-10T03:50:34.154574250Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssV3Score": 8.1,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "7.0.3"
+      ],
+      "affected": [
+        {
+          "package": "serialize-javascript",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "7.0.3"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 6,
+      "bytes": 4110,
+      "durationMs": 296
+    },
+    {
+      "id": "GHSA-m5mm-p8h7-m29v",
+      "aliases": [
+        "CVE-2026-115754",
+        "CVE-2026-115897"
+      ],
+      "cveIds": [
+        "CVE-2026-115754",
+        "CVE-2026-115897"
+      ],
+      "ghsaIds": [
+        "GHSA-m5mm-p8h7-m29v"
+      ],
+      "summary": "Serialize JavaScript: Cross-site scripting (XSS) via unescaped </script at the end of a serialized function body",
+      "published": "2026-10-23T22:09:52Z",
+      "modified": "2026-10-24T02:55:55.507718062Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:4.0/AV:N/AC:H/AT:P/PR:L/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N"
+        ],
+        "cvssV3Vector": null,
+        "cvssV3Score": null,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "LOW",
+        "normalizedLevel": "LOW",
+        "source": "database_specific.severity"
+      },
+      "fixedVersions": [
+        "7.1.3"
+      ],
+      "affected": [
+        {
+          "package": "serialize-javascript",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "7.1.3"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 5,
+      "bytes": 3587,
+      "durationMs": 267
+    },
+    {
+      "id": "GHSA-hxcc-f52p-wc94",
+      "aliases": [
+        "CVE-2020-7660"
+      ],
+      "cveIds": [
+        "CVE-2020-7660"
+      ],
+      "ghsaIds": [
+        "GHSA-hxcc-f52p-wc94"
+      ],
+      "summary": "Insecure serialization leading to RCE in serialize-javascript",
+      "published": "2020-08-11T17:21:13Z",
+      "modified": "2023-11-08T04:04:03.301649Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvssV3Score": 8.1,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "3.1.0"
+      ],
+      "affected": [
+        {
+          "package": "serialize-javascript",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "3.1.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 3,
+      "bytes": 1661,
+      "durationMs": 264
+    },
+    {
+      "id": "GHSA-qw6h-vgh9-j6wx",
+      "aliases": [
+        "CVE-2024-43796"
+      ],
+      "cveIds": [
+        "CVE-2024-43796"
+      ],
+      "ghsaIds": [
+        "GHSA-qw6h-vgh9-j6wx"
+      ],
+      "summary": "express vulnerable to XSS via response.redirect()",
+      "published": "2024-09-10T19:41:04Z",
+      "modified": "2026-09-10T03:50:18.298562940Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3",
+          "CVSS_V4"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:L",
+          "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:N/SC:L/SI:L/SA:L"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:U/C:L/I:L/A:L",
+        "cvssV3Score": 5,
+        "cvssV4Present": true,
+        "databaseSpecificSeverity": "LOW",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.20.0",
+        "5.0.0"
+      ],
+      "affected": [
+        {
+          "package": "express",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "4.20.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "express",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "5.0.0-alpha.1"
+                },
+                {
+                  "fixed": "5.0.0"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 4,
+      "bytes": 2360,
+      "durationMs": 259
+    },
+    {
+      "id": "GHSA-rv95-896h-c2vc",
+      "aliases": [
+        "CVE-2024-29041"
+      ],
+      "cveIds": [
+        "CVE-2024-29041"
+      ],
+      "ghsaIds": [
+        "GHSA-rv95-896h-c2vc"
+      ],
+      "summary": "Express.js Open Redirect in malformed URLs",
+      "published": "2024-03-25T19:40:26Z",
+      "modified": "2026-09-10T03:50:10.750068508Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+        "cvssV3Score": 6.1,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "MODERATE",
+        "normalizedLevel": "MEDIUM",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "4.19.2",
+        "5.0.0-beta.3"
+      ],
+      "affected": [
+        {
+          "package": "express",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "4.19.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "express",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "5.0.0-alpha.1"
+                },
+                {
+                  "fixed": "5.0.0-beta.3"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 8,
+      "bytes": 3311,
+      "durationMs": 299
+    },
+    {
+      "id": "GHSA-9c47-m6qq-7p4h",
+      "aliases": [
+        "CVE-2022-46175"
+      ],
+      "cveIds": [
+        "CVE-2022-46175"
+      ],
+      "ghsaIds": [
+        "GHSA-9c47-m6qq-7p4h"
+      ],
+      "summary": "Prototype Pollution in JSON5 via Parse Method",
+      "published": "2022-12-29T01:51:03Z",
+      "modified": "2026-09-10T03:49:56.250129993Z",
+      "severity": {
+        "structuredTypes": [
+          "CVSS_V3"
+        ],
+        "structuredScores": [
+          "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:L/A:H"
+        ],
+        "cvssV3Vector": "CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:L/A:H",
+        "cvssV3Score": 7.1,
+        "cvssV4Present": false,
+        "databaseSpecificSeverity": "HIGH",
+        "normalizedLevel": "HIGH",
+        "source": "CVSS_V3"
+      },
+      "fixedVersions": [
+        "2.2.2",
+        "1.0.2"
+      ],
+      "affected": [
+        {
+          "package": "json5",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "2.0.0"
+                },
+                {
+                  "fixed": "2.2.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        },
+        {
+          "package": "json5",
+          "ecosystem": "npm",
+          "ranges": [
+            {
+              "type": "SEMVER",
+              "events": [
+                {
+                  "introduced": "0"
+                },
+                {
+                  "fixed": "1.0.2"
+                }
+              ]
+            }
+          ],
+          "versionsCount": 0
+        }
+      ],
+      "referencesCount": 10,
+      "bytes": 5067,
+      "durationMs": 269
+    }
+  ]
+}
