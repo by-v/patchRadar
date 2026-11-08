@@ -173,13 +173,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Tambahkan script `lint`, `typecheck`, dan `test`, plus satu smoke test.
 - **Memenuhi:** `NFR-16`
 - **Kriteria selesai (AC):**
-  - [ ] `npm run lint` lulus.
-  - [ ] `npm run typecheck` lulus.
-  - [ ] `npm test` menjalankan minimal satu test dan lulus.
-  - [ ] Test yang sengaja dibuat gagal benar-benar dilaporkan gagal.
+  - [x] `npm run lint` lulus.
+  - [x] `npm run typecheck` lulus.
+  - [x] `npm test` menjalankan minimal satu test dan lulus.
+  - [x] Test yang sengaja dibuat gagal benar-benar dilaporkan gagal.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `tsconfig.json`: `strict` sudah aktif sejak scaffold; ditambahkan `noUncheckedIndexedAccess: true` dan `types: ["jest"]`.
+  - ESLint memakai `eslint-config-expo`; script `npm run lint` menjalankan `expo lint`.
+  - Unit test memakai Jest 30 + `jest-expo` (`~58.0.14`) sebagai devDependencies dengan preset `jest-expo`.
+  - Script baru: `npm run typecheck` (`tsc --noEmit`) dan `npm test` (`jest`).
+  - Smoke test `src/__tests__/app-config-test.ts` memverifikasi nama, slug, dan scheme PatchRadar pada `app.json`.
+  - `npm run lint`, `npm run typecheck`, dan `npm test -- --ci` lulus (1 suite, 1 test).
+  - Verifikasi AC (4): test sementara `expect(1).toBe(2)` dilaporkan **FAIL** dengan exit code 1; file uji sementara kemudian dihapus.
+  - Catatan: `npm audit` melaporkan 31 kerentanan (1 low, 30 moderate) dari dependency pengembangan; tidak memblokir AC dan akan ditinjau terpisah.
 
 ### T-D0-07 — Catat versi lingkungan dan daftar secret
 - **Tipe:** `[AGENT]`
