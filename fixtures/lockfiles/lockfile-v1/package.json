@@ -1,0 +1,10 @@
+{
+  "name": "patchradar-fixture-lockfile-v1",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fixture package-lock.json versi 1 untuk uji fallback/peringatan",
+  "dependencies": {
+    "express": "4.21.2",
+    "lodash": "4.17.21"
+  }
+}

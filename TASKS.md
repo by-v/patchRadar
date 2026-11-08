@@ -364,13 +364,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Commit hanya manifest/lockfile, bukan `node_modules`.
 - **Memenuhi:** `FR-04`, `NFR-09`, `R-06`, `R-07`
 - **Kriteria selesai (AC):**
-  - [ ] `node scripts/count-packages.mjs fixtures/lockfiles/medium-500` melaporkan jumlah unik sesuai target ±10%.
-  - [ ] Tiga ukuran fixture tersedia dan dapat diparse sebagai JSON.
-  - [ ] Fixture edge case tersedia.
-  - [ ] `git ls-files fixtures` tidak memuat `node_modules`.
+  - [x] `node scripts/count-packages.mjs fixtures/lockfiles/medium-500` melaporkan jumlah unik sesuai target ±10%.
+  - [x] Tiga ukuran fixture tersedia dan dapat diparse sebagai JSON.
+  - [x] Fixture edge case tersedia.
+  - [x] `git ls-files fixtures` tidak memuat `node_modules`.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Script: `scripts/count-packages.mjs` (mendukung lockfile v1 `dependencies` dan v2/v3 `packages`; root dan `link` tidak dihitung).
+  - `small-100`: **107** paket unik dari 108 entri; `medium-500`: **491** dari 508; `large-1500`: **1.409** dari 1.516. Ketiganya berada dalam target ±10% (90–110, 450–550, 1.350–1.650).
+  - Ketiga lockfile ber-`lockfileVersion: 3`, JSON valid, dibuat dengan npm 11.11.1 memakai `npm install --package-lock-only --ignore-scripts` sehingga tidak ada `node_modules`.
+  - Edge case: `no-lockfile/` (hanya `package.json`), `no-package-json/` (hanya `package-lock.json`), `malformed-lockfile/` (JSON terpotong, sengaja tidak valid), `lockfile-v1/` (v1 valid, 70 paket unik).
+  - `git ls-files fixtures` tidak memuat path `node_modules`; hanya manifest, lockfile, dan script yang di-commit.
 
 ### T-W1-07 — Implementasi parser lockfile v2/v3, fallback, dan dedupe
 - **Tipe:** `[AGENT]`

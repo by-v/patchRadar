@@ -1,0 +1,9 @@
+{
+  "name": "patchradar-fixture-malformed-lockfile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Fixture package-lock.json rusak (JSON tidak valid)",
+  "dependencies": {
+    "express": "4.21.2"
+  }
+}
