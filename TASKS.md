@@ -558,6 +558,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] EPSS gagal menghasilkan 200 dengan `partial=true` dan warning.
   - [ ] Label, skor, alasan, dan urutan sesuai unit test mesin label.
   - [ ] `persisted` selalu ada sebagai boolean.
+  - [ ] Unit test mencakup EPSS `total=0` pada permintaan tidak kosong dan chunk lebih dari 100 CVE.
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -1469,6 +1470,9 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | Tanggal | Tugas | Keputusan | Alasan | Konfirmasi pengembang |
 |---|---|---|---|---|
 | 9 November 2026 | `T-D0-04`, `T-D0-05` | Perangkat uji harian adalah iPhone dengan Expo Go. AC pembukaan aplikasi diverifikasi di akhir `T-D0-05`; `T-D0-04` tetap `[~]` sampai verifikasi itu. APK Android tetap dibangun lewat EAS dan diuji di emulator Android atau HP Android pinjaman. | Pengembang hanya memiliki iPhone; perangkat Android fisik belum tersedia. | Ya — instruksi langsung pengembang, 9 November 2026 |
+| 9 November 2026 | `T-W1-05`, `T-W1-12c` | EPSS: kirim maksimal 100 CVE per request dan **selalu** sertakan parameter `cve`; tanpa parameter itu seluruh basis dikembalikan. Respons `total=0`/`data=[]` untuk permintaan tidak kosong diperlakukan sebagai **kegagalan** (warning, `partial=true`), bukan "tidak ada skor". Gunakan `limit` eksplisit atau paginasi karena default 100. CVE tanpa skor tetap `null`. Perilaku 429/5xx masih `[PERLU DIVERIFIKASI]`. | Pengamatan `T-W1-05`: 134 CVE (URL 2.047 byte) mengembalikan HTTP 200 dengan `total=0`; tanpa `cve` API mengembalikan 401.956 entri; 101 CVE hanya mengembalikan 100 data dengan `limit` default. | Ya — instruksi pengembang, 9 November 2026 |
+| 9 November 2026 | `T-W1-04` | KEV: `knownRansomwareCampaignUse` bernilai `Known`/`Unknown`, bukan boolean; hanya `Known` dipetakan ke `true`. Logo/seal CISA/DHS tidak boleh dipakai. Akses feed dari region Supabase masih `[PERLU DIVERIFIKASI]` dan diuji di `T-W1-12d`. | Pengamatan `T-W1-04`: 361 `Known` + 1.408 `Unknown`; lisensi CC0 1.0 melarang pemakaian logo/seal sebagai endorsement; akses regional belum diukur. | Ya — instruksi pengembang, 9 November 2026 |
+| 9 November 2026 | `T-W1-03`, `T-W1-12c` | OSV: batas nyata **1.000 query/request**; chunk 50 dipakai untuk membatasi ukuran respons. Detail advisory diambil terpisah karena respons batch hanya berisi `id` + `modified`. Severity fallback ke `database_specific` bila advisory hanya memuat CVSS_V4. | Pengamatan `T-W1-03`: 1.000 query → 200, 1.001 → 400 `too many queries`; respons batch tanpa severity/aliases; 5/40 advisory hanya CVSS_V4. | Ya — instruksi pengembang, 9 November 2026 |
 
 ---
 
