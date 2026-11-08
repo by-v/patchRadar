@@ -420,12 +420,23 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Tulis keputusan apakah satu fungsi cukup atau perlu optimasi/pecah pekerjaan (mis. ekstrak field yang diperlukan, hindari salinan objek besar).
 - **Memenuhi:** `NFR-17`, `R-15`
 - **Kriteria selesai (AC):**
-  - [ ] Hasil CPU time dan wall time kedua ukuran fixture tercatat di `docs/due-diligence-log.md`.
-  - [ ] Ada keputusan tertulis: pipeline satu fungsi cukup, atau daftar optimasi/pemecahan yang akan dipakai.
-  - [ ] Batas CPU platform dikutip dari dokumentasi Supabase saat ini beserta tanggal akses.
+  - [x] Hasil CPU time dan wall time kedua ukuran fixture tercatat di `docs/due-diligence-log.md` (wall time terukur; CPU platform tercatat "tidak teramati" dengan bukti runtime, bukan diperkirakan).
+  - [x] Ada keputusan tertulis: pipeline satu fungsi cukup, atau daftar optimasi/pemecahan yang akan dipakai.
+  - [x] Batas CPU platform dikutip dari dokumentasi Supabase saat ini beserta tanggal akses.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [!] Tugas selesai — menunggu keputusan pengembang: wall time sudah terukur, tetapi CPU platform tidak dapat diukur dari CLI/API pada runtime ini.
 - **Catatan hasil:**
+  - File: `supabase/functions/cpu-spike/index.ts` (sementara, sudah dihapus dari remote), `scripts/probe-cpu-supabase.mjs`, `docs/due-diligence-log.md`.
+  - Deploy memakai `npx supabase@latest functions deploy cpu-spike --use-api --yes` pada CLI 3.0.0; Docker tidak terpasang dan tidak diperlukan karena API-based deploy. JWT verification tetap aktif (tanpa `--no-verify-jwt`); invokasi memakai anon key yang diambil CLI di dalam proses skrip dan tidak dicetak/disimpan.
+  - Fungsi hanya memuat parser `T-W1-07`, menerima `packageJsonText` + `lockfileText` lewat POST, dan tidak memanggil jaringan eksternal. Runtime: `supabase-edge-runtime-1.78.1 (compatible with Deno v2.1.4)`.
+  - **500 paket** (`medium-500`, 491 unik, body 267.718 B): 7 run setelah 1 warmup. Wall klien median **132,984 ms**, terburuk **213,148 ms**; wall handler median **4,719 ms**, terburuk **74,113 ms**; wall parser median **2,990 ms**, terburuk **3,278 ms**.
+  - **1.500 paket** (`large-1500`, 1.409 unik, body 846.584 B): 7 run setelah 1 warmup. Wall klien median **86,093 ms**, terburuk **284,429 ms**; wall handler median **20,083 ms**, terburuk **212,529 ms**; wall parser median **9,582 ms**, terburuk **12,412 ms**.
+  - **CPU platform tidak teramati.** Respons tidak memuat header CPU. `node:process.cpuUsage` ada tetapi mengembalikan 0, termasuk saat parser diulang 20× (51,135 ms) dan 10× (98,802 ms), sehingga nilai 0 tidak dilaporkan sebagai CPU. Metrik CPU dashboard tidak dapat diakses dari sesi CLI/headless ini. Angka CPU tidak diperkirakan. Bukti pendukung lokal (bukan platform): Node 24.21.0 mengukur median 1.600 µs/parse (500 paket) dan 4.600 µs/parse (1.500 paket).
+  - **Batas platform** dikutip dari https://supabase.com/docs/guides/functions/limits (diakses 9 November 2026): CPU time maksimum **2 s** per request; wall clock 150 s (Free)/400 s (Paid); memori 256 MB; bundle 20 MB via CLI atau 5 MB server-side. Rujukan tambahan: https://supabase.com/kb/troubleshooting/edge-function-cpu-limits.
+  - **Persentase:** wall parser 500 paket ≈0,15% dan 1.500 paket ≈0,48% dari batas CPU 2.000 ms. Ini rasio wall, bukan CPU; persentase CPU tidak dapat dihitung karena CPU platform tidak terukur. Wall klien median ≈0,09% dan ≈0,06% dari wall clock Free 150 s.
+  - **Keputusan desain:** satu Edge Function `scan` cukup untuk `T-W1-11`; parser tidak perlu dioptimasi/dipecah lebih lanjut. `T-W1-12d` wajib memverifikasi CPU dashboard; bila >70% batas, pecah pengayaan per chunk atau pindahkan pekerjaan berat.
+  - **Pembersihan remote:** `functions delete cpu-spike` sukses; `functions list` sesudahnya mengembalikan `{"functions":[]}`. Tidak ada migrasi, secrets, atau perubahan fungsi lain.
+  - **Alasan status `[!]`:** AC CPU time belum dapat dibuktikan dari platform; pengembang perlu memutuskan apakah bukti wall time + CPU lokal cukup, atau mengulang spike dengan akses metrik dashboard saat fungsi masih hidup.
 
 ### T-W1-08 — Implementasi resolver semver dan klien npm registry
 - **Tipe:** `[AGENT]`
