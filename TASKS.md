@@ -107,21 +107,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [x] Tugas selesai
 - **Catatan hasil:**
 
-### T-D0-04 — Siapkan akun EAS, perangkat Android, dan mode pengembang
+### T-D0-04 — Siapkan akun EAS, iPhone, dan Expo Go
 - **Tipe:** `[MANUAL]`
-- **Tujuan:** Memastikan build dan pengujian dapat dilakukan di perangkat Android fisik sejak awal.
+- **Tujuan:** Memastikan build Android tetap dapat dilakukan lewat EAS dan pengujian harian dapat dilakukan di iPhone memakai Expo Go.
 - **Prasyarat:** `T-D0-01`
 - **File/folder:** konfigurasi EAS nanti di `app/`; tidak ada artefak build di repo
 - **Langkah:**
   1. Buat akun Expo, pasang `eas-cli`, dan login.
-  2. Aktifkan opsi pengembang + USB debugging pada perangkat Android.
-  3. Verifikasi perangkat terdeteksi dengan `adb devices`.
-  4. Catat model, versi Android, dan arsitektur perangkat.
-- **Memenuhi:** `NFR-10`, `R-14`
+  2. Pasang Expo Go dari App Store di iPhone dan login dengan akun Expo yang sama.
+  3. Catat model iPhone dan versi iOS.
+  4. Pastikan iPhone dan PC dapat saling terhubung (jaringan yang sama atau mode tunnel Expo) agar aplikasi dari `T-D0-05` dapat dibuka lewat Expo Go.
+- **Memenuhi:** `NFR-10`, `NFR-13`, `R-14`
 - **Kriteria selesai (AC):**
   - [ ] `eas whoami` menampilkan akun.
-  - [ ] `adb devices` menampilkan perangkat berstatus `device`.
-  - [ ] Versi Android perangkat tercatat.
+  - [ ] Expo Go terpasang di iPhone.
+  - [ ] Aplikasi Expo dari `T-D0-05` terbuka di Expo Go dan versi iOS tercatat (diverifikasi di akhir `T-D0-05`).
+- **Catatan verifikasi:** AC (3) baru dapat dicentang setelah `T-D0-05` selesai; `T-D0-04` ditutup setelah verifikasi tersebut.
 - **Estimasi:** 1 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -130,18 +131,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Tipe:** `[AGENT]`
 - **Tujuan:** Membuat fondasi aplikasi Expo/React Native bertipe TypeScript dan memiliki routing file-based.
 - **Prasyarat:** `T-D0-01`, `T-D0-04`
+- **Catatan prasyarat:** `T-D0-04` boleh berstatus `[~]` sampai AC (3)-nya diverifikasi di akhir tugas ini.
 - **File/folder:** `app/package.json`, `app/app.json`, `app/tsconfig.json`, `app/app/`
 - **Langkah:**
   1. Jalankan `npx create-expo-app@latest app` dengan template default yang sudah memakai TypeScript dan Expo Router.
   2. Hapus contoh yang tidak dipakai, pertahankan struktur router dan tab dasar.
-  3. Jalankan aplikasi di perangkat/emulator untuk smoke test awal.
-  4. Catat versi Expo SDK, React Native, dan Node di `docs/`.
+  3. Jalankan aplikasi di Expo Go pada iPhone, verifikasi route awal tampil, dan catat versi iOS.
+  4. Catat versi Expo SDK, React Native, Node, dan iOS di `docs/`.
 - **Memenuhi:** `NFR-13` (fondasi), `FR-17` (shell navigasi)
 - **Kriteria selesai (AC):**
   - [ ] `npm run typecheck` atau `npx tsc --noEmit` lulus.
   - [ ] `npx expo-doctor` tidak melaporkan masalah kritis.
-  - [ ] Aplikasi terbuka dan route awal tampil di perangkat.
-  - [ ] Aplikasi diuji pada perangkat Android fisik yang tersedia dan versi Android minimum yang berhasil diuji dicatat.
+  - [ ] Aplikasi Expo terbuka di Expo Go pada iPhone dan versi iOS tercatat (sekaligus memverifikasi AC (3) `T-D0-04`).
+  - [ ] Catatan versi iOS tersimpan di `docs/`.
+- **Catatan verifikasi:** Verifikasi APK Android dilakukan terpisah di `T-W2-08` dan `T-W4-03` memakai emulator Android atau HP Android pinjaman.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -556,7 +559,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] Seluruh label berbahasa Indonesia.
   - [ ] Tampilan aman pada layar kecil dan mode teks besar.
   - [ ] Typecheck dan lint lulus.
-  - [ ] Aplikasi diuji pada perangkat Android fisik yang tersedia dan versi Android minimum yang berhasil diuji dicatat.
+  - [ ] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
 - **Estimasi:** 2,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -679,27 +682,27 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] Semua tombol memiliki label aksesibel.
   - [ ] Teks tetap terbaca pada ukuran font sistem terbesar.
   - [ ] Tidak ada string Inggris yang terlihat pengguna.
-  - [ ] Aplikasi diuji pada perangkat Android fisik yang tersedia dan versi Android minimum yang berhasil diuji dicatat.
+  - [ ] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
 
 ### T-W2-08 — `[MANUAL]` Build EAS percobaan dan pemasangan di perangkat
 - **Tipe:** `[MANUAL]`
-- **Tujuan:** Membuktikan pipeline build berjalan sebelum minggu-minggu akhir.
+- **Tujuan:** Membuktikan pipeline build Android berjalan sebelum minggu-minggu akhir.
 - **Prasyarat:** `T-D0-04`, `T-W2-04`, `T-W2-07`
 - **File/folder:** `app/eas.json`, artefak build di luar repo
 - **Langkah:**
   1. Konfigurasi profil `preview` untuk APK.
   2. Jalankan build EAS dan unduh artefak.
-  3. Pasang APK di perangkat fisik dan jalankan alur Pindai→Hasil→Detail.
+  3. Pasang APK di emulator Android atau HP Android pinjaman, lalu jalankan alur Pindai→Hasil→Detail.
   4. Periksa bundle untuk secret dan catat hasil build.
-- **Memenuhi:** `NFR-03`, `NFR-10`, `R-14`
+- **Memenuhi:** `NFR-03`, `NFR-10`, `NFR-13`, `R-14`
 - **Kriteria selesai (AC):**
   - [ ] Build EAS selesai tanpa error.
-  - [ ] APK terpasang dan alur utama berjalan.
+  - [ ] APK terpasang di emulator Android atau HP Android pinjaman dan alur utama berjalan.
   - [ ] Tidak ada secret di bundle.
-  - [ ] Log build dan model perangkat tercatat.
+  - [ ] Log build, model perangkat/emulator, dan versi Android tercatat.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -710,14 +713,14 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Prasyarat:** `T-W2-01` s.d. `T-W2-08`
 - **File/folder:** `docs/week2-gate.md`
 - **Langkah:**
-  1. Uji alur Pindai→Hasil→Detail di perangkat fisik.
+  1. Uji alur Pindai→Hasil→Detail di Expo Go pada iPhone; verifikasi APK Android di emulator atau HP Android pinjaman.
   2. Uji seluruh kasus validasi URL.
   3. Verifikasi field kartu, banner, indikator progres, dan empty state.
   4. Verifikasi tidak ada secret di APK.
   5. Catat verdict dan blocker.
-- **Memenuhi:** `FR-17`, `NFR-03`, `NFR-10`, `R-13`, `R-14`
+- **Memenuhi:** `FR-17`, `NFR-03`, `NFR-10`, `NFR-13`, `R-13`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] Alur utama lulus di perangkat fisik.
+  - [ ] Alur utama lulus di Expo Go iPhone dan APK Android (emulator atau HP pinjaman).
   - [ ] Seluruh field FR-17 ada pada kartu.
   - [ ] Build EAS percobaan berhasil.
   - [ ] Verdict Go/No-Go tercatat.
@@ -1064,7 +1067,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Memenuhi:** `NFR-10`, `R-14`
 - **Kriteria selesai (AC):**
   - [ ] APK release candidate berhasil dibuat.
-  - [ ] APK dapat dipasang di perangkat fisik.
+  - [ ] APK dapat dipasang di emulator Android atau HP Android pinjaman.
   - [ ] Keystore dan kredensial tidak ada di repo.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
@@ -1072,7 +1075,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W4-03 — `[MANUAL]` Smoke test APK di perangkat
 - **Tipe:** `[MANUAL]`
-- **Tujuan:** Memverifikasi alur utama dan kondisi penting pada build rilis, bukan hanya build pengembangan.
+- **Tujuan:** Memverifikasi alur utama dan kondisi penting pada build rilis di emulator Android atau HP Android pinjaman, bukan hanya build pengembangan.
 - **Prasyarat:** `T-W4-02`
 - **File/folder:** `docs/smoke-test.md`
 - **Langkah:**
@@ -1081,10 +1084,10 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Uji minimal 5 kondisi error utama dan hasil parsial.
   4. Siapkan repo demo GitHub berisi fixture ±500 paket unik.
   5. Ukur waktu tap Pindai sampai Hasil terisi minimal 5 kali dan hitung p95.
-  6. Catat perangkat, versi APK, dan hasil setiap langkah.
-- **Memenuhi:** `NFR-01`, `NFR-07`, `NFR-10`, `FR-17`, `FR-20`, `R-06`
+  6. Catat perangkat/emulator, versi Android, versi APK, dan hasil setiap langkah.
+- **Memenuhi:** `NFR-01`, `NFR-07`, `NFR-10`, `NFR-13`, `FR-17`, `FR-20`, `R-06`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] Alur utama lulus di APK rilis.
+  - [ ] Alur utama lulus di APK rilis pada emulator Android atau HP Android pinjaman.
   - [ ] Alur offline lulus.
   - [ ] Tidak ada crash pada langkah yang diuji.
   - [ ] p95 waktu ke hasil pada fixture 500 paket ≤ 15 detik, atau penyimpangan dicatat beserta tindakan.
@@ -1216,9 +1219,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   1. Periksa seluruh DoD Minggu 4 PRD.
   2. Verifikasi APK, smoke test, keamanan, RLS, validasi, dan blocker nol.
   3. Catat verdict Go/No-Go dan sisa risiko.
-- **Memenuhi:** `NFR-03`, `NFR-05`, `NFR-10`, `R-13`, `R-14`
+- **Memenuhi:** `NFR-03`, `NFR-05`, `NFR-10`, `NFR-13`, `R-13`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] APK terpasang dan lulus smoke test.
+  - [ ] APK terpasang dan lulus smoke test pada emulator Android atau HP Android pinjaman.
   - [ ] Checklist keamanan tanpa temuan kritis.
   - [ ] RLS diuji ulang pada build rilis.
   - [ ] Validasi memenuhi kriteria PRD §16.
@@ -1362,7 +1365,7 @@ Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requi
 | NFR-11 (S) | `T-W3-12` |
 | NFR-12 (M) | `T-W1-11`, `T-W1-12d` |
 | NFR-12 (S) | `T-W3-11` |
-| NFR-13 | `T-D0-05`, `T-W2-01`, `T-W2-07` |
+| NFR-13 | `T-D0-04`, `T-D0-05`, `T-W2-01`, `T-W2-07`, `T-W2-08`, `T-W2-09`, `T-W4-03`, `T-W4-08` |
 | NFR-14 (S) | `T-W3-10` |
 | NFR-15 | `T-D0-02`, `T-W1-13`, `T-W3-04`, `T-W3-10` |
 | NFR-16 | `T-D0-06`, `T-W1-07`, `T-W1-08`, `T-W1-09`, `T-W1-10`, `T-W3-01` |
@@ -1385,8 +1388,10 @@ Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requi
 | R-11 | `T-W1-10`, `T-W2-03`, `T-W2-04`, `T-W2-06`, `T-W3-07c`, `T-W4-07` |
 | R-12 | `T-W1-08`, `T-W2-05` |
 | R-13 | `T-D0-01`, `T-W1-14`, `T-W2-10`, `T-W3-08`, `T-W4-01`, `T-W4-08` |
-| R-14 | `T-D0-04`, `T-W2-08`, `T-W4-02` |
+| R-14 | `T-D0-04`, `T-W2-08`, `T-W2-09`, `T-W4-02`, `T-W4-03`, `T-W4-08` |
 | R-15 | `T-W1-07b`, `T-W1-12d`, `T-W1-14` |
+
+> **Catatan NFR-13/R-14:** Uji harian dilakukan di iPhone memakai Expo Go. APK Android tetap dibangun lewat EAS dan diuji di emulator Android atau HP Android pinjaman. Penyimpangan terkontrol ini dicatat di **Catatan Keputusan**.
 
 ---
 
@@ -1396,6 +1401,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 
 | Tanggal | Tugas | Keputusan | Alasan | Konfirmasi pengembang |
 |---|---|---|---|---|
+| 9 November 2026 | `T-D0-04`, `T-D0-05` | Perangkat uji harian adalah iPhone dengan Expo Go. AC pembukaan aplikasi diverifikasi di akhir `T-D0-05`; `T-D0-04` tetap `[~]` sampai verifikasi itu. APK Android tetap dibangun lewat EAS dan diuji di emulator Android atau HP Android pinjaman. | Pengembang hanya memiliki iPhone; perangkat Android fisik belum tersedia. | Ya — instruksi langsung pengembang, 9 November 2026 |
 
 ---
 
