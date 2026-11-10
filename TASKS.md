@@ -606,13 +606,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Uji kondisi katalog kosong, katalog basi, dan alias tidak lengkap.
 - **Memenuhi:** `FR-08`, `FR-09`, `R-05`
 - **Kriteria selesai (AC):**
-  - [ ] Refresh hanya terjadi saat salinan > 24 jam.
-  - [ ] Salinan lama yang gagal diperbarui ditandai `STALE`.
-  - [ ] Temuan dengan CVE di KEV mendapat `kev=true` lewat alias mana pun.
-  - [ ] Katalog belum tersedia tidak membuat scan crash.
+  - [x] Refresh hanya terjadi saat salinan > 24 jam.
+  - [x] Salinan lama yang gagal diperbarui ditandai `STALE`.
+  - [x] Temuan dengan CVE di KEV mendapat `kev=true` lewat alias mana pun.
+  - [x] Katalog belum tersedia tidak membuat scan crash.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/migrations/20261110000100_kev_entries.sql`, `supabase/functions/scan/kev.ts`, `kev-match.ts`, serta `kev.test.ts`, `kev-match.test.ts`.
+  - Keputusan 10 November 2026: migrasi hanya ditulis sebagai file dan **tidak** diterapkan ke remote; akses katalog di balik `KevStore` (`createSupabaseKevStore` untuk produksi, `createMemoryKevStore` untuk unit test).
+  - `kev.ts`: katalog dimuat dari `KevStore`; refresh hanya bila belum ada salinan atau `updated_at` > 24 jam. Refresh memakai `KEV_FEED_URL`, timeout 15 dtk, dan retry maksimum 2 dengan backoff 250/500 ms untuk 429/5xx/jaringan. `sourceStatus` bernilai `OK`/`CACHE`/`STALE`/`EMPTY`.
+  - Pemetaan feed → baris memakai nama field asli (`cveID`, `vendorProject`, `product`, `vulnerabilityName`, `dateAdded`, `knownRansomwareCampaignUse`). Hanya `Known` menjadi `known_ransomware=true`; seluruh entri asli disimpan di `raw`.
+  - Refresh gagal + salinan lama ada → salinan lama dipakai, `STALE`, warning `KEV_STALE`, scan tetap berjalan. Belum ada salinan + refresh gagal → `entries=[]`, `EMPTY`, warning `KEV_UNAVAILABLE`, tanpa crash.
+  - `kev-match.ts`: `matchKevFindings` mencocokkan **semua** alias CVE (tidak peka huruf besar/kecil); temuan tanpa CVE selalu `kev=false`. Tahap pencocokan diukur dengan `timed(..., "kev.match", ...)` (sinkron).
+  - Unit test: 13 test baru lulus (total suite scan **136**). Mencakup pemetaan field asli, `Known`/`Unknown`, entri ganda/invalid, salinan < 24 jam tanpa refresh, refresh > 24 jam tepat satu kali, `STALE`, katalog kosong, feed kosong, alias mana pun, dan timing.
+  - Typecheck strict modul baru lulus. Tidak ada panggilan jaringan nyata; `fetch` disuntikkan.
+  - **Menunggu `T-W1-12d`:** bukti baris `kev_entries` di database remote, refresh nyata dari feed CISA melalui Supabase, dan perilaku `STALE` pada salinan remote. Migrasi baru diterapkan di langkah 1 `T-W1-12d`.
 
 ### T-W1-12c — EPSS, hasil parsial, `persisted`, dan respons final
 - **Tipe:** `[AGENT]`
