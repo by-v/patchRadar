@@ -576,13 +576,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Tulis unit test untuk cache hit, cache miss, dan advisory kosong.
 - **Memenuhi:** `FR-06`, `FR-07`
 - **Kriteria selesai (AC):**
-  - [ ] Chunk OSV berjalan dan hasilnya tersimpan di `osv_cache`.
-  - [ ] Scan kedua untuk paket yang sama memakai cache, bukan memanggil OSV lagi.
-  - [ ] Findings dasar memuat ID advisory dan alias yang benar.
-  - [ ] Unit test cache dan findings lulus.
+  - [x] Chunk OSV berjalan dan hasilnya tersimpan di `osv_cache` (dibuktikan dengan store tiruan; bukti baris remote menunggu `T-W1-12d`).
+  - [x] Scan kedua untuk paket yang sama memakai cache, bukan memanggil OSV lagi (dibuktikan dengan store tiruan; bukti baris remote menunggu `T-W1-12d`).
+  - [x] Findings dasar memuat ID advisory dan alias yang benar.
+  - [x] Unit test cache dan findings lulus.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/migrations/20261110000000_osv_cache.sql`, `supabase/functions/scan/osv.ts`, `findings.ts`, `store.ts`, `supabase-store.ts`, `lib/timing.ts`, serta `osv.test.ts`, `findings.test.ts`, `lib/timing.test.ts`.
+  - Keputusan 10 November 2026: migrasi hanya ditulis sebagai file dan **tidak** diterapkan ke proyek remote. Akses database berada di balik `OsvCacheStore`; produksi memakai `createSupabaseOsvCacheStore`, unit test memakai `createMemoryOsvCacheStore`.
+  - `osv.ts`: query batch per chunk 50, detail advisory terpisah dengan konkurensi 5, retry maksimum 2 dengan backoff 250/500 ms untuk 429/5xx/jaringan, timeout 8 dtk. Cache per `npm:{nama}@{versi}` termasuk hasil negatif dan cache detail `osv:advisory:{id}`, semuanya TTL 24 jam. `sourceStatus` bernilai `OK`/`CACHE`/`PARTIAL`.
+  - Kegagalan total (tidak ada data cache sama sekali) → `ScanError('UPSTREAM_UNAVAILABLE')` 502. Kegagalan sebagian chunk/detail/cache → warning `OSV_PARTIAL`, `OSV_DETAIL_PARTIAL`, `OSV_CACHE_READ_FAILED`, atau `OSV_CACHE_WRITE_FAILED` dan `partial=true`.
+  - `findings.ts`: satu finding per paket+advisory berisi `osvId`, `cveIds`/`ghsaIds` hasil normalisasi alias, nama paket, versi terpasang, serta flag `direct`/`devOnly`/`parentPackage`. Tahap penyusunan findings diukur dengan `timed(...)`.
+  - `lib/timing.ts`: `timed(timings, "tahap", fn)` mencatat wall time terpisah untuk tahap sinkron (`timings.sync`) dan non-sinkron (`timings.async`); `totalSyncMs` tersedia untuk batas atas CPU pada `T-W1-12d`.
+  - Unit test: 17 test baru lulus (total suite scan 123). Mencakup cache miss/hit, hasil negatif, TTL kedaluwarsa, chunk 50/1, retry 429+503, kegagalan total 502, kegagalan sebagian, detail parsial, kegagalan cache, dedupe findings, dan timing.
+  - Typecheck strict modul baru lulus. Tidak ada panggilan jaringan nyata di unit test; `fetch` selalu disuntikkan.
+  - **Menunggu `T-W1-12d`:** bukti nyata baris `osv_cache` di database remote dan pemakaian cache pada scan kedua terhadap Supabase sungguhan. Migrasi baru akan diterapkan pada langkah 1 `T-W1-12d`.
 
 ### T-W1-12b — Katalog KEV: refresh lazy, `STALE`, dan pencocokan alias
 - **Tipe:** `[AGENT]`
@@ -647,6 +656,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] Log memuat durasi per sumber dan CPU time.
   - [ ] Log wall time per tahap sinkron: parse KEV, pencocokan alias, penyusunan findings, skor/label, dan serialisasi respons; jumlah wall time tahap sinkron dihitung dan dicatat sebagai batas atas CPU pipeline.
   - [ ] `[MANUAL]` Pengembang memeriksa metrik fungsi `scan` di dashboard Supabase dan melaporkan apakah CPU time ditampilkan; hasilnya dicatat di `docs/due-diligence-log.md`.
+  - [ ] `[TODO 12a/12b]` Bukti baris `osv_cache` dan `kev_entries` di database remote setelah migrasi diterapkan, termasuk scan kedua yang memakai cache tanpa panggilan OSV.
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -1541,6 +1551,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 9 November 2026 | `T-W1-04` | KEV: `knownRansomwareCampaignUse` bernilai `Known`/`Unknown`, bukan boolean; hanya `Known` dipetakan ke `true`. Logo/seal CISA/DHS tidak boleh dipakai. Akses feed dari region Supabase masih `[PERLU DIVERIFIKASI]` dan diuji di `T-W1-12d`. | Pengamatan `T-W1-04`: 361 `Known` + 1.408 `Unknown`; lisensi CC0 1.0 melarang pemakaian logo/seal sebagai endorsement; akses regional belum diukur. | Ya — instruksi pengembang, 9 November 2026 |
 | 9 November 2026 | `T-W1-03`, `T-W1-12c` | OSV: batas nyata **1.000 query/request**; chunk 50 dipakai untuk membatasi ukuran respons. Detail advisory diambil terpisah karena respons batch hanya berisi `id` + `modified`. Severity fallback ke `database_specific` bila advisory hanya memuat CVSS_V4. | Pengamatan `T-W1-03`: 1.000 query → 200, 1.001 → 400 `too many queries`; respons batch tanpa severity/aliases; 5/40 advisory hanya CVSS_V4. | Ya — instruksi pengembang, 9 November 2026 |
 | 10 November 2026 | `T-W1-11`, `T-W2-02` | Normalisasi tautan di UI (trim, huruf kecil untuk skema dan host, buang `.git` dan `/` di ujung) menjadi tanggung jawab layar Pindai Minggu 2 (`T-W2-02`), bukan fungsi `scan`. Validator server tetap ketat dan tidak menormalkan: `https://github.com/o/r.git` diterima dengan `repo="r.git"`, `https://github.com/o/r/` ditolak `EXTRA_PATH`. | Memisahkan sanitasi tampilan dari validasi keamanan server; mengubah perilaku validator sekarang akan menyimpang dari kontrak `T-W1-11` yang sudah teruji. | Ya — instruksi pengembang, 10 November 2026 |
+| 10 November 2026 | `T-W1-12a`, `T-W1-12b`, `T-W1-12d` | Migrasi Minggu 1 hanya ditulis sebagai file di `supabase/migrations/` dan **tidak** diterapkan ke proyek remote selama 12a/12b. Akses database diletakkan di balik antarmuka (`OsvCacheStore`, `KevStore`) dengan implementasi Supabase dan implementasi tiruan di memori. AC yang menuntut bukti di database sungguhan dibuktikan dengan penyimpanan tiruan sekarang; bukti remote dicatat sebagai TODO eksplisit di `T-W1-12d`. | Pengembang melarang perintah yang mengubah remote (`db push`, `functions deploy`, `secrets set`) pada 12a/12b; pemisahan antarmuka menjaga unit test tanpa jaringan. | Ya — instruksi pengembang, 10 November 2026 |
 | 9 November 2026 | `T-W1-11` | Docker tidak tersedia, sehingga langkah 5 `[AGENT]` “uji lokal dengan `supabase functions serve`” diganti dengan (a) unit test memakai fetch tiruan untuk seluruh jalur validasi dan pemetaan error, dan (b) deploy fungsi `scan` ke proyek remote dengan `--use-api` lalu uji integrasi memakai skrip. AC tugas disesuaikan: jalur validasi/error diuji dengan fetch tiruan, dan hasil uji integrasi remote (status + `requestId`) dicatat. | Docker tidak terpasang di mesin pengembang; deploy remote berbasis API sudah terbukti pada `T-W1-07b`. | Ya — instruksi pengembang, 9 November 2026 |
 
 ---
