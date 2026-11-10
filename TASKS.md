@@ -657,6 +657,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - **Menunggu `T-W1-12d`:** bukti endpoint remote, simulasi EPSS gagal/OSV gagal total/KEV basi pada Supabase sungguhan, bukti baris `osv_cache`/`kev_entries`, dan metrik CPU/wall time per tahap dari log nyata.
 
 ### T-W1-12d — Deploy remote, simulasi kegagalan, dan log CPU per sumber
+- **Status:** `[~]` — sedang dikerjakan; bukti remote belum lengkap (lihat Catatan hasil).
 - **Tipe:** `[AGENT]`
 - **Tujuan:** Membuktikan pipeline berjalan di Supabase dan berperilaku benar saat sumber eksternal gagal.
 - **Prasyarat:** `T-W1-07b`, `T-W1-12c`
@@ -681,6 +682,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [ ] Tugas selesai
 - **Catatan hasil:**
   - **Persiapan simulasi OSV gagal total (wajib dibaca saat 12d):** gunakan repo/fixture dengan paket yang belum pernah masuk `osv_cache`, atau lewati cache secara eksplisit lewat opsi test/flag. Jangan menghapus baris cache di remote tanpa persetujuan pengembang. Bila cache masih berisi data, OSV gagal akan menghasilkan 200 parsial + warning, bukan 502.
+  - **10 November 2026 — pemulihan dokumen:** `TASKS.md` dan `docs/due-diligence-log.md` sempat ter-truncate di working copy oleh perintah edit berbasis redirect shell. Keduanya dipulihkan dari commit `4540d3c`; status tugas ini dikembalikan ke `[~]`.
+  - **Bukti yang sudah tersimpan:** (a) `scan_output.txt` — `axios/axios` 200 LOCKFILE v3 679 paket 2 temuan `req_5bd1eaed5c5442d19b3b1e1b78cf1614`; `lodash/lodash` 200 PACKAGE_JSON 27 paket 6 temuan; `expressjs/express` 200 PACKAGE_JSON 44 paket 1 temuan; kasus 404/400/401 sesuai kontrak. (b) SQL pengembang — `osv_cache` 721 baris paket + 9 baris advisory pada 03:13:40–03:13:57 UTC; `kev_entries` 1773 baris, `updated_at` terbaru 03:13:48 UTC. (c) `docs/due-diligence-log.md` — `CVE-9999-99999` → 200 `total=0`/`data=[]`.
+  - **Bukti yang masih kurang:** durasi per sumber dari log fungsi (`githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`/`totalMs`), `requestId` scan `facebook/react` (artefak tidak tersimpan), scan cache dingin dan hangat pada repo 1.000–1.500 paket, `sourceStatus.kev` + `catalogVersion` pada refresh 03:13:48, satu permintaan PostgREST anon ke `osv_cache`, dan simulasi kegagalan EPSS/OSV/KEV. Semua sel terkait di `T-W1-12d_test_table.md` ditulis `belum diverifikasi`.
 
 ### T-W1-14 — `[GATE]` Go/No-Go Minggu 1
 - **Tipe:** `[GATE]`
