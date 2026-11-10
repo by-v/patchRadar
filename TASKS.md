@@ -636,14 +636,25 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Uji respons lengkap dan respons dengan EPSS gagal.
 - **Memenuhi:** `FR-10`, `FR-13`, `FR-23`, `R-05`
 - **Kriteria selesai (AC):**
-  - [ ] Respons memuat seluruh field kontrak §9, termasuk `partial`, `warnings`, dan `persisted`.
-  - [ ] EPSS gagal menghasilkan 200 dengan `partial=true` dan warning.
-  - [ ] Label, skor, alasan, dan urutan sesuai unit test mesin label.
-  - [ ] `persisted` selalu ada sebagai boolean.
-  - [ ] Unit test mencakup EPSS `total=0` pada permintaan tidak kosong dan chunk lebih dari 100 CVE.
+  - [x] Respons memuat seluruh field kontrak §9, termasuk `partial`, `warnings`, dan `persisted`.
+  - [x] EPSS gagal menghasilkan 200 dengan `partial=true` dan warning.
+  - [x] Label, skor, alasan, dan urutan sesuai unit test mesin label.
+  - [x] `persisted` selalu ada sebagai boolean.
+  - [x] Unit test mencakup EPSS `total=0` pada permintaan tidak kosong dan chunk lebih dari 100 CVE.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/functions/scan/epss.ts`, `response.ts`, `epss.test.ts`, `response.test.ts`. File yang diubah: `handler.ts`, `index.ts`, `handler.test.ts`.
+  - Pipeline di `handler.ts` kini berurutan: GitHub → parse manifest → resolusi versi npm registry bila `estimated` → OSV → KEV → pencocokan alias → EPSS → klasifikasi/severity → label/skor/alasan → urutan → serialisasi. Seluruh tahap diukur dengan `timed` (`manifest.parse`, `registry.resolve`, `osv.*`, `kev.*`, `epss.fetch`, `findings.assembly`, `kev.match`, `response.build`, `response.serialize`). Log memuat durasi per tahap/sumber, `syncMs`, status sumber, dan `requestId`; tidak memuat token atau isi manifest.
+  - `epss.ts`: maksimum 100 CVE/request (`EPSS_MAX_CVES_PER_REQUEST`), parameter `cve` selalu dikirim, `limit=1000` eksplisit, timeout `AbortController` 8 dtk, retry maksimum 2 dengan backoff. `total=0`/`data=[]` untuk permintaan tidak kosong → warning `EPSS_UNAVAILABLE` + `partial=true`; CVE tanpa skor dalam respons campuran tetap `null`. Perilaku 429/5xx EPSS ditandai `[PERLU DIVERIFIKASI]` di kode karena belum pernah diamati nyata.
+  - `response.ts` menyusun field §9 lengkap (`partial`, `warnings`, `persisted`, `sourceStatus`, `timings`), severity dari OSV, KEV/EPSS, label/skor/alasan dari mesin `T-W1-10`, `safeVersion` dari event `fixed` terendah yang lebih tinggi dari versi terpasang, perintah hanya untuk dependensi langsung, serta referensi OSV. Skor hanya field numerik untuk pengurutan; tidak ada teks "x dari 100".
+  - `persisted` selalu `false` sampai penyimpanan cloud Minggu 3. Karena belum ada percobaan penyimpanan, `CLOUD_PERSIST_FAILED` belum ditambahkan; `persisted=false` saat ini berarti "belum disimpan", bukan kegagalan cloud.
+  - Warning parser dipetakan ke kode publik `LOCKFILE_PARTIAL` (konsisten §9.3/§12) dan deduplikasi. Warning `OSV_PARTIAL`/`OSV_DETAIL_PARTIAL` dari 12a dipertahankan sebagai ekstensi yang sudah dicatat; kegagalan registry parsial memakai `REGISTRY_PARTIAL`. Kode §9.3 lain (`EPSS_UNAVAILABLE`, `KEV_STALE`, `KEV_UNAVAILABLE`) dipakai apa adanya.
+  - `index.ts` menyiapkan `createSupabaseOsvCacheStore`/`createSupabaseKevStore` dari `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`; bila tidak tersedia, pipeline memakai store memori. Tidak ada secret yang dicetak.
+  - **Penyambungan resolver registry:** tidak ada tugas lain di `TASKS.md` yang mencakup penyambungan resolver `T-W1-08` ke pipeline. Penyambungan dikerjakan di 12c dan dicatat di Catatan keputusan.
+  - Unit test: 150 test lulus (suite scan). Tambahan mencakup EPSS sukses, CVE tanpa skor, `total=0`, chunk 150 CVE, timeout, retry 5xx, respons final §9, EPSS gagal → 200 parsial, KEV kosong/STALE → scan tetap jalan, serta pipeline end-to-end memakai fixture `small-100` dan fetch/store tiruan tanpa jaringan nyata.
+  - Typecheck strict modul produksi lulus; `npm run typecheck` dan `npm run lint` di `app` lulus. Tidak ada perintah yang mengubah remote.
+  - **Menunggu `T-W1-12d`:** bukti endpoint remote, simulasi EPSS gagal/OSV gagal total/KEV basi pada Supabase sungguhan, bukti baris `osv_cache`/`kev_entries`, dan metrik CPU/wall time per tahap dari log nyata.
 
 ### T-W1-12d — Deploy remote, simulasi kegagalan, dan log CPU per sumber
 - **Tipe:** `[AGENT]`
@@ -1565,6 +1576,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 10 November 2026 | `T-W1-12a`, `T-W1-12b`, `T-W1-12d` | Migrasi Minggu 1 hanya ditulis sebagai file di `supabase/migrations/` dan **tidak** diterapkan ke proyek remote selama 12a/12b. Akses database diletakkan di balik antarmuka (`OsvCacheStore`, `KevStore`) dengan implementasi Supabase dan implementasi tiruan di memori. AC yang menuntut bukti di database sungguhan dibuktikan dengan penyimpanan tiruan sekarang; bukti remote dicatat sebagai TODO eksplisit di `T-W1-12d`. | Pengembang melarang perintah yang mengubah remote (`db push`, `functions deploy`, `secrets set`) pada 12a/12b; pemisahan antarmuka menjaga unit test tanpa jaringan. | Ya — instruksi pengembang, 10 November 2026 |
 | 10 November 2026 | `T-W1-12a`, `T-W1-12d` | “OSV gagal total” diartikan sebagai **tidak ada data sama sekali, termasuk cache**. Bila cache masih berisi data, kegagalan OSV menghasilkan 200 parsial + warning, bukan 502. Simulasi di `T-W1-12d` wajib memakai paket yang belum ada di `osv_cache` atau melewati cache secara eksplisit; menghapus baris cache remote memerlukan persetujuan eksplisit pengembang. | Pipeline 12a memakai cache sebagai fallback saat OSV gagal; tanpa kondisi cache kosong, skenario 502 tidak dapat dibuktikan. | Ya — instruksi pengembang, 10 November 2026 |
 | 10 November 2026 | `T-W1-12a`, `T-W1-12c` | Cache negatif OSV ber-TTL 24 jam dapat melewatkan kerentanan yang baru diumumkan dalam jendela tersebut. Ini diterima sebagai keterbatasan MVP dan wajib dicantumkan di laporan akhir. | PRD FR-07 menetapkan cache termasuk hasil kosong dengan TTL sementara 24 jam; risiko ini sudah tercatat sebagai A-03/Q-01 di PRD. | Ya — instruksi pengembang, 10 November 2026 |
+| 10 November 2026 | `T-W1-12c` | Penyambungan resolver npm registry `T-W1-08` ke pipeline `scan` dikerjakan di 12c karena tidak ada tugas lain yang mencakupnya. Resolusi hanya dijalankan saat manifest `estimated`; kegagalan registry tidak menggagalkan scan, versi jatuh ke batas bawah range dan muncul warning `REGISTRY_PARTIAL`. `persisted=false` pada 12c berarti “belum disimpan sampai Minggu 3”, bukan kegagalan cloud, sehingga `CLOUD_PERSIST_FAILED` belum dipakai. | Menutup celah integrasi antara parser fallback dan klien registry tanpa menambah scope baru di luar PRD. | Ya — instruksi pengembang, 10 November 2026 |
 | 9 November 2026 | `T-W1-11` | Docker tidak tersedia, sehingga langkah 5 `[AGENT]` “uji lokal dengan `supabase functions serve`” diganti dengan (a) unit test memakai fetch tiruan untuk seluruh jalur validasi dan pemetaan error, dan (b) deploy fungsi `scan` ke proyek remote dengan `--use-api` lalu uji integrasi memakai skrip. AC tugas disesuaikan: jalur validasi/error diuji dengan fetch tiruan, dan hasil uji integrasi remote (status + `requestId`) dicatat. | Docker tidak terpasang di mesin pengembang; deploy remote berbasis API sudah terbukti pada `T-W1-07b`. | Ya — instruksi pengembang, 9 November 2026 |
 
 ---
