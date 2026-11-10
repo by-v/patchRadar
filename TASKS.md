@@ -657,7 +657,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - **Menunggu `T-W1-12d`:** bukti endpoint remote, simulasi EPSS gagal/OSV gagal total/KEV basi pada Supabase sungguhan, bukti baris `osv_cache`/`kev_entries`, dan metrik CPU/wall time per tahap dari log nyata.
 
 ### T-W1-12d — Deploy remote, simulasi kegagalan, dan log CPU per sumber
-- **Status:** `[!]` — terblokir; AC3 (OSV gagal total), AC4 (KEV tidak tersedia/STALE), dan AC7 `[MANUAL]` belum dapat dibuktikan tanpa deploy/fault-injection dan laporan pengembang. Bukti remote lain sudah lengkap (lihat Catatan hasil).
+- **Status:** `[x]` — selesai; bukti remote lengkap, fault-test teruji dan dibersihkan.
 - **Tipe:** `[AGENT]`
 - **Tujuan:** Membuktikan pipeline berjalan di Supabase dan berperilaku benar saat sumber eksternal gagal.
 - **Prasyarat:** `T-W1-07b`, `T-W1-12c`
