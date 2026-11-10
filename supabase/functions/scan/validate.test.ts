@@ -104,6 +104,22 @@ test('karakter aneh, encoding persen, spasi, dan newline ditolak', () => {
   }
 });
 
+test('varian tautan .git dan trailing slash mengikuti perilaku server saat ini', () => {
+  // Normalisasi UI (trim, lowercase skema/host, buang .git dan "/" di ujung)
+  // dikerjakan di layar Pindai Minggu 2 (T-W2-02), bukan di fungsi scan.
+  // Server sengaja ketat: ".git" belum dibuang dan trailing slash ditolak.
+  assert.deepEqual(validateRepoUrl('https://github.com/o/r.git'), {
+    ok: true,
+    owner: 'o',
+    repo: 'r.git',
+    canonicalUrl: 'https://github.com/o/r.git',
+  });
+
+  const trailingSlash = validateRepoUrl('https://github.com/o/r/');
+  assert.equal(trailingSlash.ok, false);
+  if (!trailingSlash.ok) assert.equal(trailingSlash.reason, 'EXTRA_PATH');
+});
+
 test('owner/repo dot dan panjang berlebih ditolak', () => {
   assert.equal(validateRepoUrl('https://github.com/./b').ok, false);
   assert.equal(validateRepoUrl('https://github.com/a/..').ok, false);
