@@ -660,7 +660,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Kriteria selesai (AC):**
   - [ ] Endpoint remote Supabase mengembalikan 200 untuk repo uji.
   - [ ] EPSS gagal menghasilkan 200, `partial=true`, dan warning yang benar.
-  - [ ] OSV gagal total menghasilkan 502 tanpa baris scan sukses.
+  - [ ] OSV gagal total menghasilkan 502 tanpa baris scan sukses. Simulasi wajib memakai paket yang belum ada di `osv_cache` (atau melewati cache secara eksplisit); bila cache masih berisi data, hasilnya 200 parsial, bukan 502. Menghapus baris cache di remote memerlukan persetujuan eksplisit pengembang.
   - [ ] KEV tidak tersedia menghasilkan parsial atau `STALE`, bukan crash.
   - [ ] Log memuat durasi per sumber dan CPU time.
   - [ ] Log wall time per tahap sinkron: parse KEV, pencocokan alias, penyusunan findings, skor/label, dan serialisasi respons; jumlah wall time tahap sinkron dihitung dan dicatat sebagai batas atas CPU pipeline.
@@ -669,6 +669,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
+  - **Persiapan simulasi OSV gagal total (wajib dibaca saat 12d):** gunakan repo/fixture dengan paket yang belum pernah masuk `osv_cache`, atau lewati cache secara eksplisit lewat opsi test/flag. Jangan menghapus baris cache di remote tanpa persetujuan pengembang. Bila cache masih berisi data, OSV gagal akan menghasilkan 200 parsial + warning, bukan 502.
 
 ### T-W1-14 — `[GATE]` Go/No-Go Minggu 1
 - **Tipe:** `[GATE]`
@@ -732,6 +733,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Kriteria selesai (AC):**
   - [ ] Semua kasus FR-01/§12 baris 1–4 menghasilkan pesan yang sesuai.
   - [ ] URL valid mengaktifkan tombol Pindai.
+  - [ ] Normalisasi tautan di UI mencakup URL clone berakhiran `.git` dan garis miring di ujung; kasus uji eksplisit `https://github.com/o/r.git` → repo `r` (tempelan tombol Code GitHub).
   - [ ] Selama loading tombol tidak dapat ditekan ganda.
   - [ ] Unit test validasi lulus.
 - **Estimasi:** 3 jam
@@ -1561,6 +1563,8 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 9 November 2026 | `T-W1-03`, `T-W1-12c` | OSV: batas nyata **1.000 query/request**; chunk 50 dipakai untuk membatasi ukuran respons. Detail advisory diambil terpisah karena respons batch hanya berisi `id` + `modified`. Severity fallback ke `database_specific` bila advisory hanya memuat CVSS_V4. | Pengamatan `T-W1-03`: 1.000 query → 200, 1.001 → 400 `too many queries`; respons batch tanpa severity/aliases; 5/40 advisory hanya CVSS_V4. | Ya — instruksi pengembang, 9 November 2026 |
 | 10 November 2026 | `T-W1-11`, `T-W2-02` | Normalisasi tautan di UI (trim, huruf kecil untuk skema dan host, buang `.git` dan `/` di ujung) menjadi tanggung jawab layar Pindai Minggu 2 (`T-W2-02`), bukan fungsi `scan`. Validator server tetap ketat dan tidak menormalkan: `https://github.com/o/r.git` diterima dengan `repo="r.git"`, `https://github.com/o/r/` ditolak `EXTRA_PATH`. | Memisahkan sanitasi tampilan dari validasi keamanan server; mengubah perilaku validator sekarang akan menyimpang dari kontrak `T-W1-11` yang sudah teruji. | Ya — instruksi pengembang, 10 November 2026 |
 | 10 November 2026 | `T-W1-12a`, `T-W1-12b`, `T-W1-12d` | Migrasi Minggu 1 hanya ditulis sebagai file di `supabase/migrations/` dan **tidak** diterapkan ke proyek remote selama 12a/12b. Akses database diletakkan di balik antarmuka (`OsvCacheStore`, `KevStore`) dengan implementasi Supabase dan implementasi tiruan di memori. AC yang menuntut bukti di database sungguhan dibuktikan dengan penyimpanan tiruan sekarang; bukti remote dicatat sebagai TODO eksplisit di `T-W1-12d`. | Pengembang melarang perintah yang mengubah remote (`db push`, `functions deploy`, `secrets set`) pada 12a/12b; pemisahan antarmuka menjaga unit test tanpa jaringan. | Ya — instruksi pengembang, 10 November 2026 |
+| 10 November 2026 | `T-W1-12a`, `T-W1-12d` | “OSV gagal total” diartikan sebagai **tidak ada data sama sekali, termasuk cache**. Bila cache masih berisi data, kegagalan OSV menghasilkan 200 parsial + warning, bukan 502. Simulasi di `T-W1-12d` wajib memakai paket yang belum ada di `osv_cache` atau melewati cache secara eksplisit; menghapus baris cache remote memerlukan persetujuan eksplisit pengembang. | Pipeline 12a memakai cache sebagai fallback saat OSV gagal; tanpa kondisi cache kosong, skenario 502 tidak dapat dibuktikan. | Ya — instruksi pengembang, 10 November 2026 |
+| 10 November 2026 | `T-W1-12a`, `T-W1-12c` | Cache negatif OSV ber-TTL 24 jam dapat melewatkan kerentanan yang baru diumumkan dalam jendela tersebut. Ini diterima sebagai keterbatasan MVP dan wajib dicantumkan di laporan akhir. | PRD FR-07 menetapkan cache termasuk hasil kosong dengan TTL sementara 24 jam; risiko ini sudah tercatat sebagai A-03/Q-01 di PRD. | Ya — instruksi pengembang, 10 November 2026 |
 | 9 November 2026 | `T-W1-11` | Docker tidak tersedia, sehingga langkah 5 `[AGENT]` “uji lokal dengan `supabase functions serve`” diganti dengan (a) unit test memakai fetch tiruan untuk seluruh jalur validasi dan pemetaan error, dan (b) deploy fungsi `scan` ke proyek remote dengan `--use-api` lalu uji integrasi memakai skrip. AC tugas disesuaikan: jalur validasi/error diuji dengan fetch tiruan, dan hasil uji integrasi remote (status + `requestId`) dicatat. | Docker tidak terpasang di mesin pengembang; deploy remote berbasis API sudah terbukti pada `T-W1-07b`. | Ya — instruksi pengembang, 9 November 2026 |
 
 ---
