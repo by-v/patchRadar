@@ -1,0 +1,1013 @@
+{
+  "generatedAt": "2026-11-10T07:30:06.086Z",
+  "results": [
+    {
+      "repo": "lodash/lodash",
+      "startedAt": "2026-11-10T07:29:57.722Z",
+      "finishedAt": "2026-11-10T07:30:02.233Z",
+      "status": 200,
+      "clientWallMs": 4494.8085,
+      "body": {
+        "scanId": "c1e13565-20ee-45b1-80d8-7e301f7dc80a",
+        "repo": {
+          "owner": "lodash",
+          "name": "lodash",
+          "url": "https://github.com/lodash/lodash",
+          "defaultBranch": "main"
+        },
+        "scannedAt": "2026-11-10T07:29:57.110Z",
+        "status": "COMPLETED",
+        "manifest": {
+          "source": "PACKAGE_JSON",
+          "lockfileFormat": null,
+          "estimated": true
+        },
+        "summary": {
+          "totalPackages": 27,
+          "affectedPackages": 3,
+          "findingCount": 6
+        },
+        "findings": [
+          {
+            "findingId": "24a2ca87-f642-4cba-a8bc-afdff3f898af",
+            "osvId": "GHSA-r5fr-rjxr-66jc",
+            "cveIds": [
+              "CVE-2026-4800"
+            ],
+            "package": {
+              "name": "lodash",
+              "installedVersion": "4.17.20",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "HIGH",
+              "cvss": 8.1,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": 0.02808,
+              "epssPercentile": 0.86604,
+              "epssAvailable": true
+            },
+            "priority": {
+              "label": "SCHEDULE",
+              "score": 46,
+              "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+            },
+            "fix": {
+              "safeVersion": "4.18.0",
+              "command": "npm install lodash@4.18.0",
+              "suggestion": null
+            },
+            "summary": "lodash vulnerable to Code Injection via `_.template` imports key names",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-r5fr-rjxr-66jc"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/security/advisories/GHSA-r5fr-rjxr-66jc"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-4800"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://cna.openjsf.org/security-advisories.html"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://github.com/advisories/GHSA-35jh-r3h4-6jhm"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash"
+              }
+            ]
+          },
+          {
+            "findingId": "44e48da6-d957-4804-b9de-30db033dc0cd",
+            "osvId": "GHSA-35jh-r3h4-6jhm",
+            "cveIds": [
+              "CVE-2021-23337"
+            ],
+            "package": {
+              "name": "lodash",
+              "installedVersion": "4.17.20",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "HIGH",
+              "cvss": 7.2,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": null,
+              "epssPercentile": null,
+              "epssAvailable": false
+            },
+            "priority": {
+              "label": "SCHEDULE",
+              "score": 45,
+              "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+            },
+            "fix": {
+              "safeVersion": "4.17.21",
+              "command": "npm install lodash@4.17.21",
+              "suggestion": null
+            },
+            "summary": "Command Injection in lodash",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-35jh-r3h4-6jhm"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com/security-alerts/cpuoct2021.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com/security-alerts/cpujul2022.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com/security-alerts/cpujan2022.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com//security-alerts/cpujul2021.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JS-LODASH-1040724"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1074929"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBLODASH-1074931"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWER-1074928"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARS-1074930"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGFUJIONWEBJARS-1074932"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://security.netapp.com/advisory/ntap-20210312-0006"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/rubysec/ruby-advisory-db/blob/master/gems/lodash-rails/CVE-2021-23337.yml"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/blob/ddfd9b11a0126db2302cb70ec9973b66baec0975/lodash.js#L14851"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://cert-portal.siemens.com/productcert/pdf/ssa-637483.pdf"
+              }
+            ]
+          },
+          {
+            "findingId": "c1562ca2-015d-40d4-9c7f-f7e660475632",
+            "osvId": "GHSA-jc84-3g44-wf2q",
+            "cveIds": [
+              "CVE-2019-10775"
+            ],
+            "package": {
+              "name": "ecstatic",
+              "installedVersion": "2.2.2",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "MEDIUM",
+              "cvss": null,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": null,
+              "epssPercentile": null,
+              "epssAvailable": false
+            },
+            "priority": {
+              "label": "MONITOR",
+              "score": 25,
+              "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+            },
+            "fix": {
+              "safeVersion": "4.1.3",
+              "command": "npm install ecstatic@4.1.3",
+              "suggestion": null
+            },
+            "summary": "Denial of Service in ecstatic",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-jc84-3g44-wf2q"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2019-10775"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JS-ECSTATIC-540354"
+              }
+            ]
+          },
+          {
+            "findingId": "2c354da8-7832-4bbd-ae35-84364649b1ed",
+            "osvId": "GHSA-29mw-wpgm-hmr9",
+            "cveIds": [
+              "CVE-2020-28500"
+            ],
+            "package": {
+              "name": "lodash",
+              "installedVersion": "4.17.20",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "MEDIUM",
+              "cvss": 5.3,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": null,
+              "epssPercentile": null,
+              "epssAvailable": false
+            },
+            "priority": {
+              "label": "MONITOR",
+              "score": 25,
+              "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+            },
+            "fix": {
+              "safeVersion": "4.17.21",
+              "command": "npm install lodash@4.17.21",
+              "suggestion": null
+            },
+            "summary": "Regular Expression Denial of Service (ReDoS) in lodash",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-29mw-wpgm-hmr9"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2020-28500"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/github/advisory-database/pull/6139"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/pull/5065"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/pull/5065/commits/02906b8191d3c100c193fe6f7b27d1c40f200bb7"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/commit/c4847ebe7d14540bb28a8b932a9ce1b9ecbfee1a"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com/security-alerts/cpuoct2021.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com/security-alerts/cpujul2022.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com/security-alerts/cpujan2022.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://www.oracle.com//security-alerts/cpujul2021.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JS-LODASH-1018905"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1074893"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBLODASH-1074895"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWER-1074892"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARS-1074894"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://snyk.io/vuln/SNYK-JAVA-ORGFUJIONWEBJARS-1074896"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://security.netapp.com/advisory/ntap-20210312-0006"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/rubysec/ruby-advisory-db/blob/master/gems/lodash-rails/CVE-2020-28500.yml"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/blob/npm/trimEnd.js%23L8"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://cert-portal.siemens.com/productcert/pdf/ssa-637483.pdf"
+              }
+            ]
+          },
+          {
+            "findingId": "908e2187-26b6-4e97-9c89-32b5282cac16",
+            "osvId": "GHSA-xxjr-mmjv-4gpg",
+            "cveIds": [
+              "CVE-2025-13465"
+            ],
+            "package": {
+              "name": "lodash",
+              "installedVersion": "4.17.20",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "MEDIUM",
+              "cvss": 6.5,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": null,
+              "epssPercentile": null,
+              "epssAvailable": false
+            },
+            "priority": {
+              "label": "MONITOR",
+              "score": 25,
+              "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+            },
+            "fix": {
+              "safeVersion": "4.17.23",
+              "command": "npm install lodash@4.17.23",
+              "suggestion": null
+            },
+            "summary": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-xxjr-mmjv-4gpg"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/security/advisories/GHSA-xxjr-mmjv-4gpg"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-13465"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash/commit/edadd452146f7e4bad4ea684e955708931d84d81"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:41941"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:41928"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:41064"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:40984"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:40945"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:40138"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:40118"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3962"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3960"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3958"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3884"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3874"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3870"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3869"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3825"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3782"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3710"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:36882"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:36651"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:34608"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3422"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:34100"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://security.access.redhat.com/data/csaf/v2/vex/2025/cve-2025-13465.json"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/lodash/lodash"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://cna.openjsf.org/security-advisories.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://cert-portal.siemens.com/productcert/html/ssa-253495.html"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2431740"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/security/cve/CVE-2025-13465"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:9848"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:8229"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:8218"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:6567"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:6497"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:6288"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:6192"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:57487"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:5636"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:5633"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:4782"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:4630"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:4467"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:4466"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:4423"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:41944"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:24331"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:21658"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2149"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2148"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2147"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2145"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2119"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2078"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:20088"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:20042"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:19712"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:18868"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:18480"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:1845"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:17469"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:15091"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:14871"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:14870"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:14774"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:13829"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:13548"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:13542"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:11414"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:33371"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:33154"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:3087"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2990"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2984"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2926"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2900"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2819"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2818"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2817"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2816"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2694"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2675"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2672"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2661"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2651"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:25089"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2484"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2469"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2465"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2462"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2452"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://access.redhat.com/errata/RHSA-2026:2438"
+              }
+            ]
+          },
+          {
+            "findingId": "d996f57f-1528-4a95-b788-ea384b99e18b",
+            "osvId": "GHSA-p8p7-x288-28g6",
+            "cveIds": [
+              "CVE-2023-28155"
+            ],
+            "package": {
+              "name": "request",
+              "installedVersion": "2.88.2",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "MEDIUM",
+              "cvss": 6.1,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": null,
+              "epssPercentile": null,
+              "epssAvailable": false
+            },
+            "priority": {
+              "label": "MONITOR",
+              "score": 25,
+              "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+            },
+            "fix": {
+              "safeVersion": null,
+              "command": null,
+              "suggestion": "Belum ada versi aman yang diketahui; periksa referensi advisory sebelum memperbarui."
+            },
+            "summary": "Server-Side Request Forgery in Request",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-p8p7-x288-28g6"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-28155"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/request/request/issues/3442"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/cypress-io/request/pull/28"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/github/advisory-database/pull/2500"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/request/request/pull/3444"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/cypress-io/request/commit/c5bcf21d40fb61feaff21a0e5a2b3934a440024f"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://doyensec.com/resources/Doyensec_Advisory_RequestSSRF_Q12023.pdf"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/cypress-io/request/blob/master/lib/redirect.js#L116"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/cypress-io/request/releases/tag/v3.0.0"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/request/request"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/request/request/blob/master/lib/redirect.js#L111"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://security.netapp.com/advisory/ntap-20230413-0007"
+              }
+            ]
+          }
+        ],
+        "partial": false,
+        "persisted": false,
+        "warnings": [
+          {
+            "code": "LOCKFILE_V1",
+            "message": "package-lock.json v1 tidak didukung; memakai package.json."
+          }
+        ],
+        "sourceStatus": {
+          "github": "OK",
+          "osv": "CACHE",
+          "kev": "CACHE",
+          "epss": "OK"
+        },
+        "timings": {
+          "githubMs": 1067,
+          "osvMs": 867,
+          "enrichmentMs": 954,
+          "totalMs": 3638
+        },
+        "requestId": "req_6bd6c8d0f96b47819b4984e907f72dc7"
+      }
+    },
+    {
+      "repo": "expressjs/express",
+      "startedAt": "2026-11-10T07:30:02.234Z",
+      "finishedAt": "2026-11-10T07:30:06.066Z",
+      "status": 200,
+      "clientWallMs": 3598.8038000000015,
+      "body": {
+        "scanId": "4de490b8-0f69-45be-bfda-18a65dd7bb7a",
+        "repo": {
+          "owner": "expressjs",
+          "name": "express",
+          "url": "https://github.com/expressjs/express",
+          "defaultBranch": "master"
+        },
+        "scannedAt": "2026-11-10T07:30:00.462Z",
+        "status": "COMPLETED",
+        "manifest": {
+          "source": "PACKAGE_JSON",
+          "lockfileFormat": null,
+          "estimated": true
+        },
+        "summary": {
+          "totalPackages": 44,
+          "affectedPackages": 1,
+          "findingCount": 1
+        },
+        "findings": [
+          {
+            "findingId": "505df0b2-51ff-4674-b836-363032a4cae5",
+            "osvId": "GHSA-7f5c-rpf4-86p8",
+            "cveIds": [
+              "CVE-2021-32822"
+            ],
+            "package": {
+              "name": "hbs",
+              "installedVersion": "4.4.0",
+              "direct": true,
+              "devOnly": true,
+              "parentPackage": null
+            },
+            "severity": {
+              "level": "MEDIUM",
+              "cvss": 4,
+              "source": "OSV"
+            },
+            "exploitation": {
+              "kev": false,
+              "epss": 0.00982,
+              "epssPercentile": 0.62535,
+              "epssAvailable": true
+            },
+            "priority": {
+              "label": "MONITOR",
+              "score": 25.3,
+              "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+            },
+            "fix": {
+              "safeVersion": null,
+              "command": null,
+              "suggestion": "Belum ada versi aman yang diketahui; periksa referensi advisory sebelum memperbarui."
+            },
+            "summary": "hbs: Insertion of Sensitive Information into Externally-Accessible File or Directory and Exposure of Sensitive Information to an Unauthorized Actor",
+            "references": [
+              {
+                "label": "Advisory OSV",
+                "url": "https://osv.dev/vulnerability/GHSA-7f5c-rpf4-86p8"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32822"
+              },
+              {
+                "label": "Referensi",
+                "url": "https://github.com/pillarjs/hbs"
+              },
+              {
+                "label": "Advisory",
+                "url": "https://securitylab.github.com/advisories/GHSL-2021-020-pillarjs-hbs"
+              }
+            ]
+          }
+        ],
+        "partial": false,
+        "persisted": false,
+        "warnings": [
+          {
+            "code": "LOCKFILE_MISSING",
+            "message": "package-lock.json tidak ditemukan; memakai package.json."
+          }
+        ],
+        "sourceStatus": {
+          "github": "OK",
+          "osv": "CACHE",
+          "kev": "CACHE",
+          "epss": "OK"
+        },
+        "timings": {
+          "githubMs": 1603,
+          "osvMs": 266,
+          "enrichmentMs": 690,
+          "totalMs": 3198
+        },
+        "requestId": "req_d0e69a04c2334e61afe251b0d2460d87"
+      }
+    }
+  ]
+}

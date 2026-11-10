@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-11-10T07:21:45.974Z",
+  "base": "https://umldsfkvifqoqfbouhca.supabase.co/rest/v1/osv_cache?select=cache_key,payload,fetched_at&cache_key=in.(",
+  "results": [
+    {
+      "repo": "axios/axios",
+      "branch": "v1.x",
+      "lockfileVersion": 3,
+      "parsedUniquePackages": 679,
+      "expectedFromScan": 679,
+      "matchesScan": true,
+      "avgKeyLength": 28.3,
+      "maxKeyLength": 89,
+      "urlLength": 21331,
+      "sample": [
+        "npm:@babel/code-frame@7.29.7",
+        "npm:@babel/compat-data@7.29.7",
+        "npm:@babel/core@7.29.7",
+        "npm:@babel/generator@7.29.8"
+      ]
+    },
+    {
+      "repo": "socketio/socket.io",
+      "branch": "main",
+      "lockfileVersion": 3,
+      "parsedUniquePackages": 1179,
+      "expectedFromScan": 1179,
+      "matchesScan": true,
+      "avgKeyLength": 24.9,
+      "maxKeyLength": 89,
+      "urlLength": 33052,
+      "sample": [
+        "npm:@babel/code-frame@7.29.7",
+        "npm:@babel/compat-data@7.29.7",
+        "npm:@babel/core@7.29.7",
+        "npm:@babel/generator@7.29.12"
+      ]
+    }
+  ]
+}

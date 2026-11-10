@@ -1,0 +1,29 @@
+{
+  "generatedAt": "2026-11-10T07:32:57.933Z",
+  "startedAt": "2026-11-10T07:32:56.825Z",
+  "sourceCves": "docs/scan-12d-body.json (requestId req_a5c5a549d0bb419f9de85c863325f1ee)",
+  "kev": {
+    "status": 200,
+    "contentType": "application/json",
+    "catalogVersion": "2026.11.09",
+    "dateReleased": "2026-11-09T19:54:37.4945Z",
+    "count": 1773,
+    "vulnerabilitiesLength": 1773,
+    "hasAnySocketCve": []
+  },
+  "epss": {
+    "status": 200,
+    "requested": 23,
+    "total": 22,
+    "returned": 22,
+    "missing": [
+      "CVE-2026-93753"
+    ],
+    "cve102990": {
+      "cve": "CVE-2026-102990",
+      "epss": "0.003700000",
+      "percentile": "0.311670000",
+      "date": "2026-11-09"
+    }
+  }
+}

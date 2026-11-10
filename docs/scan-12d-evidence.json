@@ -1,0 +1,618 @@
+{
+  "projectRef": "umldsfkvifqoqfbouhca",
+  "generatedAt": "2026-11-10T07:13:34.240Z",
+  "results": [
+    {
+      "case": "socketio_cold",
+      "repoUrl": "https://github.com/socketio/socket.io",
+      "startedAt": "2026-11-10T07:13:05.605Z",
+      "finishedAt": "2026-11-10T07:13:21.927Z",
+      "status": 200,
+      "clientWallMs": 16310.1,
+      "requestId": "req_da314650ef494e4ea84fb06002623cd1",
+      "requestIdMatchesHeader": true,
+      "scanStatus": "PARTIAL",
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "summary": {
+        "totalPackages": 1179,
+        "affectedPackages": 11,
+        "findingCount": 24
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "PARTIAL",
+        "kev": "CACHE",
+        "epss": "FAILED"
+      },
+      "partial": true,
+      "persisted": false,
+      "warnings": [
+        {
+          "code": "LOCKFILE_PARTIAL",
+          "message": "Entri link/workspace node_modules/@socket.io/cluster-adapter dilewati. Entri link/workspace node_modules/@socket.io/cluster-engine dilewati. Entri link/workspace node_modules/@socket.io/component-emitter dilewati. Entri link/workspace node_modules/@socket.io/postgres-emitter dilewati. Entri link/workspace node_modules/@socket.io/redis-streams-emitter dilewati. Entri link/workspace node_modules/engine.io dilewati. Entri link/workspace node_modules/engine.io-client dilewati. Entri link/workspace node_modules/engine.io-parser dilewati. Entri link/workspace node_modules/socket.io dilewati. Entri link/workspace node_modules/socket.io-adapter dilewati. Entri link/workspace node_modules/socket.io-client dilewati. Entri link/workspace node_modules/socket.io-parser dilewati. Entri non-node_modules packages/engine.io dilewati. Entri non-node_modules packages/engine.io-client dilewati. Entri non-node_modules packages/engine.io-client/node_modules/xmlhttprequest-ssl dilewati. Entri non-node_modules packages/engine.io-parser dilewati. Entri non-node_modules packages/socket.io dilewati. Entri non-node_modules packages/socket.io-adapter dilewati. Entri non-node_modules packages/socket.io-client dilewati. Entri non-node_modules packages/socket.io-cluster-adapter dilewati. Entri non-node_modules packages/socket.io-cluster-engine dilewati. Entri non-node_modules packages/socket.io-component-emitter dilewati. Entri non-node_modules packages/socket.io-parser dilewati. Entri non-node_modules packages/socket.io-postgres-emitter dilewati. Entri non-node_modules packages/socket.io-redis-streams-emitter dilewati."
+        },
+        {
+          "code": "OSV_CACHE_READ_FAILED",
+          "message": "Cache OSV tidak dapat dibaca; seluruh paket akan diquery ulang."
+        },
+        {
+          "code": "EPSS_UNAVAILABLE",
+          "message": "Data EPSS tidak tersedia; prioritas sementara memakai severity dan KEV."
+        }
+      ],
+      "timings": {
+        "githubMs": 799,
+        "osvMs": 12493,
+        "enrichmentMs": 2216,
+        "totalMs": 15526
+      },
+      "findings": [
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102990"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102276"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-14257"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102278"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-69152"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-40345"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 8.1,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-19693"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 8.1,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-56876"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 8.1,
+            "source": "OSV"
+          },
+          "cveIds": []
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2025-48387"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2024-12905"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2025-59343"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-41907",
+            "CVE-2026-41988"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.3,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-13149"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 6.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-33750"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.3,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102277"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.3,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-93753"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118773"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118773"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118764"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118764"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2024-36751"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.9,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-34043"
+          ]
+        },
+        {
+          "severity": {
+            "level": "LOW",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-115754",
+            "CVE-2026-115897"
+          ]
+        }
+      ],
+      "error": null,
+      "raw": null
+    },
+    {
+      "case": "socketio_warm",
+      "repoUrl": "https://github.com/socketio/socket.io",
+      "startedAt": "2026-11-10T07:13:21.928Z",
+      "finishedAt": "2026-11-10T07:13:33.749Z",
+      "status": 200,
+      "clientWallMs": 11805,
+      "requestId": "req_e30adfc793314aabb51d154ba8af5e26",
+      "requestIdMatchesHeader": true,
+      "scanStatus": "PARTIAL",
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "summary": {
+        "totalPackages": 1179,
+        "affectedPackages": 11,
+        "findingCount": 24
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "PARTIAL",
+        "kev": "CACHE",
+        "epss": "FAILED"
+      },
+      "partial": true,
+      "persisted": false,
+      "warnings": [
+        {
+          "code": "LOCKFILE_PARTIAL",
+          "message": "Entri link/workspace node_modules/@socket.io/cluster-adapter dilewati. Entri link/workspace node_modules/@socket.io/cluster-engine dilewati. Entri link/workspace node_modules/@socket.io/component-emitter dilewati. Entri link/workspace node_modules/@socket.io/postgres-emitter dilewati. Entri link/workspace node_modules/@socket.io/redis-streams-emitter dilewati. Entri link/workspace node_modules/engine.io dilewati. Entri link/workspace node_modules/engine.io-client dilewati. Entri link/workspace node_modules/engine.io-parser dilewati. Entri link/workspace node_modules/socket.io dilewati. Entri link/workspace node_modules/socket.io-adapter dilewati. Entri link/workspace node_modules/socket.io-client dilewati. Entri link/workspace node_modules/socket.io-parser dilewati. Entri non-node_modules packages/engine.io dilewati. Entri non-node_modules packages/engine.io-client dilewati. Entri non-node_modules packages/engine.io-client/node_modules/xmlhttprequest-ssl dilewati. Entri non-node_modules packages/engine.io-parser dilewati. Entri non-node_modules packages/socket.io dilewati. Entri non-node_modules packages/socket.io-adapter dilewati. Entri non-node_modules packages/socket.io-client dilewati. Entri non-node_modules packages/socket.io-cluster-adapter dilewati. Entri non-node_modules packages/socket.io-cluster-engine dilewati. Entri non-node_modules packages/socket.io-component-emitter dilewati. Entri non-node_modules packages/socket.io-parser dilewati. Entri non-node_modules packages/socket.io-postgres-emitter dilewati. Entri non-node_modules packages/socket.io-redis-streams-emitter dilewati."
+        },
+        {
+          "code": "OSV_CACHE_READ_FAILED",
+          "message": "Cache OSV tidak dapat dibaca; seluruh paket akan diquery ulang."
+        },
+        {
+          "code": "EPSS_UNAVAILABLE",
+          "message": "Data EPSS tidak tersedia; prioritas sementara memakai severity dan KEV."
+        }
+      ],
+      "timings": {
+        "githubMs": 478,
+        "osvMs": 10238,
+        "enrichmentMs": 824,
+        "totalMs": 11553
+      },
+      "findings": [
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102990"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102276"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-14257"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102278"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-69152"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-40345"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 8.1,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-19693"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 8.1,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-56876"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 8.1,
+            "source": "OSV"
+          },
+          "cveIds": []
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2025-48387"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2024-12905"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2025-59343"
+          ]
+        },
+        {
+          "severity": {
+            "level": "HIGH",
+            "cvss": 7.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-41907",
+            "CVE-2026-41988"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.3,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-13149"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 6.5,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-33750"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.3,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-102277"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.3,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-93753"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118773"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118773"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118764"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-118764"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2024-36751"
+          ]
+        },
+        {
+          "severity": {
+            "level": "MEDIUM",
+            "cvss": 5.9,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-34043"
+          ]
+        },
+        {
+          "severity": {
+            "level": "LOW",
+            "cvss": null,
+            "source": "OSV"
+          },
+          "cveIds": [
+            "CVE-2026-115754",
+            "CVE-2026-115897"
+          ]
+        }
+      ],
+      "error": null,
+      "raw": null
+    },
+    {
+      "case": "react_no_lockfile",
+      "repoUrl": "https://github.com/facebook/react",
+      "startedAt": "2026-11-10T07:13:33.750Z",
+      "finishedAt": "2026-11-10T07:13:34.240Z",
+      "status": 502,
+      "clientWallMs": 489,
+      "requestId": "req_7565e5db2e1e49f98771433926c65abc",
+      "requestIdMatchesHeader": true,
+      "scanStatus": null,
+      "manifest": null,
+      "summary": null,
+      "sourceStatus": null,
+      "partial": null,
+      "persisted": null,
+      "warnings": null,
+      "timings": null,
+      "findings": null,
+      "error": {
+        "code": "UPSTREAM_UNAVAILABLE",
+        "message": "Upstream mengalihkan ke alamat lain; redirect tidak diikuti.",
+        "retryable": true,
+        "requestId": "req_7565e5db2e1e49f98771433926c65abc"
+      },
+      "raw": null
+    }
+  ]
+}

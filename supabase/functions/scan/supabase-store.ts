@@ -23,7 +23,18 @@ export interface SupabaseStoreOptions {
   serviceRoleKey: string;
   fetchImpl?: FetchLike;
   timeoutMs?: number;
+  /**
+   * Jumlah kunci per permintaan GET `osv_cache`.
+   *
+   * URL `in.(...)` yang memuat ratusan kunci melewati batas header/URL runtime
+   * dan gagal sebelum permintaan terkirim (terbukti di `T-W1-12d`). Batch kecil
+   * menjaga panjang URL tetap jauh di bawah batas tersebut.
+   */
+  cacheReadBatchSize?: number;
 }
+
+/** Batas aman kunci per GET; 100 kunci ≈ 5,6 ribu karakter URL setelah encoding. */
+export const OSV_CACHE_READ_BATCH_SIZE = 100;
 
 interface PostgrestRow {
   [key: string]: unknown;
@@ -68,24 +79,28 @@ function asString(value: unknown, fallback = ''): string {
 export function createSupabaseOsvCacheStore(options: SupabaseStoreOptions): OsvCacheStore {
   const fetchImpl = options.fetchImpl ?? fetch;
   const timeoutMs = options.timeoutMs ?? 8_000;
+  const batchSize = Math.max(1, options.cacheReadBatchSize ?? OSV_CACHE_READ_BATCH_SIZE);
   const auth = headers(options.serviceRoleKey);
 
   return {
     async getMany(keys) {
       if (keys.length === 0) return new Map();
-      const query = `osv_cache?select=cache_key,payload,fetched_at&cache_key=in.(${inList(keys)})`;
-      const response = await request(fetchImpl, endpoint(options.url, query), { method: 'GET', headers: auth }, timeoutMs);
-      if (!response.ok) throw new Error(`Supabase osv_cache GET gagal (${response.status}).`);
-      const rows = (await response.json()) as PostgrestRow[];
       const found = new Map<string, OsvCacheRecord>();
-      for (const row of rows) {
-        const cacheKey = asString(row.cache_key);
-        if (!cacheKey) continue;
-        found.set(cacheKey, {
-          cacheKey,
-          payload: row.payload,
-          fetchedAt: asString(row.fetched_at),
-        });
+      for (let index = 0; index < keys.length; index += batchSize) {
+        const batch = keys.slice(index, index + batchSize);
+        const query = `osv_cache?select=cache_key,payload,fetched_at&cache_key=in.(${inList(batch)})`;
+        const response = await request(fetchImpl, endpoint(options.url, query), { method: 'GET', headers: auth }, timeoutMs);
+        if (!response.ok) throw new Error(`Supabase osv_cache GET gagal (${response.status}).`);
+        const rows = (await response.json()) as PostgrestRow[];
+        for (const row of rows) {
+          const cacheKey = asString(row.cache_key);
+          if (!cacheKey) continue;
+          found.set(cacheKey, {
+            cacheKey,
+            payload: row.payload,
+            fetchedAt: asString(row.fetched_at),
+          });
+        }
       }
       return found;
     },

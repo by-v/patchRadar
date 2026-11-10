@@ -1,0 +1,55 @@
+{
+  "generatedAt": "2026-11-10T07:32:37.961Z",
+  "source": "Management API functions.combined-stats interval=1day function_id=303918d2-e7b5-4f39-81ee-a04458ea644c",
+  "note": "cpu_time_used dalam milidetik; nilai 0 berarti metrik tidak tersedia pada jam tersebut, bukan nol terukur.",
+  "rows": [
+    {
+      "timestamp": "2026-11-10T02:00:00",
+      "request_count": 6,
+      "success_count": 0,
+      "client_err_count": 6,
+      "server_err_count": 0,
+      "avg_cpu_time_used": 0,
+      "max_cpu_time_used": 0,
+      "avg_execution_time": 292.3333333333333,
+      "max_execution_time": 1632,
+      "min_execution_time": 8
+    },
+    {
+      "timestamp": "2026-11-10T03:00:00",
+      "request_count": 54,
+      "success_count": 6,
+      "client_err_count": 48,
+      "server_err_count": 0,
+      "avg_cpu_time_used": 206.5,
+      "max_cpu_time_used": 214,
+      "avg_execution_time": 672.9074074074074,
+      "max_execution_time": 10907,
+      "min_execution_time": 9
+    },
+    {
+      "timestamp": "2026-11-10T04:00:00",
+      "request_count": 18,
+      "success_count": 6,
+      "client_err_count": 12,
+      "server_err_count": 0,
+      "avg_cpu_time_used": 345,
+      "max_cpu_time_used": 345,
+      "avg_execution_time": 1557.2777777777778,
+      "max_execution_time": 10173,
+      "min_execution_time": 10
+    },
+    {
+      "timestamp": "2026-11-10T07:00:00",
+      "request_count": 7,
+      "success_count": 6,
+      "client_err_count": 0,
+      "server_err_count": 1,
+      "avg_cpu_time_used": 112.5,
+      "max_cpu_time_used": 158,
+      "avg_execution_time": 8013.142857142857,
+      "max_execution_time": 15671,
+      "min_execution_time": 342
+    }
+  ]
+}

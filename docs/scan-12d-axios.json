@@ -1,0 +1,186 @@
+{
+  "startedAt": "2026-11-10T07:19:27.862Z",
+  "finishedAt": "2026-11-10T07:19:37.290Z",
+  "status": 200,
+  "clientWallMs": 9418.1656,
+  "body": {
+    "scanId": "8947ae99-d5dc-42f1-beab-65689e45c3b5",
+    "repo": {
+      "owner": "axios",
+      "name": "axios",
+      "url": "https://github.com/axios/axios",
+      "defaultBranch": "v1.x"
+    },
+    "scannedAt": "2026-11-10T07:19:32.165Z",
+    "status": "PARTIAL",
+    "manifest": {
+      "source": "LOCKFILE",
+      "lockfileFormat": "v3",
+      "estimated": false
+    },
+    "summary": {
+      "totalPackages": 679,
+      "affectedPackages": 2,
+      "findingCount": 2
+    },
+    "findings": [
+      {
+        "findingId": "f1a5901b-b3df-442b-800c-2f2c3035add4",
+        "osvId": "GHSA-gcqx-w48m-w2h4",
+        "cveIds": [
+          "CVE-2026-93753"
+        ],
+        "package": {
+          "name": "deepmerge",
+          "installedVersion": "4.3.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": null,
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "deepmerge mergeObject() allows prototype poisoning of returned objects",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-gcqx-w48m-w2h4"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-93753"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TehShrike/deepmerge/issues/273"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TehShrike/deepmerge"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TehShrike/deepmerge/blob/5b87756a5671635679001cbac72aa42f23472c81/index.js#L39-L60"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.vulncheck.com/advisories/deepmerge-through-4.3.1-prototype-poisoning-via-mergeobject"
+          }
+        ]
+      },
+      {
+        "findingId": "6094dbf2-84da-40c7-9a05-5c80835c9101",
+        "osvId": "GHSA-g3hv-75wg-m249",
+        "cveIds": [
+          "CVE-2026-118764"
+        ],
+        "package": {
+          "name": "minimatch",
+          "installedVersion": "10.2.6",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "11.0.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "minimatch has potential denial of service via globparts amplification",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-g3hv-75wg-m249"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/security/advisories/GHSA-g3hv-75wg-m249"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118764"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/297b6c1a01f2410b3ba1ebed14ba222d0c3c1033"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/77a0f5c4b80bdc641c3c930a1d9edf5ad2db57f8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/fd0b3ab9cbc5bf1aff1c99f1f46e413c2b3340da"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/releases/tag/v11.0.1"
+          }
+        ]
+      }
+    ],
+    "partial": true,
+    "persisted": false,
+    "warnings": [
+      {
+        "code": "OSV_CACHE_READ_FAILED",
+        "message": "Cache OSV tidak dapat dibaca; seluruh paket akan diquery ulang."
+      },
+      {
+        "code": "EPSS_UNAVAILABLE",
+        "message": "Data EPSS tidak tersedia; prioritas sementara memakai severity dan KEV."
+      }
+    ],
+    "sourceStatus": {
+      "github": "OK",
+      "osv": "PARTIAL",
+      "kev": "CACHE",
+      "epss": "FAILED"
+    },
+    "timings": {
+      "githubMs": 1073,
+      "osvMs": 6658,
+      "enrichmentMs": 1048,
+      "totalMs": 8787
+    },
+    "requestId": "req_d2330df453ca4589bc8752792e094665"
+  }
+}

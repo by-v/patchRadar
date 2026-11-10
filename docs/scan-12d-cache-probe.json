@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-11-10T07:35:00.000Z",
+  "note": "Hasil probe cache T-W1-12d. Tidak memuat kunci/secret. Probe service role dijalankan dari Node 24.21.0 lokal; status 0 berarti fetch gagal sebelum respons HTTP diterima.",
+  "keyCounts": {
+    "axios/axios@v1.x": {
+      "parsedUniquePackages": 679,
+      "avgKeyLength": 28.3,
+      "maxKeyLength": 89,
+      "rawUrlLength": 21331,
+      "encodedUrlLength": 24047
+    },
+    "socketio/socket.io@main": {
+      "parsedUniquePackages": 1179,
+      "avgKeyLength": 24.9,
+      "maxKeyLength": 89,
+      "rawUrlLength": 33052,
+      "encodedUrlLength": 37768
+    }
+  },
+  "serviceRoleLocalProbes": [
+    { "label": "axios_first_100", "keys": 100, "encodedUrlLength": 5560, "httpStatus": 200, "rows": 100, "ms": 362.1 },
+    { "label": "axios_first_200", "keys": 200, "encodedUrlLength": 9756, "httpStatus": 200, "rows": 200, "ms": 1191.2 },
+    { "label": "axios_first_300", "keys": 300, "encodedUrlLength": 13135, "httpStatus": 0, "error": "TypeError: fetch failed (HeadersOverflowError: Headers Overflow Error)", "ms": 1128.3 },
+    { "label": "axios_first_400", "keys": 400, "encodedUrlLength": 16031, "httpStatus": 0, "error": "TypeError: fetch failed (HeadersOverflowError: Headers Overflow Error)", "ms": 590 },
+    { "label": "axios_first_500", "keys": 500, "encodedUrlLength": 18978, "httpStatus": 0, "error": "TypeError: fetch failed (HeadersOverflowError: Headers Overflow Error)", "ms": 930.6 },
+    { "label": "axios_first_600", "keys": 600, "encodedUrlLength": 21795, "httpStatus": 0, "error": "TypeError: fetch failed (HeadersOverflowError: Headers Overflow Error)", "ms": 615 },
+    { "label": "axios_exact", "keys": 679, "encodedUrlLength": 24047, "httpStatus": 0, "error": "TypeError: fetch failed (HeadersOverflowError: Headers Overflow Error)", "ms": 1204.2 },
+    { "label": "socketio_exact", "keys": 1179, "encodedUrlLength": 37768, "httpStatus": 400, "body": "Bad Request", "ms": 729.1 }
+  ],
+  "anonProbes": [
+    { "label": "axios_dummy_same_length", "encodedUrlLength": 18442, "httpStatus": 401, "note": "URL diterima sampai PostgREST; 401 karena RLS/permission, bukan panjang URL." },
+    { "label": "socketio_dummy_same_length", "encodedUrlLength": 31942, "httpStatus": 400, "note": "Ditolak sebelum mencapai tabel." }
+  ],
+  "edgeEvidence": {
+    "requestsAffected": ["req_da314650ef494e4ea84fb06002623cd1", "req_e30adfc793314aabb51d154ba8af5e26", "req_a5c5a549d0bb419f9de85c863325f1ee", "req_d2330df453ca4589bc8752792e094665"],
+    "warnings": ["OSV_CACHE_READ_FAILED"],
+    "osvCacheGetInEdgeLogs": "tidak ditemukan untuk axios/socket.io",
+    "interpretation": "Kegagalan terjadi sebelum GET mencapai PostgREST. Mekanisme tepat di runtime Edge tidak dapat dipastikan dari luar; probe lokal menunjukkan batas panjang header/URL sebagai penyebab yang konsisten."
+  }
+}
