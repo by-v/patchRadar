@@ -18,9 +18,9 @@ Sumber: `docs/scan-12d-evidence.json`, `docs/scan-12d-body.json`, `docs/scan-12d
 | tanpa_jwt | axios/axios | — | 401 | — | — | — | — | — (ditolak gateway) | — | — | null |
 | redirect_upstream | facebook/react (301 → react/react) | — | 502 | — | — | — | — | UPSTREAM_UNAVAILABLE | 0/0/0/0/0/326 | 0 ms | req_7565e5db2e1e49f98771433926c65abc |
 | EPSS gagal (alami, 07:13–07:19) | socketio/socket.io; axios/axios | LOCKFILE v3 | 200 | 1.179; 679 | 24; 2 | epss=FAILED pada keempat scan | true | EPSS_UNAVAILABLE | lihat baris 1–5 | 8–14 ms | req_da314650…, req_e30adfc7… |
-| **OSV gagal total → 502** | expressjs/express | PACKAGE_JSON | **502** | — | — | — | — | UPSTREAM_UNAVAILABLE | — | — | req_fault_osv_502 |
-| **KEV tidak tersedia (EMPTY)** | expressjs/express | PACKAGE_JSON | **200** | 44 | 1 | github=OK, osv=OK, **kev=EMPTY** | false | LOCKFILE_MISSING; KEV_UNAVAILABLE | — | — | req_fault_kev_empty |
-| **KEV basi (STALE)** | expressjs/express | PACKAGE_JSON | **200** | 44 | 1 | github=OK, osv=OK, **kev=STALE** | false | LOCKFILE_MISSING; KEV_STALE | — | — | req_fault_kev_stale |
+| **OSV gagal total → 502** | expressjs/express | PACKAGE_JSON | **502** | — | — | — | — | UPSTREAM_UNAVAILABLE | — | — | req_a325466ea90f49829c367306168bd506 |
+| **KEV tidak tersedia (EMPTY)** | expressjs/express | PACKAGE_JSON | **200** | 44 | 1 | github=OK, osv=OK, **kev=EMPTY** | false | LOCKFILE_MISSING; KEV_UNAVAILABLE | — | — | tidak tercatat (berkas ringkasan) |
+| **KEV basi (STALE)** | expressjs/express | PACKAGE_JSON | **200** | 44 | 1 | github=OK, osv=OK, **kev=STALE** | false | LOCKFILE_MISSING; KEV_STALE | — | — | tidak tercatat (berkas ringkasan) |
 | CPU platform `scan` (Agregat 1 jam) | — | — | — | — | — | — | — | — | CPU max 345 ms (04:00), 214 ms (03:00), 158 ms (07:00); CPU 02:00 = 0 (metrik tidak tersedia) | — | — |
 | `[MANUAL]` dashboard CPU | — | — | `max_cpu_time_used=345 ms` (catatan: agregat per jam) | — | — | — | — | — | — | — | — |
 

@@ -1,0 +1,51 @@
+{
+  "osvFail": {
+    "status": 502,
+    "body": {
+      "error": {
+        "code": "UPSTREAM_UNAVAILABLE",
+        "message": "Layanan OSV tidak dapat dihubungi. Coba lagi sebentar lagi.",
+        "retryable": true,
+        "requestId": "req_a325466ea90f49829c367306168bd506"
+      }
+    }
+  },
+  "kevEmpty": {
+    "status": 200,
+    "sourceStatus": {
+      "github": "OK",
+      "osv": "OK",
+      "kev": "EMPTY",
+      "epss": "OK"
+    },
+    "warnings": [
+      {
+        "code": "LOCKFILE_MISSING",
+        "message": "package-lock.json tidak ditemukan; memakai package.json."
+      },
+      {
+        "code": "KEV_UNAVAILABLE",
+        "message": "Katalog KEV belum tersedia; pencocokan KEV dilewati untuk scan ini."
+      }
+    ]
+  },
+  "kevStale": {
+    "status": 200,
+    "sourceStatus": {
+      "github": "OK",
+      "osv": "OK",
+      "kev": "STALE",
+      "epss": "OK"
+    },
+    "warnings": [
+      {
+        "code": "LOCKFILE_MISSING",
+        "message": "package-lock.json tidak ditemukan; memakai package.json."
+      },
+      {
+        "code": "KEV_STALE",
+        "message": "Refresh KEV gagal; memakai salinan lama (Simulasi Refresh KEV Gagal)."
+      }
+    ]
+  }
+}
