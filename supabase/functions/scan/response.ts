@@ -153,8 +153,25 @@ function sumTimings(bucket: Readonly<Record<string, number>>, prefixes: readonly
 }
 
 /**
- * Satukan warning pipeline dan ubah warning parser menjadi kode publik
- * `LOCKFILE_PARTIAL` yang konsisten dengan PRD §9.3/§12.
+ * Kode warning yang menandakan sumber data gagal/tidak lengkap (PRD §9/§12,
+ * FR-23). Fallback lockfile, hasil `estimated`, kegagalan cache, dan kegagalan
+ * registry hanya bersifat informatif; statusnya dibawa `manifest.estimated`
+ * atau `sourceStatus`, bukan `partial`.
+ */
+const PARTIAL_WARNING_CODES: ReadonlySet<string> = new Set([
+  'OSV_PARTIAL',
+  'OSV_DETAIL_PARTIAL',
+  'KEV_STALE',
+  'KEV_UNAVAILABLE',
+  'EPSS_UNAVAILABLE',
+  'LOCKFILE_PARTIAL',
+]);
+
+/**
+ * Satukan warning pipeline. Hanya entri lockfile yang dilewati
+ * (`LOCKFILE_ENTRY_SKIPPED`) dipetakan ke kode publik `LOCKFILE_PARTIAL`;
+ * warning fallback seperti `LOCKFILE_MISSING` tetap informatif dengan kode
+ * aslinya.
  */
 export function buildWarnings(
   parseWarnings: readonly ParseWarning[],
@@ -170,15 +187,26 @@ export function buildWarnings(
     warnings.push(warning);
   };
 
-  if (parseWarnings.length > 0) {
+  const skipped = parseWarnings.filter((warning) => warning.code === 'LOCKFILE_ENTRY_SKIPPED');
+  if (skipped.length > 0) {
     add({
       code: 'LOCKFILE_PARTIAL',
-      message: parseWarnings.map((warning) => warning.message).join(' '),
+      message: skipped.map((warning) => warning.message).join(' '),
     });
+  }
+
+  for (const warning of parseWarnings) {
+    if (warning.code === 'LOCKFILE_ENTRY_SKIPPED') continue;
+    add({ code: warning.code, message: warning.message });
   }
 
   for (const warning of sources) add(warning);
   return warnings;
+}
+
+/** Apakah daftar warning memuat sumber data gagal/tidak lengkap. */
+export function isPartialWarning(code: string): boolean {
+  return PARTIAL_WARNING_CODES.has(code);
 }
 
 function advisoryFor(
@@ -411,7 +439,7 @@ export function buildScanResponse(input: BuildScanResponseInput): ScanSuccessRes
     ...input.epss.warnings.map((warning) => ({ code: warning.code, message: warning.message })),
   ];
   const warnings = buildWarnings(input.parsed.warnings, sourceWarnings);
-  const partial = warnings.length > 0;
+  const partial = warnings.some((warning) => isPartialWarning(warning.code));
 
   const affectedPackages = new Set<string>();
   for (const finding of sorted) affectedPackages.add(finding.packageName);

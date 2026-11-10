@@ -214,8 +214,16 @@ test('repo tanpa lockfile memakai fallback package.json', async () => {
   assert.equal(response.status, 200);
   assert.deepEqual(body.manifest, { source: 'PACKAGE_JSON', lockfileFormat: null, estimated: true });
   assert.equal((body.summary as { totalPackages: number }).totalPackages, 3);
+  assert.equal(body.partial, false);
+  assert.equal(body.status, 'COMPLETED');
   assert.ok(
-    (body.warnings as Array<{ code: string }>).some((warning) => warning.code === 'LOCKFILE_PARTIAL'),
+    (body.warnings as Array<{ code: string }>).some((warning) => warning.code === 'LOCKFILE_MISSING'),
+  );
+  assert.equal(
+    (body.warnings as Array<{ code: string }>).some(
+      (warning) => warning.code === 'LOCKFILE_PARTIAL',
+    ),
+    false,
   );
 });
 

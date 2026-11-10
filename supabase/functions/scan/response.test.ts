@@ -273,7 +273,7 @@ test('EPSS gagal dan KEV STALE menghasilkan status PARTIAL + warning publik', ()
   assert.equal(body.findings[0]!.priority.label, 'FIX_NOW');
 });
 
-test('warning parser dipetakan ke LOCKFILE_PARTIAL dan deduplikasi', () => {
+test('fallback lockfile dan hasil perkiraan tetap informatif tanpa partial', () => {
   const body = buildScanResponse(
     input({
       parsed: {
@@ -283,6 +283,38 @@ test('warning parser dipetakan ke LOCKFILE_PARTIAL dan deduplikasi', () => {
         lockfileVersion: null,
         warnings: [
           { code: 'LOCKFILE_MISSING', message: 'package-lock.json tidak ditemukan; memakai package.json.' },
+          {
+            code: 'REGISTRY_PARTIAL',
+            message: 'Versi express memakai batas bawah range karena registry gagal dihubungi.',
+          },
+        ],
+      },
+    }),
+  );
+
+  assert.equal(body.manifest.estimated, true);
+  assert.equal(body.partial, false);
+  assert.equal(body.status, 'COMPLETED');
+  assert.deepEqual(body.warnings, [
+    {
+      code: 'LOCKFILE_MISSING',
+      message: 'package-lock.json tidak ditemukan; memakai package.json.',
+    },
+    {
+      code: 'REGISTRY_PARTIAL',
+      message: 'Versi express memakai batas bawah range karena registry gagal dihubungi.',
+    },
+  ]);
+});
+
+test('entri lockfile yang dilewati dipetakan ke LOCKFILE_PARTIAL', () => {
+  const body = buildScanResponse(
+    input({
+      parsed: {
+        ...PARSED,
+        warnings: [
+          { code: 'LOCKFILE_ENTRY_SKIPPED', message: 'Entri tanpa versi dilewati.' },
+          { code: 'LOCKFILE_ENTRY_SKIPPED', message: 'Entri git dilewati.' },
         ],
       },
     }),
@@ -293,7 +325,7 @@ test('warning parser dipetakan ke LOCKFILE_PARTIAL dan deduplikasi', () => {
   assert.deepEqual(body.warnings, [
     {
       code: 'LOCKFILE_PARTIAL',
-      message: 'package-lock.json tidak ditemukan; memakai package.json.',
+      message: 'Entri tanpa versi dilewati. Entri git dilewati.',
     },
   ]);
 });
