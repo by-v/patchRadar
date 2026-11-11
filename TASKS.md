@@ -657,7 +657,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - **Menunggu `T-W1-12d`:** bukti endpoint remote, simulasi EPSS gagal/OSV gagal total/KEV basi pada Supabase sungguhan, bukti baris `osv_cache`/`kev_entries`, dan metrik CPU/wall time per tahap dari log nyata.
 
 ### T-W1-12d — Deploy remote, simulasi kegagalan, dan log CPU per sumber
-- **Status:** `[x]` — selesai; bukti remote lengkap, fault-test teruji dan dibersihkan.
+- **Status:** `[x]` — selesai; seluruh bukti final tercatat di bawah, item lanjutan menjadi prasyarat `T-W1-14`.
 - **Tipe:** `[AGENT]`
 - **Tujuan:** Membuktikan pipeline berjalan di Supabase dan berperilaku benar saat sumber eksternal gagal.
 - **Prasyarat:** `T-W1-07b`, `T-W1-12c`
@@ -670,42 +670,47 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Catat `requestId`, durasi per sumber, dan CPU/wall time di log.
 - **Memenuhi:** `NFR-01`, `NFR-02`, `NFR-06`, `NFR-08`, `NFR-17`, `R-05`, `R-15`
 - **Kriteria selesai (AC):**
-  - [x] Endpoint remote Supabase mengembalikan 200 untuk repo uji. — Terbukti: socket.io 1.179 paket, axios 679, lodash 27, express 44; `requestId` cocok dengan header `X-Request-Id`.
-  - [x] EPSS gagal menghasilkan 200, `partial=true`, dan warning yang benar. — Terbukti alami pada scan 07:13–07:19 UTC (`epss=FAILED`, warning `EPSS_UNAVAILABLE`, `partial=true`).
-  - [ ] OSV gagal total menghasilkan 502 tanpa baris scan sukses. Simulasi wajib memakai paket yang belum ada di `osv_cache` (atau melewati cache secara eksplisit); bila cache masih berisi data, hasilnya 200 parsial, bukan 502. Menghapus baris cache di remote memerlukan persetujuan eksplisit pengembang. — **Belum terbukti di remote**; hanya unit test. Butuh flag uji/fault-injection atau izin menghapus cache.
-  - [ ] KEV tidak tersedia menghasilkan parsial atau `STALE`, bukan crash. — **Belum terbukti di remote**; refresh nyata 03:13:50 UTC menghasilkan `kev=OK`/`kev.catalog.fetch`, scan berikutnya `kev=CACHE`. Kondisi gagal/basi belum dipicu.
-  - [ ] Log memuat durasi per sumber dan CPU time. — Durasi per sumber (`githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`) terbukti ada di `function_logs`; **CPU time tidak ada di log fungsi**. CPU platform hanya tersedia lewat Management API `functions.combined-stats` (max 345 ms), dicatat di `docs/scan-12d-cpu.json`.
-  - [x] Log wall time per tahap sinkron: parse KEV, pencocokan alias, penyusunan findings, skor/label, dan serialisasi respons; jumlah wall time tahap sinkron dihitung dan dicatat sebagai batas atas CPU pipeline. — `syncMs` 1–14 ms; rincian tahap tersimpan di `docs/scan-12d-logs.json` dan `T-W1-12d_test_table.md`. `labelMs` di log = `response.build` (skor/label dihitung di dalamnya), bukan tahap terpisah.
-  - [ ] `[MANUAL]` Pengembang memeriksa metrik fungsi `scan` di dashboard Supabase dan melaporkan apakah CPU time ditampilkan; hasilnya dicatat di `docs/due-diligence-log.md`. — Belum dilaporkan.
-  - [x] `[TODO 12a/12b]` Bukti baris `osv_cache` dan `kev_entries` di database remote setelah migrasi diterapkan, termasuk scan kedua yang memakai cache tanpa panggilan OSV. — `osv_cache` 721 baris paket + 9 advisory, `kev_entries` 1.773 baris; lodash/express pukul 03:37, 04:40, 07:29/07:30 tidak memanggil `osv.batch` dan `osv=CACHE`. **Cacat terpisah:** repo 1.000–1.500 paket tetap `PARTIAL` karena URL cache terlalu panjang; perbaikan batch 100 kunci sudah ditulis tetapi belum di-deploy.
+  - [x] Endpoint remote Supabase mengembalikan 200 untuk repo uji. — socket.io 1.179 paket, axios 679, lodash 27, express 44; `requestId` cocok dengan header `X-Request-Id`.
+  - [x] EPSS gagal menghasilkan 200, `partial=true`, dan warning yang benar. — Alami pada scan 07:13–07:19 UTC: `epss=FAILED`, warning `EPSS_UNAVAILABLE`, `partial=true`.
+  - [x] OSV gagal total menghasilkan 502. — `scan-faulttest?mode=osv-fail` mengembalikan `requestId req_a325466ea90f49829c367306168bd506` dan kode `UPSTREAM_UNAVAILABLE`; fungsi uji sudah dihapus.
+  - [ ] OSV gagal total tidak meninggalkan baris scan sukses. — **Ditunda (10 November 2026) ke `T-W3-05`**: tabel `scans` baru dibuat di Minggu 3, sehingga tidak dapat diuji di 12d; AC sudah ditambahkan ke tugas persistensi.
+  - [x] KEV tidak tersedia menghasilkan parsial atau `STALE`, bukan crash. — `scan-faulttest?mode=kev-empty` → 200 `kev=EMPTY` + `KEV_UNAVAILABLE`; `mode=kev-stale` → 200 `kev=STALE` + `KEV_STALE`. Hasil berupa ringkasan tanpa `requestId`; fungsi uji sudah dihapus.
+  - [x] Log memuat durasi per sumber; CPU platform dicatat dari agregat Management API (`functions.combined-stats`) beserta keterbatasannya, dan batas atas CPU pipeline dihitung dari jumlah wall time sinkron. — `function_logs` memuat `githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`; CPU per scan **tidak ada** di `function_logs`, dan `max_cpu_time_used` 345 ms adalah agregat per jam yang tidak boleh disajikan sebagai CPU per scan; batas atas dihitung dari `syncMs` 1–18 ms.
+  - [x] Log wall time per tahap sinkron: parse KEV, pencocokan alias, penyusunan findings, skor/label, dan serialisasi respons; jumlah wall time tahap sinkron dihitung dan dicatat sebagai batas atas CPU pipeline. — `syncMs` 1–18 ms; rincian tahap tersimpan di `docs/scan-12d-logs.json` dan `T-W1-12d_test_table.md`; `labelMs` di log = `response.build` (skor/label dihitung di dalamnya), bukan tahap terpisah.
+  - [x] `[MANUAL]` Pengembang memeriksa metrik fungsi `scan` di dashboard Supabase dan melaporkan apakah CPU time ditampilkan; hasilnya dicatat di `docs/due-diligence-log.md`. — CPU dashboard 0 ms dinyatakan tidak valid; average execution time ±140 ms.
+  - [x] `[TODO 12a/12b]` Bukti baris `osv_cache` dan `kev_entries` di database remote setelah migrasi diterapkan, termasuk scan kedua yang memakai cache tanpa panggilan OSV. — SQL pengembang 07:43 UTC: `osv_cache` 2.610 baris paket + 83 advisory (rentang 03:13:40–07:43:20 UTC), `kev_entries` 1.773 (katalog CISA `2026.11.09`, tanpa duplikat); nestjs/nest dingin vs hangat `osvMs` 16.803 vs 4.149 ms dan `osv.batch` tidak dipanggil saat hangat; batching 100 kunci sudah di-deploy dan terbukti.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
-  - **Persiapan simulasi OSV gagal total (wajib dibaca saat 12d):** gunakan repo/fixture dengan paket yang belum pernah masuk `osv_cache`, atau lewati cache secara eksplisit lewat opsi test/flag. Jangan menghapus baris cache di remote tanpa persetujuan pengembang. Bila cache masih berisi data, OSV gagal akan menghasilkan 200 parsial + warning, bukan 502.
-  - **10 November 2026 — pemulihan dokumen:** `TASKS.md` dan `docs/due-diligence-log.md` sempat ter-truncate di working copy oleh perintah edit berbasis redirect shell. Keduanya dipulihkan dari commit `4540d3c`; status tugas ini dikembalikan ke `[~]`.
-  - **Bukti remote yang sudah lengkap (10 November 2026):**
-    - **Deploy/migrasi:** hanya fungsi `scan` (ACTIVE, `verify_jwt=true`, versi 2); sumber runtime yang diunduh dari remote identik SHA-256 dengan file lokal (kecuali test/contract yang tidak masuk bundel). Kedua migrasi Minggu 1 sudah diterapkan.
-    - **Scan 200:** `socketio/socket.io` 1.179 paket/24 temuan (3 scan), `axios/axios` 679/2, `lodash/lodash` 27/6, `expressjs/express` 44/1. `requestId` cocok dengan header.
-    - **Kasus error:** 404 `REPO_NOT_FOUND_OR_PRIVATE`, 400 `INVALID_URL`, 401 tanpa JWT. `facebook/react` sekarang 502 `UPSTREAM_UNAVAILABLE` karena GitHub 301 → `react/react` dan redirect tidak diikuti; klaim lama 200/1.240 paket tidak dapat direproduksi.
-    - **EPSS gagal nyata:** 07:13–07:19 UTC, empat scan menghasilkan 200 + `partial=true` + warning `EPSS_UNAVAILABLE`; 22/23 CVE socket.io punya skor, `CVE-2026-93753` memang tidak ada di EPSS.
-    - **KEV:** refresh nyata pada `req_0a806fcf…` (03:13:50 UTC) dengan `kev=OK`/`kev.catalog.fetch`; scan berikutnya `kev=CACHE`. Katalog CISA `2026.11.09`, 1.773 entri, `dateReleased=2026-11-09T19:54:37.4945Z`; `kev_entries` 1.773 baris `updated_at=2026-11-10 03:13:48 UTC`.
-    - **Cache:** `osv_cache` 721 baris paket + 9 advisory. lodash/express pukul 03:37, 04:40, 07:29/07:30 memakai cache tanpa `osv.batch` (`osv=CACHE`).
-    - **Durasi:** `function_logs` memuat `githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`/`syncMs`/`totalMs`; 39 entri tersimpan di `docs/scan-12d-logs.json`. `syncMs` 1–14 ms; rincian tahap sinkron tersimpan.
-    - **CPU platform:** Management API `functions.combined-stats` — `max_cpu_time_used` 345 ms (04:00), 214 ms (03:00), 158 ms (07:00); `max_execution_time` 15.671 ms. Tersimpan di `docs/scan-12d-cpu.json`.
+  - **1. Terbukti (10 November 2026)**
+    - **Deploy/migrasi:** fungsi `scan` ACTIVE, `verify_jwt=true`, versi 3; sumber runtime remote identik SHA-256 dengan file lokal (test/contract tidak masuk bundel); kedua migrasi Minggu 1 diterapkan.
+    - **Scan 200:** `socketio/socket.io` 1.179 paket/24 temuan, `axios/axios` 679/2, `lodash/lodash` 27/6, `expressjs/express` 44/1; `requestId` cocok dengan header.
+    - **Kasus error:** 404 `REPO_NOT_FOUND_OR_PRIVATE`, 400 `INVALID_URL`, 401 tanpa JWT; `facebook/react` 502 `UPSTREAM_UNAVAILABLE` karena redirect GitHub 301 tidak diikuti.
+    - **EPSS gagal nyata:** 07:13–07:19 UTC, empat scan menghasilkan 200 + `partial=true` + `EPSS_UNAVAILABLE`; 22/23 CVE socket.io punya skor, `CVE-2026-93753` tidak ada di EPSS.
+    - **KEV:** refresh `req_0a806fcf…` (03:13:50 UTC) dengan `kev=OK`/`kev.catalog.fetch`; scan berikutnya `kev=CACHE`. Katalog CISA `2026.11.09`, 1.773 entri, `dateReleased=2026-11-09T19:54:37.4945Z`; `kev_entries` 1.773 baris. Selisih 1.769 → 1.773 dijelaskan oleh versi katalog `2026.11.09`, bukan duplikasi.
+    - **Cache OSV:** SQL pengembang 07:43 UTC menunjukkan `osv_cache` 2.610 baris paket + 83 advisory (rentang 03:13:40–07:43:20 UTC). NestJS 1.425 paket: dingin `osvMs=16.803` dengan `osv.batch`; hangat `osvMs=4.149` tanpa `osv.batch` (`osv=CACHE`).
+    - **Batching cache:** `OSV_CACHE_READ_BATCH_SIZE=100` sudah di-deploy dan terbukti; masalah URL `cache_key=in.(...)` yang terlalu panjang (24.047/37.768 karakter) terselesaikan dan cache hangat untuk repo 1.425 paket terbukti.
+    - **Durasi/CPU:** `function_logs` memuat durasi per sumber dan `syncMs` 1–18 ms. Management API `functions.combined-stats`: `max_cpu_time_used` 345 ms (04:00), 214 ms (03:00), 158 ms (07:00) — agregat per jam, bukan CPU per scan; `max_execution_time` 15.671 ms. CPU per scan tidak tersedia di `function_logs`.
+    - **Fault-test:** OSV gagal total → 502 `UPSTREAM_UNAVAILABLE` (`req_a325466ea90f49829c367306168bd506`); KEV EMPTY/STALE → 200 + warning masing-masing. Fungsi `scan-faulttest` sudah dihapus dari remote dan lokal.
+    - **Manual dashboard:** CPU dashboard 0 ms dinyatakan tidak valid; average execution time ±140 ms; dicatat di `docs/due-diligence-log.md`.
     - **RLS:** GET anon ke `osv_cache` → 401 `42501 permission denied for table osv_cache`.
-  - **Cacat yang ditemukan dan perbaikannya (belum di-deploy):** `getMany` membangun satu URL `cache_key=in.(...)`; URL ter-encode 24.047 karakter (axios 679 kunci) dan 37.768 karakter (socket.io 1.179 kunci). Probe lokal: 100/200 kunci → 200; 300+ → `HeadersOverflowError`; 1.179 kunci ke PostgREST → 400. Dampak remote: scan 679/1.179 paket selalu `osv=PARTIAL` + `OSV_CACHE_READ_FAILED`, sehingga cache tidak pernah hangat untuk repo besar. Perbaikan `OSV_CACHE_READ_BATCH_SIZE=100` ada di `supabase/functions/scan/supabase-store.ts` + `supabase-store.test.ts`; **155/155 test lulus, typecheck strict lulus, tetapi deploy belum diizinkan**.
-  - **Blocker yang tersisa (alasan status `[!]`):**
-    1. AC3: OSV gagal total → 502 belum disimulasikan. Tidak ada flag fault-injection di runtime remote; menghapus cache atau deploy kode uji memerlukan izin eksplisit.
-    2. AC4: KEV tidak tersedia/`STALE` belum dipicu. Butuh fault-injection atau salinan > 24 jam.
-    3. AC5: CPU time tidak ada di `function_logs`; hanya tersedia lewat Management API. Bila AC ini dimaksudkan "CPU di log", perlu perubahan logging.
-    4. AC7: pemeriksaan dashboard `[MANUAL]` belum dilaporkan pengembang.
-  - **Bukti tambahan:** `T-W1-12d_test_table.md` memuat tabel akhir dengan kolom yang diminta, `docs/scan-12d-*.json` menyimpan badan respons/log/metrik, `scripts/probe-scan-12d.mjs` dapat dijalankan ulang tanpa mencetak kunci.
+  - **2. Ditunda (10 November 2026)**
+    - AC "OSV gagal total tidak meninggalkan baris scan sukses" dipindahkan ke `T-W3-05` karena tabel `scans` baru ada di Minggu 3. Ini bukan blocker 12d dan tidak mengubah status tugas.
+  - **3. Terbuka untuk gerbang `T-W1-14`**
+    - (a) `LOCKFILE_PARTIAL` pada nestjs/nest: 21 entri dilewati (10 `link/workspace node_modules/@nestjs/*` + 11 `non-node_modules packages/*`); tentukan paket terlewat dan kesesuaian `partial=true` dengan PRD §9.
+    - (b) Penyebab EPSS gagal 11 ms pada 07:13–07:19: log hanya memuat status `FAILED` dan `epssMs` 8–14 ms tanpa pesan error/status HTTP.
+    - (c) Pengukuran ulang fixture ±500 paket (dingin/hangat) dan axios setelah perbaikan batching.
+    - (d) Penanganan redirect GitHub 301 (ikuti sekali hanya ke `api.github.com` atau pesan khusus) sebagai tugas Minggu 2/3 beserta kasus uji SSRF.
+    - (e) Dua tugas prioritas S: ambil dari `kev_entries` hanya CVE yang dibutuhkan, dan baca cache OSV paralel dengan konkurensi terbatas; baseline `kevMs` 700–900 ms dan `osvMs` hangat 4.149 ms untuk 1.425 paket.
+    - (f) Usulan batas atas paket sementara ±1.500 dengan ekstrapolasi berlabel perkiraan (≈11,8 ms/paket cache dingin; 2.000 paket ≈26 s > batas keras 25 s), hanya di `docs/prd-change-proposals.md`.
+  - **Bukti tambahan:** `T-W1-12d_test_table.md`, `docs/scan-12d-*.json`, `scripts/probe-scan-12d.mjs` (tidak mencetak kunci).
 
 
 ### T-W1-14 — `[GATE]` Go/No-Go Minggu 1
 - **Tipe:** `[GATE]`
 - **Tujuan:** Memutuskan kelayakan pipeline berdasarkan bukti API, performa, CPU, dan penanganan parsial.
 - **Prasyarat:** `T-W1-01` s.d. `T-W1-11`, `T-W1-07b`, `T-W1-12a` s.d. `T-W1-12d`
+- **Prasyarat tambahan dari `T-W1-12d`:** item (a)–(f) di bawah wajib diselesaikan atau diputuskan sebelum verdict Go/No-Go.
 - **File/folder:** `docs/due-diligence-log.md`, `docs/week1-gate.md`
 - **Langkah:**
   1. Jalankan kelima script API dan pastikan log due diligence lengkap.
@@ -713,6 +718,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Gunakan hasil `T-W1-07b` dan ukur ulang CPU time pada fixture ≥400 dan ≥1.500 paket; bandingkan dengan batas platform.
   4. Uji timeout, hasil parsial, dan kegagalan satu sumber.
   5. Tetapkan target p95 dan batas atas final; catat keputusan gerbang API/data, performa, CPU, dan batas keras. Gerbang anonymous sign-in dijadwalkan eksplisit ke `T-W3-03` sesuai jadwal verifikasi PRD §13.
+  6. Selesaikan item terbuka `T-W1-12d` (a)–(f) di bawah; jangan menutup gerbang selama item yang memblokir verdict belum diputuskan.
 - **Memenuhi:** `NFR-01`, `NFR-09`, `NFR-17`, `R-06`, `R-15`
 - **Kriteria selesai (AC):**
   - [ ] Semua gerbang §13.1 yang dapat diuji Minggu 1 punya verdict Go/No-Go beserta bukti.
@@ -721,6 +727,12 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] CPU time < batas platform, atau mitigasi R-15 dipilih dan dicatat.
   - [ ] Keputusan CPU memakai batas atas sinkron (jumlah wall time tahap sinkron) dan hasil metrik dashboard `T-W1-12d`; bila batas atas > 70% dari 2 s untuk fixture 500 paket, pekerjaan dipecah per chunk atau dipindahkan (R-15).
   - [ ] Tidak ada blocker tanpa rencana tindak lanjut.
+  - [ ] `[DARI 12d-a]` `LOCKFILE_PARTIAL` pada `nestjs/nest` dijelaskan: 21 entri dilewati (10 `link/workspace node_modules/@nestjs/*` + 11 `non-node_modules packages/*`), tentukan apakah ada paket terlewat, dan putuskan apakah `partial=true` sesuai PRD §9; bukti `docs/scan-12d-large-cold.json` dan kode parser.
+  - [ ] `[DARI 12d-b]` Penyebab EPSS gagal 11 ms pada scan 07:13–07:19 dijelaskan dari `docs/scan-12d-logs.json`: log hanya memuat `sourceStatus.epss=FAILED` dan `epssMs` 8–14 ms, tanpa pesan error/status HTTP; tambahkan bukti penyebab.
+  - [ ] `[DARI 12d-c]` Pengukuran fixture ±500 paket (dingin dan hangat) serta axios diulang setelah perbaikan batching 100 kunci; catat hasil final.
+  - [ ] `[DARI 12d-d]` Redirect GitHub 301 ditangani (ikuti sekali hanya ke `api.github.com` atau tampilkan pesan khusus) sebagai tugas Minggu 2/3, beserta kasus uji SSRF.
+  - [ ] `[DARI 12d-e]` Dua tugas prioritas S diputuskan/dikerjakan: ambil dari `kev_entries` hanya CVE yang dibutuhkan, dan baca cache OSV paralel dengan konkurensi terbatas; baseline `kevMs` 700–900 ms dan `osvMs` hangat 4.149 ms untuk 1.425 paket.
+  - [ ] `[DARI 12d-f]` Usulan batas atas paket sementara ±1.500 dengan ekstrapolasi berlabel perkiraan (≈11,8 ms/paket cache dingin; 2.000 paket ≈26 s > batas keras 25 s) dicatat hanya di `docs/prd-change-proposals.md`; `docs/PRD.md` tidak diubah.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -1053,6 +1065,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] Simulasi kegagalan menghasilkan 200, `persisted=false`, dan satu warning.
   - [ ] Label dan hasil tidak berubah karena kegagalan simpan.
   - [ ] Tidak ada retry klien.
+  - [ ] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. Ini AC lanjutan yang ditunda dari `T-W1-12d` karena tabel `scans` baru dibuat di Minggu 3.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -1579,6 +1592,8 @@ Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requi
 | R-15 | `T-W1-07b`, `T-W1-12d`, `T-W1-14` |
 
 > **Catatan NFR-13/R-14:** Uji harian dilakukan di iPhone memakai Expo Go. APK Android tetap dibangun lewat EAS dan diuji di emulator Android atau HP Android pinjaman. Penyimpangan terkontrol ini dicatat di **Catatan Keputusan**.
+
+**AC lanjutan dari `T-W1-12d`:** AC "OSV gagal total tidak meninggalkan baris scan sukses" dipindahkan ke `T-W3-05`; item terbuka `T-W1-12d` (a)–(f) menjadi prasyarat/AC `T-W1-14`. Keduanya tetap tercakup oleh FR-22/FR-23 dan NFR-08 pada tabel di atas.
 
 ---
 

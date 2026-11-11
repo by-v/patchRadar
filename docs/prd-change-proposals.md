@@ -80,3 +80,14 @@ tidak berubah.
    terbaru yang tersedia, tetapi tidak merinci kegagalan registry. Implementasi
    mempertahankan `estimated=true` dan memakai batas bawah range dengan warning
    `REGISTRY_PARTIAL`. Usulan: tambahkan satu kalimat di FR-05.
+
+## 4. Batas atas paket sementara ±1.500 (usulan)
+
+Sampai optimasi `T-W1-14(e)` selesai, usulkan batas atas paket sementara **±1.500
+paket**. Dasar ekstrapolasi dari pengamatan 10 November 2026: cache dingin
+≈11,8 ms/paket; 2.000 paket ≈26 s, melewati batas keras 25 s (NFR-02). Angka ini
+**perkiraan berlabel**, bukan hasil pengukuran fixture ±2.000 paket. Keputusan final
+menunggu pengukuran ulang `T-W1-14(c)` pada fixture ±500 dan ±1.500 paket.
+
+Usulan teks PRD: cantumkan batas sementara ini di NFR-09 bersama label "perkiraan"
+dan mekanisme penolakan/peringatan yang jelas untuk repositori di atas batas.

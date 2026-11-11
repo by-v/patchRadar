@@ -22,18 +22,18 @@ Sumber: `docs/scan-12d-evidence.json`, `docs/scan-12d-body.json`, `docs/scan-12d
 | **KEV tidak tersedia (EMPTY)** | expressjs/express | PACKAGE_JSON | **200** | 44 | 1 | github=OK, osv=OK, **kev=EMPTY** | false | LOCKFILE_MISSING; KEV_UNAVAILABLE | — | — | tidak tercatat (berkas ringkasan) |
 | **KEV basi (STALE)** | expressjs/express | PACKAGE_JSON | **200** | 44 | 1 | github=OK, osv=OK, **kev=STALE** | false | LOCKFILE_MISSING; KEV_STALE | — | — | tidak tercatat (berkas ringkasan) |
 | CPU platform `scan` (Agregat 1 jam) | — | — | — | — | — | — | — | — | CPU max 345 ms (04:00), 214 ms (03:00), 158 ms (07:00); CPU 02:00 = 0 (metrik tidak tersedia) | — | — |
-| `[MANUAL]` dashboard CPU | — | — | `max_cpu_time_used=345 ms` (catatan: agregat per jam) | — | — | — | — | — | — | — | — |
+| `[MANUAL]` dashboard CPU | — | — | CPU 0 ms (dinyatakan tidak valid); average execution time ±140 ms | — | — | — | — | — | — | — | — |
 
 ## Bukti per AC
 
 - **AC1 endpoint remote 200:** terbukti oleh baris nestjs/nest (1.425 paket), axios, lodash, dan express (200) dengan `requestId` yang cocok dengan header `X-Request-Id`.
 - **AC2 EPSS gagal → 200 + `partial=true` + warning:** terbukti alami pada empat scan 07:13–07:19 UTC: `sourceStatus.epss=FAILED`, `partial=true`, warning `EPSS_UNAVAILABLE`.
-- **AC3 OSV gagal total → 502:** **terbukti remote** via fungsi uji sementara `scan-faulttest?mode=osv-fail`: mengembalikan `502 UPSTREAM_UNAVAILABLE` tanpa baris/respons scan sukses.
-- **AC4 KEV tidak tersedia/STALE:** **terbukti remote** via `scan-faulttest?mode=kev-empty` (mengembalikan 200 dengan `kev=EMPTY` dan warning `KEV_UNAVAILABLE`) serta `scan-faulttest?mode=kev-stale` (mengembalikan 200 dengan `kev=STALE` dan warning `KEV_STALE`).
-- **AC5 log durasi per sumber + CPU:** durasi per sumber tersedia di `function_logs` (`githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`). CPU platform dicatat di `docs/scan-12d-cpu.json` (`max_cpu_time_used=345 ms`).
+- **AC3 OSV gagal total → 502:** **terbukti remote** via fungsi uji sementara `scan-faulttest?mode=osv-fail`: mengembalikan `502 UPSTREAM_UNAVAILABLE` (`req_a325466ea90f49829c367306168bd506`). AC "tanpa baris scan sukses" **ditunda ke `T-W3-05`** karena tabel `scans` belum ada. Fungsi uji sudah dihapus.
+- **AC4 KEV tidak tersedia/STALE:** **terbukti remote** via `scan-faulttest?mode=kev-empty` (mengembalikan 200 dengan `kev=EMPTY` dan warning `KEV_UNAVAILABLE`) serta `scan-faulttest?mode=kev-stale` (mengembalikan 200 dengan `kev=STALE` dan warning `KEV_STALE`). Hasil berupa ringkasan tanpa `requestId`; fungsi uji sudah dihapus.
+- **AC5 log durasi per sumber + CPU:** durasi per sumber tersedia di `function_logs` (`githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`). CPU per scan **tidak ada** di `function_logs`; CPU platform dicatat dari agregat `functions.combined-stats` (`max_cpu_time_used=345 ms`, agregat per jam, bukan CPU per scan). Batas atas pipeline dihitung dari jumlah wall time sinkron.
 - **AC6 wall time tahap sinkron:** `syncMs` 1–18 ms; rincian tahap tersimpan di `docs/scan-12d-logs.json`.
-- **AC7 `[MANUAL]` dashboard:** pengembang melaporkan CPU dashboard `0 ms` (invalid); data Management API `functions.combined-stats` mencatat `max_cpu_time_used=345 ms` (agregat 1 jam).
-- **AC8 bukti baris cache + scan kedua tanpa OSV:** terbukti untuk repo besar (1.425 paket `nestjs/nest`). Scan dingin: `osv=OK`, `osvMs=16.803 ms`, tahap `osv.batch` dipanggil. Scan hangat: `osv=CACHE`, `osvMs=4.149 ms`, tahap `osv.batch` tidak dipanggil. `osv_cache` bertambah 980 baris (926 baris paket + 54 advisory). Perbaikan batching 100 kunci telah di-deploy dan terbukti menyelesaikan masalah URL overlength.
+- **AC7 `[MANUAL]` dashboard:** pengembang melaporkan CPU dashboard `0 ms` (dinyatakan tidak valid) dan average execution time ±140 ms; dicatat di `docs/due-diligence-log.md`.
+- **AC8 bukti baris cache + scan kedua tanpa OSV:** terbukti untuk repo besar (1.425 paket `nestjs/nest`). Scan dingin: `osv=OK`, `osvMs=16.803 ms`, tahap `osv.batch` dipanggil. Scan hangat: `osv=CACHE`, `osvMs=4.149 ms`, tahap `osv.batch` tidak dipanggil. SQL pengembang 07:43 UTC: `osv_cache` 2.610 baris paket + 83 advisory (rentang 03:13:40–07:43:20 UTC). Perbaikan batching 100 kunci sudah di-deploy dan terbukti menyelesaikan masalah URL overlength.
 
 ## Pembersihan Fungsi Uji
 
