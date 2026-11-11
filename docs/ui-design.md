@@ -6,10 +6,10 @@ Dokumen ini menerjemahkan arah visual aplikasi menjadi aturan yang dapat diimple
 
 | Item | Nilai |
 |---|---|
-| Versi dokumen | 1.0 |
+| Versi dokumen | 1.1 |
 | Tanggal | 12 November 2026 |
-| Status | Disetujui untuk acuan `T-W2-01` |
-| Sumber desain | Figma pengembang — **[ISI TAUTAN FIGMA]** |
+| Status | Disetujui dan diimplementasikan pada `T-W2-01` |
+| Sumber desain | Hasil uji prompt Figma, disetujui pengembang (tanpa tautan; spesifikasi lengkap ada di dokumen ini) |
 | Cakupan | Light mode saja (dark mode opsional, prioritas S) |
 | Bahasa UI | Indonesia; istilah teknis (KEV, EPSS, CVSS, OSV, CVE) tetap Inggris |
 
@@ -119,7 +119,8 @@ Nama berkas mengikuti konvensi yang sudah ada di repo (`kebab-case`), bukan `Pas
 | `Banner` | `app/src/components/banner.tsx` | Info, peringatan, error |
 | `EmptyState` | `app/src/components/empty-state.tsx` | Ilustrasi abstrak + teks + tindakan |
 | `Skeleton` | `app/src/components/skeleton.tsx` | Placeholder loading dengan shimmer |
-| Tab bar | `app/src/components/app-tabs.tsx` (sudah ada) | Perlu diperluas menjadi 4 tab |
+| `Wordmark` | `app/src/components/wordmark.tsx` | Tipografis "Patch" tebal + "Radar" ringan, tanpa aset gambar |
+| Tab bar | `app/src/components/tab-bar.tsx` | Tab bar kaca mengambang, 4 tab |
 | Token | `app/src/constants/theme.ts` (sudah ada) | Menggantikan nilai default Expo |
 
 Token warna, spacing, dan tipografi didefinisikan di `theme.ts` dan diimpor oleh semua komponen. Tidak ada nilai hex yang ditulis langsung di komponen.
@@ -202,25 +203,34 @@ Dua modul tersedia, dengan konsekuensi berbeda:
 
 Aturan:
 
-1. Latar layar memakai gambar yang sudah di-blur di aset + `expo-linear-gradient`. Jangan memakai blur runtime untuk latar penuh.
+1. Latar layar memakai gradient tiga titik dari `expo-linear-gradient` ditambah dua blob `View` semi-transparan. Tidak ada blur runtime untuk latar penuh.
 2. `GlassSurface` memilih implementasi: iOS 26 → `GlassView`; lainnya → panel semi-opaque `glassFill` + `glassBorder`.
 3. Selalu sediakan varian opaque; efek kaca adalah penyempurnaan, bukan syarat tampilan.
 4. Jangan menaruh opasitas < 1 pada `GlassView` atau induknya — efek tidak akan tampil.
 
-**Keputusan yang belum diambil:** apakah menambah `expo-blur` untuk Android, atau cukup fallback opaque. Dibahas di `T-W2-01` dan dicatat pada bagian Catatan keputusan `TASKS.md`.
+Dependensi yang ditambahkan pada `T-W2-01`:
 
-**Konflik yang perlu diputuskan:** tab bar saat ini memakai `NativeTabs` dari `expo-router/native-tabs`, yang gayanya dikendalikan sistem dan tidak mendukung tab bar kaca mengambang dengan indikator pill. Pilihan: (a) pertahankan `NativeTabs` dan lepaskan gaya tab bar kaca, atau (b) ganti ke `Tabs` dengan `tabBar` kustom. Keputusan diambil di `T-W2-01`.
+| Paket | Versi | Alasan |
+|---|---|---|
+| `@expo/vector-icons` | `^15.0.2` | Ikon tab dan status; tersedia di Expo Go |
+| `expo-linear-gradient` | `~58.0.4` | Gradient latar hangat |
+
+**Keputusan:** `expo-blur` **tidak** ditambahkan. Android dan iOS < 26 memakai panel semi-opaque. Alasan: menghindari biaya performa dan ketidakkonsistenan blur di Android untuk keuntungan visual yang kecil.
+
+**Keputusan:** tab bar memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom, menggantikan `NativeTabs`. Catatan penting: `Tabs` dari `expo-router` sudah ditandai *deprecated* pada SDK 58, sehingga impor harus dari `expo-router/js-tabs`. Tipe `BottomTabBarProps` di SDK 58 tidak memuat `navigation`; gunakan `emitter`, `navigateToTab`, dan `insets`.
 
 ## 11. Aset
 
-| Aset | Lokasi | Format | Catatan |
-|---|---|---|---|
-| Latar hangat ter-blur | `app/assets/images/bg-blur.webp` | WebP, lebar 1080 | Sudah dalam kondisi blur; tanpa detail tajam |
-| Wordmark | `app/assets/images/wordmark.svg` | SVG | Versi gelap dan terang |
-| Ikon tab | `app/assets/images/tabIcons/` | PNG template / SVG | Pindai, Hasil, Riwayat, Tentang |
-| Ikon status | komponen inline | SVG | Severity, banner, empty state |
+Tidak ada aset gambar yang dibutuhkan. Semua elemen visual dibentuk dari kode:
 
-Aset belum diekspor dari Figma. Ini prasyarat `T-W2-01`.
+| Aset | Pengganti | Catatan |
+|---|---|---|
+| Latar hangat ter-blur | `ScreenBackground` | `expo-linear-gradient` + dua blob `View` |
+| Wordmark | `Wordmark` | Teks "Patch" (600) + "Radar" (300), 19px |
+| Ikon tab | `@expo/vector-icons` (Ionicons) | `scan-outline`, `time-outline`, `information-circle-outline` |
+| Ikon status | `@expo/vector-icons` | Ditentukan saat komponen badge dibuat |
+
+Ikon aplikasi dan splash masih memakai aset bawaan Expo pada `T-W2-01`; penggantian ikon aplikasi di luar lingkup tugas ini.
 
 ## 12. Checklist handoff
 
@@ -229,16 +239,18 @@ Aset belum diekspor dari Figma. Ini prasyarat `T-W2-01`.
 - [x] Skala tipografi, spacing, radius, dan elevasi ditetapkan
 - [x] Spesifikasi lima layar dan lima state dirangkum
 - [x] Aturan aksesibilitas ditetapkan
-- [ ] Tautan Figma diisi
-- [ ] Tangkapan layar per frame dilampirkan (bila Figma tidak dapat dibagikan)
-- [ ] Aset diekspor ke `app/assets/images/`
-- [ ] Warna severity disetujui
-- [ ] Keputusan `expo-blur` dan tab bar diambil pada `T-W2-01`
+- [x] Tautan Figma tidak diperlukan; spesifikasi lengkap ada di dokumen ini
+- [x] Aset gambar digantikan komponen kode (§11)
+- [x] Warna severity disetujui pengembang
+- [x] Keputusan `expo-blur` dan tab bar diambil (§10)
 
-## 13. Catatan keputusan terbuka
+## 13. Catatan keputusan
 
-1. **Warna severity** — belum ada di palet awal; usulan pada §3.3 menunggu persetujuan pengembang.
-2. **`textSecondary` `#544B45`** — tambahan di luar enam warna awal, wajib untuk memenuhi kontras AA.
-3. **`hairline` `#6B605A`** — tambahan agar batas input dan pemisah terlihat (≥3:1).
-4. **Tab bar kaca** — bergantung pada keputusan `NativeTabs` vs `Tabs` kustom.
-5. **Efek kaca Android** — bergantung pada keputusan menambah `expo-blur`.
+Seluruh keputusan terbuka pada versi 1.0 sudah ditutup pada `T-W2-01`:
+
+1. **Warna severity** — disetujui sesuai §3.3.
+2. **`textSecondary` `#544B45`** — dipakai; wajib untuk memenuhi kontras AA.
+3. **`hairline` `#6B605A`** — dipakai untuk batas input dan pemisah (≥3:1).
+4. **Tab bar kaca** — memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom.
+5. **Efek kaca Android** — tanpa `expo-blur`; memakai panel semi-opaque.
+6. **Mode gelap** — tidak diaktifkan pada MVP; `app.json` dikunci ke `light`.

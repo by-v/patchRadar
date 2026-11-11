@@ -762,14 +762,23 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Siapkan grup rute `scan/` sebagai placeholder agar Hasil/Detail dapat ditambahkan tanpa mengubah layout.
 - **Memenuhi:** `FR-17` (shell), `FR-26` (shell), `NFR-11` (M), `NFR-13`
 - **Kriteria selesai (AC):**
-  - [ ] Tiga tab tampil dan dapat berpindah tanpa crash.
-  - [ ] Seluruh label berbahasa Indonesia.
-  - [ ] Tampilan aman pada layar kecil dan mode teks besar.
-  - [ ] Typecheck dan lint lulus.
+  - [ ] Tiga tab tampil dan dapat berpindah tanpa crash. *(menunggu uji perangkat)*
+  - [x] Seluruh label berbahasa Indonesia.
+  - [ ] Tampilan aman pada layar kecil dan mode teks besar. *(menunggu uji perangkat)*
+  - [x] Typecheck dan lint lulus.
   - [ ] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
 - **Estimasi:** 2,5 jam
-- [ ] Tugas selesai
+- [~] Tugas selesai — implementasi lengkap, menunggu uji perangkat pengembang
 - **Catatan hasil:**
+  - Implementasi memakai scaffold nyata `app/src/app`, bukan `app/app` seperti tertulis pada bagian *File/folder*. Nama berkas komponen memakai `kebab-case` sesuai konvensi repo, bukan `PascalCase`. Keduanya dicatat di Catatan Keputusan.
+  - Token desain lengkap di `app/src/constants/theme.ts`; acuan `docs/ui-design.md` v1.1.
+  - Rute disusun ulang: `_layout.tsx` menjadi `Stack`, tab dipindah ke `src/app/(tabs)/` (`index`, `riwayat`, `tentang`), placeholder `src/app/scan/[scanId]/index.tsx` ditambahkan.
+  - Tab bar kaca kustom di `app/src/components/tab-bar.tsx` memakai `Tabs` dari `expo-router/js-tabs`; `NativeTabs` beserta `app-tabs.tsx` dan `app-tabs.web.tsx` dihapus.
+  - Komponen baru: `screen`, `screen-background`, `glass-surface`, `screen-header`, `pill-input`, `dark-cta`, `tab-bar`, `wordmark`, dan hook `use-reduce-transparency`.
+  - Dependensi baru: `@expo/vector-icons@^15.0.2` dan `expo-linear-gradient@~58.0.4`. `expo-blur` tidak dipakai.
+  - `app.json`: `userInterfaceStyle` menjadi `light`, latar splash `#DDD3CC`. Ikon aplikasi dan splash masih aset bawaan Expo.
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 1 suite/1 test lulus, `expo export --platform android` berhasil (bundel 3,9 MB).
+  - Belum terverifikasi: uji manual Expo Go di iPhone, tampilan nyata pada layar kecil dan skala font 200%, serta perilaku `GlassView` pada iOS 26. Menunggu pengembang.
 
 ### T-W2-02 — Layar Pindai dan validasi URL
 - **Tipe:** `[AGENT]`
@@ -1630,6 +1639,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 12 November 2026 | `T-W1-14`, `T-W1-12d-b` | EPSS batch memakai **satu** parameter `cve` berisi daftar dipisah koma (`?cve=A,B,C`). Parameter `cve` yang diulang tidak dipakai karena hanya CVE terakhir yang diproses. | Pengamatan 12 November 2026: parameter berulang → `total=1` (CVE terakhir); bentuk koma → `total=3`; 23 CVE socket.io dengan parameter berulang → `total=0` sehingga scan melaporkan EPSS gagal. | Ya — keputusan gerbang `T-W1-14`; sudah diuji dan di-deploy |
 | 12 November 2026 | `T-W1-14` | Batas atas paket final ditetapkan **1.500 paket unik** (bukan 2.000) dan **25 detik** wall time. `MAX_PACKAGES` serta pesan 413 disesuaikan. Usulan perubahan NFR-09 dicatat di `docs/prd-change-proposals.md`; `docs/PRD.md` tidak diubah. | Pengukuran 12 November 2026: 1.425 paket dingin 16,49 detik; 1.179 paket dingin 21,87 detik; 2.000 paket tidak dijamin di bawah 25 detik. | Ya — keputusan gerbang `T-W1-14`; perubahan PRD menunggu persetujuan |
 | 12 November 2026 | `T-W1-14`, `T-W3-07b` | Redirect GitHub 301 tetap **ditolak** pada Minggu 1 (502 `UPSTREAM_UNAVAILABLE`, bukan kegagalan senyap). Implementasi satu hop hanya ke `https://api.github.com` beserta uji SSRF dikerjakan di `T-W3-07b`. | Menghindari SSRF dan redirect berantai; belum ada kebutuhan produk yang mengharuskan redirect diikuti. | Ya — keputusan gerbang `T-W1-14` |
+| 12 November 2026 | `T-W2-01` | Tema **Modern Minimalist + Glassmorphism** dan palet pengembang (`#DDD3CC`, `#CABEB5`, `#A2958B`, `#1E1E1E`, `#2A2725`) menjadi acuan visual. Ditambah token pendukung `textSecondary #544B45` (4,7–5,8:1), `hairline #6B605A` (≥3:1), dan lima warna severity; `#A2958B` hanya dipakai di permukaan gelap (1,98:1 di latar terang). Aplikasi dikunci mode terang. Efek kaca memakai `expo-glass-effect` (iOS 26) dengan fallback opaque di platform lain; `expo-blur` tidak ditambahkan. Tab bar memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom, menggantikan `NativeTabs`. Wordmark dibuat sebagai komponen teks, bukan aset. Nama berkas komponen `kebab-case` dan path rute mengikuti scaffold nyata `app/src/app`. | Hasil uji prompt Figma disetujui pengembang; kontras palet awal gagal AA untuk teks sekunder di latar terang; `NativeTabs` tidak dapat dibentuk menjadi pill mengambang; blur runtime di Android berbiaya tinggi untuk keuntungan visual kecil. | Ya — instruksi pengembang, 12 November 2026 |
 
 
 ---
