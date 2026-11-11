@@ -20,6 +20,7 @@ const WARMUP_RUNS = 1;
 const REQUEST_TIMEOUT_MS = 60_000;
 
 const CASES = [
+  { name: 'small-100', expectedPackages: 107 },
   { name: 'medium-500', expectedPackages: 491 },
   { name: 'large-1500', expectedPackages: 1409 },
 ];

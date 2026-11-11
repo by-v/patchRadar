@@ -34,7 +34,7 @@ import { buildScanResponse, type ScanSuccessResponse, type SourceState } from '.
 import type { OsvCacheStore, KevStore } from './store.ts';
 
 export const MAX_REQUEST_BODY_BYTES = 16 * 1024;
-export const MAX_PACKAGES = 2_000;
+export const MAX_PACKAGES = 1_500;
 
 export interface ScanLogEntry {
   requestId: string;

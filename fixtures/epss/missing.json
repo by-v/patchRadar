@@ -20,7 +20,7 @@
         "cve": "CVE-2021-44228",
         "epss": 0.99999,
         "percentile": 1,
-        "date": "2026-11-08",
+        "date": "2026-11-10",
         "available": true
       },
       {
@@ -40,13 +40,13 @@
   },
   "emptyCveParam": {
     "status": 200,
-    "total": 401956,
+    "total": 402773,
     "dataLength": 1,
     "limit": 1
   },
   "noCveParam": {
     "status": 200,
-    "total": 401956,
+    "total": 402773,
     "dataLength": 1,
     "limit": 1
   },

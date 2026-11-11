@@ -24,7 +24,7 @@ interface FetchBehaviour {
   lockBody?: string;
   throwNetwork?: boolean;
   hangUntilAbort?: boolean;
-  external?: (url: string, init?: RequestInit) => Promise<Response> | null;
+  external?: (url: string, init?: RequestInit) => Promise<Response | null> | null;
 }
 
 interface FakeFetch {
@@ -358,9 +358,9 @@ test('manifest > 5 MB menghasilkan 413', async () => {
   assert.equal(((await bodyOf(response)).error as { code: string }).code, 'MANIFEST_TOO_LARGE');
 });
 
-test('lebih dari 2.000 paket unik menghasilkan 413', async () => {
+test('lebih dari 1.500 paket unik menghasilkan 413', async () => {
   const packages: Record<string, { version: string }> = {};
-  for (let index = 0; index < 2001; index += 1) {
+  for (let index = 0; index < 1501; index += 1) {
     packages[`node_modules/pkg-${index}`] = { version: '1.0.0' };
   }
   const fake = makeFetch({
@@ -468,7 +468,7 @@ function pipelineExternal(options: { epssFail?: boolean } = {}) {
     if (parsed.hostname === 'www.cisa.gov') return new Response(null, { status: 503 });
 
     if (parsed.hostname === 'api.first.org') {
-      const cves = parsed.searchParams.getAll('cve');
+      const cves = (parsed.searchParams.get('cve') ?? '').split(',').filter(Boolean);
       if (options.epssFail === true) return jsonBody({ total: 0, data: [] });
       return jsonBody({
         total: cves.length,

@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-11-08T20:15:29Z",
+  "capturedAt": "2026-11-11T18:34:51Z",
   "requested": 40,
   "succeeded": 40,
   "failures": [],
@@ -129,7 +129,7 @@
       ],
       "referencesCount": 20,
       "bytes": 4846,
-      "durationMs": 273
+      "durationMs": 285
     },
     {
       "id": "GHSA-35jh-r3h4-6jhm",
@@ -256,7 +256,7 @@
       ],
       "referencesCount": 17,
       "bytes": 4178,
-      "durationMs": 328
+      "durationMs": 359
     },
     {
       "id": "GHSA-r5fr-rjxr-66jc",
@@ -365,7 +365,7 @@
       ],
       "referencesCount": 6,
       "bytes": 3703,
-      "durationMs": 299
+      "durationMs": 266
     },
     {
       "id": "GHSA-xxjr-mmjv-4gpg",
@@ -495,7 +495,7 @@
       ],
       "referencesCount": 93,
       "bytes": 9734,
-      "durationMs": 278
+      "durationMs": 387
     },
     {
       "id": "GHSA-p6mc-m468-83gw",
@@ -677,7 +677,7 @@
       ],
       "referencesCount": 12,
       "bytes": 4949,
-      "durationMs": 267
+      "durationMs": 319
     },
     {
       "id": "GHSA-xvch-5gv4-984h",
@@ -751,7 +751,7 @@
       ],
       "referencesCount": 15,
       "bytes": 2615,
-      "durationMs": 286
+      "durationMs": 299
     },
     {
       "id": "GHSA-vh95-rmgr-6w4m",
@@ -825,7 +825,7 @@
       ],
       "referencesCount": 9,
       "bytes": 2615,
-      "durationMs": 445
+      "durationMs": 309
     },
     {
       "id": "GHSA-3g43-6gmg-66jw",
@@ -899,7 +899,7 @@
       ],
       "referencesCount": 3,
       "bytes": 15622,
-      "durationMs": 438
+      "durationMs": 330
     },
     {
       "id": "GHSA-3p68-rc4w-qgx5",
@@ -975,7 +975,7 @@
       ],
       "referencesCount": 11,
       "bytes": 5129,
-      "durationMs": 264
+      "durationMs": 399
     },
     {
       "id": "GHSA-43fc-jf86-j433",
@@ -1049,7 +1049,7 @@
       ],
       "referencesCount": 9,
       "bytes": 5058,
-      "durationMs": 637
+      "durationMs": 294
     },
     {
       "id": "GHSA-5c9x-8gcm-mpgx",
@@ -1123,7 +1123,7 @@
       ],
       "referencesCount": 3,
       "bytes": 2953,
-      "durationMs": 262
+      "durationMs": 306
     },
     {
       "id": "GHSA-62hf-57xw-28j9",
@@ -1199,7 +1199,7 @@
       ],
       "referencesCount": 5,
       "bytes": 4490,
-      "durationMs": 455
+      "durationMs": 313
     },
     {
       "id": "GHSA-6chq-wfr3-2hj9",
@@ -1273,7 +1273,7 @@
       ],
       "referencesCount": 3,
       "bytes": 5739,
-      "durationMs": 439
+      "durationMs": 318
     },
     {
       "id": "GHSA-7q8q-rj6j-mhjq",
@@ -1347,7 +1347,7 @@
       ],
       "referencesCount": 11,
       "bytes": 13357,
-      "durationMs": 273
+      "durationMs": 295
     },
     {
       "id": "GHSA-898c-q2cr-xwhg",
@@ -1421,7 +1421,7 @@
       ],
       "referencesCount": 4,
       "bytes": 8414,
-      "durationMs": 622
+      "durationMs": 312
     },
     {
       "id": "GHSA-cph5-m8f7-6c5x",
@@ -1476,7 +1476,7 @@
       ],
       "referencesCount": 17,
       "bytes": 2970,
-      "durationMs": 253
+      "durationMs": 298
     },
     {
       "id": "GHSA-fvcv-3m26-pcqx",
@@ -1550,7 +1550,7 @@
       ],
       "referencesCount": 11,
       "bytes": 5735,
-      "durationMs": 441
+      "durationMs": 306
     },
     {
       "id": "GHSA-hfxv-24rg-xrqf",
@@ -1624,7 +1624,7 @@
       ],
       "referencesCount": 4,
       "bytes": 12016,
-      "durationMs": 272
+      "durationMs": 310
     },
     {
       "id": "GHSA-j5f8-grm9-p9fc",
@@ -1698,7 +1698,7 @@
       ],
       "referencesCount": 7,
       "bytes": 7483,
-      "durationMs": 261
+      "durationMs": 306
     },
     {
       "id": "GHSA-jr5f-v2jv-69x6",
@@ -1772,7 +1772,7 @@
       ],
       "referencesCount": 8,
       "bytes": 4492,
-      "durationMs": 264
+      "durationMs": 307
     },
     {
       "id": "GHSA-m7pr-hjqh-92cm",
@@ -1846,7 +1846,7 @@
       ],
       "referencesCount": 3,
       "bytes": 3535,
-      "durationMs": 264
+      "durationMs": 306
     },
     {
       "id": "GHSA-mmx7-hfxf-jppx",
@@ -1920,7 +1920,7 @@
       ],
       "referencesCount": 11,
       "bytes": 9818,
-      "durationMs": 291
+      "durationMs": 311
     },
     {
       "id": "GHSA-p92q-9vqr-4j8v",
@@ -1994,7 +1994,7 @@
       ],
       "referencesCount": 5,
       "bytes": 10147,
-      "durationMs": 359
+      "durationMs": 318
     },
     {
       "id": "GHSA-pf86-5x62-jrwf",
@@ -2142,7 +2142,7 @@
       ],
       "referencesCount": 38,
       "bytes": 13389,
-      "durationMs": 302
+      "durationMs": 311
     },
     {
       "id": "GHSA-pmwg-cvhr-8vh7",
@@ -2216,7 +2216,7 @@
       ],
       "referencesCount": 3,
       "bytes": 31554,
-      "durationMs": 387
+      "durationMs": 327
     },
     {
       "id": "GHSA-vf2m-468p-8v99",
@@ -2290,7 +2290,7 @@
       ],
       "referencesCount": 3,
       "bytes": 2645,
-      "durationMs": 263
+      "durationMs": 279
     },
     {
       "id": "GHSA-w9j2-pvgh-6h63",
@@ -2364,7 +2364,7 @@
       ],
       "referencesCount": 3,
       "bytes": 9049,
-      "durationMs": 271
+      "durationMs": 309
     },
     {
       "id": "GHSA-wf5p-g6vw-rhxx",
@@ -2438,7 +2438,7 @@
       ],
       "referencesCount": 12,
       "bytes": 2310,
-      "durationMs": 256
+      "durationMs": 305
     },
     {
       "id": "GHSA-xhjh-pmcv-23jw",
@@ -2512,7 +2512,7 @@
       ],
       "referencesCount": 3,
       "bytes": 7739,
-      "durationMs": 260
+      "durationMs": 316
     },
     {
       "id": "GHSA-xx6v-rp6x-q39c",
@@ -2586,7 +2586,7 @@
       ],
       "referencesCount": 3,
       "bytes": 7711,
-      "durationMs": 263
+      "durationMs": 310
     },
     {
       "id": "GHSA-4w2v-q235-vp99",
@@ -2641,7 +2641,7 @@
       ],
       "referencesCount": 10,
       "bytes": 2015,
-      "durationMs": 261
+      "durationMs": 294
     },
     {
       "id": "GHSA-r683-j2x4-v87g",
@@ -2715,7 +2715,7 @@
       ],
       "referencesCount": 10,
       "bytes": 2272,
-      "durationMs": 272
+      "durationMs": 313
     },
     {
       "id": "GHSA-w7rc-rwvf-8q5r",
@@ -2789,7 +2789,7 @@
       ],
       "referencesCount": 5,
       "bytes": 2814,
-      "durationMs": 273
+      "durationMs": 403
     },
     {
       "id": "GHSA-5c6j-r48x-rmvq",
@@ -2840,7 +2840,7 @@
       ],
       "referencesCount": 6,
       "bytes": 4110,
-      "durationMs": 296
+      "durationMs": 307
     },
     {
       "id": "GHSA-m5mm-p8h7-m29v",
@@ -2897,7 +2897,7 @@
       ],
       "referencesCount": 5,
       "bytes": 3587,
-      "durationMs": 267
+      "durationMs": 315
     },
     {
       "id": "GHSA-hxcc-f52p-wc94",
@@ -2952,7 +2952,7 @@
       ],
       "referencesCount": 3,
       "bytes": 1661,
-      "durationMs": 264
+      "durationMs": 301
     },
     {
       "id": "GHSA-qw6h-vgh9-j6wx",
@@ -3028,7 +3028,7 @@
       ],
       "referencesCount": 4,
       "bytes": 2360,
-      "durationMs": 259
+      "durationMs": 308
     },
     {
       "id": "GHSA-rv95-896h-c2vc",
@@ -3102,7 +3102,7 @@
       ],
       "referencesCount": 8,
       "bytes": 3311,
-      "durationMs": 299
+      "durationMs": 310
     },
     {
       "id": "GHSA-9c47-m6qq-7p4h",
@@ -3176,7 +3176,7 @@
       ],
       "referencesCount": 10,
       "bytes": 5067,
-      "durationMs": 269
+      "durationMs": 302
     }
   ]
 }

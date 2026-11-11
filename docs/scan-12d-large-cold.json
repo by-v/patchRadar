@@ -1,0 +1,5562 @@
+{
+  "repo": "nestjs/nest",
+  "label": "cache-dingin",
+  "startedAt": "2026-11-10T07:43:24.319Z",
+  "finishedAt": "2026-11-10T07:43:43.503Z",
+  "status": 200,
+  "clientWallMs": 19172.3,
+  "requestId": "req_f2b6087e8e5c443a92758c9710183b42",
+  "body": {
+    "scanId": "a796e52d-40fc-4c95-844f-217db86124be",
+    "repo": {
+      "owner": "nestjs",
+      "name": "nest",
+      "url": "https://github.com/nestjs/nest",
+      "defaultBranch": "master"
+    },
+    "scannedAt": "2026-11-10T07:43:38.417Z",
+    "status": "PARTIAL",
+    "manifest": {
+      "source": "LOCKFILE",
+      "lockfileFormat": "v3",
+      "estimated": false
+    },
+    "summary": {
+      "totalPackages": 1425,
+      "affectedPackages": 21,
+      "findingCount": 77
+    },
+    "findings": [
+      {
+        "findingId": "1fa201e1-291d-40a5-8eba-8577719593d4",
+        "osvId": "GHSA-fjxv-7rqg-78g4",
+        "cveIds": [
+          "CVE-2025-7783"
+        ],
+        "package": {
+          "name": "form-data",
+          "installedVersion": "2.3.3",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "request"
+        },
+        "severity": {
+          "level": "CRITICAL",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 60,
+          "reason": "Severity Critical, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "2.5.4",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "form-data uses unsafe random function in form-data for choosing boundary",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-fjxv-7rqg-78g4"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data/security/advisories/GHSA-fjxv-7rqg-78g4"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-7783"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data/commit/3d1723080e6577a66f17f163ecd345a21d8d0fd0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/benweissmann/CVE-2025-7783-poc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://lists.debian.org/debian-lts-announce/2025/07/msg00023.html"
+          }
+        ]
+      },
+      {
+        "findingId": "b391743b-1543-4d6d-9871-20b6fcbf9270",
+        "osvId": "GHSA-6j4f-fj2g-mc7p",
+        "cveIds": [
+          "CVE-2026-102276"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "1.1.13",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "1.1.19",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-6j4f-fj2g-mc7p"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102276"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "3acaec5a-ca5e-4b80-85c9-1c7f4b2b9413",
+        "osvId": "GHSA-mh99-v99m-4gvg",
+        "cveIds": [
+          "CVE-2026-14257"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "1.1.13",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "1.1.17",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-mh99-v99m-4gvg"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-mh99-v99m-4gvg"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-14257"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/129"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/130"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/136"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/a1bd33999ea75262c4749fff3bbb0d1372bd07b5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/d13ff455a58b0d56704f0111e3c2a0b16ceb06eb"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/package/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "58d8a8da-7ef0-451e-9322-2b012ba6e8b5",
+        "osvId": "GHSA-qhr7-859c-m2p7",
+        "cveIds": [
+          "CVE-2026-102278"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "1.1.13",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "1.1.20",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qhr7-859c-m2p7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102278"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "ddf5590f-49b9-442c-86bb-20ebcf264b55",
+        "osvId": "GHSA-rgw5-rvv9-x895",
+        "cveIds": [
+          "CVE-2026-69152"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "1.1.13",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "1.1.18",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-rgw5-rvv9-x895"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-rgw5-rvv9-x895"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-69152"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/1e30c930238d7162802d88a94189182def178dac"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/688a99eeaab02627c2b89ba8ba4821fecfa659cf"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "0806d385-1bbc-49b2-9979-5905117cd1f4",
+        "osvId": "GHSA-6j4f-fj2g-mc7p",
+        "cveIds": [
+          "CVE-2026-102276"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "5.0.10",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-6j4f-fj2g-mc7p"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102276"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "c41f0449-47f0-441f-a3c2-235702f7f0c8",
+        "osvId": "GHSA-mh99-v99m-4gvg",
+        "cveIds": [
+          "CVE-2026-14257"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "5.0.8",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-mh99-v99m-4gvg"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-mh99-v99m-4gvg"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-14257"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/129"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/130"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/136"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/a1bd33999ea75262c4749fff3bbb0d1372bd07b5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/d13ff455a58b0d56704f0111e3c2a0b16ceb06eb"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/package/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "c1aeca69-6dd3-4c22-987c-18dcffd1554e",
+        "osvId": "GHSA-qhr7-859c-m2p7",
+        "cveIds": [
+          "CVE-2026-102278"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "5.0.11",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qhr7-859c-m2p7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102278"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "258abd04-1f1c-489e-b579-aa17c07aa9c6",
+        "osvId": "GHSA-rgw5-rvv9-x895",
+        "cveIds": [
+          "CVE-2026-69152"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "5.0.9",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via unbounded intermediate arrays, bypassing the CVE-2026-14257 mitigation",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-rgw5-rvv9-x895"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-rgw5-rvv9-x895"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-69152"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/139d015104e71433ad52a41d19467c48ecbb2c7d"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/1e30c930238d7162802d88a94189182def178dac"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/688a99eeaab02627c2b89ba8ba4821fecfa659cf"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/cb4b9e47cc2ec777c14b2b4492fb431a56f6a031"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "dbd962dc-1a4b-48ef-9e8d-2d62dc2b5636",
+        "osvId": "GHSA-6j4f-fj2g-mc7p",
+        "cveIds": [
+          "CVE-2026-102276"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.9",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "@nx/devkit"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "5.0.10",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via uncontrolled recursion in parseCommaParts causing stack exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-6j4f-fj2g-mc7p"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-6j4f-fj2g-mc7p"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102276"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/0bcbfc0a5928c3073d48f42999d1ce4fc1c42fbc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/316359e6019c39b3254c8ba8e25dc586a480652c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/5171e681c0922b7ae8bfaf9a331e309107be6edc"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/6735c94873ca570bcdd6a0690033bdd3126379d3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "6833a1d1-cbc9-434b-b672-10517d4de9e4",
+        "osvId": "GHSA-qhr7-859c-m2p7",
+        "cveIds": [
+          "CVE-2026-102278"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.9",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "@nx/devkit"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "5.0.11",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via uncontrolled recursion on nested brace groups causing stack exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qhr7-859c-m2p7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-qhr7-859c-m2p7"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102278"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/1efee7c397c191da6287a78ec19512476a966a7b"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/935d78f32f335b2ff76578e5c5e877d31ae9888c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/de84f144e9816f30e25fc8179e2e1249ab6df0db"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "ab657184-af79-4652-a121-60f0ade88125",
+        "osvId": "GHSA-grv7-fg5c-xmjg",
+        "cveIds": [
+          "CVE-2024-4068"
+        ],
+        "package": {
+          "name": "braces",
+          "installedVersion": "1.8.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "anymatch"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "3.0.3",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Uncontrolled resource consumption in braces",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-grv7-fg5c-xmjg"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-4068"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/issues/35"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/pull/37"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/pull/40"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/commit/415d660c3002d1ab7e63dbf490c9851da80596ff"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://devhub.checkmarx.com/cve-details/CVE-2024-4068"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/blob/98414f9f1fabe021736e26836d8306d5de747e0d/lib/parse.js#L308"
+          }
+        ]
+      },
+      {
+        "findingId": "c6e3dc89-4585-493a-8f8a-d38d41459bd7",
+        "osvId": "GHSA-grv7-fg5c-xmjg",
+        "cveIds": [
+          "CVE-2024-4068"
+        ],
+        "package": {
+          "name": "braces",
+          "installedVersion": "2.3.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "gulp-watch"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "3.0.3",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Uncontrolled resource consumption in braces",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-grv7-fg5c-xmjg"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-4068"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/issues/35"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/pull/37"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/pull/40"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/commit/415d660c3002d1ab7e63dbf490c9851da80596ff"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://devhub.checkmarx.com/cve-details/CVE-2024-4068"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/braces/blob/98414f9f1fabe021736e26836d8306d5de747e0d/lib/parse.js#L308"
+          }
+        ]
+      },
+      {
+        "findingId": "c6a206a7-64cf-49c0-bbf1-28d373f5c82f",
+        "osvId": "GHSA-qr28-fpjm-wq7f",
+        "cveIds": [
+          "CVE-2026-118664"
+        ],
+        "package": {
+          "name": "decode-uri-component",
+          "installedVersion": "0.2.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "0.5.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "decode-uri-component vulnerable to denial of service via quadratic replacement of percent-encoded runs",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qr28-fpjm-wq7f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/security/advisories/GHSA-qr28-fpjm-wq7f"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118664"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/commit/fad01d65b93bd3f2f0dc32dfd8d57a38b57bc608"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/releases/tag/v0.5.1"
+          }
+        ]
+      },
+      {
+        "findingId": "0e5edd58-d322-43cb-93cc-8235aebabc2c",
+        "osvId": "GHSA-h6ch-v84p-w6p9",
+        "cveIds": [],
+        "package": {
+          "name": "diff",
+          "installedVersion": "2.2.3",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "3.5.0",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Regular Expression Denial of Service (ReDoS)",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-h6ch-v84p-w6p9"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/kpdecker/jsdiff/commit/2aec4298639bf30fb88a00b356bf404d3551b8c0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=1552148"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/npm:diff:20180305"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/advisories/1631"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.whitesourcesoftware.com/vulnerability-database/WS-2018-0590"
+          }
+        ]
+      },
+      {
+        "findingId": "d16e89e8-3568-4e31-b38e-569c024acd25",
+        "osvId": "GHSA-hmw2-7cc7-3qxx",
+        "cveIds": [
+          "CVE-2026-12143"
+        ],
+        "package": {
+          "name": "form-data",
+          "installedVersion": "2.3.3",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "request"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "2.5.6",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "form-data: CRLF injection in form-data via unescaped multipart field names and filenames",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-hmw2-7cc7-3qxx"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data/security/advisories/GHSA-hmw2-7cc7-3qxx"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-12143"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data/commit/64190db548c0179e37206858e39f27cf513e9435"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data/commit/be3f3cf553978bac15a5182f1f3c3d2d38ccf229"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data/commit/c7133499c2ee1b80c678e411244f4442bf902045"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/form-data/form-data"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#multipart-form-data"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/package/form-data"
+          }
+        ]
+      },
+      {
+        "findingId": "ec2fd6ea-7b09-4191-9e02-2919b97de652",
+        "osvId": "GHSA-35jh-r3h4-6jhm",
+        "cveIds": [
+          "CVE-2021-23337"
+        ],
+        "package": {
+          "name": "lodash.template",
+          "installedVersion": "3.6.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.2,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": null,
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Command Injection in lodash",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-35jh-r3h4-6jhm"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-23337"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/lodash/lodash/commit/3469357cff396a26c363f8c1b5a91dde28ba4b1c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.oracle.com/security-alerts/cpuoct2021.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.oracle.com/security-alerts/cpujul2022.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.oracle.com/security-alerts/cpujan2022.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.oracle.com//security-alerts/cpujul2021.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/SNYK-JS-LODASH-1040724"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1074929"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBLODASH-1074931"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWER-1074928"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARS-1074930"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://snyk.io/vuln/SNYK-JAVA-ORGFUJIONWEBJARS-1074932"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://security.netapp.com/advisory/ntap-20210312-0006"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/rubysec/ruby-advisory-db/blob/master/gems/lodash-rails/CVE-2021-23337.yml"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/lodash/lodash/blob/ddfd9b11a0126db2302cb70ec9973b66baec0975/lodash.js#L14851"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/lodash/lodash"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cert-portal.siemens.com/productcert/pdf/ssa-637483.pdf"
+          }
+        ]
+      },
+      {
+        "findingId": "7f4f99c2-8aa1-41f2-83c6-e395a8969040",
+        "osvId": "GHSA-6g55-p6wh-862q",
+        "cveIds": [
+          "CVE-2026-45623"
+        ],
+        "package": {
+          "name": "postcss",
+          "installedVersion": "7.0.39",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "8.5.12",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-6g55-p6wh-862q"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/security/advisories/GHSA-6g55-p6wh-862q"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/commit/aaec7b78b3ce2792585b4b300ef1bd5dd5b3e8ad"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/commit/c64b7488d2731dfa16213739b42c34faf5a9eba3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/releases/tag/8.5.12"
+          }
+        ]
+      },
+      {
+        "findingId": "1a9999ca-ab25-4e9f-baae-8d63ef7ebb3c",
+        "osvId": "GHSA-r28c-9q8g-f849",
+        "cveIds": [
+          "CVE-2026-73646"
+        ],
+        "package": {
+          "name": "postcss",
+          "installedVersion": "7.0.39",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "8.5.18",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-r28c-9q8g-f849"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/security/advisories/GHSA-r28c-9q8g-f849"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/commit/95663d3eb7ba26f4854dd19d3b4f4425760cf56c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/releases/tag/8.5.18"
+          }
+        ]
+      },
+      {
+        "findingId": "ae903183-585f-4a09-8679-921c07330a27",
+        "osvId": "GHSA-2m8v-j782-fhvr",
+        "cveIds": [
+          "CVE-2026-69185"
+        ],
+        "package": {
+          "name": "socket.io-parser",
+          "installedVersion": "4.2.6",
+          "direct": false,
+          "devOnly": false,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "4.2.7",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Socket.IO: Zero-attachment Memory Exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-2m8v-j782-fhvr"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/socketio/socket.io/security/advisories/GHSA-2m8v-j782-fhvr"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/socketio/socket.io/commit/7c6ef571a00656718e9e05e3b948fd1758b2a7b4"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/socketio/socket.io/commit/9c6323e5cde41bd75df3379b5fc9293664a5f240"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/socketio/socket.io/commit/ced94ffa3ac020a8f3c14eb98a3bf34acb14d291"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/socketio/socket.io"
+          }
+        ]
+      },
+      {
+        "findingId": "29ba7ef6-3b57-4cfa-90c7-3c5cd4664d2c",
+        "osvId": "GHSA-23hp-3jrh-7fpw",
+        "cveIds": [
+          "CVE-2026-59873"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.19",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar: Decompression/parse DoS via unlimited input",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-23hp-3jrh-7fpw"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-23hp-3jrh-7fpw"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59873"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/2812e9338665659b183aa7226518c307044957d3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/releases/tag/v7.5.19"
+          }
+        ]
+      },
+      {
+        "findingId": "fbe7046d-4906-4758-8994-9a5fb9522624",
+        "osvId": "GHSA-34x7-hfp2-rc4v",
+        "cveIds": [
+          "CVE-2026-24842"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 8.2,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.7",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar Vulnerable to Arbitrary File Creation/Overwrite via Hardlink Path Traversal",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-34x7-hfp2-rc4v"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-34x7-hfp2-rc4v"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-24842"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/f4a7aa9bc3d717c987fdf1480ff7a64e87ffdb46"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "61f40764-842a-4985-a345-03b8f9388425",
+        "osvId": "GHSA-83g3-92jg-28cx",
+        "cveIds": [
+          "CVE-2026-26960"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.1,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.8",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Arbitrary File Read/Write via Hardlink Target Escape Through Symlink Chain in node-tar Extraction",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-83g3-92jg-28cx"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-83g3-92jg-28cx"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-26960"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/2cb1120bcefe28d7ecc719b41441ade59c52e384"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/d18e4e1f846f4ddddc153b0f536a19c050e7499f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "2476e3f4-0105-4170-9d15-2d5fb85d408e",
+        "osvId": "GHSA-8qq5-rm4j-mr97",
+        "cveIds": [
+          "CVE-2026-23745"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.3",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar is Vulnerable to Arbitrary File Overwrite and Symlink Poisoning via Insufficient Path Sanitization",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-8qq5-rm4j-mr97"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-8qq5-rm4j-mr97"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-23745"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/340eb285b6d986e91969a1170d7fe9b0face405e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "50a07d31-9c82-46dc-97de-f50bc8ec6e25",
+        "osvId": "GHSA-8x88-c5mf-7j5w",
+        "cveIds": [
+          "CVE-2026-59874"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.18",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar: Negative tar entry size causes infinite loop in archive replace",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-8x88-c5mf-7j5w"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-8x88-c5mf-7j5w"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59874"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/9e78bf058b2c22dd4d52e00d8922d5c06fc2f7b5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/releases/tag/v7.5.18"
+          }
+        ]
+      },
+      {
+        "findingId": "1dbd058d-25a9-4f38-894a-0c96e4fee432",
+        "osvId": "GHSA-9ppj-qmqm-q256",
+        "cveIds": [
+          "CVE-2026-31802"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.11",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar Symlink Path Traversal via Drive-Relative Linkpath",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-9ppj-qmqm-q256"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-9ppj-qmqm-q256"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-31802"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/f48b5fa3b7985ddab96dc0f2125a4ffc9911b6ad"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "e5d1fddd-1f2e-4268-9cb5-78bca844aa76",
+        "osvId": "GHSA-qffp-2rhf-9h96",
+        "cveIds": [
+          "CVE-2026-29786"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.10",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "tar has Hardlink Path Traversal via Drive-Relative Linkpath",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qffp-2rhf-9h96"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-qffp-2rhf-9h96"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-29786"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/7bc755dd85e623c0279e08eb3784909e6d7e4b9f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "91abc982-bad9-4f35-8b9d-cfbc041d269e",
+        "osvId": "GHSA-r292-9mhp-454m",
+        "cveIds": [
+          "CVE-2026-73566"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.21",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar: Uncontrolled recursion in mapHas/filesFilter allows uncatchable stack-overflow DoS via crafted long-path tar with member selection",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-r292-9mhp-454m"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-r292-9mhp-454m"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-73566"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/631ae59121bf8fc8a22bbae35f074cb9b789cd4a"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/releases/tag/v7.5.21"
+          }
+        ]
+      },
+      {
+        "findingId": "b0bef1e5-28da-4faf-ba83-66634686a4fc",
+        "osvId": "GHSA-r6q2-hw4h-h46w",
+        "cveIds": [
+          "CVE-2026-23950"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 8.8,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.5.4",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Race Condition in node-tar Path Reservations via Unicode Ligature Collisions on macOS APFS",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-r6q2-hw4h-h46w"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-r6q2-hw4h-h46w"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-23950"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/3b1abfae650056edfabcbe0a0df5954d390521e6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "b745228d-5081-4a20-adf9-448794225e6f",
+        "osvId": "GHSA-2m5v-pch6-74hx",
+        "cveIds": [
+          "CVE-2026-109383"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.4,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to TLS certificate validation bypass via dropped tls options in Agent",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-2m5v-pch6-74hx"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-2m5v-pch6-74hx"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109383"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/04cb74b1db131ff8f5b4557dce811cbf5f4664b4"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/8c59f6b302898cb2e9b0f7962cd7212b6e597c9f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/f75eac00ac177f7b2e6c8bfbd52d4113164286e6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "66f6392f-dda9-4de2-9222-4d173ae8a345",
+        "osvId": "GHSA-4w7w-5xrc-9h26",
+        "cveIds": [
+          "CVE-2026-109829"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.4,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to cache poisoning and cross-user disclosure via cross-origin redirects",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-4w7w-5xrc-9h26"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-4w7w-5xrc-9h26"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109829"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/26c2bfb3def0b67241ce878e80657ed5d6c3efa8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/b20b82ad80a405a12b6ce1f341bcd418de390aa0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "76aa3b1c-3616-4892-8238-3a63e5227a85",
+        "osvId": "GHSA-qrxm-fqhp-jwvm",
+        "cveIds": [
+          "CVE-2026-87018"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via TLS 1.2 certificate-changing renegotiation",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qrxm-fqhp-jwvm"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-qrxm-fqhp-jwvm"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87018"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/12cfd96c3f430897656e3edc1c5e02be8c1cd309"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/b40fbfc0651703cf9fa9f6ced68b679f28d8bb28"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/e257e9f8fb42eedd50727b9cf65e548c8925e4a8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "27dfff1e-a3c7-4e1c-91d6-e4ac76ba7416",
+        "osvId": "GHSA-rfgv-xxqx-mfg5",
+        "cveIds": [
+          "CVE-2026-19534"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via unrequested WebSocket subprotocol",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-rfgv-xxqx-mfg5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-rfgv-xxqx-mfg5"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-19534"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/2af0faf88b906d3127a360c3ac75164c0f95e5a5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/6615e0175e9b635bcd2e3e87a47daa82f6f5b728"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/66e12816064cf3068f63bd134748b7fc4e779bad"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.28.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "18979135-a200-4e17-9096-0050449566a8",
+        "osvId": "GHSA-w293-vg96-wgc3",
+        "cveIds": [
+          "CVE-2026-84961"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.4,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to TLS certificate validation bypass via dropped connect options in BalancedPool",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-w293-vg96-wgc3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-w293-vg96-wgc3"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84961"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/8f5868fbdbc8f1146dfc1bcd1f2d117790141390"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/f690157d728508652fef14673630c71515123e96"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "6c85750a-3da6-4690-9f20-9830dcfd24da",
+        "osvId": "GHSA-xjj6-f33q-929c",
+        "cveIds": [
+          "CVE-2026-109869"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via unhandled error on excessive content-encodings",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-xjj6-f33q-929c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-xjj6-f33q-929c"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109869"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/07ded4941b1e72afec862958c3b8ddf468f3b429"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/1325a87dfb3492f8e87e6b0a84b3bda4e82e3436"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/b5084c7dc239172d75c336b1cd51ddac023938a5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "7da603e8-33be-462f-88fa-299c02227595",
+        "osvId": "GHSA-w5hq-g745-h8pq",
+        "cveIds": [
+          "CVE-2026-41907",
+          "CVE-2026-41988"
+        ],
+        "package": {
+          "name": "uuid",
+          "installedVersion": "3.4.0",
+          "direct": true,
+          "devOnly": true,
+          "parentPackage": "request"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "11.1.1",
+          "command": "npm install uuid@11.1.1",
+          "suggestion": null
+        },
+        "summary": "uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-w5hq-g745-h8pq"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/security/advisories/GHSA-w5hq-g745-h8pq"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41907"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/commit/32389c887c9e75f90442ee4cc95bbab0c4e8346e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/commit/3d2c5b0342f0fcb52a5ac681c3d47c13e7444b34"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/commit/3d61d6ac1f782cf6b1dd8661c60f11722cd49a0d"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/commit/9d27ddf7046ce496ef39569ff84d948eeff9cb2a"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/releases/tag/v11.1.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/releases/tag/v12.0.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/releases/tag/v13.0.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/uuidjs/uuid/releases/tag/v14.0.0"
+          }
+        ]
+      },
+      {
+        "findingId": "7c096ffb-3cf2-41c2-8b4c-f4a39021bec2",
+        "osvId": "GHSA-96hv-2xvq-fx4p",
+        "cveIds": [
+          "CVE-2026-48779"
+        ],
+        "package": {
+          "name": "ws",
+          "installedVersion": "8.18.3",
+          "direct": true,
+          "devOnly": false,
+          "parentPackage": "engine.io-client"
+        },
+        "severity": {
+          "level": "HIGH",
+          "cvss": 7.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "SCHEDULE",
+          "score": 45,
+          "reason": "Severity High, tetapi belum ada bukti eksploitasi nyata yang kuat."
+        },
+        "fix": {
+          "safeVersion": "8.21.0",
+          "command": "npm install ws@8.21.0",
+          "suggestion": null
+        },
+        "summary": "ws: Memory exhaustion DoS from tiny fragments and data chunks",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-96hv-2xvq-fx4p"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/security/advisories/GHSA-96hv-2xvq-fx4p"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48779"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/commit/fd36cd864fcdf62a08273a99e19a7d975401fee8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/commit/bca91adf15677e47dbe4f959653452727be28b94"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/commit/b5372ac67bb97a773727b8e9f5035a8123556d53"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/commit/86d3e8a5fb0246ed373860c5fbb0de88824a27f7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-48779.json"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://bugzilla.redhat.com/show_bug.cgi?id=2489661"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/security/cve/CVE-2026-48779"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:37272"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:36820"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:36754"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:34342"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:33574"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:33183"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:33173"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:33163"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:33160"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:33155"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:29197"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:27171"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://access.redhat.com/errata/RHSA-2026:26638"
+          }
+        ]
+      },
+      {
+        "findingId": "704847f3-ab29-4dcb-9e19-b93368bbea4e",
+        "osvId": "GHSA-55wc-3pg8-jfw6",
+        "cveIds": [
+          "CVE-2026-87029"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": 0.0026,
+          "epssPercentile": 0.17845,
+          "epssAvailable": true
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25.1,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via unhandled exception in the decompress interceptor",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-55wc-3pg8-jfw6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-55wc-3pg8-jfw6"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-87029"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/63cba7712ca012b2603c6aeeb4c72d8692332cd0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/f851f315db1f2acce0ea668f88d9d0fa61c8420c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "9a90defc-028d-4f51-8ad5-cee3e35fc096",
+        "osvId": "GHSA-3jxr-9vmj-r5cp",
+        "cveIds": [
+          "CVE-2026-13149"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "1.1.13",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "1.1.16",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-3jxr-9vmj-r5cp"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-3jxr-9vmj-r5cp"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13149"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/122"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/123"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/835d6be91201122d9adffb0c0c8c094189ace265"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/c7e33ec13ac1a684c116720843ce24e208611754"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/d74e63030c012e3b7ae81657b8d665619cd51b95"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/releases/tag/v1.1.16"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/releases/tag/v2.1.2"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/releases/tag/v5.0.7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/package/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "c632845d-e8a1-4f78-a23e-63a2c0bc56cf",
+        "osvId": "GHSA-q2hr-2g5m-vwhr",
+        "cveIds": [
+          "CVE-2026-102277"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "1.1.13",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "1.1.21",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-q2hr-2g5m-vwhr"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-q2hr-2g5m-vwhr"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102277"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/33a5ef17b8d800bbfa8c52b14c39043b6aac1a96"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/bdff773f98e5988616b7039cc9b508df5d640b22"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/c55e67d8d8b1c56a2474afff15c2891166b2d364"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/ffdfa3e3806bed17c0874b8f1439b084de354a7e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "237b6aae-e976-40f1-a611-0a39617fa02d",
+        "osvId": "GHSA-3jxr-9vmj-r5cp",
+        "cveIds": [
+          "CVE-2026-13149"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "5.0.7",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-3jxr-9vmj-r5cp"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-3jxr-9vmj-r5cp"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-13149"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/122"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/pull/123"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/835d6be91201122d9adffb0c0c8c094189ace265"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/c7e33ec13ac1a684c116720843ce24e208611754"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/d74e63030c012e3b7ae81657b8d665619cd51b95"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/releases/tag/v1.1.16"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/releases/tag/v2.1.2"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/releases/tag/v5.0.7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/package/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "13768a56-80b8-4bba-873f-0c2e8b9b9fdf",
+        "osvId": "GHSA-jxxr-4gwj-5jf2",
+        "cveIds": [
+          "CVE-2026-45149"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 6.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "5.0.6",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: Large numeric range defeats documented `max` DoS protection",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-jxxr-4gwj-5jf2"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-jxxr-4gwj-5jf2"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45149"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/c0b095bdc52bc4c36dc88deddbadabc49f8371e5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "089035de-a73b-49c4-b81b-95e0757ca1c0",
+        "osvId": "GHSA-q2hr-2g5m-vwhr",
+        "cveIds": [
+          "CVE-2026-102277"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "glob"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "5.0.12",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-q2hr-2g5m-vwhr"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-q2hr-2g5m-vwhr"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102277"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/33a5ef17b8d800bbfa8c52b14c39043b6aac1a96"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/bdff773f98e5988616b7039cc9b508df5d640b22"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/c55e67d8d8b1c56a2474afff15c2891166b2d364"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/ffdfa3e3806bed17c0874b8f1439b084de354a7e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "1f8233bd-621e-4b5c-9695-35742d6c1094",
+        "osvId": "GHSA-q2hr-2g5m-vwhr",
+        "cveIds": [
+          "CVE-2026-102277"
+        ],
+        "package": {
+          "name": "brace-expansion",
+          "installedVersion": "5.0.9",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "@nx/devkit"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "5.0.12",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "brace-expansion: Quadratic-time expansion of the `{a},b}` rewrite causes CPU denial of service",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-q2hr-2g5m-vwhr"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/security/advisories/GHSA-q2hr-2g5m-vwhr"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-102277"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/33a5ef17b8d800bbfa8c52b14c39043b6aac1a96"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/bdff773f98e5988616b7039cc9b508df5d640b22"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/c55e67d8d8b1c56a2474afff15c2891166b2d364"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion/commit/ffdfa3e3806bed17c0874b8f1439b084de354a7e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/juliangruber/brace-expansion"
+          }
+        ]
+      },
+      {
+        "findingId": "9b05f93a-97c0-487b-b638-bcbb5e9a126a",
+        "osvId": "GHSA-vcc3-ghjq-m6fr",
+        "cveIds": [
+          "CVE-2026-45822"
+        ],
+        "package": {
+          "name": "decode-uri-component",
+          "installedVersion": "0.2.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "0.5.0",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "decode-uri-component: Denial of service via exponential decoding of malformed percent-encoded input",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-vcc3-ghjq-m6fr"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/security/advisories/GHSA-vcc3-ghjq-m6fr"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45822"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/commit/fa479dafeede7bedf04e5c89aa78f2a78c664005"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/blob/00662938dc7c6241547ae8abce7785cc13ffd3f6/index.js"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/SamVerschueren/decode-uri-component/releases/tag/v0.5.0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://www.npmjs.com/package/decode-uri-component"
+          }
+        ]
+      },
+      {
+        "findingId": "4d571cef-5847-4027-ba37-badb1ea3b3b2",
+        "osvId": "GHSA-3g3m-2fjr-6pw4",
+        "cveIds": [
+          "CVE-2026-118773"
+        ],
+        "package": {
+          "name": "glob",
+          "installedVersion": "13.0.6",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "14.0.2",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-3g3m-2fjr-6pw4"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-glob/security/advisories/GHSA-3g3m-2fjr-6pw4"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118773"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-glob/commit/4682e8c9babee1b385202ede36389634e12076d7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-glob"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-glob/releases/tag/v14.0.2"
+          }
+        ]
+      },
+      {
+        "findingId": "a27ba447-7daf-4002-a341-3edf57fe7264",
+        "osvId": "GHSA-rxp7-6hxx-x8q5",
+        "cveIds": [
+          "CVE-2026-111997"
+        ],
+        "package": {
+          "name": "ip-address",
+          "installedVersion": "10.7.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "10.7.4",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "ip-address: Address6 matches a zone identifier in quadratic time ahead of its length limit, allowing a single long string to stall the process",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-rxp7-6hxx-x8q5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/beaugunderson/ip-address/security/advisories/GHSA-rxp7-6hxx-x8q5"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-111997"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/beaugunderson/ip-address/commit/ec80fcd5d7b97defecfd39717d782a9f9f8b89dd"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/beaugunderson/ip-address"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/beaugunderson/ip-address/releases/tag/v10.7.4"
+          }
+        ]
+      },
+      {
+        "findingId": "d76094d3-4f5b-49dd-b235-fb0ffafba9e6",
+        "osvId": "GHSA-952p-6rrq-rcjv",
+        "cveIds": [
+          "CVE-2024-4067"
+        ],
+        "package": {
+          "name": "micromatch",
+          "installedVersion": "2.3.11",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "anymatch"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "4.0.8",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Regular Expression Denial of Service (ReDoS) in micromatch",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-952p-6rrq-rcjv"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-4067"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/issues/243"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/pull/247"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/pull/266"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/commit/03aa8052171e878897eee5d7bb2ae0ae83ec2ade"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/commit/500d5d6f42f0e8dfa1cb5464c6cb420b1b6aaaa0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://advisory.checkmarx.net/advisory/CVE-2024-4067"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://devhub.checkmarx.com/cve-details/CVE-2024-4067"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/blob/2c56a8604b68c1099e7bc0f807ce0865a339747a/index.js#L448"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/releases/tag/4.0.8"
+          }
+        ]
+      },
+      {
+        "findingId": "1e3ae6c2-2b67-4ce9-be47-e431221c550a",
+        "osvId": "GHSA-952p-6rrq-rcjv",
+        "cveIds": [
+          "CVE-2024-4067"
+        ],
+        "package": {
+          "name": "micromatch",
+          "installedVersion": "3.1.10",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "gulp-watch"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "4.0.8",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Regular Expression Denial of Service (ReDoS) in micromatch",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-952p-6rrq-rcjv"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2024-4067"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/issues/243"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/pull/247"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/pull/266"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/commit/03aa8052171e878897eee5d7bb2ae0ae83ec2ade"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/commit/500d5d6f42f0e8dfa1cb5464c6cb420b1b6aaaa0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://advisory.checkmarx.net/advisory/CVE-2024-4067"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://devhub.checkmarx.com/cve-details/CVE-2024-4067"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/blob/2c56a8604b68c1099e7bc0f807ce0865a339747a/index.js#L448"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/micromatch/micromatch/releases/tag/4.0.8"
+          }
+        ]
+      },
+      {
+        "findingId": "9f9d6633-4548-465b-9902-82f73a870b9d",
+        "osvId": "GHSA-g3hv-75wg-m249",
+        "cveIds": [
+          "CVE-2026-118764"
+        ],
+        "package": {
+          "name": "minimatch",
+          "installedVersion": "10.2.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "@nx/devkit"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "11.0.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "minimatch has potential denial of service via globparts amplification",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-g3hv-75wg-m249"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/security/advisories/GHSA-g3hv-75wg-m249"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118764"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/297b6c1a01f2410b3ba1ebed14ba222d0c3c1033"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/77a0f5c4b80bdc641c3c930a1d9edf5ad2db57f8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/fd0b3ab9cbc5bf1aff1c99f1f46e413c2b3340da"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/releases/tag/v11.0.1"
+          }
+        ]
+      },
+      {
+        "findingId": "26efbafc-d779-4411-9016-eb3e100a7fe4",
+        "osvId": "GHSA-g3hv-75wg-m249",
+        "cveIds": [
+          "CVE-2026-118764"
+        ],
+        "package": {
+          "name": "minimatch",
+          "installedVersion": "10.2.6",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "@npmcli/arborist"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "11.0.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "minimatch has potential denial of service via globparts amplification",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-g3hv-75wg-m249"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/security/advisories/GHSA-g3hv-75wg-m249"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-118764"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/297b6c1a01f2410b3ba1ebed14ba222d0c3c1033"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/77a0f5c4b80bdc641c3c930a1d9edf5ad2db57f8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/commit/fd0b3ab9cbc5bf1aff1c99f1f46e413c2b3340da"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/minimatch/releases/tag/v11.0.1"
+          }
+        ]
+      },
+      {
+        "findingId": "39d43f2f-eb05-43e4-93b3-1a07b1d79866",
+        "osvId": "GHSA-7fh5-64p2-3v2j",
+        "cveIds": [
+          "CVE-2023-44270"
+        ],
+        "package": {
+          "name": "postcss",
+          "installedVersion": "7.0.39",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "8.4.31",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "PostCSS line return parsing error",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-7fh5-64p2-3v2j"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-44270"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/github/advisory-database/issues/2820"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/commit/58cc860b4c1707510c9cd1bc1fa30b423a9ad6c5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/blob/main/lib/tokenize.js#L25"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/releases/tag/8.4.31"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://lists.debian.org/debian-lts-announce/2024/12/msg00025.html"
+          }
+        ]
+      },
+      {
+        "findingId": "5e545b74-8b95-4ed7-a7f6-0feeebde4095",
+        "osvId": "GHSA-fxqj-rqcc-2cmp",
+        "cveIds": [
+          "CVE-2026-69153"
+        ],
+        "package": {
+          "name": "postcss",
+          "installedVersion": "7.0.39",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "8.5.23",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "PostCSS: incomplete fix of GHSA-6g55-p6wh-862q — attacker-controlled sourceMappingURL reads arbitrary .map files when `from` is unset",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-fxqj-rqcc-2cmp"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/security/advisories/GHSA-fxqj-rqcc-2cmp"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/commit/7beca139e70f9075c6b19700fcb00dd8033e5da8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/releases/tag/8.5.19"
+          }
+        ]
+      },
+      {
+        "findingId": "ffdb6ac0-9ea3-490d-b38d-2568507379ad",
+        "osvId": "GHSA-qx2v-qp2m-jg93",
+        "cveIds": [
+          "CVE-2026-41305"
+        ],
+        "package": {
+          "name": "postcss",
+          "installedVersion": "7.0.39",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 6.1,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "8.5.10",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "PostCSS has XSS via Unescaped </style> in its CSS Stringify Output",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-qx2v-qp2m-jg93"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/security/advisories/GHSA-qx2v-qp2m-jg93"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-41305"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/postcss/postcss/releases/tag/8.5.10"
+          }
+        ]
+      },
+      {
+        "findingId": "4219513a-ab43-4420-8be5-215648f5d648",
+        "osvId": "GHSA-f38q-mgvj-vph7",
+        "cveIds": [
+          "CVE-2026-54269"
+        ],
+        "package": {
+          "name": "protobufjs",
+          "installedVersion": "7.6.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.6.3",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "protobufjs : Schema-derived names can shadow runtime-significant properties",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-f38q-mgvj-vph7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/security/advisories/GHSA-f38q-mgvj-vph7"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54269"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js"
+          }
+        ]
+      },
+      {
+        "findingId": "c15d9f88-3780-498f-934a-1e783b3808da",
+        "osvId": "GHSA-j3f2-48v5-ccww",
+        "cveIds": [
+          "CVE-2026-59877"
+        ],
+        "package": {
+          "name": "protobufjs",
+          "installedVersion": "7.6.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.6.5",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "protobufjs: Denial of Service via infinite loop in .proto option parsing",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-j3f2-48v5-ccww"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/security/advisories/GHSA-j3f2-48v5-ccww"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59877"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/pull/2352"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/commit/10fba6d54815ceecca8a06b9a6db490c8f5d2217"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/commit/fa5c73add738ceb471e74da8cc2f3727c3d0a69f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/releases/tag/protobufjs-v7.6.5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/protobufjs/protobuf.js/releases/tag/protobufjs-v8.6.6"
+          }
+        ]
+      },
+      {
+        "findingId": "f4856935-6452-40ff-a8a3-092afcf6c08f",
+        "osvId": "GHSA-4mjr-xmp4-gh2g",
+        "cveIds": [
+          "CVE-2026-82417"
+        ],
+        "package": {
+          "name": "qs",
+          "installedVersion": "6.5.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "request"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "6.16.0",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "qs: Denial of Service via Attacker Controlled isBuffer",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-4mjr-xmp4-gh2g"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/ljharb/qs/security/advisories/GHSA-4mjr-xmp4-gh2g"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-82417"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/ljharb/qs/commit/e83d321ffafb38cf210683ac31714fce6ce1c6c6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/ljharb/qs"
+          }
+        ]
+      },
+      {
+        "findingId": "4d252c37-462a-4464-b282-1c581da1274b",
+        "osvId": "GHSA-p8p7-x288-28g6",
+        "cveIds": [
+          "CVE-2023-28155"
+        ],
+        "package": {
+          "name": "request",
+          "installedVersion": "2.88.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 6.1,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": null,
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "Server-Side Request Forgery in Request",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-p8p7-x288-28g6"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-28155"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/request/request/issues/3442"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/cypress-io/request/pull/28"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/github/advisory-database/pull/2500"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/request/request/pull/3444"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/cypress-io/request/commit/c5bcf21d40fb61feaff21a0e5a2b3934a440024f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://doyensec.com/resources/Doyensec_Advisory_RequestSSRF_Q12023.pdf"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/cypress-io/request/blob/master/lib/redirect.js#L116"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/cypress-io/request/releases/tag/v3.0.0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/request/request"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/request/request/blob/master/lib/redirect.js#L111"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://security.netapp.com/advisory/ntap-20230413-0007"
+          }
+        ]
+      },
+      {
+        "findingId": "7f9e7460-8a14-4e5e-ad1f-1d057caf1f00",
+        "osvId": "GHSA-gvwx-54wh-qm9j",
+        "cveIds": [
+          "CVE-2026-59875"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.5.17",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar: Uncaught Exception DoS via NUL byte in PAX path/linkpath records",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-gvwx-54wh-qm9j"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-gvwx-54wh-qm9j"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59875"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/7a635c29f5edbf083557374d43984273ecfed5b3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/releases/tag/v7.5.17"
+          }
+        ]
+      },
+      {
+        "findingId": "30a28c1a-bf98-4bda-8831-8349b151c0d6",
+        "osvId": "GHSA-vmf3-w455-68vh",
+        "cveIds": [
+          "CVE-2026-53655"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.5.16",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar applies PAX size override to intermediary GNU long-name/long-link headers, causing tar parser interpretation differential (file smuggling)",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-vmf3-w455-68vh"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-vmf3-w455-68vh"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          }
+        ]
+      },
+      {
+        "findingId": "e7047b56-5502-4f9b-b023-87e7132a9264",
+        "osvId": "GHSA-w8wr-v893-vjvp",
+        "cveIds": [
+          "CVE-2026-59871"
+        ],
+        "package": {
+          "name": "tar",
+          "installedVersion": "6.2.1",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "lerna-changelog"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.5.18",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "node-tar: Process crash via PAX numeric path type confusion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-w8wr-v893-vjvp"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/security/advisories/GHSA-w8wr-v893-vjvp"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-59871"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/commit/e02a4e9e013c4be95302e2eb2047a942b883c27b"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/isaacs/node-tar/releases/tag/v7.5.18"
+          }
+        ]
+      },
+      {
+        "findingId": "000e6fc2-c518-4276-a67b-fb2a6b17eb37",
+        "osvId": "GHSA-72xf-g2v4-qvf3",
+        "cveIds": [
+          "CVE-2023-26136"
+        ],
+        "package": {
+          "name": "tough-cookie",
+          "installedVersion": "2.5.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 6.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "4.1.3",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "tough-cookie Prototype Pollution vulnerability",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-72xf-g2v4-qvf3"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2023-26136"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/salesforce/tough-cookie/issues/282"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/salesforce/tough-cookie/commit/12d474791bb856004e858fdb1c47b7608d09cf6e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/salesforce/tough-cookie"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/salesforce/tough-cookie/releases/tag/v4.1.3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://lists.debian.org/debian-lts-announce/2023/07/msg00010.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/3HUE6ZR5SL73KHL7XUPAOEL6SB7HUDT2"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://lists.fedoraproject.org/archives/list/package-announce@lists.fedoraproject.org/message/6PVVPNSAGSDS63HQ74PJ7MZ3MU5IYNVZ"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://security.netapp.com/advisory/ntap-20240621-0006"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://security.snyk.io/vuln/SNYK-JS-TOUGHCOOKIE-5672873"
+          }
+        ]
+      },
+      {
+        "findingId": "622b052e-efa0-4971-b6cc-2e8f2013a6c8",
+        "osvId": "GHSA-2jfj-6hjv-fm6j",
+        "cveIds": [
+          "CVE-2026-84933"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 6.5,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to cross-user cookie disclosure via Set-Cookie caching in shared caches",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-2jfj-6hjv-fm6j"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-2jfj-6hjv-fm6j"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84933"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/b6c5a00252c37da9dd2db9bead053bb843e1f988"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/cb75bbb34224a968b4ad80cab8b7aba5e0b3b28a"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "9808c6f7-dba0-46ee-868c-e6d4dd07ab08",
+        "osvId": "GHSA-3wwx-pv8p-q78v",
+        "cveIds": [
+          "CVE-2026-85024"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via unhandled error in WebSocket permessage-deflate decompression",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-3wwx-pv8p-q78v"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-3wwx-pv8p-q78v"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85024"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/07c60d9c7099a910451244afe42861bbdbdd974c"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/4411a238a98e8791da5fff10cc9e3578a7668ed6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/63cf698b611fecc6ee0a17b185b930051e4b982f"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.28.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "c9a78c76-c856-4b68-8ccc-cf452be8c28d",
+        "osvId": "GHSA-3xpg-4rpp-hhhm",
+        "cveIds": [
+          "CVE-2026-84890"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via unbounded decompression of compressed responses",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-3xpg-4rpp-hhhm"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-3xpg-4rpp-hhhm"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84890"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/2c7d7e1227043c644c4c32cfd1e276f4fd4fcb11"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/7aac7f12f757844763c8b8f1ab6e305e80d55838"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "96bfb58d-63a7-45ca-9ec9-388c352b8645",
+        "osvId": "GHSA-4qv8-2p9j-2685",
+        "cveIds": [
+          "CVE-2026-109924"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via unbounded memory in the EventSource parser",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-4qv8-2p9j-2685"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-4qv8-2p9j-2685"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109924"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/299162740d5f39120092277e70efacb4d151c1c6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/789ef26461c648480433846607154f52d74ec9ab"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/c43b23fdc6b37e1283d4347408bb16800f867d9e"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "ff8320e4-caaa-4e73-af43-1917fa96e2d8",
+        "osvId": "GHSA-9fm3-97px-rjf6",
+        "cveIds": [
+          "CVE-2026-109932"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici WebSocket client vulnerable to Denial of Service via unbounded automatic PONG buffering",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-9fm3-97px-rjf6"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-9fm3-97px-rjf6"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109932"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/39f93e142df03e559fe7c3d1fc7fba9beee2c185"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/53944624462b6797560288c55dbd8c66857bb495"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/b217373bb024cd93f85eb5b3ffd25684855f60f8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "b86accbc-3860-4021-9fc9-0f4a0c7ba204",
+        "osvId": "GHSA-f72v-6w45-q472",
+        "cveIds": [
+          "CVE-2026-109841"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.30.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Subresource Integrity bypass via non-lowercase algorithm tokens",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-f72v-6w45-q472"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-f72v-6w45-q472"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-109841"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/18bc8a1e09d15bc45815154a289dcf6fd5254d00"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/4f7ef6806e532ab9e29ccd6229b1b9d241e1b1f0"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.30.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.12.2"
+          }
+        ]
+      },
+      {
+        "findingId": "e0106c83-dfb0-4470-983e-841e96fc5e83",
+        "osvId": "GHSA-pmjh-fq2x-6v4x",
+        "cveIds": [
+          "CVE-2026-18149"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via orphaned RetryHandler response body",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-pmjh-fq2x-6v4x"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-pmjh-fq2x-6v4x"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18149"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/3c6726599cea8646384dde846c97d630da472a74"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/e905b5b87e6953bcc542af90557b2fee5b7b5974"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://hackerone.com/reports/3892751"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "2a321c4f-9c40-4e49-95dc-549d93ef161f",
+        "osvId": "GHSA-rx4f-c7p8-82vq",
+        "cveIds": [
+          "CVE-2026-85014"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 5.9,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to Denial of Service via WebSocketStream unclean close",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-rx4f-c7p8-82vq"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-rx4f-c7p8-82vq"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85014"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/1858656ebb1e919311c1f31613dfd581b7214349"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/662d0ea671fe64139e79533c913fce412765e1d7"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "ce6023b0-6252-4e32-8a8b-af923f0a9c34",
+        "osvId": "GHSA-58qx-3vcg-4xpx",
+        "cveIds": [
+          "CVE-2026-45736"
+        ],
+        "package": {
+          "name": "ws",
+          "installedVersion": "8.18.3",
+          "direct": true,
+          "devOnly": false,
+          "parentPackage": "engine.io-client"
+        },
+        "severity": {
+          "level": "MEDIUM",
+          "cvss": 4.4,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 25,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "8.20.1",
+          "command": "npm install ws@8.20.1",
+          "suggestion": null
+        },
+        "summary": "ws: Uninitialized memory disclosure",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-58qx-3vcg-4xpx"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/security/advisories/GHSA-58qx-3vcg-4xpx"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-45736"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws/commit/c0327ec15a54d701eb6ccefaa8bef328cfc03086"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/websockets/ws"
+          }
+        ]
+      },
+      {
+        "findingId": "29941b77-d937-4152-a15e-1cd3384521a4",
+        "osvId": "GHSA-vpq2-c234-7xj6",
+        "cveIds": [
+          "CVE-2026-3449"
+        ],
+        "package": {
+          "name": "@tootallnate/once",
+          "installedVersion": "1.1.2",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "LOW",
+          "cvss": 3.3,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 10,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "2.0.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "@tootallnate/once vulnerable to Incorrect Control Flow Scoping",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-vpq2-c234-7xj6"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-3449"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TooTallNate/once/issues/8"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TooTallNate/once/commit/b9f43cc5259bee2952d91ad3cdbd201a82df448a"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TooTallNate/once"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/TooTallNate/once/releases/tag/v2.0.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://security.snyk.io/vuln/SNYK-JS-TOOTALLNATEONCE-15250612"
+          }
+        ]
+      },
+      {
+        "findingId": "eb646207-61d2-4a65-911c-a0aad3097ee2",
+        "osvId": "GHSA-73rr-hh4g-fpgx",
+        "cveIds": [
+          "CVE-2026-24001"
+        ],
+        "package": {
+          "name": "diff",
+          "installedVersion": "2.2.3",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": null
+        },
+        "severity": {
+          "level": "LOW",
+          "cvss": null,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 10,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "3.5.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "jsdiff has a Denial of Service vulnerability in parsePatch and applyPatch",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-73rr-hh4g-fpgx"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/kpdecker/jsdiff/security/advisories/GHSA-73rr-hh4g-fpgx"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-24001"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/kpdecker/jsdiff/issues/653"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/kpdecker/jsdiff/pull/649"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/kpdecker/jsdiff/commit/15a1585230748c8ae6f8274c202e0c87309142f5"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/kpdecker/jsdiff"
+          }
+        ]
+      },
+      {
+        "findingId": "cd1f76e7-68e9-4947-9faf-fe948dc7d1cb",
+        "osvId": "GHSA-6rw7-vpxm-498p",
+        "cveIds": [
+          "CVE-2025-15284"
+        ],
+        "package": {
+          "name": "qs",
+          "installedVersion": "6.5.5",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "request"
+        },
+        "severity": {
+          "level": "LOW",
+          "cvss": 3.7,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 10,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "6.14.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "qs's arrayLimit bypass in its bracket notation allows DoS via memory exhaustion",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-6rw7-vpxm-498p"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/ljharb/qs/security/advisories/GHSA-6rw7-vpxm-498p"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-15284"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/ljharb/qs/commit/3086902ecf7f088d0d1803887643ac6c03d415b9"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/ljharb/qs"
+          }
+        ]
+      },
+      {
+        "findingId": "c7990a2e-cb41-4df2-b26e-a057e04f8902",
+        "osvId": "GHSA-2gqq-gqf2-x968",
+        "cveIds": [
+          "CVE-2026-84947"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "LOW",
+          "cvss": 3.7,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 10,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to response truncation via oversized chunked responses in the dump interceptor",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-2gqq-gqf2-x968"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-2gqq-gqf2-x968"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-84947"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/21693f406f0142f3504192e9f9b022dcf84782ae"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/6d583124e7cf60b640097d64144ed633cc450584"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "ae93d785-5134-46ec-88f0-8fc54aadc5f3",
+        "osvId": "GHSA-8436-99hf-9mmv",
+        "cveIds": [
+          "CVE-2026-85008"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "LOW",
+          "cvss": 3.7,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 10,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to caching and replay of unsafe HTTP method responses",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-8436-99hf-9mmv"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-8436-99hf-9mmv"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-85008"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/2be07bf97b3022e0324142d31f99f6e019d815e3"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/b61d9432bac7caac51273ad209862e4c0bf935ae"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      },
+      {
+        "findingId": "8978d261-ed28-405a-a861-5dc33931efec",
+        "osvId": "GHSA-r53p-7pc4-xj5r",
+        "cveIds": [
+          "CVE-2026-18540"
+        ],
+        "package": {
+          "name": "undici",
+          "installedVersion": "7.29.0",
+          "direct": false,
+          "devOnly": true,
+          "parentPackage": "nx"
+        },
+        "severity": {
+          "level": "LOW",
+          "cvss": 3.7,
+          "source": "OSV"
+        },
+        "exploitation": {
+          "kev": false,
+          "epss": null,
+          "epssPercentile": null,
+          "epssAvailable": false
+        },
+        "priority": {
+          "label": "MONITOR",
+          "score": 10,
+          "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+        },
+        "fix": {
+          "safeVersion": "7.29.1",
+          "command": null,
+          "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+        },
+        "summary": "undici vulnerable to downstream response splitting via retry interceptor",
+        "references": [
+          {
+            "label": "Advisory OSV",
+            "url": "https://osv.dev/vulnerability/GHSA-r53p-7pc4-xj5r"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/security/advisories/GHSA-r53p-7pc4-xj5r"
+          },
+          {
+            "label": "Advisory",
+            "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-18540"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/0160a719063fb0a77f4fdf9500b9166b91e14329"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/cd8af90b38ae33c2838d54a2d629774122effe95"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/commit/ce31bc824b578008faae5d3350da66c1b5f71548"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://hackerone.com/reports/3900104"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://hackerone.com/reports/3900615"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://cna.openjsf.org/security-advisories.html"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v6.28.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v7.29.1"
+          },
+          {
+            "label": "Referensi",
+            "url": "https://github.com/nodejs/undici/releases/tag/v8.10.2"
+          }
+        ]
+      }
+    ],
+    "partial": true,
+    "persisted": false,
+    "warnings": [
+      {
+        "code": "LOCKFILE_PARTIAL",
+        "message": "Entri link/workspace node_modules/@nestjs/common dilewati. Entri link/workspace node_modules/@nestjs/core dilewati. Entri link/workspace node_modules/@nestjs/microservices dilewati. Entri link/workspace node_modules/@nestjs/platform-express dilewati. Entri link/workspace node_modules/@nestjs/platform-fastify dilewati. Entri link/workspace node_modules/@nestjs/platform-node dilewati. Entri link/workspace node_modules/@nestjs/platform-socket.io dilewati. Entri link/workspace node_modules/@nestjs/platform-ws dilewati. Entri link/workspace node_modules/@nestjs/testing dilewati. Entri link/workspace node_modules/@nestjs/websockets dilewati. Entri non-node_modules packages/common dilewati. Entri non-node_modules packages/core dilewati. Entri non-node_modules packages/microservices dilewati. Entri non-node_modules packages/platform-express dilewati. Entri non-node_modules packages/platform-fastify dilewati. Entri non-node_modules packages/platform-node dilewati. Entri non-node_modules packages/platform-node/node_modules/content-type dilewati. Entri non-node_modules packages/platform-socket.io dilewati. Entri non-node_modules packages/platform-ws dilewati. Entri non-node_modules packages/testing dilewati. Entri non-node_modules packages/websockets dilewati."
+      }
+    ],
+    "sourceStatus": {
+      "github": "OK",
+      "osv": "OK",
+      "kev": "CACHE",
+      "epss": "OK"
+    },
+    "timings": {
+      "githubMs": 882,
+      "osvMs": 16803,
+      "enrichmentMs": 1100,
+      "totalMs": 18807
+    },
+    "requestId": "req_f2b6087e8e5c443a92758c9710183b42"
+  }
+}

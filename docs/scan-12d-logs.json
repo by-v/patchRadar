@@ -1,5 +1,5 @@
 ﻿{
-    "generatedAt":  "2026-11-10T07:30:25Z",
+    "generatedAt":  "2026-11-10T07:44:52Z",
     "entries":  [
                     {
                         "timestamp":  "2026-11-10T03:13:50.339000",
@@ -2562,6 +2562,280 @@
                                                        "name":  "response.serialize",
                                                        "async":  false,
                                                        "ms":  0.02
+                                                   }
+                                               ]
+                                }
+                    },
+                    {
+                        "timestamp":  "2026-11-10T07:42:13.445000",
+                        "log":  {
+                                    "requestId":  "req_9772561bbae045eb8672fa5c93b5a86d",
+                                    "owner":  "by-v",
+                                    "repo":  "patchradar-fixture-large",
+                                    "status":  404,
+                                    "githubMs":  0,
+                                    "parseMs":  0,
+                                    "registryMs":  0,
+                                    "osvMs":  0,
+                                    "kevMs":  0,
+                                    "epssMs":  0,
+                                    "findingsMs":  0,
+                                    "labelMs":  0,
+                                    "syncMs":  0,
+                                    "totalMs":  336,
+                                    "sourceStatus":  {
+                                                         "osv":  null,
+                                                         "kev":  null,
+                                                         "epss":  null
+                                                     },
+                                    "stages":  [
+                                                   {
+                                                       "name":  "github.metadata",
+                                                       "async":  true,
+                                                       "ms":  334.532
+                                                   }
+                                               ]
+                                }
+                    },
+                    {
+                        "timestamp":  "2026-11-10T07:42:24.917000",
+                        "log":  {
+                                    "requestId":  "req_b0a40082dca24f92a2f9cbf8bf3df0c7",
+                                    "owner":  "username-lo",
+                                    "repo":  "patchradar-fixture-large",
+                                    "status":  404,
+                                    "githubMs":  0,
+                                    "parseMs":  0,
+                                    "registryMs":  0,
+                                    "osvMs":  0,
+                                    "kevMs":  0,
+                                    "epssMs":  0,
+                                    "findingsMs":  0,
+                                    "labelMs":  0,
+                                    "syncMs":  0,
+                                    "totalMs":  282,
+                                    "sourceStatus":  {
+                                                         "osv":  null,
+                                                         "kev":  null,
+                                                         "epss":  null
+                                                     },
+                                    "stages":  [
+                                                   {
+                                                       "name":  "github.metadata",
+                                                       "async":  true,
+                                                       "ms":  281.762
+                                                   }
+                                               ]
+                                }
+                    },
+                    {
+                        "timestamp":  "2026-11-10T07:43:38.421000",
+                        "log":  {
+                                    "requestId":  "req_f2b6087e8e5c443a92758c9710183b42",
+                                    "owner":  "nestjs",
+                                    "repo":  "nest",
+                                    "status":  200,
+                                    "githubMs":  882,
+                                    "parseMs":  10,
+                                    "registryMs":  0,
+                                    "osvMs":  16803,
+                                    "kevMs":  817,
+                                    "epssMs":  283,
+                                    "findingsMs":  3,
+                                    "labelMs":  4,
+                                    "syncMs":  18,
+                                    "totalMs":  18808,
+                                    "sourceStatus":  {
+                                                         "osv":  "OK",
+                                                         "kev":  "CACHE",
+                                                         "epss":  "OK"
+                                                     },
+                                    "stages":  [
+                                                   {
+                                                       "name":  "github.metadata",
+                                                       "async":  true,
+                                                       "ms":  516.372
+                                                   },
+                                                   {
+                                                       "name":  "github.packageJson",
+                                                       "async":  true,
+                                                       "ms":  355.942
+                                                   },
+                                                   {
+                                                       "name":  "github.lockfile",
+                                                       "async":  true,
+                                                       "ms":  10.468
+                                                   },
+                                                   {
+                                                       "name":  "manifest.parse",
+                                                       "async":  false,
+                                                       "ms":  10.112
+                                                   },
+                                                   {
+                                                       "name":  "osv.cache.read",
+                                                       "async":  true,
+                                                       "ms":  4400.115
+                                                   },
+                                                   {
+                                                       "name":  "osv.batch",
+                                                       "async":  true,
+                                                       "ms":  8514.844
+                                                   },
+                                                   {
+                                                       "name":  "osv.cache.write",
+                                                       "async":  true,
+                                                       "ms":  275.674
+                                                   },
+                                                   {
+                                                       "name":  "osv.advisory.cache.read",
+                                                       "async":  true,
+                                                       "ms":  401.12
+                                                   },
+                                                   {
+                                                       "name":  "osv.advisory.fetch",
+                                                       "async":  true,
+                                                       "ms":  2849.882
+                                                   },
+                                                   {
+                                                       "name":  "osv.advisory.cache.write",
+                                                       "async":  true,
+                                                       "ms":  361.591
+                                                   },
+                                                   {
+                                                       "name":  "kev.catalog.count",
+                                                       "async":  true,
+                                                       "ms":  151.272
+                                                   },
+                                                   {
+                                                       "name":  "kev.catalog.latest",
+                                                       "async":  true,
+                                                       "ms":  148.389
+                                                   },
+                                                   {
+                                                       "name":  "kev.catalog.load",
+                                                       "async":  true,
+                                                       "ms":  517.292
+                                                   },
+                                                   {
+                                                       "name":  "findings.assembly",
+                                                       "async":  false,
+                                                       "ms":  2.961
+                                                   },
+                                                   {
+                                                       "name":  "kev.match",
+                                                       "async":  false,
+                                                       "ms":  0.379
+                                                   },
+                                                   {
+                                                       "name":  "epss.fetch",
+                                                       "async":  true,
+                                                       "ms":  282.813
+                                                   },
+                                                   {
+                                                       "name":  "response.build",
+                                                       "async":  false,
+                                                       "ms":  3.666
+                                                   },
+                                                   {
+                                                       "name":  "response.serialize",
+                                                       "async":  false,
+                                                       "ms":  0.498
+                                                   }
+                                               ]
+                                }
+                    },
+                    {
+                        "timestamp":  "2026-11-10T07:44:32.960000",
+                        "log":  {
+                                    "requestId":  "req_af749e89bcf04ee8aec76b5bd533bfd1",
+                                    "owner":  "nestjs",
+                                    "repo":  "nest",
+                                    "status":  200,
+                                    "githubMs":  475,
+                                    "parseMs":  10,
+                                    "registryMs":  0,
+                                    "osvMs":  4149,
+                                    "kevMs":  788,
+                                    "epssMs":  14,
+                                    "findingsMs":  3,
+                                    "labelMs":  3,
+                                    "syncMs":  17,
+                                    "totalMs":  5448,
+                                    "sourceStatus":  {
+                                                         "osv":  "CACHE",
+                                                         "kev":  "CACHE",
+                                                         "epss":  "OK"
+                                                     },
+                                    "stages":  [
+                                                   {
+                                                       "name":  "github.metadata",
+                                                       "async":  true,
+                                                       "ms":  453.101
+                                                   },
+                                                   {
+                                                       "name":  "github.packageJson",
+                                                       "async":  true,
+                                                       "ms":  10.644
+                                                   },
+                                                   {
+                                                       "name":  "github.lockfile",
+                                                       "async":  true,
+                                                       "ms":  10.998
+                                                   },
+                                                   {
+                                                       "name":  "manifest.parse",
+                                                       "async":  false,
+                                                       "ms":  9.589
+                                                   },
+                                                   {
+                                                       "name":  "osv.cache.read",
+                                                       "async":  true,
+                                                       "ms":  3792.27
+                                                   },
+                                                   {
+                                                       "name":  "osv.advisory.cache.read",
+                                                       "async":  true,
+                                                       "ms":  356.31
+                                                   },
+                                                   {
+                                                       "name":  "kev.catalog.count",
+                                                       "async":  true,
+                                                       "ms":  140.005
+                                                   },
+                                                   {
+                                                       "name":  "kev.catalog.latest",
+                                                       "async":  true,
+                                                       "ms":  138.576
+                                                   },
+                                                   {
+                                                       "name":  "kev.catalog.load",
+                                                       "async":  true,
+                                                       "ms":  509.371
+                                                   },
+                                                   {
+                                                       "name":  "findings.assembly",
+                                                       "async":  false,
+                                                       "ms":  3.15
+                                                   },
+                                                   {
+                                                       "name":  "kev.match",
+                                                       "async":  false,
+                                                       "ms":  0.415
+                                                   },
+                                                   {
+                                                       "name":  "epss.fetch",
+                                                       "async":  true,
+                                                       "ms":  14.28
+                                                   },
+                                                   {
+                                                       "name":  "response.build",
+                                                       "async":  false,
+                                                       "ms":  3.246
+                                                   },
+                                                   {
+                                                       "name":  "response.serialize",
+                                                       "async":  false,
+                                                       "ms":  0.443
                                                    }
                                                ]
                                 }

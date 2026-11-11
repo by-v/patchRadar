@@ -1,5 +1,5 @@
 {
-  "probedAt": "2026-11-08T20:12:10Z",
+  "probedAt": "2026-11-11T18:34:40Z",
   "registry": "https://registry.npmjs.org",
   "accept": "application/vnd.npm.install-v1+json",
   "packages": [
@@ -11,7 +11,7 @@
       "contentType": "application/vnd.npm.install-v1+json",
       "contentEncoding": "br",
       "bytes": 342878,
-      "durationMs": 221,
+      "durationMs": 358,
       "versionCount": 290,
       "distTags": {
         "latest-4": "4.22.3",
@@ -46,7 +46,7 @@
       "contentType": "application/vnd.npm.install-v1+json",
       "contentEncoding": "br",
       "bytes": 2334287,
-      "durationMs": 347,
+      "durationMs": 1121,
       "versionCount": 2382,
       "distTags": {
         "ts2.0": "12.12.6",
@@ -113,20 +113,20 @@
       "status": 200,
       "contentType": "application/vnd.npm.install-v1+json",
       "contentEncoding": "br",
-      "bytes": 2967104,
-      "durationMs": 129,
-      "versionCount": 3003,
+      "bytes": 2972858,
+      "durationMs": 1014,
+      "versionCount": 3009,
       "distTags": {
         "beta": "19.0.0-beta-26f2496093-20240514",
         "rc": "19.0.0-rc.1",
         "next": "19.3.0-canary-d5736f09-20260507",
         "latest": "19.3.1",
         "backport": "19.1.10",
-        "experimental": "0.0.0-experimental-5b610964-20261106",
-        "canary": "19.3.0-canary-5b610964-20261106"
+        "experimental": "0.0.0-experimental-1620f7b9-20261111",
+        "canary": "19.3.0-canary-1620f7b9-20261111"
       },
       "latestVersion": "19.3.1",
-      "prereleaseCount": 2860,
+      "prereleaseCount": 2866,
       "maxPrereleaseBySemver": "19.3.0-canary-ff8f88fc-20260915",
       "resolutions": [
         {

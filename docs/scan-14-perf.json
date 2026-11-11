@@ -1,0 +1,346 @@
+{
+  "projectRef": "umldsfkvifqoqfbouhca",
+  "generatedAt": "2026-11-11T18:56:17.470Z",
+  "results": [
+    {
+      "repoUrl": "https://github.com/axios/axios",
+      "label": "cold",
+      "startedAt": "2026-11-11T18:55:31.181Z",
+      "finishedAt": "2026-11-11T18:55:35.602Z",
+      "status": 200,
+      "clientWallMs": 4416,
+      "requestId": "req_ede0f7516ccd4c2785a491aca5b71166",
+      "summary": {
+        "totalPackages": 680,
+        "affectedPackages": 2,
+        "findingCount": 2
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 979,
+        "osvMs": 1850,
+        "enrichmentMs": 1004,
+        "totalMs": 3854
+      },
+      "epssAvailable": 1,
+      "findings": 2
+    },
+    {
+      "repoUrl": "https://github.com/axios/axios",
+      "label": "warm-1",
+      "startedAt": "2026-11-11T18:55:35.602Z",
+      "finishedAt": "2026-11-11T18:55:38.142Z",
+      "status": 200,
+      "clientWallMs": 2539.9,
+      "requestId": "req_aabc3ebb6ebd403d8d724f5156677db8",
+      "summary": {
+        "totalPackages": 680,
+        "affectedPackages": 2,
+        "findingCount": 2
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 546,
+        "osvMs": 1093,
+        "enrichmentMs": 727,
+        "totalMs": 2377
+      },
+      "epssAvailable": 1,
+      "findings": 2
+    },
+    {
+      "repoUrl": "https://github.com/axios/axios",
+      "label": "warm-2",
+      "startedAt": "2026-11-11T18:55:38.142Z",
+      "finishedAt": "2026-11-11T18:55:40.826Z",
+      "status": 200,
+      "clientWallMs": 2684.1,
+      "requestId": "req_971fa421827348759c6e0e410adfa3b7",
+      "summary": {
+        "totalPackages": 680,
+        "affectedPackages": 2,
+        "findingCount": 2
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 846,
+        "osvMs": 1073,
+        "enrichmentMs": 689,
+        "totalMs": 2620
+      },
+      "epssAvailable": 1,
+      "findings": 2
+    },
+    {
+      "repoUrl": "https://github.com/axios/axios",
+      "label": "warm-3",
+      "startedAt": "2026-11-11T18:55:40.826Z",
+      "finishedAt": "2026-11-11T18:55:43.152Z",
+      "status": 200,
+      "clientWallMs": 2326.2,
+      "requestId": "req_ee06a8cc1c664245a09e8c8c7473e2df",
+      "summary": {
+        "totalPackages": 680,
+        "affectedPackages": 2,
+        "findingCount": 2
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 444,
+        "osvMs": 1067,
+        "enrichmentMs": 714,
+        "totalMs": 2236
+      },
+      "epssAvailable": 1,
+      "findings": 2
+    },
+    {
+      "repoUrl": "https://github.com/axios/axios",
+      "label": "warm-4",
+      "startedAt": "2026-11-11T18:55:43.153Z",
+      "finishedAt": "2026-11-11T18:55:45.823Z",
+      "status": 200,
+      "clientWallMs": 2670.4,
+      "requestId": "req_ac723ded524a4a3fa656d8d2620493b7",
+      "summary": {
+        "totalPackages": 680,
+        "affectedPackages": 2,
+        "findingCount": 2
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 421,
+        "osvMs": 1065,
+        "enrichmentMs": 997,
+        "totalMs": 2494
+      },
+      "epssAvailable": 1,
+      "findings": 2
+    },
+    {
+      "repoUrl": "https://github.com/nestjs/nest",
+      "label": "cold",
+      "startedAt": "2026-11-11T18:55:45.823Z",
+      "finishedAt": "2026-11-11T18:56:02.309Z",
+      "status": 200,
+      "clientWallMs": 16486.2,
+      "requestId": "req_c1f1b3aaa66d43538419ecd467ff3288",
+      "summary": {
+        "totalPackages": 1425,
+        "affectedPackages": 21,
+        "findingCount": 77
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "OK",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 1156,
+        "osvMs": 13502,
+        "enrichmentMs": 1644,
+        "totalMs": 16331
+      },
+      "epssAvailable": 76,
+      "findings": 77
+    },
+    {
+      "repoUrl": "https://github.com/nestjs/nest",
+      "label": "warm-1",
+      "startedAt": "2026-11-11T18:56:02.309Z",
+      "finishedAt": "2026-11-11T18:56:06.201Z",
+      "status": 200,
+      "clientWallMs": 3891.5,
+      "requestId": "req_1e388d0e23c749309945286919e93bbb",
+      "summary": {
+        "totalPackages": 1425,
+        "affectedPackages": 21,
+        "findingCount": 77
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 455,
+        "osvMs": 2360,
+        "enrichmentMs": 764,
+        "totalMs": 3633
+      },
+      "epssAvailable": 76,
+      "findings": 77
+    },
+    {
+      "repoUrl": "https://github.com/nestjs/nest",
+      "label": "warm-2",
+      "startedAt": "2026-11-11T18:56:06.201Z",
+      "finishedAt": "2026-11-11T18:56:09.985Z",
+      "status": 200,
+      "clientWallMs": 3783.6,
+      "requestId": "req_e9bbe5c85afa4b94a0b74b4e0095f51f",
+      "summary": {
+        "totalPackages": 1425,
+        "affectedPackages": 21,
+        "findingCount": 77
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 477,
+        "osvMs": 2324,
+        "enrichmentMs": 700,
+        "totalMs": 3552
+      },
+      "epssAvailable": 76,
+      "findings": 77
+    },
+    {
+      "repoUrl": "https://github.com/nestjs/nest",
+      "label": "warm-3",
+      "startedAt": "2026-11-11T18:56:09.985Z",
+      "finishedAt": "2026-11-11T18:56:13.781Z",
+      "status": 200,
+      "clientWallMs": 3796.3,
+      "requestId": "req_d4006059d0144b3f836ba0c693aaae9d",
+      "summary": {
+        "totalPackages": 1425,
+        "affectedPackages": 21,
+        "findingCount": 77
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 508,
+        "osvMs": 2508,
+        "enrichmentMs": 553,
+        "totalMs": 3595
+      },
+      "epssAvailable": 76,
+      "findings": 77
+    },
+    {
+      "repoUrl": "https://github.com/nestjs/nest",
+      "label": "warm-4",
+      "startedAt": "2026-11-11T18:56:13.781Z",
+      "finishedAt": "2026-11-11T18:56:17.470Z",
+      "status": 200,
+      "clientWallMs": 3689.1,
+      "requestId": "req_fc35d33497c9494aaf36562e9a38a1b7",
+      "summary": {
+        "totalPackages": 1425,
+        "affectedPackages": 21,
+        "findingCount": 77
+      },
+      "manifest": {
+        "source": "LOCKFILE",
+        "lockfileFormat": "v3",
+        "estimated": false
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 484,
+        "osvMs": 2294,
+        "enrichmentMs": 697,
+        "totalMs": 3497
+      },
+      "epssAvailable": 76,
+      "findings": 77
+    }
+  ]
+}

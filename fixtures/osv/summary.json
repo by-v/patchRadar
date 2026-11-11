@@ -1,17 +1,17 @@
 {
-  "probedAt": "2026-11-08T20:15:34Z",
+  "probedAt": "2026-11-11T18:34:57Z",
   "endpoint": "https://api.osv.dev/v1",
   "batch": {
     "status": 200,
     "queryCount": 50,
     "resultCount": 50,
-    "bytes": 17237,
-    "durationMs": 912,
+    "bytes": 18497,
+    "durationMs": 1106,
     "vulnsInBatchIncludeDetail": false,
     "vulnerablePairs": 46,
     "neutralPairs": 4,
-    "totalFindings": 239,
-    "uniqueAdvisories": 133
+    "totalFindings": 257,
+    "uniqueAdvisories": 142
   },
   "details": {
     "requested": 40,
@@ -902,21 +902,21 @@
     {
       "queryCount": 100,
       "status": 200,
-      "bytes": 34461,
+      "bytes": 36981,
       "resultCount": 100,
       "error": null
     },
     {
       "queryCount": 200,
       "status": 200,
-      "bytes": 68909,
+      "bytes": 73949,
       "resultCount": 200,
       "error": null
     },
     {
       "queryCount": 1000,
       "status": 200,
-      "bytes": 344493,
+      "bytes": 369693,
       "resultCount": 1000,
       "error": null
     },

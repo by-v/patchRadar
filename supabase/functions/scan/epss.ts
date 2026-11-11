@@ -1,8 +1,11 @@
 /**
  * Klien EPSS FIRST (PRD FR-10).
  *
- * Mengikuti hasil probe `T-W1-05`:
+ * Mengikuti hasil probe `T-W1-05` dan pengamatan ulang 12 November 2026:
  * - Maksimum 100 CVE per request dan parameter `cve` SELALU dikirim.
+ * - Beberapa CVE HARUS dipisah koma dalam SATU parameter `cve`
+ *   (`?cve=A,B,C`). Mengulang parameter `cve` hanya mengembalikan CVE
+ *   terakhir, sehingga skor CVE lain hilang tanpa error.
  * - `limit` eksplisit agar data tidak terpotong di default 100.
  * - `total=0`/`data=[]` untuk permintaan tidak kosong dianggap KEGAGALAN
  *   (warning + parsial), bukan "semua CVE tidak punya skor".
@@ -167,7 +170,8 @@ async function fetchChunk(url: string, context: RequestContext): Promise<EpssRes
 
 function buildUrl(cveIds: readonly string[]): string {
   const url = new URL(EPSS_BASE_URL);
-  for (const cveId of cveIds) url.searchParams.append('cve', cveId);
+  // Satu parameter `cve` berisi daftar dipisah koma (lihat komentar modul).
+  url.searchParams.set('cve', cveIds.join(','));
   url.searchParams.set('limit', String(EPSS_LIMIT));
   return url.toString();
 }

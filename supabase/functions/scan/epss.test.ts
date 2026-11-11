@@ -20,7 +20,9 @@ function jsonResponse(body: unknown, status = 200): Response {
 }
 
 function cvesFromUrl(url: string): string[] {
-  return new URL(url).searchParams.getAll('cve');
+  const raw = new URL(url).searchParams.get('cve');
+  if (!raw) return [];
+  return raw.split(',').filter(Boolean);
 }
 
 function successFetch(): FakeEpss {
@@ -50,7 +52,10 @@ test('EPSS mengirim cve dan limit eksplisit serta memetakan skor', async () => {
   assert.equal(result.warnings.length, 0);
 
   const url = new URL(fake.urls[0]!);
-  assert.deepEqual(url.searchParams.getAll('cve'), ['CVE-2099-0001', 'CVE-2099-0002']);
+  // Regresi 12 Nov 2026: beberapa CVE harus dalam SATU parameter `cve`
+  // dipisah koma; mengulang `cve` hanya mengembalikan CVE terakhir.
+  assert.equal(url.searchParams.getAll('cve').length, 1);
+  assert.deepEqual(url.searchParams.get('cve')?.split(','), ['CVE-2099-0001', 'CVE-2099-0002']);
   assert.equal(url.searchParams.get('limit'), String(EPSS_LIMIT));
 
   assert.deepEqual(result.scores.get('CVE-2099-0001'), {
@@ -59,6 +64,17 @@ test('EPSS mengirim cve dan limit eksplisit serta memetakan skor', async () => {
     percentile: 0.97,
     available: true,
   });
+});
+
+test('beberapa CVE dikirim sebagai satu parameter cve dipisah koma', async () => {
+  const fake = successFetch();
+  await fetchEpssScores(['CVE-2099-0001', 'CVE-2099-0002', 'CVE-2099-0003'], {
+    fetchImpl: fake.fetchImpl,
+  });
+
+  const url = new URL(fake.urls[0]!);
+  assert.equal(url.searchParams.getAll('cve').length, 1);
+  assert.equal(url.searchParams.get('cve'), 'CVE-2099-0001,CVE-2099-0002,CVE-2099-0003');
 });
 
 test('CVE tanpa skor di respons campuran menjadi null, bukan 0', async () => {

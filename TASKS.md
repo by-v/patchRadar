@@ -541,7 +541,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Catatan hasil:**
   - File baru: `supabase/functions/scan/contract.ts`, `validate.ts`, `errors.ts`, `github.ts`, `handler.ts`, `index.ts`, `validate.test.ts`, `github.test.ts`, `handler.test.ts`, dan `scripts/probe-scan.mjs`. `TASKS.md` dan `docs/due-diligence-log.md` diperbarui. `docs/PRD.md` tidak diubah.
   - Validasi hanya menerima `https://github.com/{pemilik}/{repo}` persis; menolak skema lain, userinfo, port, host lain/IP/localhost, `/tree`/`/blob`/query/fragmen/trailing slash, encoding persen, karakter kontrol, dot, panjang berlebih, dan huruf campuran menipu (mis. `GitHub.com`).
-  - Fetch dibatasi allowlist `api.github.com` + `raw.githubusercontent.com`; redirect 3xx tidak diikuti; setiap fetch memakai `AbortController` (timeout 8 dtk); body dibatasi 5 MB dan 2.000 paket (413). Token hanya dikirim ke `api.github.com`, tidak ke `raw.githubusercontent.com`.
+  - Fetch dibatasi allowlist `api.github.com` + `raw.githubusercontent.com`; redirect 3xx tidak diikuti; setiap fetch memakai `AbortController` (timeout 8 dtk); body dibatasi 5 MB dan batas paket (kini 1.500 setelah `T-W1-14`; awalnya 2.000). Token hanya dikirim ke `api.github.com`, tidak ke `raw.githubusercontent.com`.
   - Log hanya `requestId`, `owner`, `repo`, `status`, `githubMs`, `totalMs`; token dan isi manifest tidak pernah dicatat atau dikembalikan.
   - Unit test: 30 test baru (total suite 105) lulus; typecheck `strict` + `noUncheckedIndexedAccess` lulus; `app` lint/typecheck/test lulus.
   - Docker tidak tersedia: langkah 5 diganti unit test fetch tiruan + deploy `scan --use-api --yes` (JWT aktif) + `node scripts/probe-scan.mjs`. Lihat Catatan Keputusan 9 November 2026.
@@ -708,6 +708,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W1-14 — `[GATE]` Go/No-Go Minggu 1
 - **Tipe:** `[GATE]`
+- **Status:** `[x]` — **GO** dengan batas final 1.500 paket/25 detik; laporan di `docs/week1-gate.md`.
 - **Tujuan:** Memutuskan kelayakan pipeline berdasarkan bukti API, performa, CPU, dan penanganan parsial.
 - **Prasyarat:** `T-W1-01` s.d. `T-W1-11`, `T-W1-07b`, `T-W1-12a` s.d. `T-W1-12d`
 - **Prasyarat tambahan dari `T-W1-12d`:** item (a)–(f) di bawah wajib diselesaikan atau diputuskan sebelum verdict Go/No-Go.
@@ -721,21 +722,29 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   6. Selesaikan item terbuka `T-W1-12d` (a)–(f) di bawah; jangan menutup gerbang selama item yang memblokir verdict belum diputuskan.
 - **Memenuhi:** `NFR-01`, `NFR-09`, `NFR-17`, `R-06`, `R-15`
 - **Kriteria selesai (AC):**
-  - [ ] Semua gerbang §13.1 yang dapat diuji Minggu 1 punya verdict Go/No-Go beserta bukti.
-  - [ ] Gerbang anonymous sign-in tercatat akan diputuskan pada `T-W3-03`.
-  - [ ] Target p95 dan batas atas final tertulis di `docs/week1-gate.md`.
-  - [ ] CPU time < batas platform, atau mitigasi R-15 dipilih dan dicatat.
-  - [ ] Keputusan CPU memakai batas atas sinkron (jumlah wall time tahap sinkron) dan hasil metrik dashboard `T-W1-12d`; bila batas atas > 70% dari 2 s untuk fixture 500 paket, pekerjaan dipecah per chunk atau dipindahkan (R-15).
-  - [ ] Tidak ada blocker tanpa rencana tindak lanjut.
-  - [ ] `[DARI 12d-a]` `LOCKFILE_PARTIAL` pada `nestjs/nest` dijelaskan: 21 entri dilewati (10 `link/workspace node_modules/@nestjs/*` + 11 `non-node_modules packages/*`), tentukan apakah ada paket terlewat, dan putuskan apakah `partial=true` sesuai PRD §9; bukti `docs/scan-12d-large-cold.json` dan kode parser.
-  - [ ] `[DARI 12d-b]` Penyebab EPSS gagal 11 ms pada scan 07:13–07:19 dijelaskan dari `docs/scan-12d-logs.json`: log hanya memuat `sourceStatus.epss=FAILED` dan `epssMs` 8–14 ms, tanpa pesan error/status HTTP; tambahkan bukti penyebab.
-  - [ ] `[DARI 12d-c]` Pengukuran fixture ±500 paket (dingin dan hangat) serta axios diulang setelah perbaikan batching 100 kunci; catat hasil final.
-  - [ ] `[DARI 12d-d]` Redirect GitHub 301 ditangani (ikuti sekali hanya ke `api.github.com` atau tampilkan pesan khusus) sebagai tugas Minggu 2/3, beserta kasus uji SSRF.
-  - [ ] `[DARI 12d-e]` Dua tugas prioritas S diputuskan/dikerjakan: ambil dari `kev_entries` hanya CVE yang dibutuhkan, dan baca cache OSV paralel dengan konkurensi terbatas; baseline `kevMs` 700–900 ms dan `osvMs` hangat 4.149 ms untuk 1.425 paket.
-  - [ ] `[DARI 12d-f]` Usulan batas atas paket sementara ±1.500 dengan ekstrapolasi berlabel perkiraan (≈11,8 ms/paket cache dingin; 2.000 paket ≈26 s > batas keras 25 s) dicatat hanya di `docs/prd-change-proposals.md`; `docs/PRD.md` tidak diubah.
+  - [x] Semua gerbang §13.1 yang dapat diuji Minggu 1 punya verdict Go/No-Go beserta bukti. — Verdict dan bukti di `docs/week1-gate.md` §2.
+  - [x] Gerbang anonymous sign-in tercatat akan diputuskan pada `T-W3-03`. — Dicatat di `docs/week1-gate.md` §2.
+  - [x] Target p95 dan batas atas final tertulis di `docs/week1-gate.md`. — p95 dingin ≤15 s (≤500) / ≤22 s (500–1.500), hangat ≤6 s; batas keras 1.500 paket/25 s.
+  - [x] CPU time < batas platform, atau mitigasi R-15 dipilih dan dicatat. — CPU platform tidak teramati; batas atas wall sinkron/parse ≤62,381 ms (3,1% dari 2.000 ms); R-15 tidak diaktifkan.
+  - [x] Keputusan CPU memakai batas atas sinkron (jumlah wall time tahap sinkron) dan hasil metrik dashboard `T-W1-12d`; bila batas atas > 70% dari 2 s untuk fixture 500 paket, pekerjaan dipecah per chunk atau dipindahkan (R-15). — `syncMs` 1–18 ms; parser 491 paket ≤2,391 ms; jauh di bawah 1.400 ms.
+  - [x] Tidak ada blocker tanpa rencana tindak lanjut. — Redirect 301 → `T-W3-07b`; anonymous sign-in → `T-W3-03`; optimasi S ditunda dengan pemicu; token GitHub diverifikasi sebelum rilis.
+  - [x] `[DARI 12d-a]` `LOCKFILE_PARTIAL` pada `nestjs/nest` dijelaskan: 21 entri dilewati (10 `link/workspace node_modules/@nestjs/*` + 11 `non-node_modules packages/*`), tentukan apakah ada paket terlewat, dan putuskan apakah `partial=true` sesuai PRD §9; bukti `docs/scan-12d-large-cold.json` dan kode parser. — Tidak ada dependensi eksternal yang hilang; `partial=true` sesuai PRD §9.
+  - [x] `[DARI 12d-b]` Penyebab EPSS gagal 11 ms pada scan 07:13–07:19 dijelaskan dari `docs/scan-12d-logs.json`: log hanya memuat `sourceStatus.epss=FAILED` dan `epssMs` 8–14 ms, tanpa pesan error/status HTTP; tambahkan bukti penyebab. — Parameter `cve` berulang hanya memproses CVE terakhir; URL diperbaiki ke daftar dipisah koma, diuji, di-deploy, dan diverifikasi remote.
+  - [x] `[DARI 12d-c]` Pengukuran fixture ±500 paket (dingin dan hangat) serta axios diulang setelah perbaikan batching 100 kunci; catat hasil final. — Fixture 491/1.409 paket diukur di `cpu-spike`; end-to-end mocha 715 paket 11,28 s dingin/2,45–2,75 s hangat; axios 680 paket 4,42 s/2,33–2,68 s.
+  - [x] `[DARI 12d-d]` Redirect GitHub 301 ditangani (ikuti sekali hanya ke `api.github.com` atau tampilkan pesan khusus) sebagai tugas Minggu 2/3, beserta kasus uji SSRF. — Keputusan: tetap tolak 301 pada Minggu 1 (502), implementasi satu hop + uji SSRF di `T-W3-07b`.
+  - [x] `[DARI 12d-e]` Dua tugas prioritas S diputuskan/dikerjakan: ambil dari `kev_entries` hanya CVE yang dibutuhkan, dan baca cache OSV paralel dengan konkurensi terbatas; baseline `kevMs` 700–900 ms dan `osvMs` hangat 4.149 ms untuk 1.425 paket. — Diputuskan ditunda; p95 hangat 3,69–3,89 s dan `osvMs` hangat 2,29–2,51 s sudah memenuhi target; pemicu di `docs/week1-gate.md` §7(e).
+  - [x] `[DARI 12d-f]` Usulan batas atas paket sementara ±1.500 dengan ekstrapolasi berlabel perkiraan (≈11,8 ms/paket cache dingin; 2.000 paket ≈26 s > batas keras 25 s) dicatat hanya di `docs/prd-change-proposals.md`; `docs/PRD.md` tidak diubah. — Usulan diperbarui dengan hasil final; `MAX_PACKAGES=1_500` diterapkan di kode; PRD tidak diubah.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - **Verdict: GO** untuk Minggu 2 dengan batas final 1.500 paket unik dan 25 detik wall time. Laporan lengkap: `docs/week1-gate.md`.
+  - **API/data:** kelima probe dijalankan ulang 12 November 2026. GitHub (60/jam anonim, 5.000/jam token), OSV (batch 50; 1.001 → 400), severity OSV (40/40), KEV `2026.11.10`/1.779 entri, EPSS OK setelah perbaikan URL batch. Anonymous sign-in tetap dijadwalkan ke `T-W3-03`.
+  - **Perbaikan EPSS:** `buildUrl` kini memakai satu parameter `cve` berisi daftar dipisah koma. Regresi ditambahkan di `epss.test.ts` dan `handler.test.ts`; 156 unit test lulus, typecheck strict lulus. `scan` versi 5 di-deploy; socket.io 22/23 CVE dan nestjs 76/77 CVE berEPSS, `sourceStatus.epss=OK`.
+  - **Performa fixture (`cpu-spike`, 9 run):** `small-100` 107 paket parser median 0,465 ms/terburuk 0,524 ms, handler 0,792/0,945 ms; `medium-500` 491 paket parser 2,304/2,391 ms, handler 3,415/62,381 ms; `large-1500` 1.409 paket parser 7,924/9,211 ms, handler 13,251/15,939 ms. CPU platform tetap tidak teramati; batas atas wall dipakai.
+  - **Performa end-to-end:** koa 363 paket 4,91 s dingin/2,15–2,76 s hangat; axios 680 4,42/2,33–2,68 s; mocha 715 11,28/2,45–2,75 s; socket.io 1.179 21,87/3,24 s; nest 1.425 16,49/3,69–3,89 s. Semua di bawah target p95 dan batas keras.
+  - **Batas paket:** `MAX_PACKAGES` diubah dari 2.000 ke 1.500 dan pesan 413 diperbarui; unit test 413 memakai 1.501 paket. Usulan PRD diperbarui di `docs/prd-change-proposals.md` §4; `docs/PRD.md` tidak diubah.
+  - **Item terbuka 12d:** (a) `LOCKFILE_PARTIAL` wajar, tidak ada dependensi eksternal hilang; (b) penyebab EPSS parameter berulang, sudah diperbaiki; (c) pengukuran ulang tercatat; (d) redirect 301 → `T-W3-07b`; (e) dua optimasi S ditunda dengan pemicu; (f) usulan batas 1.500 diperbarui.
+  - **Bukti:** `docs/week1-gate.md`, `docs/due-diligence-log.md`, `docs/scan-14-cpu.json`, `docs/scan-14-perf.json`, `docs/scan-14-perf-medium.json`, `docs/scan-14-epss-verify.json`. Fungsi sementara `cpu-spike` sudah dihapus; remote hanya menyisakan `scan` versi 5.
 
 ---
 
@@ -812,7 +821,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Langkah:**
   1. Tampilkan repo, waktu scan, header jumlah paket/terimbas, dan banner parsial/perkiraan.
   2. Render kartu dengan nama, versi, label, severity, KEV/EPSS, tag, dan alasan.
-  3. Tampilkan indikator progres/banner untuk repo 501–2.000 paket.
+  3. Tampilkan indikator progres/banner untuk repo 501–1.500 paket.
   4. Implementasikan empty state hati-hati dan navigasi ke Detail.
 - **Memenuhi:** `FR-15`, `FR-16`, `FR-17`, `NFR-01`, `R-11`
 - **Kriteria selesai (AC):**
@@ -1114,18 +1123,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Tipe:** `[AGENT]`
 - **Tujuan:** Menangani kegagalan GitHub/OSV/KEV/EPSS, timeout total, dan batas laju aplikasi.
 - **Prasyarat:** `T-W1-12d`, `T-W3-06`
-- **File/folder:** `app/src/errors/messages.ts`, `supabase/functions/scan/errors.ts`, `docs/error-matrix.md`
+- **File/folder:** `app/src/errors/messages.ts`, `supabase/functions/scan/errors.ts`, `supabase/functions/scan/github.ts`, `supabase/functions/scan/github.test.ts`, `docs/error-matrix.md`
 - **Langkah:**
   1. Implementasikan kondisi 11–16: rate limit GitHub, OSV 429/5xx, EPSS gagal, KEV `STALE`, KEV belum tersedia, dan timeout total.
   2. Implementasikan kondisi 20: batas laju aplikasi dengan hitung mundur.
   3. Bedakan error penghenti (502/504) dari hasil parsial (200 + warning).
-  4. Uji seluruh kondisi kelompok B dan perbarui bukti di `docs/error-matrix.md`.
+  4. Tangani redirect GitHub 301: ikuti maksimal satu hop hanya bila `Location` tetap `https://api.github.com` tanpa userinfo/port/skema turun; tolak redirect berantai, host lain, dan alamat privat/loopback.
+  5. Uji seluruh kondisi kelompok B, termasuk kasus SSRF redirect, dan perbarui bukti di `docs/error-matrix.md`.
 - **Memenuhi:** `FR-24`, `NFR-02`, `NFR-08`, `R-05`
 - **Kriteria selesai (AC):**
   - [ ] Kondisi 11–16 dan 20 memiliki pesan Indonesia serta kode/status yang benar.
   - [ ] Kegagalan pengayaan tidak menyamar sebagai hasil lengkap.
   - [ ] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
   - [ ] Tidak ada crash pada seluruh kondisi kelompok B.
+  - [ ] Redirect 301 diikuti maksimal satu hop hanya ke `api.github.com` yang aman; redirect ke host lain, alamat privat/loopback, skema turun, userinfo/port, atau rantai redirect tetap ditolak dengan pesan khusus.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
@@ -1217,7 +1228,8 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Uji 23 kondisi error.
   4. Uji hasil parsial, `persisted=false`, dan scan ke-6 (429).
   5. Verifikasi ketersediaan anonymous sign-in dan catat keputusan gerbang §13.1.
-  6. Catat verdict dan sisa risiko.
+  6. Ukur ulang p95 hangat dan CPU dashboard `scan`; bila p95 hangat >6 detik atau CPU per scan mendekati 1.400 ms, aktifkan mitigasi R-15 atau optimasi S yang ditunda.
+  7. Catat verdict dan sisa risiko.
 - **Memenuhi:** `FR-22`, `FR-23`, `FR-24`, `FR-25a`, `NFR-05`, `NFR-07`, `R-08`, `R-09`, `R-13`
 - **Kriteria selesai (AC):**
   - [ ] Riwayat→Hasil→Detail berhasil dalam mode pesawat.
@@ -1226,6 +1238,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] 23 kondisi error teruji tanpa crash.
   - [ ] `persisted=false` dan warning tampil benar.
   - [ ] Scan ke-6 menghasilkan 429.
+  - [ ] p95 hangat dan CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat.
   - [ ] Verdict Go/No-Go tercatat.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
@@ -1614,6 +1627,10 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 10 November 2026 | `T-W1-12c` | Penyambungan resolver npm registry `T-W1-08` ke pipeline `scan` dikerjakan di 12c karena tidak ada tugas lain yang mencakupnya. Resolusi hanya dijalankan saat manifest `estimated`; kegagalan registry tidak menggagalkan scan, versi jatuh ke batas bawah range dan muncul warning `REGISTRY_PARTIAL`. `persisted=false` pada 12c berarti “belum disimpan sampai Minggu 3”, bukan kegagalan cloud, sehingga `CLOUD_PERSIST_FAILED` belum dipakai. | Menutup celah integrasi antara parser fallback dan klien registry tanpa menambah scope baru di luar PRD. | Ya — instruksi pengembang, 10 November 2026 |
 | 9 November 2026 | `T-W1-11` | Docker tidak tersedia, sehingga langkah 5 `[AGENT]` “uji lokal dengan `supabase functions serve`” diganti dengan (a) unit test memakai fetch tiruan untuk seluruh jalur validasi dan pemetaan error, dan (b) deploy fungsi `scan` ke proyek remote dengan `--use-api` lalu uji integrasi memakai skrip. AC tugas disesuaikan: jalur validasi/error diuji dengan fetch tiruan, dan hasil uji integrasi remote (status + `requestId`) dicatat. | Docker tidak terpasang di mesin pengembang; deploy remote berbasis API sudah terbukti pada `T-W1-07b`. | Ya — instruksi pengembang, 9 November 2026 |
 | 10 November 2026 | `T-W1-12d` (Langkah 0), `T-W1-12c` | Semantik `partial` diselaraskan dengan PRD §9.3/FR-23: `partial=true` hanya bila ada sumber data gagal/tidak lengkap (`OSV_PARTIAL`, `OSV_DETAIL_PARTIAL`, `KEV_STALE`, `KEV_UNAVAILABLE`, `EPSS_UNAVAILABLE`, `LOCKFILE_PARTIAL`). Fallback lockfile, hasil `estimated`, `REGISTRY_PARTIAL`, dan kegagalan cache internal tetap menjadi warning informatif tanpa menyalakan `partial`. Hanya `LOCKFILE_ENTRY_SKIPPED` yang dipetakan ke `LOCKFILE_PARTIAL`. Usulan perubahan PRD dicatat di `docs/prd-change-proposals.md`. | Fallback dan hasil perkiraan sudah diwakili `manifest.estimated=true` serta banner "Hasil perkiraan"; menyalakan `partial` untuk kondisi itu bertentangan dengan definisi PRD dan membuat status ganda. | Ya — instruksi pengembang, 10 November 2026; usulan perubahan PRD menunggu persetujuan |
+| 12 November 2026 | `T-W1-14`, `T-W1-12d-b` | EPSS batch memakai **satu** parameter `cve` berisi daftar dipisah koma (`?cve=A,B,C`). Parameter `cve` yang diulang tidak dipakai karena hanya CVE terakhir yang diproses. | Pengamatan 12 November 2026: parameter berulang → `total=1` (CVE terakhir); bentuk koma → `total=3`; 23 CVE socket.io dengan parameter berulang → `total=0` sehingga scan melaporkan EPSS gagal. | Ya — keputusan gerbang `T-W1-14`; sudah diuji dan di-deploy |
+| 12 November 2026 | `T-W1-14` | Batas atas paket final ditetapkan **1.500 paket unik** (bukan 2.000) dan **25 detik** wall time. `MAX_PACKAGES` serta pesan 413 disesuaikan. Usulan perubahan NFR-09 dicatat di `docs/prd-change-proposals.md`; `docs/PRD.md` tidak diubah. | Pengukuran 12 November 2026: 1.425 paket dingin 16,49 detik; 1.179 paket dingin 21,87 detik; 2.000 paket tidak dijamin di bawah 25 detik. | Ya — keputusan gerbang `T-W1-14`; perubahan PRD menunggu persetujuan |
+| 12 November 2026 | `T-W1-14`, `T-W3-07b` | Redirect GitHub 301 tetap **ditolak** pada Minggu 1 (502 `UPSTREAM_UNAVAILABLE`, bukan kegagalan senyap). Implementasi satu hop hanya ke `https://api.github.com` beserta uji SSRF dikerjakan di `T-W3-07b`. | Menghindari SSRF dan redirect berantai; belum ada kebutuhan produk yang mengharuskan redirect diikuti. | Ya — keputusan gerbang `T-W1-14` |
+
 
 ---
 

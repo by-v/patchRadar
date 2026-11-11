@@ -58,7 +58,7 @@ const DEFAULT_MESSAGE: Readonly<Record<ScanErrorCode, string>> = {
     'Repo tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repo publik.',
   NO_PACKAGE_JSON: 'package.json tidak ditemukan di root repo. PatchRadar hanya memindai manifest di root.',
   MANIFEST_TOO_LARGE:
-    'Repo melebihi batas ukuran sementara (5 MB atau 2.000 paket). Coba repo yang lebih kecil.',
+    'Repo melebihi batas ukuran sementara (5 MB atau 1.500 paket). Coba repo yang lebih kecil.',
   RATE_LIMITED: 'Batas permintaan tercapai. Coba lagi sebentar lagi.',
   UPSTREAM_UNAVAILABLE: 'Layanan upstream sedang bermasalah. Coba lagi sebentar lagi.',
   SCAN_TIMEOUT: 'Pemindaian melebihi batas waktu. Coba lagi atau pindai repo yang lebih kecil.',

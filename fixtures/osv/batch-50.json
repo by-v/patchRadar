@@ -1,10 +1,10 @@
 {
-  "capturedAt": "2026-11-08T20:15:16Z",
+  "capturedAt": "2026-11-11T18:34:38Z",
   "endpoint": "https://api.osv.dev/v1/querybatch",
   "status": 200,
   "contentType": "application/json",
-  "bytes": 17237,
-  "durationMs": 912,
+  "bytes": 18497,
+  "durationMs": 1106,
   "queryCount": 50,
   "resultCount": 50,
   "request": {
@@ -1156,6 +1156,10 @@
             "modified": "2023-11-08T04:08:35.918577Z"
           },
           {
+            "id": "GHSA-2vgq-wchc-25w7",
+            "modified": "2026-11-10T16:15:04.155948Z"
+          },
+          {
             "id": "GHSA-4487-j8r4-4g2f",
             "modified": "2026-10-30T23:15:05.499229Z"
           },
@@ -1194,6 +1198,18 @@
           {
             "id": "GHSA-65ch-62r8-g69g",
             "modified": "2026-09-10T03:50:30.550089Z"
+          },
+          {
+            "id": "GHSA-6889-vf6x-f3g5",
+            "modified": "2026-11-10T21:30:03.999616Z"
+          },
+          {
+            "id": "GHSA-6cv4-p8m7-4r25",
+            "modified": "2026-11-10T21:30:03.999795Z"
+          },
+          {
+            "id": "GHSA-6qrw-m8cv-hcxf",
+            "modified": "2026-11-10T16:15:04.157919Z"
           },
           {
             "id": "GHSA-6wvx-3r32-xmcg",
@@ -1216,6 +1232,10 @@
             "modified": "2026-10-30T23:15:08.387649Z"
           },
           {
+            "id": "GHSA-9wg5-mj3p-v49q",
+            "modified": "2026-11-10T16:15:04.153166Z"
+          },
+          {
             "id": "GHSA-cfm4-qjh2-4765",
             "modified": "2023-11-08T04:08:35.796827Z"
           },
@@ -1224,12 +1244,20 @@
             "modified": "2022-01-07T22:20:43Z"
           },
           {
+            "id": "GHSA-h46v-rmh6-fq4f",
+            "modified": "2026-11-10T16:15:05.046196Z"
+          },
+          {
             "id": "GHSA-h6cr-wjv9-3cpp",
             "modified": "2026-10-30T23:15:04.479846Z"
           },
           {
             "id": "GHSA-hqq3-7jhf-c5jx",
             "modified": "2026-10-30T23:15:07.576305Z"
+          },
+          {
+            "id": "GHSA-j8rw-jp99-435v",
+            "modified": "2026-11-10T21:30:04.008068Z"
           },
           {
             "id": "GHSA-jc66-7q78-782g",
@@ -1242,6 +1270,14 @@
           {
             "id": "GHSA-q67f-28xg-22rw",
             "modified": "2026-09-10T03:50:40.409799Z"
+          },
+          {
+            "id": "GHSA-rhr8-3pm8-cq29",
+            "modified": "2026-11-10T16:15:05.495721Z"
+          },
+          {
+            "id": "GHSA-w4xr-hqv8-ch44",
+            "modified": "2026-11-10T21:30:04.002424Z"
           },
           {
             "id": "GHSA-x4jg-mjrx-434g",
@@ -1258,6 +1294,10 @@
           {
             "id": "GHSA-2r2c-g63r-vccr",
             "modified": "2023-11-08T04:08:35.918577Z"
+          },
+          {
+            "id": "GHSA-2vgq-wchc-25w7",
+            "modified": "2026-11-10T16:15:04.155948Z"
           },
           {
             "id": "GHSA-4487-j8r4-4g2f",
@@ -1298,6 +1338,18 @@
           {
             "id": "GHSA-65ch-62r8-g69g",
             "modified": "2026-09-10T03:50:30.550089Z"
+          },
+          {
+            "id": "GHSA-6889-vf6x-f3g5",
+            "modified": "2026-11-10T21:30:03.999616Z"
+          },
+          {
+            "id": "GHSA-6cv4-p8m7-4r25",
+            "modified": "2026-11-10T21:30:03.999795Z"
+          },
+          {
+            "id": "GHSA-6qrw-m8cv-hcxf",
+            "modified": "2026-11-10T16:15:04.157919Z"
           },
           {
             "id": "GHSA-6wvx-3r32-xmcg",
@@ -1324,6 +1376,10 @@
             "modified": "2025-01-14T08:57:27.810691Z"
           },
           {
+            "id": "GHSA-9wg5-mj3p-v49q",
+            "modified": "2026-11-10T16:15:04.153166Z"
+          },
+          {
             "id": "GHSA-cfm4-qjh2-4765",
             "modified": "2023-11-08T04:08:35.796827Z"
           },
@@ -1332,12 +1388,20 @@
             "modified": "2022-01-07T22:20:43Z"
           },
           {
+            "id": "GHSA-h46v-rmh6-fq4f",
+            "modified": "2026-11-10T16:15:05.046196Z"
+          },
+          {
             "id": "GHSA-h6cr-wjv9-3cpp",
             "modified": "2026-10-30T23:15:04.479846Z"
           },
           {
             "id": "GHSA-hqq3-7jhf-c5jx",
             "modified": "2026-10-30T23:15:07.576305Z"
+          },
+          {
+            "id": "GHSA-j8rw-jp99-435v",
+            "modified": "2026-11-10T21:30:04.008068Z"
           },
           {
             "id": "GHSA-jc66-7q78-782g",
@@ -1350,6 +1414,14 @@
           {
             "id": "GHSA-q67f-28xg-22rw",
             "modified": "2026-09-10T03:50:40.409799Z"
+          },
+          {
+            "id": "GHSA-rhr8-3pm8-cq29",
+            "modified": "2026-11-10T16:15:05.495721Z"
+          },
+          {
+            "id": "GHSA-w4xr-hqv8-ch44",
+            "modified": "2026-11-10T21:30:04.002424Z"
           },
           {
             "id": "GHSA-wxgw-qj99-44c2",

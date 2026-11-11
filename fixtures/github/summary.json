@@ -1,205 +1,85 @@
 {
-  "probedAt": "2026-11-08T20:05:38.470Z",
-  "authenticated": true,
+  "probedAt": "2026-11-11T18:34:23.039Z",
+  "authenticated": false,
   "rateLimitBefore": {
     "status": 200,
-    "limit": "5000",
-    "remaining": "4999",
-    "used": "1",
-    "reset": "1794171776",
+    "limit": "60",
+    "remaining": "60",
+    "used": "0",
+    "reset": "1794425651",
     "resource": "core",
     "retryAfter": null,
     "body": {
-      "core": {
-        "limit": 5000,
-        "used": 1,
-        "remaining": 4999,
-        "reset": 1794171776
+      "code_search": {
+        "limit": 60,
+        "remaining": 60,
+        "reset": 1794425651,
+        "used": 0
       },
-      "search": {
-        "limit": 30,
-        "used": 0,
-        "remaining": 30,
-        "reset": 1794168388
+      "core": {
+        "limit": 60,
+        "remaining": 60,
+        "reset": 1794425651,
+        "used": 0
       },
       "graphql": {
-        "limit": 5000,
-        "used": 0,
-        "remaining": 5000,
-        "reset": 1794171928
+        "limit": 0,
+        "remaining": 0,
+        "reset": 1794425651,
+        "used": 0
       },
       "integration_manifest": {
         "limit": 5000,
-        "used": 0,
         "remaining": 5000,
-        "reset": 1794171928
+        "reset": 1794425651,
+        "used": 0
       },
-      "source_import": {
-        "limit": 100,
-        "used": 0,
-        "remaining": 100,
-        "reset": 1794168388
-      },
-      "code_scanning_autofix": {
+      "search": {
         "limit": 10,
-        "used": 0,
         "remaining": 10,
-        "reset": 1794168388
-      },
-      "actions_runner_registration": {
-        "limit": 10000,
-        "used": 0,
-        "remaining": 10000,
-        "reset": 1794171928
-      },
-      "scim": {
-        "limit": 15000,
-        "used": 0,
-        "remaining": 15000,
-        "reset": 1794171928
-      },
-      "dependency_snapshots": {
-        "limit": 100,
-        "used": 0,
-        "remaining": 100,
-        "reset": 1794168388
-      },
-      "dependency_sbom": {
-        "limit": 100,
-        "used": 0,
-        "remaining": 100,
-        "reset": 1794168388
-      },
-      "audit_log": {
-        "limit": 1750,
-        "used": 0,
-        "remaining": 1750,
-        "reset": 1794171928
-      },
-      "audit_log_streaming": {
-        "limit": 15,
-        "used": 0,
-        "remaining": 15,
-        "reset": 1794171928
-      },
-      "code_search": {
-        "limit": 10,
-        "used": 0,
-        "remaining": 10,
-        "reset": 1794168388
-      },
-      "copilot_usage_records": {
-        "limit": 1750,
-        "used": 0,
-        "remaining": 1750,
-        "reset": 1794171928
-      },
-      "enterprise_token_inventory": {
-        "limit": 1750,
-        "used": 0,
-        "remaining": 1750,
-        "reset": 1794171928
+        "reset": 1794422111,
+        "used": 0
       }
     }
   },
   "rateLimitAfter": {
     "status": 200,
-    "limit": "5000",
-    "remaining": "4994",
-    "used": "6",
-    "reset": "1794171776",
+    "limit": "60",
+    "remaining": "55",
+    "used": "5",
+    "reset": "1794425651",
     "resource": "core",
     "retryAfter": null,
     "body": {
-      "core": {
-        "limit": 5000,
-        "used": 6,
-        "remaining": 4994,
-        "reset": 1794171776
+      "code_search": {
+        "limit": 60,
+        "remaining": 55,
+        "reset": 1794425651,
+        "used": 5
       },
-      "search": {
-        "limit": 30,
-        "used": 0,
-        "remaining": 30,
-        "reset": 1794168395
+      "core": {
+        "limit": 60,
+        "remaining": 55,
+        "reset": 1794425651,
+        "used": 5
       },
       "graphql": {
-        "limit": 5000,
-        "used": 0,
-        "remaining": 5000,
-        "reset": 1794171935
+        "limit": 0,
+        "remaining": 0,
+        "reset": 1794425657,
+        "used": 0
       },
       "integration_manifest": {
         "limit": 5000,
-        "used": 0,
         "remaining": 5000,
-        "reset": 1794171935
+        "reset": 1794425657,
+        "used": 0
       },
-      "source_import": {
-        "limit": 100,
-        "used": 0,
-        "remaining": 100,
-        "reset": 1794168395
-      },
-      "code_scanning_autofix": {
+      "search": {
         "limit": 10,
-        "used": 0,
         "remaining": 10,
-        "reset": 1794168395
-      },
-      "actions_runner_registration": {
-        "limit": 10000,
-        "used": 0,
-        "remaining": 10000,
-        "reset": 1794171935
-      },
-      "scim": {
-        "limit": 15000,
-        "used": 0,
-        "remaining": 15000,
-        "reset": 1794171935
-      },
-      "dependency_snapshots": {
-        "limit": 100,
-        "used": 0,
-        "remaining": 100,
-        "reset": 1794168395
-      },
-      "dependency_sbom": {
-        "limit": 100,
-        "used": 0,
-        "remaining": 100,
-        "reset": 1794168395
-      },
-      "audit_log": {
-        "limit": 1750,
-        "used": 0,
-        "remaining": 1750,
-        "reset": 1794171935
-      },
-      "audit_log_streaming": {
-        "limit": 15,
-        "used": 0,
-        "remaining": 15,
-        "reset": 1794171935
-      },
-      "code_search": {
-        "limit": 10,
-        "used": 0,
-        "remaining": 10,
-        "reset": 1794168395
-      },
-      "copilot_usage_records": {
-        "limit": 1750,
-        "used": 0,
-        "remaining": 1750,
-        "reset": 1794171935
-      },
-      "enterprise_token_inventory": {
-        "limit": 1750,
-        "used": 0,
-        "remaining": 1750,
-        "reset": 1794171935
+        "reset": 1794422117,
+        "used": 0
       }
     }
   },
@@ -212,17 +92,17 @@
         "redirected": false,
         "finalUrl": "https://api.github.com/repos/axios/axios",
         "rateLimit": {
-          "limit": "5000",
-          "remaining": "4998",
-          "used": "2",
-          "reset": "1794171776",
+          "limit": "60",
+          "remaining": "59",
+          "used": "1",
+          "reset": "1794425651",
           "resource": "core",
           "retryAfter": null
         },
         "fullName": "axios/axios",
         "defaultBranch": "v1.x",
         "private": false,
-        "sizeKb": 30701
+        "sizeKb": 30988
       },
       "manifests": {
         "package.json": {
@@ -230,8 +110,8 @@
           "redirected": false,
           "finalUrl": "https://raw.githubusercontent.com/axios/axios/v1.x/package.json",
           "contentType": "text/plain; charset=utf-8",
-          "bytes": 6662,
-          "sha256": "42d569add47da844a669326de3580616bc7ba3d745350eebb80d288d7ec9fa41",
+          "bytes": 6661,
+          "sha256": "65f87e1420173239f4a02fb17e52641f7dc8635b17aa5e0761f5d968eab23077",
           "utf8": true
         },
         "package-lock.json": {
@@ -239,8 +119,8 @@
           "redirected": false,
           "finalUrl": "https://raw.githubusercontent.com/axios/axios/v1.x/package-lock.json",
           "contentType": "text/plain; charset=utf-8",
-          "bytes": 355049,
-          "sha256": "6b9b150b66380a0d2219cc7343bdd33ca4a369d3e46ab008e0c909fd13316429",
+          "bytes": 355554,
+          "sha256": "5d8a6de3c5d5b665c2254fc124d0f9ac375c466516be4db09cdde4f97f2ce8c0",
           "utf8": true
         }
       }
@@ -253,10 +133,10 @@
         "redirected": false,
         "finalUrl": "https://api.github.com/repos/lodash/lodash",
         "rateLimit": {
-          "limit": "5000",
-          "remaining": "4997",
-          "used": "3",
-          "reset": "1794171776",
+          "limit": "60",
+          "remaining": "58",
+          "used": "2",
+          "reset": "1794425651",
           "resource": "core",
           "retryAfter": null
         },
@@ -294,17 +174,17 @@
         "redirected": false,
         "finalUrl": "https://api.github.com/repos/npm/cli",
         "rateLimit": {
-          "limit": "5000",
-          "remaining": "4996",
-          "used": "4",
-          "reset": "1794171776",
+          "limit": "60",
+          "remaining": "57",
+          "used": "3",
+          "reset": "1794425651",
           "resource": "core",
           "retryAfter": null
         },
         "fullName": "npm/cli",
         "defaultBranch": "latest",
         "private": false,
-        "sizeKb": 180258
+        "sizeKb": 180345
       },
       "manifests": {
         "package.json": {
@@ -322,7 +202,7 @@
           "finalUrl": "https://raw.githubusercontent.com/npm/cli/latest/package-lock.json",
           "contentType": "text/plain; charset=utf-8",
           "bytes": 437638,
-          "sha256": "7342befe648253ff5d5edd1dc69229901fcdd631bb190c57b9e16b1fe9d07284",
+          "sha256": "f2f11b1f8be957e877e50fde05dba262bed773216295b806625b25948a28ad4f",
           "utf8": true
         }
       }
@@ -335,10 +215,10 @@
         "redirected": false,
         "finalUrl": "https://api.github.com/repos/expressjs/express",
         "rateLimit": {
-          "limit": "5000",
-          "remaining": "4995",
-          "used": "5",
-          "reset": "1794171776",
+          "limit": "60",
+          "remaining": "56",
+          "used": "4",
+          "reset": "1794425651",
           "resource": "core",
           "retryAfter": null
         },
@@ -377,10 +257,10 @@
       "message": "Not Found",
       "documentationUrl": "https://docs.github.com/rest/repos/repos#get-a-repository",
       "rateLimit": {
-        "limit": "5000",
-        "remaining": "4994",
-        "used": "6",
-        "reset": "1794171776",
+        "limit": "60",
+        "remaining": "55",
+        "used": "5",
+        "reset": "1794425651",
         "resource": "core",
         "retryAfter": null
       }

@@ -83,11 +83,16 @@ tidak berubah.
 
 ## 4. Batas atas paket sementara ±1.500 (usulan)
 
-Sampai optimasi `T-W1-14(e)` selesai, usulkan batas atas paket sementara **±1.500
-paket**. Dasar ekstrapolasi dari pengamatan 10 November 2026: cache dingin
-≈11,8 ms/paket; 2.000 paket ≈26 s, melewati batas keras 25 s (NFR-02). Angka ini
-**perkiraan berlabel**, bukan hasil pengukuran fixture ±2.000 paket. Keputusan final
-menunggu pengukuran ulang `T-W1-14(c)` pada fixture ±500 dan ±1.500 paket.
+Gerbang `T-W1-14` (12 November 2026) menetapkan batas final **1.500 paket unik** dan **25 detik wall time**. Batas ini sudah diterapkan pada kode (`MAX_PACKAGES = 1_500`, respons `413 MANIFEST_TOO_LARGE`), tetapi `docs/PRD.md` belum diubah.
 
-Usulan teks PRD: cantumkan batas sementara ini di NFR-09 bersama label "perkiraan"
-dan mekanisme penolakan/peringatan yang jelas untuk repositori di atas batas.
+Dasar pengukuran final:
+
+- Fixture `large-1500` (1.409 paket): wall parser median 7,924 ms, terburuk 9,211 ms; wall handler median 13,251 ms.
+- `nestjs/nest` 1.425 paket: dingin 16,49 detik, hangat 3,69–3,89 detik.
+- `socketio/socket.io` 1.179 paket: dingin 21,87 detik, hangat 3,24 detik.
+- `mochajs/mocha` 715 paket: dingin 11,28 detik, hangat 2,45–2,75 detik.
+
+Ekstrapolasi lama ≈11,8 ms/paket (2.000 paket ≈26 s) tidak lagi dipakai sebagai dasar keputusan. Batas 1.500 memberi margin di bawah batas keras 25 detik; 2.000 paket tidak dijamin dan ditolak.
+
+Usulan teks PRD: cantumkan batas final ini di NFR-09 dan mekanisme penolakan/peringatan yang jelas untuk repositori di atas batas.
+

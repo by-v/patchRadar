@@ -1,7 +1,7 @@
 {
   "status": 200,
   "bytes": 388,
-  "durationMs": 32,
+  "durationMs": 50245,
   "total": 3,
   "dataLength": 3,
   "records": [
@@ -9,21 +9,21 @@
       "cve": "CVE-2021-44228",
       "epss": 0.99999,
       "percentile": 1,
-      "date": "2026-11-08",
+      "date": "2026-11-10",
       "available": true
     },
     {
       "cve": "CVE-2021-45046",
       "epss": 0.99977,
       "percentile": 0.99979,
-      "date": "2026-11-08",
+      "date": "2026-11-10",
       "available": true
     },
     {
       "cve": "CVE-2020-1472",
       "epss": 0.99389,
       "percentile": 0.9994,
-      "date": "2026-11-08",
+      "date": "2026-11-10",
       "available": true
     }
   ]

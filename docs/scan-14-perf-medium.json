@@ -1,0 +1,222 @@
+{
+  "projectRef": "umldsfkvifqoqfbouhca",
+  "generatedAt": "2026-11-11T18:58:50.341Z",
+  "results": [
+    {
+      "repoUrl": "https://github.com/mochajs/mocha",
+      "label": "cold",
+      "status": 200,
+      "clientWallMs": 11278.5,
+      "requestId": "req_e5f8acbe498f4d0ab505a12d86877c3a",
+      "summary": {
+        "totalPackages": 715,
+        "affectedPackages": 20,
+        "findingCount": 55
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "OK",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 1013,
+        "osvMs": 8530,
+        "enrichmentMs": 994,
+        "totalMs": 10561
+      },
+      "epssAvailable": 49,
+      "findings": 55
+    },
+    {
+      "repoUrl": "https://github.com/mochajs/mocha",
+      "label": "warm-1",
+      "status": 200,
+      "clientWallMs": 2749.7,
+      "requestId": "req_7c3166df0f6b4429bd109abfaef6afca",
+      "summary": {
+        "totalPackages": 715,
+        "affectedPackages": 20,
+        "findingCount": 55
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 487,
+        "osvMs": 1336,
+        "enrichmentMs": 691,
+        "totalMs": 2532
+      },
+      "epssAvailable": 49,
+      "findings": 55
+    },
+    {
+      "repoUrl": "https://github.com/mochajs/mocha",
+      "label": "warm-2",
+      "status": 200,
+      "clientWallMs": 2655.5,
+      "requestId": "req_bc074773316945d5b68d421e17f28d47",
+      "summary": {
+        "totalPackages": 715,
+        "affectedPackages": 20,
+        "findingCount": 55
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 469,
+        "osvMs": 1386,
+        "enrichmentMs": 687,
+        "totalMs": 2557
+      },
+      "epssAvailable": 49,
+      "findings": 55
+    },
+    {
+      "repoUrl": "https://github.com/mochajs/mocha",
+      "label": "warm-3",
+      "status": 200,
+      "clientWallMs": 2447.5,
+      "requestId": "req_a42eb65b3da64b4b8232f7d835117894",
+      "summary": {
+        "totalPackages": 715,
+        "affectedPackages": 20,
+        "findingCount": 55
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": true,
+      "timings": {
+        "githubMs": 434,
+        "osvMs": 1165,
+        "enrichmentMs": 686,
+        "totalMs": 2299
+      },
+      "epssAvailable": 49,
+      "findings": 55
+    },
+    {
+      "repoUrl": "https://github.com/koajs/koa",
+      "label": "cold",
+      "status": 200,
+      "clientWallMs": 4910.2,
+      "requestId": "req_e1b9fe4175c7487e9beca1427167a4d0",
+      "summary": {
+        "totalPackages": 363,
+        "affectedPackages": 5,
+        "findingCount": 12
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "OK",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 1219,
+        "osvMs": 2673,
+        "enrichmentMs": 916,
+        "totalMs": 4815
+      },
+      "epssAvailable": 12,
+      "findings": 12
+    },
+    {
+      "repoUrl": "https://github.com/koajs/koa",
+      "label": "warm-1",
+      "status": 200,
+      "clientWallMs": 2148.4,
+      "requestId": "req_ec177a206c7447b19ccc3f3046c9d5c7",
+      "summary": {
+        "totalPackages": 363,
+        "affectedPackages": 5,
+        "findingCount": 12
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 819,
+        "osvMs": 667,
+        "enrichmentMs": 535,
+        "totalMs": 2027
+      },
+      "epssAvailable": 12,
+      "findings": 12
+    },
+    {
+      "repoUrl": "https://github.com/koajs/koa",
+      "label": "warm-2",
+      "status": 200,
+      "clientWallMs": 2462.5,
+      "requestId": "req_c0594a6c13d64a109acdf9f5b3203c84",
+      "summary": {
+        "totalPackages": 363,
+        "affectedPackages": 5,
+        "findingCount": 12
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 848,
+        "osvMs": 701,
+        "enrichmentMs": 674,
+        "totalMs": 2233
+      },
+      "epssAvailable": 12,
+      "findings": 12
+    },
+    {
+      "repoUrl": "https://github.com/koajs/koa",
+      "label": "warm-3",
+      "status": 200,
+      "clientWallMs": 2762.4,
+      "requestId": "req_8e947d2c46174f9d90dae1bed980e4b2",
+      "summary": {
+        "totalPackages": 363,
+        "affectedPackages": 5,
+        "findingCount": 12
+      },
+      "sourceStatus": {
+        "github": "OK",
+        "osv": "CACHE",
+        "kev": "CACHE",
+        "epss": "OK"
+      },
+      "partial": false,
+      "timings": {
+        "githubMs": 487,
+        "osvMs": 1359,
+        "enrichmentMs": 706,
+        "totalMs": 2562
+      },
+      "epssAvailable": 12,
+      "findings": 12
+    }
+  ]
+}

@@ -1,24 +1,24 @@
 {
-  "capturedAt": "2026-11-08T20:15:34Z",
+  "capturedAt": "2026-11-11T18:34:57Z",
   "trials": [
     {
       "queryCount": 100,
       "status": 200,
-      "bytes": 34461,
+      "bytes": 36981,
       "resultCount": 100,
       "error": null
     },
     {
       "queryCount": 200,
       "status": 200,
-      "bytes": 68909,
+      "bytes": 73949,
       "resultCount": 200,
       "error": null
     },
     {
       "queryCount": 1000,
       "status": 200,
-      "bytes": 344493,
+      "bytes": 369693,
       "resultCount": 1000,
       "error": null
     },

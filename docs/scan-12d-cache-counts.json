@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-11-10T07:45:59.565Z",
+  "source": "PostgREST osv_cache (service role, GET saja) + package-lock repos",
+  "coldScan": {
+    "requestId": "req_f2b6087e8e5c443a92758c9710183b42",
+    "startedAt": "2026-11-10T07:43:24.319Z",
+    "finishedAt": "2026-11-10T07:43:43.503Z"
+  },
+  "warmScan": "req_af749e89bcf04ee8aec76b5bd533bfd1",
+  "cacheNow": {
+    "totalRows": 2693,
+    "packageRows": 2610,
+    "advisoryRows": 83,
+    "otherRows": 0,
+    "rowsFetchedAtColdWindow": 0,
+    "rowsFetchedAtWarmWindow": 0
+  },
+  "nest": {
+    "uniquePackageKeys": 1425,
+    "uniqueAdvisoryKeysFromFindings": 65,
+    "packageKeysPresentNow": 1425,
+    "advisoryKeysPresentNow": 65,
+    "packageKeysInEarlierScans": 498
+  },
+  "expectedIncrease": {
+    "packageRowsWritten": 1425,
+    "advisoryRowsWritten": 65,
+    "packageRowsNetNewIfEarlierScansKnown": 927,
+    "upperBoundRows": 1490,
+    "note": "Upsert menulis ulang seluruh paket yang diquery; kunci yang sudah ada tidak menambah baris, hanya memperbarui fetched_at. Overlap dihitung dari lockfile axios v1.x + socket.io main yang dipindai sebelumnya; lodash/express (estimasi 27/44 paket) tidak dihitung sehingga angka net-new bersifat batas atas."
+  }
+}
