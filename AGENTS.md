@@ -13,6 +13,7 @@ Dokumen ini berlaku untuk semua agent yang mengerjakan repositori ini.
 - Jika tugas terblokir, tandai `[!]` dan tulis alasannya; jangan melewati tugas secara diam-diam.
 - Baca hanya file yang diperlukan untuk tugas saat ini. Jika butuh file lain, sebutkan nama file dan alasannya sebelum mengubahnya.
 - Jangan berasumsi isi file yang belum dibaca.
+- Jangan mengedit `TASKS.md` atau `docs/*` dengan redirect shell; gunakan alat edit. Commit sebelum dan sesudah mengubah berkas besar. Setelah edit, verifikasi jumlah baris/heading dan `git diff --stat`.
 
 ## Ruang lingkup
 - Jangan menambah fitur di luar MVP PRD.
