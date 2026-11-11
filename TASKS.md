@@ -777,7 +777,8 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - Komponen baru: `screen`, `screen-background`, `glass-surface`, `screen-header`, `pill-input`, `dark-cta`, `tab-bar`, `wordmark`, dan hook `use-reduce-transparency`.
   - Dependensi baru: `@expo/vector-icons@^15.0.2` dan `expo-linear-gradient@~58.0.4`. `expo-blur` tidak dipakai.
   - `app.json`: `userInterfaceStyle` menjadi `light`, latar splash `#DDD3CC`. Ikon aplikasi dan splash masih aset bawaan Expo.
-  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 1 suite/1 test lulus, `expo export --platform android` berhasil (bundel 3,9 MB).
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 2 suite/5 test lulus, `expo export --platform android` dan `--platform web` berhasil.
+  - Perbaikan pasca-uji: `react-native-web` tidak menyediakan `AccessibilityInfo.isReduceTransparencyEnabled`, sehingga hook lama melempar `TypeError` dan mematikan subtree `GlassSurface` di web. Deteksi kemampuan dipindah ke `app/src/lib/reduce-transparency.ts` dengan unit test; hook tidak lagi memanggil API yang tidak ada. Uji iOS tidak terpengaruh.
   - Belum terverifikasi: uji manual Expo Go di iPhone, tampilan nyata pada layar kecil dan skala font 200%, serta perilaku `GlassView` pada iOS 26. Menunggu pengembang.
 
 ### T-W2-02 — Layar Pindai dan validasi URL

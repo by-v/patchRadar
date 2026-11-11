@@ -254,3 +254,4 @@ Seluruh keputusan terbuka pada versi 1.0 sudah ditutup pada `T-W2-01`:
 4. **Tab bar kaca** — memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom.
 5. **Efek kaca Android** — tanpa `expo-blur`; memakai panel semi-opaque.
 6. **Mode gelap** — tidak diaktifkan pada MVP; `app.json` dikunci ke `light`.
+7. **Web** — `react-native-web` tidak menyediakan `AccessibilityInfo.isReduceTransparencyEnabled`. `useReduceTransparency` mendeteksi kemampuan lewat `app/src/lib/reduce-transparency.ts` dan memakai fallback opaque di web; tidak ada efek kaca dan tidak ada error.
