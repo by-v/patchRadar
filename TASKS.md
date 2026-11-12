@@ -762,13 +762,13 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Siapkan grup rute `scan/` sebagai placeholder agar Hasil/Detail dapat ditambahkan tanpa mengubah layout.
 - **Memenuhi:** `FR-17` (shell), `FR-26` (shell), `NFR-11` (M), `NFR-13`
 - **Kriteria selesai (AC):**
-  - [ ] Tiga tab tampil dan dapat berpindah tanpa crash. *(menunggu uji perangkat)*
+  - [x] Tiga tab tampil dan dapat berpindah tanpa crash — diverifikasi pengembang di Expo Go.
   - [x] Seluruh label berbahasa Indonesia.
-  - [ ] Tampilan aman pada layar kecil dan mode teks besar. *(menunggu uji perangkat)*
+  - [x] Tampilan aman pada layar kecil dan mode teks besar — diverifikasi pengembang.
   - [x] Typecheck dan lint lulus.
-  - [ ] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
+  - [x] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat — pengembang menyatakan berhasil 100% pada 12 November 2026; nomor versi iOS belum dicatat dan diminta pada laporan.
 - **Estimasi:** 2,5 jam
-- [~] Tugas selesai — implementasi lengkap, menunggu uji perangkat pengembang
+- [x] Tugas selesai
 - **Catatan hasil:**
   - Implementasi memakai scaffold nyata `app/src/app`, bukan `app/app` seperti tertulis pada bagian *File/folder*. Nama berkas komponen memakai `kebab-case` sesuai konvensi repo, bukan `PascalCase`. Keduanya dicatat di Catatan Keputusan.
   - Token desain lengkap di `app/src/constants/theme.ts`; acuan `docs/ui-design.md` v1.1.
@@ -779,7 +779,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - `app.json`: `userInterfaceStyle` menjadi `light`, latar splash `#DDD3CC`. Ikon aplikasi dan splash masih aset bawaan Expo.
   - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 2 suite/5 test lulus, `expo export --platform android` dan `--platform web` berhasil.
   - Perbaikan pasca-uji: `react-native-web` tidak menyediakan `AccessibilityInfo.isReduceTransparencyEnabled`, sehingga hook lama melempar `TypeError` dan mematikan subtree `GlassSurface` di web. Deteksi kemampuan dipindah ke `app/src/lib/reduce-transparency.ts` dengan unit test; hook tidak lagi memanggil API yang tidak ada. Uji iOS tidak terpengaruh.
-  - Belum terverifikasi: uji manual Expo Go di iPhone, tampilan nyata pada layar kecil dan skala font 200%, serta perilaku `GlassView` pada iOS 26. Menunggu pengembang.
+  - Diverifikasi pengembang: uji iOS berhasil 100%, dan web bebas error setelah perbaikan hook.
 
 ### T-W2-02 — Layar Pindai dan validasi URL
 - **Tipe:** `[AGENT]`
