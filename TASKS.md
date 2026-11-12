@@ -766,7 +766,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] Seluruh label berbahasa Indonesia.
   - [x] Tampilan aman pada layar kecil dan mode teks besar — diverifikasi pengembang.
   - [x] Typecheck dan lint lulus.
-  - [x] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat — pengembang menyatakan berhasil 100% pada 12 November 2026; nomor versi iOS belum dicatat dan diminta pada laporan.
+  - [x] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat — iPhone X, iOS 16.7.16 (Expo Go), diverifikasi pengembang 12 November 2026.
 - **Estimasi:** 2,5 jam
 - [x] Tugas selesai
 - **Catatan hasil:**
