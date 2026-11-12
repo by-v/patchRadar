@@ -39,6 +39,24 @@ npx expo start --lan
 - Expo Go iOS mensyaratkan Expo CLI dan Expo Go login ke akun Expo yang sama (`codebyv10`).
 - Opsi “Enter URL manually” tidak tersedia pada Expo Go iOS versi ini; gunakan pemindaian QR atau buka `exp://192.168.1.27:8081` lewat Safari.
 
+## Konfigurasi Aplikasi (`app/.env`)
+
+Klien `scan` membaca dua variabel publik Expo:
+
+| Variabel | Isi | Sifat |
+|---|---|---|
+| `EXPO_PUBLIC_SUPABASE_URL` | URL proyek, mis. `https://<ref>.supabase.co` | Publik |
+| `EXPO_PUBLIC_SUPABASE_ANON_KEY` | Anon/publishable key proyek | Publik, dilindungi RLS |
+
+Langkah:
+
+1. Salin `app/.env.example` menjadi `app/.env`.
+2. Ambil nilai dari dashboard Supabase → **Project Settings → API**. URL boleh disalin lengkap dengan akhiran `/rest/v1/`; klien menormalkannya menjadi basis proyek.
+3. Jalankan `npx expo start --clear` setiap kali `.env` berubah. `EXPO_PUBLIC_*` ditanam saat bundling, bukan dibaca saat runtime.
+4. Jangan pernah menaruh `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`, atau kunci rahasia lain di `app/.env`; semua variabel berawalan `EXPO_PUBLIC_` ikut masuk ke bundel.
+
+`app/.env` diabaikan git. Untuk build EAS, daftarkan dua variabel yang sama di environment EAS (`eas env:create` atau dashboard) sebelum `T-W2-08`; tanpa itu build berjalan tanpa konfigurasi.
+
 ## Daftar Secret
 
 Tidak ada nilai secret yang dicatat di dokumen ini. Hanya lokasi penyimpanannya.
@@ -73,6 +91,8 @@ Tidak ditemukan token, service role key, atau private key yang tertanam di file 
 - `npx tsc --noEmit` lulus.
 - `npx expo-doctor` lulus 20/20.
 - `npx expo lint` lulus.
+- `npx jest` lulus 5 suite/51 test (termasuk parser tautan, konfigurasi environment, dan klien `scan`).
+- Respons nyata `scan` untuk `chalk/chalk` dan error 404 tersimpan sebagai fixture di `app/src/api/__fixtures__/`.
 
 ## Catatan Android
 

@@ -824,13 +824,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Uji dengan respons fixture nyata.
 - **Memenuhi:** `FR-02`, `FR-23`, `FR-24`, `NFR-02`, `NFR-03`, `NFR-06`, `R-11`
 - **Kriteria selesai (AC):**
-  - [ ] Respons 200, parsial, dan error terpetakan dengan benar.
-  - [ ] `persisted` dan `warnings` tersedia di tipe dan tidak dibuang.
-  - [ ] Tidak ada token/secret di kode klien.
-  - [ ] Test parsing lulus untuk fixture sukses dan error.
+  - [x] Respons 200, parsial, dan error terpetakan dengan benar.
+  - [x] `persisted` dan `warnings` tersedia di tipe dan tidak dibuang.
+  - [x] Tidak ada token/secret di kode klien.
+  - [x] Test parsing lulus untuk fixture sukses dan error.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `app/src/config/env.ts` membaca `EXPO_PUBLIC_SUPABASE_URL` dan `EXPO_PUBLIC_SUPABASE_ANON_KEY`, memangkas spasi, membuang garis miring di ujung, dan **menormalkan akhiran `/rest/v1/`** yang sering tersalin dari dashboard Supabase. Nilai kosong gagal dengan pesan yang menyebut nama variabel, tanpa mencetak nilainya. `app/.env.example` dibuat; `app/.env` tetap diabaikan git.
+  - `app/src/types/scan.ts` memuat kontrak PRD §9.2–§9.4. Field pengayaan (`osv`/`kev`/`epss`, `osvMs`/`enrichmentMs`) opsional karena backend tahap manifest-only belum mengirimnya. `persisted`, `partial`, `warnings`, dan `requestId` selalu tersedia.
+  - `app/src/api/scan.ts` mengirim satu `POST` ke `{url}/functions/v1/scan` dengan `apikey`, `Content-Type`, dan `X-Client-Version`; `Authorization: Bearer` hanya ditambahkan bila `accessToken` diberikan (diaktifkan pada `T-W3-03`). Tidak ada retry otomatis. `AbortController` membatalkan permintaan setelah 30 detik.
+  - Parsing ketat: field wajib, enum status/severity/label, dan setiap finding divalidasi. Respons 200 yang rusak menjadi `INVALID_RESPONSE` dengan pesan PRD §12 baris 22 beserta `requestId`; kegagalan jaringan memakai pesan baris 17; timeout memakai baris 16.
+  - Error server dipetakan ke pesan §12 menurut kode: 404, 403, 404 ambigu, tanpa `package.json`, melebihi batas (1.500 paket), rate limit (menit dari `retryAfter`/header `retry-after`), upstream, timeout, dan internal. `requestId` body dipakai lebih dulu, lalu header `X-Request-Id`. `UNAUTHENTICATED` memakai teks §12 baris 18 karena sesi anonim belum ada.
+  - `partial=true` dan `persisted=false` diteruskan sebagai hasil sah tanpa retry. Layar Pindai kini memanggil klien nyata, menampilkan kegagalan lewat `Banner`, dan berpindah ke `/scan/[scanId]` saat berhasil; simulasi 1,2 detik dihapus.
+  - Fixture nyata diambil dari backend ter-deploy 12 November 2026: `chalk/chalk` (200, 9 paket) dan repo tidak ada (404 `REPO_NOT_FOUND_OR_PRIVATE`). Fixture parsial disusun dari kontrak §9.3 karena kondisi parsial alami sulit dipicu; field-nya tetap divalidasi parser.
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 5 suite/51 test lulus. Ekspor web dan Android dijalankan setelah perubahan.
 
 ### T-W2-04 — Layar Hasil
 - **Tipe:** `[AGENT]`
@@ -1651,6 +1659,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 12 November 2026 | `T-W1-14`, `T-W3-07b` | Redirect GitHub 301 tetap **ditolak** pada Minggu 1 (502 `UPSTREAM_UNAVAILABLE`, bukan kegagalan senyap). Implementasi satu hop hanya ke `https://api.github.com` beserta uji SSRF dikerjakan di `T-W3-07b`. | Menghindari SSRF dan redirect berantai; belum ada kebutuhan produk yang mengharuskan redirect diikuti. | Ya — keputusan gerbang `T-W1-14` |
 | 12 November 2026 | `T-W2-01` | Tema **Modern Minimalist + Glassmorphism** dan palet pengembang (`#DDD3CC`, `#CABEB5`, `#A2958B`, `#1E1E1E`, `#2A2725`) menjadi acuan visual. Ditambah token pendukung `textSecondary #544B45` (4,7–5,8:1), `hairline #6B605A` (≥3:1), dan lima warna severity; `#A2958B` hanya dipakai di permukaan gelap (1,98:1 di latar terang). Aplikasi dikunci mode terang. Efek kaca memakai `expo-glass-effect` (iOS 26) dengan fallback opaque di platform lain; `expo-blur` tidak ditambahkan. Tab bar memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom, menggantikan `NativeTabs`. Wordmark dibuat sebagai komponen teks, bukan aset. Nama berkas komponen `kebab-case` dan path rute mengikuti scaffold nyata `app/src/app`. | Hasil uji prompt Figma disetujui pengembang; kontras palet awal gagal AA untuk teks sekunder di latar terang; `NativeTabs` tidak dapat dibentuk menjadi pill mengambang; blur runtime di Android berbiaya tinggi untuk keuntungan visual kecil. | Ya — instruksi pengembang, 12 November 2026 |
 | 12 November 2026 | `T-W2-01`, `T-W2-02` | **Web termasuk platform MVP** dan harus lulus bersama iOS. Web dijalankan sebagai SPA (`web.output = "single"`), bukan SSR. Semua dialog/error memakai komponen dalam aplikasi (`Banner`), bukan `Alert.alert`. Konten dibatasi `MaxContentWidth` 800. Usulan perubahan PRD dicatat di `docs/prd-change-proposals.md` §5. | Pengembang menetapkan web ikut diuji; SSR memicu hydration mismatch pada ikon `@expo/vector-icons`; `Alert.alert` adalah fungsi kosong di `react-native-web`. | Ya — instruksi pengembang, 12 November 2026; perubahan PRD menunggu persetujuan |
+| 12 November 2026 | `T-W2-03` | Konfigurasi Supabase memakai `EXPO_PUBLIC_SUPABASE_URL` + `EXPO_PUBLIC_SUPABASE_ANON_KEY` lewat `app/.env` (diabaikan git) dan `.env.example` tanpa nilai. Klien `scan` untuk sementara hanya mengirim `apikey`; header `Authorization: Bearer` sudah disiapkan sebagai parameter opsional dan diaktifkan pada `T-W3-03`. URL yang berakhiran `/rest/v1/` dinormalkan. | Pengembang memilih `.env`; sesi anonim baru dibuat pada `T-W3-03`; dashboard Supabase menampilkan URL API lengkap dengan `/rest/v1/`. | Ya — instruksi pengembang, 12 November 2026 |
 
 
 ---

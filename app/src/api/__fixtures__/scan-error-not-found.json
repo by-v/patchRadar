@@ -1,0 +1,8 @@
+{
+  "error": {
+    "code": "REPO_NOT_FOUND_OR_PRIVATE",
+    "message": "Repo tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repo publik.",
+    "retryable": false,
+    "requestId": "req_953ed6cccc4e48dbb1b93b550e8eb816"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "scanId": "fcdd2179-cd34-43fd-aadb-bea487ec450e",
+  "repo": {
+    "owner": "chalk",
+    "name": "chalk",
+    "url": "https://github.com/chalk/chalk",
+    "defaultBranch": "main"
+  },
+  "scannedAt": "2026-11-12T16:09:34.351Z",
+  "status": "COMPLETED",
+  "manifest": {
+    "source": "PACKAGE_JSON",
+    "lockfileFormat": null,
+    "estimated": true
+  },
+  "summary": {
+    "totalPackages": 9,
+    "affectedPackages": 0,
+    "findingCount": 0
+  },
+  "findings": [],
+  "partial": false,
+  "persisted": false,
+  "warnings": [
+    {
+      "code": "LOCKFILE_MISSING",
+      "message": "package-lock.json tidak ditemukan; memakai package.json."
+    }
+  ],
+  "sourceStatus": {
+    "github": "OK",
+    "osv": "OK",
+    "kev": "CACHE",
+    "epss": "OK"
+  },
+  "timings": {
+    "githubMs": 1406,
+    "osvMs": 1134,
+    "enrichmentMs": 1278,
+    "totalMs": 4389
+  },
+  "requestId": "req_c8c4ae44015343bb891a42c471f61c1d"
+}

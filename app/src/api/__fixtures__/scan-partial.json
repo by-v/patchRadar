@@ -1,0 +1,81 @@
+{
+  "scanId": "7a2d3b0f-4c8e-4d32-8f9b-1e6a8b2c3d45",
+  "repo": {
+    "owner": "demo-user",
+    "name": "patchradar-demo",
+    "url": "https://github.com/demo-user/patchradar-demo",
+    "defaultBranch": "main"
+  },
+  "scannedAt": "2026-11-08T10:15:30.000Z",
+  "status": "PARTIAL",
+  "manifest": {
+    "source": "LOCKFILE",
+    "lockfileFormat": "v3",
+    "estimated": false
+  },
+  "summary": {
+    "totalPackages": 88,
+    "affectedPackages": 4,
+    "findingCount": 5
+  },
+  "findings": [
+    {
+      "findingId": "b1e2d3c4-1111-4222-8333-944455556666",
+      "osvId": "GHSA-aaaa-bbbb-cccc",
+      "cveIds": ["CVE-2099-0001"],
+      "package": {
+        "name": "minimist",
+        "installedVersion": "1.2.5",
+        "direct": false,
+        "devOnly": false,
+        "parentPackage": "mkdirp"
+      },
+      "severity": { "level": "CRITICAL", "cvss": 9.8, "source": "OSV" },
+      "exploitation": {
+        "kev": true,
+        "epss": null,
+        "epssPercentile": null,
+        "epssAvailable": false
+      },
+      "priority": {
+        "label": "FIX_NOW",
+        "score": 89.5,
+        "reason": "Kerentanan ini sudah dieksploitasi nyata dan tercatat di CISA KEV, jadi ini prioritas tertinggi."
+      },
+      "fix": {
+        "safeVersion": "1.2.8",
+        "command": null,
+        "suggestion": "Perbarui paket induk yang menarik dependensi ini, atau jalankan npm audit fix di proyek Anda."
+      },
+      "summary": "Penyerang dapat mengirim input yang mengubah perilaku program saat dependensi ini dipakai.",
+      "references": [
+        { "label": "Advisory OSV", "url": "https://osv.dev/vulnerability/GHSA-aaaa-bbbb-cccc" }
+      ]
+    }
+  ],
+  "partial": true,
+  "persisted": false,
+  "warnings": [
+    {
+      "code": "EPSS_UNAVAILABLE",
+      "message": "Data EPSS tidak tersedia; prioritas sementara memakai severity dan KEV."
+    },
+    {
+      "code": "CLOUD_PERSIST_FAILED",
+      "message": "Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat."
+    }
+  ],
+  "sourceStatus": {
+    "github": "OK",
+    "osv": "OK",
+    "kev": "STALE",
+    "epss": "FAILED"
+  },
+  "timings": {
+    "githubMs": 420,
+    "osvMs": 2100,
+    "enrichmentMs": 800,
+    "totalMs": 3600
+  },
+  "requestId": "req_01JABCDEF"
+}

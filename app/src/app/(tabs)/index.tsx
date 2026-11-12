@@ -1,7 +1,9 @@
+import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import type { TextInputInstance } from 'react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { requestScan } from '@/api/scan';
 import { Banner } from '@/components/banner';
 import { DarkCallToAction } from '@/components/dark-cta';
 import { PillInput } from '@/components/pill-input';
@@ -9,6 +11,7 @@ import { Screen } from '@/components/screen';
 import { Wordmark } from '@/components/wordmark';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
 import { parseRepoLink } from '@/lib/url';
+import type { ScanFailure } from '@/types/scan';
 
 type ScanScope = 'production' | 'all';
 
@@ -19,16 +22,15 @@ const SCOPES: { value: ScanScope; label: string }[] = [
 
 /** Setelah 5 detik, tampilkan penjelasan tambahan. */
 const SLOW_HINT_DELAY_MS = 5_000;
-/** Durasi tiruan sampai klien `scan` tersedia pada T-W2-03. */
-const SIMULATED_SCAN_MS = 1_200;
 
 export default function ScanScreen() {
+  const router = useRouter();
   const [url, setUrl] = useState('');
   const [scope, setScope] = useState<ScanScope>('production');
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [slowHint, setSlowHint] = useState(false);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [scanError, setScanError] = useState<ScanFailure | null>(null);
   const inputRef = useRef<TextInputInstance>(null);
 
   const validation = parseRepoLink(url);
@@ -56,14 +58,19 @@ export default function ScanScreen() {
     }
 
     setSlowHint(false);
+    setScanError(null);
     setLoading(true);
     try {
-      // T-W2-03: ganti simulasi ini dengan panggilan klien `scan`
-      // beserta timeout klien 30 detik.
-      await new Promise((resolve) => setTimeout(resolve, SIMULATED_SCAN_MS));
-      setNotice(
-        'Pemindaian belum terhubung. Panggilan ke Edge Function scan diimplementasikan pada tugas berikutnya.',
-      );
+      const result = await requestScan({ repoUrl: validation.value.url });
+      if (!result.ok) {
+        setScanError(result.error);
+        return;
+      }
+
+      router.push({
+        pathname: '/scan/[scanId]',
+        params: { scanId: result.data.scanId },
+      });
     } finally {
       setLoading(false);
     }
@@ -97,7 +104,7 @@ export default function ScanScreen() {
           }}
           onChangeText={(value) => {
             setUrl(value);
-            setNotice(null);
+            setScanError(null);
           }}
           onSubmitEditing={handleScan}
           placeholder="https://github.com/pemilik/repo"
@@ -138,7 +145,9 @@ export default function ScanScreen() {
         title={loading ? 'Memindai…' : 'Mulai pemindaian'}
       />
 
-      {notice ? <Banner message={notice} variant="info" /> : null}
+      {scanError ? (
+        <Banner message={scanError.message} title="Pemindaian gagal" variant="error" />
+      ) : null}
 
       {loading && slowHint ? (
         <Text style={styles.note}>Repo besar bisa memakan waktu lebih lama.</Text>
