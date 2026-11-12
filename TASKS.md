@@ -883,13 +883,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Tampilkan badge Perkiraan bila relevan.
 - **Memenuhi:** `FR-16`, `FR-18`, `FR-19`, `R-12`
 - **Kriteria selesai (AC):**
-  - [ ] Detail memuat referensi dan versi aman.
-  - [ ] Perintah hanya muncul untuk dependensi langsung.
-  - [ ] Tombol salin menyalin teks yang benar dan memberi konfirmasi.
-  - [ ] Badge Perkiraan tampil untuk hasil fallback.
+  - [x] Detail memuat referensi dan versi aman.
+  - [x] Perintah hanya muncul untuk dependensi langsung.
+  - [x] Tombol salin menyalin teks yang benar dan memberi konfirmasi.
+  - [x] Badge Perkiraan tampil untuk hasil fallback.
 - **Estimasi:** 2,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `app/src/app/scan/[scanId]/finding/[findingId].tsx` kini berisi layar Detail penuh: kartu identitas gelap (label, badge **Perkiraan** bila `manifest.estimated`, `paket@versi`, skor prioritas, alasan), grid data (severity + CVSS, EPSS + persentil, status CISA KEV dengan tautan katalog, versi aman), ringkasan dampak dari advisory, blok perbaikan, chip ID OSV/CVE, dan daftar referensi.
+  - `app/src/lib/command.ts` memuat aturan murni FR-19: `getFixAdvice` memberi perintah `npm install paket@versi` hanya untuk `direct=true` dengan `safeVersion`, memakai `fix.command` backend bila ada; temuan transitif mendapat saran `Perbarui paket induk atau jalankan npm audit fix` tanpa perintah install; temuan tanpa perbaikan menampilkan `Belum ada versi aman yang diketahui`.
+  - Tombol **Salin perintah** memakai `expo-clipboard` dan menampilkan banner `Perintah disalin` selama 2,5 detik; kegagalan salin (mis. izin clipboard web ditolak) menampilkan banner error agar teks dapat disalin manual.
+  - Tautan referensi dibuka dengan `expo-web-browser` di iOS/Android dan `Linking.openURL` di web. Bila gagal, muncul banner error dan URL tetap tampil sebagai teks `selectable` untuk disalin manual.
+  - Banner **Hasil perkiraan** dan **Hasil parsial** ditampilkan sesuai kondisi; `fix.suggestion` ikut tampil saat belum ada versi aman.
+  - Fungsi murni baru diuji: `buildInstallCommand`, `getFixAdvice`, `formatEpssValue`, `formatEpssPercentile`, `formatCvss`, dan `formatScore`.
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 9 suite/80 test lulus, ekspor web dan Android berhasil.
+  - Membuka Detail dari Riwayat secara offline baru dapat diuji setelah SQLite (Minggu 3); saat ini Detail membaca hasil dari sesi memori seperti layar Hasil.
+  - Uji manual perangkat/browser masih diperlukan untuk memastikan clipboard dan pembukaan tautan berperilaku sesuai platform.
 
 ### T-W2-06 — Layar Riwayat (UI) dan Tentang
 - **Tipe:** `[AGENT]`
@@ -1670,6 +1679,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 12 November 2026 | `T-W2-01`, `T-W2-02` | **Web termasuk platform MVP** dan harus lulus bersama iOS. Web dijalankan sebagai SPA (`web.output = "single"`), bukan SSR. Semua dialog/error memakai komponen dalam aplikasi (`Banner`), bukan `Alert.alert`. Konten dibatasi `MaxContentWidth` 800. Usulan perubahan PRD dicatat di `docs/prd-change-proposals.md` §5. | Pengembang menetapkan web ikut diuji; SSR memicu hydration mismatch pada ikon `@expo/vector-icons`; `Alert.alert` adalah fungsi kosong di `react-native-web`. | Ya — instruksi pengembang, 12 November 2026; perubahan PRD menunggu persetujuan |
 | 12 November 2026 | `T-W2-03` | Konfigurasi Supabase memakai `EXPO_PUBLIC_SUPABASE_URL` + `EXPO_PUBLIC_SUPABASE_ANON_KEY` lewat `app/.env` (diabaikan git) dan `.env.example` tanpa nilai. Klien `scan` untuk sementara hanya mengirim `apikey`; header `Authorization: Bearer` sudah disiapkan sebagai parameter opsional dan diaktifkan pada `T-W3-03`. URL yang berakhiran `/rest/v1/` dinormalkan. | Pengembang memilih `.env`; sesi anonim baru dibuat pada `T-W3-03`; dashboard Supabase menampilkan URL API lengkap dengan `/rest/v1/`. | Ya — instruksi pengembang, 12 November 2026 |
 | 13 November 2026 | `T-W2-04` | Hasil scan disimpan sementara di memori (`app/src/lib/scan-session.ts`, maksimal 10 scan) sampai SQLite dibangun pada Minggu 3. Rute Detail `.../finding/[findingId]` dibuat sebagai placeholder agar navigasi dari kartu sudah berfungsi; isinya diisi pada `T-W2-05`. | PRD §10.1 menyebut fallback ke state navigasi; penyimpanan lokal baru dijadwalkan Minggu 3; menyimpan seluruh payload di parameter URL tidak aman dan tidak praktis. | Ya — keputusan implementasi sementara; tidak mengubah cakupan PRD |
+| 13 November 2026 | `T-W2-05` | Menambah dependensi `expo-clipboard` (~58.0.4) untuk tombol salin. Tautan referensi dibuka dengan `expo-web-browser` di iOS/Android dan `Linking.openURL` di web. Bila `fix.command` dari backend tersedia, nilainya dipakai; bila kosong, perintah dirakit dari `safeVersion` sesuai FR-19. | `expo-clipboard` adalah modul resmi Expo yang tersedia di Expo Go; `openBrowserAsync` di web memakai popup `window.open` yang mudah diblokir; kontrak backend sudah menyediakan `fix.command`. | Ya — keputusan implementasi; tidak mengubah cakupan PRD |
 
 
 ---

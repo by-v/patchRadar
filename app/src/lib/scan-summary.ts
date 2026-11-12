@@ -25,8 +25,31 @@ export function nonEmptyLabelCounts(
 }
 
 /** Persentase EPSS dengan satu desimal dan koma Indonesia. */
+export function formatEpssValue(epss: number | null, available: boolean): string {
+  if (!available || epss === null) return 'Tidak tersedia';
+  return `${(epss * 100).toFixed(1).replace('.', ',')}%`;
+}
+
+/** Persentase EPSS dengan awalan "EPSS" untuk chip dan kartu temuan. */
 export function formatEpss(epss: number | null, available: boolean): string {
   if (!available || epss === null) return 'EPSS tidak tersedia';
-  const percent = (epss * 100).toFixed(1).replace('.', ',');
-  return `EPSS ${percent}%`;
+  return `EPSS ${formatEpssValue(epss, available)}`;
+}
+
+/** Persentil EPSS; dipisah dari nilai karena hanya ditampilkan di Detail. */
+export function formatEpssPercentile(percentile: number | null, available: boolean): string {
+  if (!available || percentile === null) return 'Persentil tidak tersedia';
+  const percent = (percentile * 100).toFixed(0);
+  return `Persentil ${percent}`;
+}
+
+/** Skor CVSS dengan satu desimal dan koma Indonesia. */
+export function formatCvss(cvss: number | null): string {
+  if (cvss === null) return 'CVSS tidak tersedia';
+  return `CVSS ${cvss.toFixed(1).replace('.', ',')}`;
+}
+
+/** Skor prioritas 0–100 untuk kartu identitas. */
+export function formatScore(score: number): string {
+  return score.toFixed(1).replace('.', ',');
 }

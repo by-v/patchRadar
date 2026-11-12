@@ -26,6 +26,7 @@ Catatan versi lingkungan pengembangan dan perangkat uji. Diperbarui saat verifik
 | EAS CLI | 27.5.0 |
 | TypeScript | strict + `noUncheckedIndexedAccess` (`npm run typecheck` lulus) |
 | Unit test | Jest 30 + `jest-expo` ~58.0.14 (`npm test` lulus) |
+| Clipboard & browser | `expo-clipboard` ~58.0.4 dan `expo-web-browser` ~58.0.7 (keduanya tersedia di Expo Go) |
 
 ## Cara Menjalankan
 
@@ -91,7 +92,7 @@ Tidak ditemukan token, service role key, atau private key yang tertanam di file 
 - `npx tsc --noEmit` lulus.
 - `npx expo-doctor` lulus 20/20.
 - `npx expo lint` lulus.
-- `npx jest` lulus 8 suite/67 test (termasuk parser tautan, konfigurasi environment, klien `scan`, format waktu, ringkasan label, dan sesi hasil).
+- `npx jest` lulus 9 suite/80 test (termasuk parser tautan, konfigurasi environment, klien `scan`, format waktu, ringkasan label, sesi hasil, dan aturan perbaikan).
 - Respons nyata `scan` untuk `chalk/chalk` dan error 404 tersimpan sebagai fixture di `app/src/api/__fixtures__/`.
 
 ## Catatan Android
