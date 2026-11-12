@@ -137,7 +137,7 @@ Route mengikuti struktur nyata `app/src/app/`. Pengelompokan `(tabs)` dan nama b
 - `DarkCTA`: label kecil "Siap dipindai", judul "Mulai pemindaian", panah dalam lingkaran. Nonaktif saat input belum valid atau saat loading.
 - Kartu kaca "Pindai terakhir" bila ada riwayat.
 - Catatan kaki: batas 1.500 paket unik dan perkiraan hingga 25 detik.
-- Error validasi tampil inline di bawah input, bukan modal.
+- Inline di bawah input, bukan modal. Teks galat diambil dari PRD §12 baris 1–4; input difokuskan kembali saat pengguna menekan Pindai tanpa isi.
 
 ### 7.2 Hasil
 

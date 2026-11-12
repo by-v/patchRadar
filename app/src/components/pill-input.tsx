@@ -1,11 +1,12 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useState } from 'react';
+import { useState, type RefObject } from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   View,
   type StyleProp,
+  type TextInputInstance,
   type TextInputProps,
   type ViewStyle,
 } from 'react-native';
@@ -19,12 +20,14 @@ type PillInputProps = Omit<TextInputProps, 'style'> & {
   /** Pesan galat inline; tidak memakai modal. */
   error?: string;
   containerStyle?: StyleProp<ViewStyle>;
+  inputRef?: RefObject<TextInputInstance | null>;
 };
 
 export function PillInput({
   icon,
   error,
   containerStyle,
+  inputRef,
   onFocus,
   onBlur,
   accessibilityLabel,
@@ -49,6 +52,7 @@ export function PillInput({
         {icon ? <Ionicons color={Colors.light.textSecondary} name={icon} size={20} /> : null}
         <TextInput
           accessibilityLabel={accessibilityLabel}
+          ref={inputRef}
           onBlur={(event) => {
             setFocused(false);
             onBlur?.(event);

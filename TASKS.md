@@ -793,14 +793,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Tulis unit test untuk seluruh kasus validasi.
 - **Memenuhi:** `FR-01`, `FR-02`, `FR-17`, `NFR-04`, `R-02`
 - **Kriteria selesai (AC):**
-  - [ ] Semua kasus FR-01/§12 baris 1–4 menghasilkan pesan yang sesuai.
-  - [ ] URL valid mengaktifkan tombol Pindai.
-  - [ ] Normalisasi tautan di UI mencakup URL clone berakhiran `.git` dan garis miring di ujung; kasus uji eksplisit `https://github.com/o/r.git` → repo `r` (tempelan tombol Code GitHub).
-  - [ ] Selama loading tombol tidak dapat ditekan ganda.
-  - [ ] Unit test validasi lulus.
+  - [x] Semua kasus FR-01/§12 baris 1–4 menghasilkan pesan yang sesuai.
+  - [x] URL valid mengaktifkan tombol Pindai.
+  - [x] Normalisasi tautan di UI mencakup URL clone berakhiran `.git` dan garis miring di ujung; kasus uji eksplisit `https://github.com/o/r.git` → repo `r` (tempelan tombol Code GitHub).
+  - [x] Selama loading tombol tidak dapat ditekan ganda.
+  - [x] Unit test validasi lulus.
 - **Estimasi:** 3 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Parser di `app/src/lib/url.ts` mengembalikan `{ ok: true, value: { owner, repo, url } }` atau `{ ok: false, error: { code, message } }`. Kode galat: `EMPTY`, `FORMAT`, `HOST`, `PATH`, dengan teks persis dari PRD §12 baris 1–4.
+  - Normalisasi: trim spasi, skema dan host dihuruf-kecilkan, buang `.git` dan garis miring di ujung, hasilkan `url` kanonis. Nama pemilik/repo mempertahankan huruf asli.
+  - Urutan pemeriksaan: kosong → skema https → host `github.com` → jumlah segmen (minimal 2, maksimal 2) → query/fragmen → karakter sah. `https://github.com/a` menghasilkan `FORMAT`, bukan `PATH`, sesuai AC FR-01.
+  - `PillInput` menerima prop `inputRef` (tipe `TextInputInstance`) agar input dapat difokuskan saat pengguna menekan Pindai tanpa isi.
+  - Layar Pindai: error inline muncul setelah blur atau setelah menekan Pindai; tombol nonaktif bila tautan belum valid; setelah 5 detik loading muncul "Repo besar bisa memakan waktu lebih lama"; pratinjau `Akan memindai …` menunjukkan hasil normalisasi.
+  - `DarkCallToAction` mendapat prop `loading`; selama loading tombol `disabled` dan `handleScan` melakukan early-return, sehingga tekan ganda tidak mungkin.
+  - **Timeout klien 30 detik belum diimplementasikan**: itu milik klien `scan` pada `T-W2-03`. Sebagai gantinya `handleScan` memakai simulasi 1,2 detik dan menampilkan pesan bahwa API belum terhubung. Wajib diganti pada `T-W2-03`.
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 3 suite/29 test lulus, `expo export --platform web` berhasil.
 
 ### T-W2-03 — Klien API `scan` dan tipe kontrak
 - **Tipe:** `[AGENT]`

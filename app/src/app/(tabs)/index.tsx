@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { TextInputInstance } from 'react-native';
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { DarkCallToAction } from '@/components/dark-cta';
@@ -6,6 +7,7 @@ import { PillInput } from '@/components/pill-input';
 import { Screen } from '@/components/screen';
 import { Wordmark } from '@/components/wordmark';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { parseRepoLink } from '@/lib/url';
 
 type ScanScope = 'production' | 'all';
 
@@ -14,10 +16,57 @@ const SCOPES: { value: ScanScope; label: string }[] = [
   { value: 'all', label: 'Termasuk dev' },
 ];
 
+/** Setelah 5 detik, tampilkan penjelasan tambahan. */
+const SLOW_HINT_DELAY_MS = 5_000;
+/** Durasi tiruan sampai klien `scan` tersedia pada T-W2-03. */
+const SIMULATED_SCAN_MS = 1_200;
+
 export default function ScanScreen() {
   const [url, setUrl] = useState('');
   const [scope, setScope] = useState<ScanScope>('production');
-  const canScan = url.trim().length > 0;
+  const [showError, setShowError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [slowHint, setSlowHint] = useState(false);
+  const inputRef = useRef<TextInputInstance>(null);
+
+  const validation = parseRepoLink(url);
+  const error = showError && !validation.ok ? validation.error.message : undefined;
+  const canScan = validation.ok && !loading;
+
+  useEffect(() => {
+    if (!loading) {
+      return;
+    }
+
+    const timer = setTimeout(() => setSlowHint(true), SLOW_HINT_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  async function handleScan() {
+    if (loading) {
+      return;
+    }
+
+    if (!validation.ok) {
+      setShowError(true);
+      inputRef.current?.focus();
+      return;
+    }
+
+    setSlowHint(false);
+    setLoading(true);
+    try {
+      // T-W2-03: ganti simulasi ini dengan panggilan klien `scan`
+      // beserta timeout klien 30 detik.
+      await new Promise((resolve) => setTimeout(resolve, SIMULATED_SCAN_MS));
+      Alert.alert(
+        'Pemindaian belum terhubung',
+        'Panggilan ke Edge Function scan akan diimplementasikan pada tugas berikutnya.',
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <Screen avoidKeyboard>
@@ -30,17 +79,31 @@ export default function ScanScreen() {
         </Text>
       </View>
 
-      <PillInput
-        accessibilityLabel="Tautan repositori GitHub"
-        autoCapitalize="none"
-        autoCorrect={false}
-        icon="logo-github"
-        keyboardType="url"
-        onChangeText={setUrl}
-        placeholder="https://github.com/pemilik/repo"
-        returnKeyType="go"
-        value={url}
-      />
+      <View style={styles.form}>
+        <PillInput
+          accessibilityLabel="Tautan repositori GitHub"
+          autoCapitalize="none"
+          autoCorrect={false}
+          editable={!loading}
+          error={error}
+          icon="logo-github"
+          inputRef={inputRef}
+          keyboardType="url"
+          onBlur={() => {
+            if (url.trim().length > 0) {
+              setShowError(true);
+            }
+          }}
+          onChangeText={(value) => setUrl(value)}
+          placeholder="https://github.com/pemilik/repo"
+          returnKeyType="go"
+          value={url}
+        />
+
+        {validation.ok && !loading ? (
+          <Text style={styles.preview}>Akan memindai {validation.value.url}</Text>
+        ) : null}
+      </View>
 
       <View accessibilityRole="radiogroup" style={styles.scope}>
         {SCOPES.map((option) => {
@@ -48,7 +111,8 @@ export default function ScanScreen() {
           return (
             <Pressable
               accessibilityRole="radio"
-              accessibilityState={{ selected }}
+              accessibilityState={{ selected, disabled: loading }}
+              disabled={loading}
               key={option.value}
               onPress={() => setScope(option.value)}
               style={[styles.scopeItem, selected && styles.scopeItemActive]}>
@@ -63,15 +127,15 @@ export default function ScanScreen() {
       <DarkCallToAction
         accessibilityHint="Memulai pemindaian dependensi repositori"
         disabled={!canScan}
-        eyebrow="Siap dipindai"
-        onPress={() =>
-          Alert.alert(
-            'Pemindaian belum aktif',
-            'Pemanggilan API akan dihubungkan pada tugas berikutnya.',
-          )
-        }
-        title="Mulai pemindaian"
+        eyebrow={loading ? 'Memeriksa dependensi…' : 'Siap dipindai'}
+        loading={loading}
+        onPress={handleScan}
+        title={loading ? 'Memindai…' : 'Mulai pemindaian'}
       />
+
+      {loading && slowHint ? (
+        <Text style={styles.note}>Repo besar bisa memakan waktu lebih lama.</Text>
+      ) : null}
 
       <Text style={styles.note}>
         Maksimal 1.500 paket unik per pemindaian. Repositori besar dapat memakan waktu hingga 25
@@ -92,6 +156,14 @@ const styles = StyleSheet.create({
   subtitle: {
     ...Typography.body,
     color: Colors.light.textSecondary,
+  },
+  form: {
+    gap: Spacing.two,
+  },
+  preview: {
+    ...Typography.meta,
+    color: Colors.light.textSecondary,
+    paddingHorizontal: Spacing.three,
   },
   scope: {
     flexDirection: 'row',

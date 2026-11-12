@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Colors, Radius, Shadows, Spacing, Typography } from '@/constants/theme';
 
@@ -9,6 +9,7 @@ type DarkCallToActionProps = {
   title: string;
   onPress: () => void;
   disabled?: boolean;
+  loading?: boolean;
   accessibilityHint?: string;
 };
 
@@ -17,19 +18,20 @@ export function DarkCallToAction({
   title,
   onPress,
   disabled = false,
+  loading = false,
   accessibilityHint,
 }: DarkCallToActionProps) {
   return (
     <Pressable
       accessibilityHint={accessibilityHint}
       accessibilityRole="button"
-      accessibilityState={{ disabled }}
-      disabled={disabled}
+      accessibilityState={{ disabled: disabled || loading, busy: loading }}
+      disabled={disabled || loading}
       onPress={onPress}
       style={({ pressed }) => [
         styles.card,
         Shadows.glass,
-        disabled && styles.disabled,
+        disabled && !loading && styles.disabled,
         pressed && styles.pressed,
       ]}>
       <View style={styles.texts}>
@@ -37,7 +39,11 @@ export function DarkCallToAction({
         <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.arrow}>
-        <Ionicons color={Colors.light.text} name="arrow-forward" size={20} />
+        {loading ? (
+          <ActivityIndicator color={Colors.light.text} size="small" />
+        ) : (
+          <Ionicons color={Colors.light.text} name="arrow-forward" size={20} />
+        )}
       </View>
     </Pressable>
   );
