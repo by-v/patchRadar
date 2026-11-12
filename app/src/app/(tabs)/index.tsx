@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { TextInputInstance } from 'react-native';
-import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { Banner } from '@/components/banner';
 import { DarkCallToAction } from '@/components/dark-cta';
 import { PillInput } from '@/components/pill-input';
 import { Screen } from '@/components/screen';
@@ -27,6 +28,7 @@ export default function ScanScreen() {
   const [showError, setShowError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [slowHint, setSlowHint] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const inputRef = useRef<TextInputInstance>(null);
 
   const validation = parseRepoLink(url);
@@ -59,9 +61,8 @@ export default function ScanScreen() {
       // T-W2-03: ganti simulasi ini dengan panggilan klien `scan`
       // beserta timeout klien 30 detik.
       await new Promise((resolve) => setTimeout(resolve, SIMULATED_SCAN_MS));
-      Alert.alert(
-        'Pemindaian belum terhubung',
-        'Panggilan ke Edge Function scan akan diimplementasikan pada tugas berikutnya.',
+      setNotice(
+        'Pemindaian belum terhubung. Panggilan ke Edge Function scan diimplementasikan pada tugas berikutnya.',
       );
     } finally {
       setLoading(false);
@@ -94,7 +95,11 @@ export default function ScanScreen() {
               setShowError(true);
             }
           }}
-          onChangeText={(value) => setUrl(value)}
+          onChangeText={(value) => {
+            setUrl(value);
+            setNotice(null);
+          }}
+          onSubmitEditing={handleScan}
           placeholder="https://github.com/pemilik/repo"
           returnKeyType="go"
           value={url}
@@ -132,6 +137,8 @@ export default function ScanScreen() {
         onPress={handleScan}
         title={loading ? 'Memindai…' : 'Mulai pemindaian'}
       />
+
+      {notice ? <Banner message={notice} variant="info" /> : null}
 
       {loading && slowHint ? (
         <Text style={styles.note}>Repo besar bisa memakan waktu lebih lama.</Text>

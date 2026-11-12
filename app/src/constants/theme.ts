@@ -40,6 +40,10 @@ const lightColors = {
   success: '#3F6212',
   warning: '#92690B',
   danger: '#B3261E',
+  successSurface: 'rgba(63, 98, 18, 0.12)',
+  warningSurface: 'rgba(146, 105, 11, 0.12)',
+  dangerSurface: 'rgba(179, 38, 30, 0.12)',
+  infoSurface: 'rgba(30, 30, 30, 0.06)',
 
   // Severity
   severityCritical: '#B3261E',
@@ -155,6 +159,7 @@ export const Shadows = {
       shadowOpacity: 0.12,
       shadowRadius: 32,
     },
+    web: { boxShadow: '0px 12px 32px rgba(30, 30, 30, 0.12)' },
     default: { elevation: 6 },
   }),
 } as const;

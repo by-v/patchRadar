@@ -96,3 +96,18 @@ Ekstrapolasi lama ≈11,8 ms/paket (2.000 paket ≈26 s) tidak lagi dipakai seba
 
 Usulan teks PRD: cantumkan batas final ini di NFR-09 dan mekanisme penolakan/peringatan yang jelas untuk repositori di atas batas.
 
+## 5. Web sebagai platform MVP (usulan)
+
+Pengembang menetapkan bahwa **web ikut menjadi bagian MVP** dan harus lulus pengujian bersama iOS. `docs/PRD.md` belum menyebut web sebagai platform target; §10 hanya memetakan rute Expo dan §16 hanya merencanakan sesi validasi di perangkat.
+
+Konsekuensi teknis yang sudah diterapkan pada 12 November 2026:
+
+| Hal | Keputusan | Alasan |
+|---|---|---|
+| Mode web | `web.output = "single"` (SPA) | SSR memicu hydration mismatch pada ikon font `@expo/vector-icons`; SPA tidak membutuhkannya |
+| Lebar konten | dibatasi `MaxContentWidth` 800 dan dipusatkan | Tanpa batas, konten membentang penuh di desktop |
+| Dialog dan error | komponen `Banner` dalam aplikasi, bukan `Alert.alert` | `Alert.alert` di `react-native-web` adalah fungsi kosong |
+| Input | `onSubmitEditing` agar tombol Enter bekerja | Perilaku keyboard web |
+
+Usulan teks PRD: tambahkan web pada daftar platform §10, perluas NFR-16 agar mencakup uji peramban (Chrome desktop dan lebar 360 px), dan nyatakan SSR tidak dipakai. Batas minimal: alur Pindai, Hasil, Detail, Riwayat, Tentang berjalan di peramban tanpa error console.
+

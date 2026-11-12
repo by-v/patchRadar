@@ -11,7 +11,7 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ScreenBackground } from '@/components/screen-background';
-import { Spacing, TabBarHeight } from '@/constants/theme';
+import { MaxContentWidth, Spacing, TabBarHeight } from '@/constants/theme';
 
 type ScreenProps = {
   children: ReactNode;
@@ -72,6 +72,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flexGrow: 1,
+    width: '100%',
+    maxWidth: MaxContentWidth,
+    alignSelf: 'center',
     paddingTop: Spacing.three,
     paddingHorizontal: Spacing.four,
     gap: Spacing.three,
