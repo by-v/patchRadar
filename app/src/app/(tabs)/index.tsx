@@ -10,6 +10,7 @@ import { PillInput } from '@/components/pill-input';
 import { Screen } from '@/components/screen';
 import { Wordmark } from '@/components/wordmark';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { rememberScanResult } from '@/lib/scan-session';
 import { parseRepoLink } from '@/lib/url';
 import type { ScanFailure } from '@/types/scan';
 
@@ -67,6 +68,7 @@ export default function ScanScreen() {
         return;
       }
 
+      rememberScanResult(result.data);
       router.push({
         pathname: '/scan/[scanId]',
         params: { scanId: result.data.scanId },

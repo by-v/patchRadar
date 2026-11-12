@@ -1,0 +1,98 @@
+{
+  "scanId": "ad09bb6f-1cdf-44bf-b7b3-38cb6a0a09f0",
+  "repo": {
+    "owner": "expressjs",
+    "name": "express",
+    "url": "https://github.com/expressjs/express",
+    "defaultBranch": "master"
+  },
+  "scannedAt": "2026-11-12T17:16:30.758Z",
+  "status": "COMPLETED",
+  "manifest": {
+    "source": "PACKAGE_JSON",
+    "lockfileFormat": null,
+    "estimated": true
+  },
+  "summary": {
+    "totalPackages": 44,
+    "affectedPackages": 1,
+    "findingCount": 1
+  },
+  "findings": [
+    {
+      "findingId": "b7947e15-bfe8-4635-8f01-c59221fbfe92",
+      "osvId": "GHSA-7f5c-rpf4-86p8",
+      "cveIds": [
+        "CVE-2021-32822"
+      ],
+      "package": {
+        "name": "hbs",
+        "installedVersion": "4.4.0",
+        "direct": true,
+        "devOnly": true,
+        "parentPackage": null
+      },
+      "severity": {
+        "level": "MEDIUM",
+        "cvss": 4,
+        "source": "OSV"
+      },
+      "exploitation": {
+        "kev": false,
+        "epss": 0.00982,
+        "epssPercentile": 0.62772,
+        "epssAvailable": true
+      },
+      "priority": {
+        "label": "MONITOR",
+        "score": 25.3,
+        "reason": "Tidak ada indikasi eksploitasi nyata dan severity relatif rendah; pantau saja."
+      },
+      "fix": {
+        "safeVersion": null,
+        "command": null,
+        "suggestion": "Belum ada versi aman yang diketahui; periksa referensi advisory sebelum memperbarui."
+      },
+      "summary": "hbs: Insertion of Sensitive Information into Externally-Accessible File or Directory and Exposure of Sensitive Information to an Unauthorized Actor",
+      "references": [
+        {
+          "label": "Advisory OSV",
+          "url": "https://osv.dev/vulnerability/GHSA-7f5c-rpf4-86p8"
+        },
+        {
+          "label": "Advisory",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-32822"
+        },
+        {
+          "label": "Referensi",
+          "url": "https://github.com/pillarjs/hbs"
+        },
+        {
+          "label": "Advisory",
+          "url": "https://securitylab.github.com/advisories/GHSL-2021-020-pillarjs-hbs"
+        }
+      ]
+    }
+  ],
+  "partial": false,
+  "persisted": false,
+  "warnings": [
+    {
+      "code": "LOCKFILE_MISSING",
+      "message": "package-lock.json tidak ditemukan; memakai package.json."
+    }
+  ],
+  "sourceStatus": {
+    "github": "OK",
+    "osv": "OK",
+    "kev": "CACHE",
+    "epss": "OK"
+  },
+  "timings": {
+    "githubMs": 1089,
+    "osvMs": 2311,
+    "enrichmentMs": 2064,
+    "totalMs": 6350
+  },
+  "requestId": "req_f78e044c35cf4ae5b9333e688652bc22"
+}

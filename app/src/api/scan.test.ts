@@ -2,6 +2,7 @@ import { requestScan } from '@/api/scan';
 import type { SupabaseConfig } from '@/config/env';
 
 import notFoundFixture from './__fixtures__/scan-error-not-found.json';
+import findingsFixture from './__fixtures__/scan-findings.json';
 import partialFixture from './__fixtures__/scan-partial.json';
 import successFixture from './__fixtures__/scan-success.json';
 
@@ -72,6 +73,35 @@ describe('requestScan — respons sukses nyata', () => {
     expect(result.data.sourceStatus).toEqual(successFixture.sourceStatus);
     expect(result.data.timings).toEqual(successFixture.timings);
     expect(result.data.requestId).toBe(successFixture.requestId);
+  });
+
+  it('mempertahankan seluruh field temuan dari respons nyata', async () => {
+    const result = await requestScan({
+      repoUrl: 'https://github.com/expressjs/express',
+      config: CONFIG,
+      fetchImpl: fetchMock(jsonResponse(findingsFixture)),
+    });
+
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+
+    expect(result.data.summary).toEqual({
+      totalPackages: 44,
+      affectedPackages: 1,
+      findingCount: 1,
+    });
+    const finding = result.data.findings[0];
+    expect(finding?.package).toEqual({
+      name: 'hbs',
+      installedVersion: '4.4.0',
+      direct: true,
+      devOnly: true,
+      parentPackage: null,
+    });
+    expect(finding?.severity).toEqual({ level: 'MEDIUM', cvss: 4, source: 'OSV' });
+    expect(finding?.priority.label).toBe('MONITOR');
+    expect(finding?.fix.safeVersion).toBeNull();
+    expect(finding?.references).toHaveLength(4);
   });
 
   it('menambahkan Authorization hanya bila accessToken tersedia', async () => {

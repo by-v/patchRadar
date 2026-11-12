@@ -852,14 +852,23 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Implementasikan empty state hati-hati dan navigasi ke Detail.
 - **Memenuhi:** `FR-15`, `FR-16`, `FR-17`, `NFR-01`, `R-11`
 - **Kriteria selesai (AC):**
-  - [ ] Header menampilkan teks persis `"{totalPackages} paket diperiksa, {affectedPackages} punya temuan"`.
-  - [ ] Setiap kartu memuat seluruh field FR-17.
-  - [ ] Banner parsial/perkiraan dan indikator repo besar tampil sesuai kondisi.
-  - [ ] Tap kartu membuka Detail.
-  - [ ] Empty state tidak mengklaim proyek aman.
+  - [x] Header menampilkan teks persis `"{totalPackages} paket diperiksa, {affectedPackages} punya temuan"`.
+  - [x] Setiap kartu memuat seluruh field FR-17.
+  - [x] Banner parsial/perkiraan dan indikator repo besar tampil sesuai kondisi.
+  - [x] Tap kartu membuka Detail.
+  - [x] Empty state tidak mengklaim proyek aman.
 - **Estimasi:** 3 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `app/src/app/scan/[scanId]/index.tsx` kini memuat layar Hasil: judul `owner/repo`, waktu relatif ("Dipindai 3 menit lalu"), kartu ringkasan kaca dengan angka temuan, chip label (hanya yang berjumlah > 0), dan teks persis `{totalPackages} paket diperiksa, {affectedPackages} punya temuan`.
+  - Banner yang tampil: **Repo besar** bila `totalPackages > 500`, **Hasil perkiraan** bila `manifest.estimated`, **Hasil parsial** berisi pesan warning, serta **Catatan pemindaian** untuk warning lain (mis. `CLOUD_PERSIST_FAILED`) agar tidak dibuang.
+  - Komponen baru mengikuti konvensi `kebab-case`: `severity-badge`, `label-badge`, `meta-chip`, `finding-card`, `empty-state`. Setiap kartu memuat severity + label, `paket@versi`, KEV (ya/tidak), EPSS (nilai atau "tidak tersedia"), tag Langsung/Transitif dan Dev, alasan, serta chevron.
+  - Empty state memakai teks `Tidak ada temuan pada data yang diperiksa` dan `Hasil ini potensial dan tidak menjamin proyek bebas risiko.`; tidak ada klaim proyek aman. Tersedia aksi "Pindai repo lain".
+  - Tap kartu membuka rute `app/src/app/scan/[scanId]/finding/[findingId].tsx`. Rute Detail masih placeholder dan akan diisi penuh pada `T-W2-05`.
+  - Hasil scan disimpan sementara di memori lewat `app/src/lib/scan-session.ts` (maksimal 10 scan) lalu dibaca layar Hasil/Detail. Bila hasil tidak ada (mis. muat ulang web atau restart), layar menampilkan "Hasil tidak tersedia" dengan aksi kembali ke Pindai, bukan crash.
+  - Fungsi murni baru diuji: `formatRelativeTime`, `countFindingsByLabel`, `nonEmptyLabelCounts`, `formatEpss`, dan perilaku penyimpanan sesi.
+  - Fixture nyata baru dari `expressjs/express`: 44 paket, 1 temuan (`hbs@4.4.0`, MONITOR, MEDIUM, EPSS 0,98%, `kev=false`); dipakai untuk menguji parsing dan menjadi repo uji manual kartu.
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 8 suite/67 test lulus, ekspor web dan Android berhasil. Tipe rute diperbarui dengan menjalankan Metro sekali agar rute Detail dikenali.
 
 ### T-W2-05 — Layar Detail dan perintah salin
 - **Tipe:** `[AGENT]`
@@ -1660,6 +1669,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 12 November 2026 | `T-W2-01` | Tema **Modern Minimalist + Glassmorphism** dan palet pengembang (`#DDD3CC`, `#CABEB5`, `#A2958B`, `#1E1E1E`, `#2A2725`) menjadi acuan visual. Ditambah token pendukung `textSecondary #544B45` (4,7–5,8:1), `hairline #6B605A` (≥3:1), dan lima warna severity; `#A2958B` hanya dipakai di permukaan gelap (1,98:1 di latar terang). Aplikasi dikunci mode terang. Efek kaca memakai `expo-glass-effect` (iOS 26) dengan fallback opaque di platform lain; `expo-blur` tidak ditambahkan. Tab bar memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom, menggantikan `NativeTabs`. Wordmark dibuat sebagai komponen teks, bukan aset. Nama berkas komponen `kebab-case` dan path rute mengikuti scaffold nyata `app/src/app`. | Hasil uji prompt Figma disetujui pengembang; kontras palet awal gagal AA untuk teks sekunder di latar terang; `NativeTabs` tidak dapat dibentuk menjadi pill mengambang; blur runtime di Android berbiaya tinggi untuk keuntungan visual kecil. | Ya — instruksi pengembang, 12 November 2026 |
 | 12 November 2026 | `T-W2-01`, `T-W2-02` | **Web termasuk platform MVP** dan harus lulus bersama iOS. Web dijalankan sebagai SPA (`web.output = "single"`), bukan SSR. Semua dialog/error memakai komponen dalam aplikasi (`Banner`), bukan `Alert.alert`. Konten dibatasi `MaxContentWidth` 800. Usulan perubahan PRD dicatat di `docs/prd-change-proposals.md` §5. | Pengembang menetapkan web ikut diuji; SSR memicu hydration mismatch pada ikon `@expo/vector-icons`; `Alert.alert` adalah fungsi kosong di `react-native-web`. | Ya — instruksi pengembang, 12 November 2026; perubahan PRD menunggu persetujuan |
 | 12 November 2026 | `T-W2-03` | Konfigurasi Supabase memakai `EXPO_PUBLIC_SUPABASE_URL` + `EXPO_PUBLIC_SUPABASE_ANON_KEY` lewat `app/.env` (diabaikan git) dan `.env.example` tanpa nilai. Klien `scan` untuk sementara hanya mengirim `apikey`; header `Authorization: Bearer` sudah disiapkan sebagai parameter opsional dan diaktifkan pada `T-W3-03`. URL yang berakhiran `/rest/v1/` dinormalkan. | Pengembang memilih `.env`; sesi anonim baru dibuat pada `T-W3-03`; dashboard Supabase menampilkan URL API lengkap dengan `/rest/v1/`. | Ya — instruksi pengembang, 12 November 2026 |
+| 13 November 2026 | `T-W2-04` | Hasil scan disimpan sementara di memori (`app/src/lib/scan-session.ts`, maksimal 10 scan) sampai SQLite dibangun pada Minggu 3. Rute Detail `.../finding/[findingId]` dibuat sebagai placeholder agar navigasi dari kartu sudah berfungsi; isinya diisi pada `T-W2-05`. | PRD §10.1 menyebut fallback ke state navigasi; penyimpanan lokal baru dijadwalkan Minggu 3; menyimpan seluruh payload di parameter URL tidak aman dan tidak praktis. | Ya — keputusan implementasi sementara; tidak mengubah cakupan PRD |
 
 
 ---

@@ -91,7 +91,7 @@ Tidak ditemukan token, service role key, atau private key yang tertanam di file 
 - `npx tsc --noEmit` lulus.
 - `npx expo-doctor` lulus 20/20.
 - `npx expo lint` lulus.
-- `npx jest` lulus 5 suite/51 test (termasuk parser tautan, konfigurasi environment, dan klien `scan`).
+- `npx jest` lulus 8 suite/67 test (termasuk parser tautan, konfigurasi environment, klien `scan`, format waktu, ringkasan label, dan sesi hasil).
 - Respons nyata `scan` untuk `chalk/chalk` dan error 404 tersimpan sebagai fixture di `app/src/api/__fixtures__/`.
 
 ## Catatan Android
