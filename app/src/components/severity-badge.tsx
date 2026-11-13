@@ -27,10 +27,10 @@ export function SeverityBadge({ level }: SeverityBadgeProps) {
 
   return (
     <View
-      accessibilityLabel={`Severity ${label}`}
+      accessibilityLabel={`Tingkat keparahan ${label}`}
       accessibilityRole="text"
       style={[styles.badge, { backgroundColor: config.background }]}>
-      <Ionicons color={Colors.light.textOnDark} name={config.icon} size={13} />
+      <Ionicons color={Colors.light.textOnStatus} name={config.icon} size={13} />
       <Text style={styles.text}>{label}</Text>
     </View>
   );
@@ -50,6 +50,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     fontWeight: '600',
-    color: Colors.light.textOnDark,
+    color: Colors.light.textOnStatus,
   },
 });

@@ -64,9 +64,7 @@ export function TabBar({ state, descriptors, emitter, navigateToTab, insets }: B
                 name={icon}
                 size={22}
               />
-              <Text numberOfLines={1} style={[styles.label, focused && styles.labelActive]}>
-                {label}
-              </Text>
+              <Text style={[styles.label, focused && styles.labelActive]}>{label}</Text>
             </Pressable>
           );
         })}

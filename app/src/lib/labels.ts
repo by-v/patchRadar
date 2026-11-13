@@ -9,9 +9,9 @@ export const PRIORITY_LABELS: Readonly<Record<PriorityLabel, string>> = {
 };
 
 export const SEVERITY_LABELS: Readonly<Record<SeverityLevel, string>> = {
-  CRITICAL: 'Critical',
-  HIGH: 'High',
-  MEDIUM: 'Medium',
-  LOW: 'Low',
+  CRITICAL: 'Kritis',
+  HIGH: 'Tinggi',
+  MEDIUM: 'Sedang',
+  LOW: 'Rendah',
   UNKNOWN: 'Tidak diketahui',
 };

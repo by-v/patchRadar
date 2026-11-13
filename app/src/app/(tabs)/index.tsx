@@ -18,7 +18,7 @@ type ScanScope = 'production' | 'all';
 
 const SCOPES: { value: ScanScope; label: string }[] = [
   { value: 'production', label: 'Hanya produksi' },
-  { value: 'all', label: 'Termasuk dev' },
+  { value: 'all', label: 'Termasuk pengembangan' },
 ];
 
 /** Setelah 5 detik, tampilkan penjelasan tambahan. */
@@ -124,6 +124,7 @@ export default function ScanScreen() {
           const selected = scope === option.value;
           return (
             <Pressable
+              accessibilityLabel={option.label}
               accessibilityRole="radio"
               accessibilityState={{ selected, disabled: loading }}
               disabled={loading}
@@ -152,7 +153,7 @@ export default function ScanScreen() {
       ) : null}
 
       {loading && slowHint ? (
-        <Text style={styles.note}>Repo besar bisa memakan waktu lebih lama.</Text>
+        <Text style={styles.note}>Repositori besar bisa memakan waktu lebih lama.</Text>
       ) : null}
 
       <Text style={styles.note}>

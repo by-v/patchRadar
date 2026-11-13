@@ -60,24 +60,25 @@ const SOURCE_STATE_VALUES: ReadonlySet<string> = new Set<SourceState>([
 ]);
 
 const USER_MESSAGES: Readonly<Record<string, string>> = {
-  INVALID_URL: 'Tautan tidak valid. Gunakan format https://github.com/pemilik/repo.',
+  INVALID_URL: 'Tautan tidak valid. Gunakan format https://github.com/pemilik/repositori.',
   UNAUTHENTICATED: 'Sesi belum siap. Periksa koneksi lalu coba lagi.',
   REPO_PRIVATE_OR_FORBIDDEN:
-    'Repo ini privat atau tidak dapat diakses. PatchRadar hanya memindai repo publik.',
-  REPO_NOT_FOUND: 'Repo tidak ditemukan. Periksa ejaan pemilik dan nama repo.',
+    'Repositori ini privat atau tidak dapat diakses. PatchRadar hanya memindai repositori publik.',
+  REPO_NOT_FOUND: 'Repositori tidak ditemukan. Periksa ejaan pemilik dan nama repositori.',
   REPO_NOT_FOUND_OR_PRIVATE:
-    'Repo tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repo publik.',
+    'Repositori tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repositori publik.',
   NO_PACKAGE_JSON:
-    'package.json tidak ditemukan di root repo. PatchRadar hanya memindai manifest di root.',
+    'package.json tidak ditemukan di folder utama repositori. PatchRadar hanya memindai berkas dependensi di folder utama.',
   MANIFEST_TOO_LARGE:
-    'Repo melebihi batas ukuran sementara (5 MB atau 1.500 paket). Coba repo yang lebih kecil.',
+    'Repositori melebihi batas ukuran sementara (5 MB atau 1.500 paket). Coba repositori yang lebih kecil.',
   RATE_LIMITED: 'Terlalu banyak pemindaian. Coba lagi sebentar lagi.',
   UPSTREAM_UNAVAILABLE: 'Layanan kerentanan sedang sibuk. Coba lagi sebentar lagi.',
-  SCAN_TIMEOUT: 'Pemindaian melebihi batas waktu. Coba lagi atau pindai repo yang lebih kecil.',
+  SCAN_TIMEOUT:
+    'Pemindaian melebihi batas waktu. Coba lagi atau pindai repositori yang lebih kecil.',
   INTERNAL: 'Terjadi kesalahan pada server. Coba lagi.',
   METHOD_NOT_ALLOWED: 'Metode permintaan tidak didukung.',
-  NETWORK: 'Tidak ada koneksi. Hasil tersimpan tetap bisa dibuka dari Riwayat.',
-  TIMEOUT: 'Pemindaian melebihi batas waktu. Coba lagi atau pindai repo yang lebih kecil.',
+  NETWORK: 'Tidak ada koneksi. Periksa jaringan lalu coba lagi.',
+  TIMEOUT: 'Pemindaian melebihi batas waktu. Coba lagi atau pindai repositori yang lebih kecil.',
   INVALID_RESPONSE: 'Terjadi kesalahan saat membaca hasil. Coba lagi.',
   CONFIG: 'Konfigurasi aplikasi belum lengkap. Hubungi pengembang.',
   UNKNOWN: 'Terjadi kesalahan saat memindai. Coba lagi.',

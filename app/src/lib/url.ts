@@ -1,8 +1,8 @@
 export const REPO_LINK_MESSAGES = {
-  empty: 'Tempel tautan repo GitHub terlebih dahulu.',
-  format: 'Tautan tidak valid. Gunakan format https://github.com/pemilik/repo.',
+  empty: 'Tempel tautan repositori GitHub terlebih dahulu.',
+  format: 'Tautan tidak valid. Gunakan format https://github.com/pemilik/repositori.',
   host: 'Hanya tautan github.com yang didukung.',
-  path: 'Gunakan tautan halaman utama repo, tanpa /tree, /blob, atau parameter.',
+  path: 'Gunakan tautan halaman utama repositori, tanpa /tree, /blob, atau parameter.',
 } as const;
 
 export type RepoLinkErrorCode = 'EMPTY' | 'FORMAT' | 'HOST' | 'PATH';

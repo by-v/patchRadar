@@ -167,7 +167,7 @@ describe('requestScan — respons error', () => {
 
     expect(result.error.code).toBe('REPO_NOT_FOUND_OR_PRIVATE');
     expect(result.error.message).toBe(
-      'Repo tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repo publik.',
+      'Repositori tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repositori publik.',
     );
     expect(result.error.retryable).toBe(false);
     expect(result.error.requestId).toBe(notFoundFixture.error.requestId);
@@ -294,9 +294,7 @@ describe('requestScan — validasi dan kegagalan jaringan', () => {
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.error.code).toBe('NETWORK');
-    expect(result.error.message).toBe(
-      'Tidak ada koneksi. Hasil tersimpan tetap bisa dibuka dari Riwayat.',
-    );
+    expect(result.error.message).toBe('Tidak ada koneksi. Periksa jaringan lalu coba lagi.');
     expect(result.error.retryable).toBe(true);
   });
 
@@ -323,7 +321,7 @@ describe('requestScan — validasi dan kegagalan jaringan', () => {
     if (result.ok) return;
     expect(result.error.code).toBe('TIMEOUT');
     expect(result.error.message).toBe(
-      'Pemindaian melebihi batas waktu. Coba lagi atau pindai repo yang lebih kecil.',
+      'Pemindaian melebihi batas waktu. Coba lagi atau pindai repositori yang lebih kecil.',
     );
   });
 

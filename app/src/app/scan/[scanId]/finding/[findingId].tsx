@@ -147,7 +147,7 @@ export default function FindingDetailScreen() {
 
       {result.manifest.estimated ? (
         <Banner
-          message="Lockfile tidak ditemukan atau tidak dapat dibaca; hanya dependensi langsung yang diperiksa."
+          message="Berkas package-lock.json tidak ditemukan atau tidak dapat dibaca; hanya dependensi langsung yang diperiksa."
           title="Hasil perkiraan"
           variant="warning"
         />
@@ -164,7 +164,7 @@ export default function FindingDetailScreen() {
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Data temuan</Text>
         <View style={styles.grid}>
-          <DataCard label="Severity">
+          <DataCard label="Tingkat keparahan">
             <SeverityBadge level={finding.severity.level} />
             <Text style={styles.dataValue}>{formatCvss(finding.severity.cvss)}</Text>
           </DataCard>
@@ -187,7 +187,8 @@ export default function FindingDetailScreen() {
             </Text>
             {finding.exploitation.kev ? (
               <Pressable
-                accessibilityHint="Membuka katalog KEV CISA di browser"
+                accessibilityHint="Membuka katalog KEV CISA di peramban"
+                accessibilityLabel="Buka katalog KEV CISA"
                 accessibilityRole="link"
                 hitSlop={8}
                 onPress={() => handleOpenReference(KEV_CATALOG_URL)}
@@ -261,7 +262,7 @@ export default function FindingDetailScreen() {
       <GlassSurface style={styles.sectionCard}>
         <Text style={styles.sectionTitle}>Ringkasan dampak</Text>
         <Text style={styles.body}>{finding.summary}</Text>
-        <Text style={styles.note}>Ringkasan dikutip dari advisory dan tidak diterjemahkan ulang.</Text>
+        <Text style={styles.note}>Ringkasan dikutip dari laporan kerentanan dan tidak diterjemahkan ulang.</Text>
       </GlassSurface>
 
       <View style={styles.chips}>
@@ -282,11 +283,12 @@ export default function FindingDetailScreen() {
           />
         ) : null}
         {finding.references.length === 0 ? (
-          <Text style={styles.body}>Tidak ada tautan referensi pada advisory ini.</Text>
+          <Text style={styles.body}>Tidak ada tautan referensi pada laporan kerentanan ini.</Text>
         ) : (
           finding.references.map((reference, index) => (
             <Pressable
-              accessibilityHint="Membuka tautan di browser"
+              accessibilityHint="Membuka tautan di peramban"
+              accessibilityLabel={`Buka referensi: ${reference.label}`}
               accessibilityRole="link"
               key={`${reference.url}-${index}`}
               onPress={() => handleOpenReference(reference.url)}

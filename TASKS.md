@@ -939,13 +939,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Sapu seluruh string untuk memastikan bahasa Indonesia.
 - **Memenuhi:** `NFR-11` (M), `NFR-13`
 - **Kriteria selesai (AC):**
-  - [ ] Semua tombol memiliki label aksesibel.
-  - [ ] Teks tetap terbaca pada ukuran font sistem terbesar.
-  - [ ] Tidak ada string Inggris yang terlihat pengguna.
+  - [x] Semua tombol memiliki label aksesibel.
+  - [x] Teks tetap terbaca pada ukuran font sistem terbesar.
+  - [x] Tidak ada string Inggris yang terlihat pengguna.
   - [ ] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [!] Tugas selesai — **tertunda uji manual iPhone**; pekerjaan kode sudah selesai dan di-commit.
 - **Catatan hasil:**
+  - Audit seluruh `Pressable` (7 lokasi) menambahkan `accessibilityLabel`: radio cakupan di layar Pindai, kartu Riwayat, `DarkCallToAction` (bawaan judul), aksi `EmptyState`, tautan katalog KEV, dan tautan referensi. Tab bar, tombol kembali, dan kartu temuan sudah memiliki label sejak tugas sebelumnya.
+  - `DarkCallToAction` menerima prop `accessibilityLabel` opsional dan memakai `title` bila tidak diisi. Label aksi empty state dan tautan referensi tidak lagi bergantung pada anak teks saja.
+  - Skala font: semua `Text`/`TextInput` memakai skala sistem. `numberOfLines` pada label tab dihapus agar teks dapat membungkus; `numberOfLines` yang tersisa hanya pada kartu temuan (2/3 baris) dan nama repositori di Riwayat (2 baris), yang semuanya punya halaman alternatif dengan teks lengkap. `Wordmark` tetap dibatasi 1,4 karena dekoratif dan `accessible={false}`.
+  - Kontras tema terang dihitung: `text` `#1E1E1E` pada canvas 5,72–11,3:1; `textSecondary` `#544B45` pada canvas tengah 4,67:1. Pesan banner kini memakai `text` (bukan `textSecondary`), teks `MetaChip` memakai `text` di atas permukaan tint, dan badge severity memakai putih murni sesuai tabel §3.3 `docs/ui-design.md` (`textOnStatus`) sehingga seluruh level lulus 4,5:1. Catatan risiko: `textSecondary` di tepi gradient paling bawah masih 2,92:1 pada canvas mentah dan 3,82:1 pada panel kaca; teks sekunder umumnya berada di panel kaca yang lebih terang, dan perbaikan kontras lanjutan tetap prioritas S (NFR-11).
+  - Sapuan bahasa: label severity menjadi **Kritis/Tinggi/Sedang/Rendah/Tidak diketahui**; istilah "Severity" menjadi "Tingkat keparahan", "repo" menjadi "repositori", "Termasuk dev" menjadi "Termasuk pengembangan", "Lockfile" menjadi "package-lock.json", "advisory" menjadi "laporan kerentanan", "browser" menjadi "peramban", dan chip "Dev" menjadi "Pengembangan". Pesan `NETWORK` tidak lagi menjanjikan hasil tersimpan karena riwayat masih sesi memori: "Tidak ada koneksi. Periksa jaringan lalu coba lagi."
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 9 suite/86 test lulus, ekspor web dan Android berhasil.
+  - **Sisa uji manual (pengembang):** buka aplikasi di Expo Go pada iPhone, atur ukuran teks sistem ke maksimum, lalu periksa Pindai → Hasil → Detail → Riwayat → Tentang: tidak ada teks terpotong, semua tombol terbaca pembaca layar, dan tidak ada string Inggris. Catat model iPhone serta versi iOS di `docs/environment.md` sebelum mencentang AC terakhir.
 
 ### T-W2-08 — `[MANUAL]` Build EAS percobaan dan pemasangan di perangkat
 - **Tipe:** `[MANUAL]`

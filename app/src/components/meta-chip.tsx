@@ -16,12 +16,12 @@ const CONFIG = {
   neutral: {
     background: Colors.light.glassFill,
     border: Colors.light.hairline,
-    color: Colors.light.textSecondary,
+    color: Colors.light.text,
   },
   danger: {
     background: Colors.light.dangerSurface,
     border: Colors.light.danger,
-    color: Colors.light.danger,
+    color: Colors.light.text,
   },
   warning: {
     background: Colors.light.warningSurface,
@@ -31,7 +31,7 @@ const CONFIG = {
   success: {
     background: Colors.light.successSurface,
     border: Colors.light.success,
-    color: Colors.light.success,
+    color: Colors.light.text,
   },
 } as const;
 

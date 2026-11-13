@@ -18,6 +18,8 @@ const lightColors = {
   textSecondary: '#544B45',
   textOnDark: '#F2EDE8',
   textMutedOnDark: '#A2958B',
+  /** Teks pada pil status berwarna; putih murni sesuai `docs/ui-design.md` §3.3. */
+  textOnStatus: '#FFFFFF',
 
   // Permukaan
   background: '#DDD3CC',

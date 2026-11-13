@@ -90,7 +90,7 @@ describe('parseRepoLink — format bukan https://github.com/pemilik/repo (§12 b
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.message).toBe(
-        'Tautan tidak valid. Gunakan format https://github.com/pemilik/repo.',
+        'Tautan tidak valid. Gunakan format https://github.com/pemilik/repositori.',
       );
     }
   });
@@ -140,7 +140,7 @@ describe('parseRepoLink — path tambahan, query, atau fragmen (§12 baris 4)', 
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.error.message).toBe(
-        'Gunakan tautan halaman utama repo, tanpa /tree, /blob, atau parameter.',
+        'Gunakan tautan halaman utama repositori, tanpa /tree, /blob, atau parameter.',
       );
     }
   });

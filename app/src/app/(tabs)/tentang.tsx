@@ -43,13 +43,13 @@ const SOURCES = [
   },
   {
     title: 'GitHub',
-    body: 'Manifest package.json dan package-lock.json dari default branch repositori publik.',
+    body: 'Berkas package.json dan package-lock.json dari cabang utama repositori publik.',
   },
 ];
 
 const LIMITATIONS = [
-  'Hanya repositori GitHub publik pada cabang utama; repo privat dan cabang lain tidak didukung.',
-  'Hanya manifest di folder utama dan ekosistem npm dengan package-lock.json v2/v3. Yarn atau pnpm diperlakukan sebagai mode perkiraan.',
+  'Hanya repositori GitHub publik pada cabang utama; repositori privat dan cabang lain tidak didukung.',
+  'Hanya berkas dependensi di folder utama dan ekosistem npm dengan package-lock.json v2/v3. Yarn atau pnpm diperlakukan sebagai mode perkiraan.',
   'Mode perkiraan hanya memeriksa dependensi langsung dengan versi teoretis, bukan versi yang benar-benar terpasang.',
   'Tingkat keparahan bergantung pada kelengkapan data OSV. Laporan tanpa tingkat keparahan atau CVE tidak dapat dicocokkan dengan KEV dan EPSS.',
   'KEV dan EPSS adalah sinyal, bukan bukti bahwa proyek tertentu diserang. Tidak ada analisis konteks kode.',
@@ -118,8 +118,8 @@ export default function AboutScreen() {
         <GlassSurface style={styles.card}>
           <Text style={styles.cardBody}>
             PatchRadar tidak meminta login. Sesi anonim dibuat otomatis untuk memakai layanan, dan
-            hanya repositori publik yang dapat dipindai. Tautan repo serta hasil pemindaian dikirim
-            ke server PatchRadar untuk diproses.
+            hanya repositori publik yang dapat dipindai. Tautan repositori serta hasil pemindaian
+            dikirim ke server PatchRadar untuk diproses.
           </Text>
           <Text style={styles.cardBody}>
             Riwayat saat ini hanya bertahan selama sesi aplikasi. Setelah riwayat cloud aktif, data

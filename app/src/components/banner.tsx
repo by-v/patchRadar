@@ -75,6 +75,6 @@ const styles = StyleSheet.create({
   },
   message: {
     ...Typography.body,
-    color: Colors.light.textSecondary,
+    color: Colors.light.text,
   },
 });

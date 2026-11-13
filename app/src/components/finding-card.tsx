@@ -24,7 +24,7 @@ export function FindingCard({ finding, onPress }: FindingCardProps) {
   return (
     <Pressable
       accessibilityHint="Membuka detail temuan"
-      accessibilityLabel={`${packageText}. ${label}. Severity ${severity}. ${finding.priority.reason}`}
+      accessibilityLabel={`${packageText}. ${label}. Tingkat keparahan ${severity}. ${finding.priority.reason}`}
       accessibilityRole="button"
       onPress={onPress}
       style={({ pressed }) => [styles.pressable, pressed && styles.pressed]}>
@@ -57,7 +57,9 @@ export function FindingCard({ finding, onPress }: FindingCardProps) {
             label={finding.package.direct ? 'Langsung' : 'Transitif'}
             tone="neutral"
           />
-          {finding.package.devOnly ? <MetaChip label="Dev" tone="neutral" /> : null}
+          {finding.package.devOnly ? (
+            <MetaChip label="Pengembangan" tone="neutral" />
+          ) : null}
         </View>
 
         <Text numberOfLines={3} style={styles.reason}>

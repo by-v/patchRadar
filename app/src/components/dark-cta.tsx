@@ -11,6 +11,8 @@ type DarkCallToActionProps = {
   disabled?: boolean;
   loading?: boolean;
   accessibilityHint?: string;
+  /** Label pembaca layar; bawaannya judul tombol. */
+  accessibilityLabel?: string;
 };
 
 export function DarkCallToAction({
@@ -20,10 +22,12 @@ export function DarkCallToAction({
   disabled = false,
   loading = false,
   accessibilityHint,
+  accessibilityLabel,
 }: DarkCallToActionProps) {
   return (
     <Pressable
       accessibilityHint={accessibilityHint}
+      accessibilityLabel={accessibilityLabel ?? title}
       accessibilityRole="button"
       accessibilityState={{ disabled: disabled || loading, busy: loading }}
       disabled={disabled || loading}

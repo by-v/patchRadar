@@ -65,7 +65,7 @@ export default function ScanResultScreen() {
         right={
           <Pressable
             accessibilityHint="Membuka tab Pindai"
-            accessibilityLabel="Pindai repo lain"
+            accessibilityLabel="Pindai repositori lain"
             accessibilityRole="button"
             hitSlop={8}
             onPress={goToScan}
@@ -100,14 +100,14 @@ export default function ScanResultScreen() {
 
       {isLargeRepo ? (
         <Banner
-          message="Repo besar; pemindaian bisa lebih lama dari biasanya."
-          title="Repo besar"
+          message="Repositori besar; pemindaian bisa lebih lama dari biasanya."
+          title="Repositori besar"
         />
       ) : null}
 
       {result.manifest.estimated ? (
         <Banner
-          message="Lockfile tidak ditemukan atau tidak dapat dibaca; hanya dependensi langsung yang diperiksa."
+          message="Berkas package-lock.json tidak ditemukan atau tidak dapat dibaca; hanya dependensi langsung yang diperiksa."
           title="Hasil perkiraan"
           variant="warning"
         />
@@ -127,7 +127,7 @@ export default function ScanResultScreen() {
 
       {result.findings.length === 0 ? (
         <EmptyState
-          actionLabel="Pindai repo lain"
+          actionLabel="Pindai repositori lain"
           icon="shield-outline"
           message="Hasil ini potensial dan tidak menjamin proyek bebas risiko."
           onAction={goToScan}
