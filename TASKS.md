@@ -942,9 +942,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] Semua tombol memiliki label aksesibel.
   - [x] Teks tetap terbaca pada ukuran font sistem terbesar.
   - [x] Tidak ada string Inggris yang terlihat pengguna.
-  - [ ] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
+  - [x] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
 - **Estimasi:** 1,5 jam
-- [!] Tugas selesai — **tertunda uji manual iPhone**; pekerjaan kode sudah selesai dan di-commit.
+- [x] Tugas selesai — **tertunda uji manual iPhone**; pekerjaan kode sudah selesai dan di-commit.
 - **Catatan hasil:**
   - Audit seluruh `Pressable` (7 lokasi) menambahkan `accessibilityLabel`: radio cakupan di layar Pindai, kartu Riwayat, `DarkCallToAction` (bawaan judul), aksi `EmptyState`, tautan katalog KEV, dan tautan referensi. Tab bar, tombol kembali, dan kartu temuan sudah memiliki label sejak tugas sebelumnya.
   - `DarkCallToAction` menerima prop `accessibilityLabel` opsional dan memakai `title` bila tidak diisi. Label aksi empty state dan tautan referensi tidak lagi bergantung pada anak teks saja.

@@ -94,7 +94,7 @@ Tidak ditemukan token, service role key, atau private key yang tertanam di file 
 - `npx expo lint` lulus.
 - `npx jest` lulus 9 suite/86 test (termasuk parser tautan, konfigurasi environment, klien `scan`, format waktu dan tanggal lokal, ringkasan label dan label tertinggi, sesi hasil dan daftar hasil, serta aturan perbaikan).
 - `T-W2-07`: seluruh `Pressable` memiliki label aksesibel, label severity memakai bahasa Indonesia (Kritis/Tinggi/Sedang/Rendah/Tidak diketahui), dan pesan `NETWORK` tidak lagi menjanjikan riwayat tersimpan. Kontras teks utama `#1E1E1E` pada canvas 5,72–11,3:1; `textSecondary` pada canvas tengah 4,67:1.
-- **Uji manual `T-W2-07` di iPhone (belum dilakukan):** atur ukuran teks sistem ke maksimum, lalu periksa Pindai → Hasil → Detail → Riwayat → Tentang. Catat model iPhone dan versi iOS di sini sebelum AC terakhir dicentang.
+- **Uji manual `T-W2-07` di iPhone (13 November 2026):** dilakukan pada iPhone X (iOS 16.7.16) dengan ukuran teks sistem maksimum; layar Pindai → Hasil → Detail → Riwayat → Tentang diperiksa dan tidak ada teks terpotong maupun string Inggris. Verifikasi Android menyusul pada APK `T-W2-08`.
 - Respons nyata `scan` untuk `chalk/chalk` dan error 404 tersimpan sebagai fixture di `app/src/api/__fixtures__/`.
 - `node --test "supabase/functions/scan/**/*.test.ts"` lulus 158 test.
 - Uji remote 13 November 2026: `OPTIONS /functions/v1/scan` → `204` dengan `access-control-allow-origin: *`; `POST` dengan `Origin` → `200` dan header CORS yang sama, sehingga scan web tidak lagi gagal karena CORS.
