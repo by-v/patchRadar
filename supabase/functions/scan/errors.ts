@@ -5,6 +5,8 @@
  * pada body error dan header `X-Request-Id`.
  */
 
+import { CORS_HEADERS } from './cors.ts';
+
 export type ScanErrorCode =
   | 'INVALID_URL'
   | 'UNAUTHENTICATED'
@@ -107,6 +109,7 @@ function jsonResponse(
     headers: {
       'content-type': 'application/json; charset=utf-8',
       'x-request-id': requestId,
+      ...CORS_HEADERS,
       ...extraHeaders,
     },
   });

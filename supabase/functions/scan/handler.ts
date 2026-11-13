@@ -10,6 +10,7 @@
  */
 
 import { ScanError, scanErrorResponse } from './errors.ts';
+import { CORS_HEADERS, corsPreflightResponse } from './cors.ts';
 import {
   fetchRepoFile,
   fetchRepoMetadata,
@@ -218,6 +219,10 @@ export async function handleScanRequest(
   const started = now();
   const timings = createStageTimings();
 
+  // Preflight browser: balas sebelum validasi metode/body agar web tidak
+  // diblokir CORS dan tidak menghasilkan "Tidak ada koneksi".
+  if (request.method === 'OPTIONS') return corsPreflightResponse();
+
   let status = 200;
   let owner: string | null = null;
   let repo: string | null = null;
@@ -367,6 +372,7 @@ export async function handleScanRequest(
       headers: {
         'content-type': 'application/json; charset=utf-8',
         'x-request-id': requestId,
+        ...CORS_HEADERS,
       },
     });
   } catch (error) {

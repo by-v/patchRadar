@@ -391,6 +391,43 @@ test('tanpa token, metode salah, dan body rusak ditangani', async () => {
   assert.equal(malformed.status, 400);
 });
 
+test('preflight OPTIONS dijawab 204 dengan header CORS tanpa menjalankan pipeline', async () => {
+  const response = await handleScanRequest(
+    new Request('https://contoh.test/functions/v1/scan', {
+      method: 'OPTIONS',
+      headers: {
+        origin: 'http://localhost:8081',
+        'access-control-request-method': 'POST',
+        'access-control-request-headers': 'apikey,content-type,x-client-version',
+      },
+    }),
+  );
+
+  assert.equal(response.status, 204);
+  assert.equal(response.headers.get('access-control-allow-origin'), '*');
+  assert.match(response.headers.get('access-control-allow-methods') ?? '', /POST/);
+  const allowedHeaders = response.headers.get('access-control-allow-headers') ?? '';
+  for (const header of ['apikey', 'content-type', 'x-client-version']) {
+    assert.match(allowedHeaders, new RegExp(header));
+  }
+});
+
+test('respons sukses dan error memuat header CORS untuk browser', async () => {
+  const success = await handleScanRequest(scanRequest(), {
+    token: TOKEN,
+    fetchImpl: validFixtureFetch().fetchImpl,
+  });
+  assert.equal(success.status, 200);
+  assert.equal(success.headers.get('access-control-allow-origin'), '*');
+
+  const failure = await handleScanRequest(scanRequest(undefined, 'GET'), {
+    token: TOKEN,
+    fetchImpl: makeFetch().fetchImpl,
+  });
+  assert.equal(failure.status, 405);
+  assert.equal(failure.headers.get('access-control-allow-origin'), '*');
+});
+
 test('error tak terduga dipetakan ke 500 INTERNAL tanpa detail sensitif', async () => {
   const response = scanErrorResponse(new Error('detail internal rahasia'), 'req_uji');
   const body = (await response.json()) as { error: Record<string, unknown> };
