@@ -944,7 +944,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] Tidak ada string Inggris yang terlihat pengguna.
   - [x] Aplikasi diuji di Expo Go pada iPhone dan versi iOS dicatat; verifikasi APK Android dilakukan di `T-W2-08`.
 - **Estimasi:** 1,5 jam
-- [x] Tugas selesai — **tertunda uji manual iPhone**; pekerjaan kode sudah selesai dan di-commit.
+- [x] Tugas selesai
 - **Catatan hasil:**
   - Audit seluruh `Pressable` (7 lokasi) menambahkan `accessibilityLabel`: radio cakupan di layar Pindai, kartu Riwayat, `DarkCallToAction` (bawaan judul), aksi `EmptyState`, tautan katalog KEV, dan tautan referensi. Tab bar, tombol kembali, dan kartu temuan sudah memiliki label sejak tugas sebelumnya.
   - `DarkCallToAction` menerima prop `accessibilityLabel` opsional dan memakai `title` bila tidak diisi. Label aksi empty state dan tautan referensi tidak lagi bergantung pada anak teks saja.
@@ -966,13 +966,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Periksa bundle untuk secret dan catat hasil build.
 - **Memenuhi:** `NFR-03`, `NFR-10`, `NFR-13`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] Build EAS selesai tanpa error.
-  - [ ] APK terpasang di emulator Android atau HP Android pinjaman dan alur utama berjalan.
-  - [ ] Tidak ada secret di bundle.
-  - [ ] Log build, model perangkat/emulator, dan versi Android tercatat.
+  - [x] Build EAS selesai tanpa error.
+  - [x] APK terpasang di emulator Android atau HP Android pinjaman dan alur utama berjalan.
+  - [x] Tidak ada secret di bundle.
+  - [x] Log build, model perangkat/emulator, dan versi Android tercatat.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Build EAS profil `preview` (APK) selesai: ID `d4c8dfa1-9003-4d13-826e-5c778ca255df`, status `FINISHED`, durasi 23 menit 21 detik, versionCode `1`, fingerprint `dfa68b417ba936d07c54a4d947706f7c5814d63d`. Log dan artefak dicatat di `docs/environment.md`.
+  - `app/eas.json` menambahkan profil `preview` (`distribution: internal`, `environment: preview`, `android.buildType: apk`) dan profil `production` (`autoIncrement`), dengan `cli.appVersionSource: remote`. `app/app.json` memakai `android.package: com.codebyv.patchradar`.
+  - Env build diambil dari environment EAS `preview` (`EXPO_PUBLIC_SUPABASE_URL`, `EXPO_PUBLIC_SUPABASE_ANON_KEY`); `app/.env` tidak ikut terunggah karena di-ignore git.
+  - APK `D:\builds\patchradar-preview.apk` berukuran 101.327.543 byte (96,63 MB) dengan SHA-256 `63E1AD6AD36B810CD89D330E868E235353B579B9750D790CADC8191393113F3A`.
+  - APK terpasang dan berjalan di **realme XT (Android 8)**. Alur Pindai → Hasil → Detail, tombol salin perintah, tautan referensi, Riwayat, dan Tentang berfungsi.
+  - Audit secret pada `assets/index.android.bundle` (3.303.852 byte): tidak ada `service_role`, `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`, `ghp_`, `github_pat_`, `sk_live_`, maupun blok private key; tidak ada berkas `.env` di dalam APK. Anon publishable key dan host Supabase ada di bundle sesuai desain.
+  - Build dibuat saat konfigurasi EAS masih di working tree (commit `9114acc`). Rebuild dari commit bersih disarankan sebelum/selama `T-W2-09` untuk membuktikan reproduksibilitas.
+  - `npx expo-doctor` melaporkan 19/20 karena drift versi patch dependensi yang sudah ada sebelumnya; tidak menghalangi build dan dapat diselaraskan pada commit terpisah.
 
 ### T-W2-09 — `[GATE]` Gate Minggu 2
 - **Tipe:** `[GATE]`
