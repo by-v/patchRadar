@@ -5,6 +5,7 @@ import {
   formatEpssPercentile,
   formatEpssValue,
   formatScore,
+  highestPriorityLabel,
   nonEmptyLabelCounts,
 } from '@/lib/scan-summary';
 import type { ScanFinding } from '@/types/scan';
@@ -35,6 +36,23 @@ describe('nonEmptyLabelCounts', () => {
     expect(
       nonEmptyLabelCounts({ FIX_NOW: 0, SCHEDULE: 3, MONITOR: 0 }),
     ).toEqual([{ label: 'SCHEDULE', count: 3 }]);
+  });
+});
+
+describe('highestPriorityLabel', () => {
+  it('memilih label paling mendesak tanpa memedulikan urutan temuan', () => {
+    expect(
+      highestPriorityLabel([
+        findingWithLabel('MONITOR'),
+        findingWithLabel('FIX_NOW'),
+        findingWithLabel('SCHEDULE'),
+      ]),
+    ).toBe('FIX_NOW');
+    expect(highestPriorityLabel([findingWithLabel('MONITOR')])).toBe('MONITOR');
+  });
+
+  it('mengembalikan null saat tidak ada temuan', () => {
+    expect(highestPriorityLabel([])).toBeNull();
   });
 });
 

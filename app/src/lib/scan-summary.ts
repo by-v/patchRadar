@@ -24,6 +24,14 @@ export function nonEmptyLabelCounts(
   }));
 }
 
+/** Label paling mendesak pada daftar temuan; `null` bila tidak ada temuan. */
+export function highestPriorityLabel(
+  findings: readonly Pick<ScanFinding, 'priority'>[],
+): PriorityLabel | null {
+  const counts = countFindingsByLabel(findings);
+  return PRIORITY_ORDER.find((label) => counts[label] > 0) ?? null;
+}
+
 /** Persentase EPSS dengan satu desimal dan koma Indonesia. */
 export function formatEpssValue(epss: number | null, available: boolean): string {
   if (!available || epss === null) return 'Tidak tersedia';

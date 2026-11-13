@@ -92,7 +92,7 @@ Tidak ditemukan token, service role key, atau private key yang tertanam di file 
 - `npx tsc --noEmit` lulus.
 - `npx expo-doctor` lulus 20/20.
 - `npx expo lint` lulus.
-- `npx jest` lulus 9 suite/80 test (termasuk parser tautan, konfigurasi environment, klien `scan`, format waktu, ringkasan label, sesi hasil, dan aturan perbaikan).
+- `npx jest` lulus 9 suite/86 test (termasuk parser tautan, konfigurasi environment, klien `scan`, format waktu dan tanggal lokal, ringkasan label dan label tertinggi, sesi hasil dan daftar hasil, serta aturan perbaikan).
 - Respons nyata `scan` untuk `chalk/chalk` dan error 404 tersimpan sebagai fixture di `app/src/api/__fixtures__/`.
 - `node --test "supabase/functions/scan/**/*.test.ts"` lulus 158 test.
 - Uji remote 13 November 2026: `OPTIONS /functions/v1/scan` → `204` dengan `access-control-allow-origin: *`; `POST` dengan `Origin` → `200` dan header CORS yang sama, sehingga scan web tidak lagi gagal karena CORS.

@@ -2,6 +2,7 @@ import {
   clearRememberedScans,
   getLatestRememberedScan,
   getRememberedScan,
+  listRememberedScans,
   rememberScanResult,
 } from '@/lib/scan-session';
 import type { ScanResult } from '@/types/scan';
@@ -48,6 +49,22 @@ describe('scan-session', () => {
     rememberScanResult(scanWithId('scan-1'));
 
     expect(getLatestRememberedScan()?.scanId).toBe('scan-1');
+  });
+
+  it('mendaftar hasil dari yang terbaru', () => {
+    rememberScanResult(scanWithId('scan-1'));
+    rememberScanResult(scanWithId('scan-2'));
+    rememberScanResult(scanWithId('scan-3'));
+
+    expect(listRememberedScans().map((result) => result.scanId)).toEqual([
+      'scan-3',
+      'scan-2',
+      'scan-1',
+    ]);
+  });
+
+  it('mendaftar hasil kosong saat belum ada pemindaian', () => {
+    expect(listRememberedScans()).toEqual([]);
   });
 
   it('membatasi jumlah hasil yang disimpan', () => {

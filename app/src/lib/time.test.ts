@@ -1,4 +1,4 @@
-import { formatRelativeTime } from '@/lib/time';
+import { formatLocalDateTime, formatRelativeTime } from '@/lib/time';
 
 const NOW = new Date('2026-11-13T12:00:00.000Z');
 
@@ -39,5 +39,20 @@ describe('formatRelativeTime', () => {
       'baru saja',
     );
     expect(formatRelativeTime('bukan tanggal', NOW)).toBe('waktu tidak diketahui');
+  });
+});
+
+describe('formatLocalDateTime', () => {
+  it('memakai tanggal, bulan Indonesia, dan jam dua digit', () => {
+    expect(formatLocalDateTime(new Date(2026, 10, 13, 9, 5).toISOString())).toBe(
+      '13 Nov 2026, 09.05',
+    );
+    expect(formatLocalDateTime(new Date(2026, 0, 2, 17, 30).toISOString())).toBe(
+      '2 Jan 2026, 17.30',
+    );
+  });
+
+  it('menandai ISO tidak valid', () => {
+    expect(formatLocalDateTime('bukan tanggal')).toBe('waktu tidak diketahui');
   });
 });

@@ -912,13 +912,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Pastikan teks tidak menjanjikan pemulihan riwayat setelah uninstall.
 - **Memenuhi:** `FR-20` (UI), `FR-26`, `R-10`, `R-11`
 - **Kriteria selesai (AC):**
-  - [ ] Empty state Riwayat tampil tanpa crash.
-  - [ ] Tentang memuat disclaimer dan keterbatasan utama.
-  - [ ] Tidak ada klaim "proyek aman" atau janji pemulihan data.
-  - [ ] Seluruh teks berbahasa Indonesia.
+  - [x] Empty state Riwayat tampil tanpa crash.
+  - [x] Tentang memuat disclaimer dan keterbatasan utama.
+  - [x] Tidak ada klaim "proyek aman" atau janji pemulihan data.
+  - [x] Seluruh teks berbahasa Indonesia.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `app/src/app/(tabs)/riwayat.tsx` membaca hasil dari sesi memori melalui `listRememberedScans()` (terbaru lebih dulu) dan menyegarkan daftar setiap tab dibuka. Empty state memakai `EmptyState` berjudul **Belum ada pemindaian** dengan tombol **Mulai pindai**; kartu menampilkan `owner/repo`, waktu lokal, jumlah temuan, dan badge label tertinggi. Tap kartu membuka Hasil dari data sesi tanpa memanggil jaringan.
+  - Riwayat tidak mengklaim penyimpanan permanen: subjudul dan catatan menyebut hasil hanya bertahan selama sesi aplikasi dan hilang saat aplikasi ditutup. Riwayat cloud/SQLite tetap pekerjaan Minggu 3.
+  - `app/src/app/(tabs)/tentang.tsx` kini memuat tujuan aplikasi, tiga kartu label beserta contoh pemicu, sumber data (OSV, CISA KEV, EPSS, GitHub), disclaimer **Hasil bersifat potensial** yang menegaskan PatchRadar tidak menjamin proyek aman atau tidak diserang, bagian privasi/identitas anonim (tanpa login, hanya repo publik, uninstall/hapus data tidak dapat dipulihkan, pindai ulang), 11 keterbatasan utama dari PRD §15, dan versi aplikasi.
+  - Fungsi murni baru diuji: `listRememberedScans`, `highestPriorityLabel`, dan `formatLocalDateTime`.
+  - Verifikasi: `tsc --noEmit` lulus, `expo lint` lulus, `jest` 9 suite/86 test lulus, ekspor web dan Android berhasil.
+  - Tautan kebijakan privasi belum ditambahkan karena URL resmi belum ada; jangan mengarang tautan. Bagian privasi ditulis sebagai teks sampai kebijakan tersedia.
+  - Uji manual singkat di perangkat/browser tetap disarankan untuk memeriksa tata letak Tentang yang panjang dan kartu Riwayat setelah pemindaian nyata.
 
 ### T-W2-07 — Aksesibilitas dasar dan konsistensi bahasa
 - **Tipe:** `[AGENT]`

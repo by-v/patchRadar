@@ -39,3 +39,14 @@ export function formatRelativeTime(iso: string, now: Date = new Date()): string 
   const month = MONTHS[date.getMonth()] ?? '';
   return `${date.getDate()} ${month} ${date.getFullYear()}`;
 }
+
+/** Tanggal dan jam lokal ringkas untuk kartu Riwayat, mis. `13 Nov 2026, 17.05`. */
+export function formatLocalDateTime(iso: string): string {
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return 'waktu tidak diketahui';
+
+  const month = MONTHS[date.getMonth()] ?? '';
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${date.getDate()} ${month} ${date.getFullYear()}, ${hours}.${minutes}`;
+}

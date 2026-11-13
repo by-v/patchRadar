@@ -31,6 +31,11 @@ export function getLatestRememberedScan(): ScanResult | null {
   return latest;
 }
 
+/** Daftar hasil untuk layar Riwayat; terbaru lebih dulu. */
+export function listRememberedScans(): ScanResult[] {
+  return Array.from(scans.values()).reverse();
+}
+
 /** Hanya untuk unit test. */
 export function clearRememberedScans(): void {
   scans.clear();
