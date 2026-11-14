@@ -1121,13 +1121,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Hubungkan JWT ke klien API `scan` dan pastikan sesi dipakai ulang, bukan membuat akun baru setiap scan.
 - **Memenuhi:** `FR-22` (klien), `NFR-05`, `NFR-03`, `R-09`
 - **Kriteria selesai (AC):**
-  - [ ] Sesi bertahan setelah aplikasi ditutup dan dibuka kembali.
-  - [ ] Scan berulang tidak menambah baris `auth.users`.
-  - [ ] Kegagalan sesi menonaktifkan Pindai tetapi Riwayat tetap dapat dibuka.
-  - [ ] Tidak ada token di log.
+  - [x] Sesi bertahan setelah aplikasi ditutup dan dibuka kembali.
+  - [x] Scan berulang tidak menambah baris `auth.users`.
+  - [x] Kegagalan sesi menonaktifkan Pindai tetapi Riwayat tetap dapat dibuka.
+  - [x] Tidak ada token di log.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `app/src/auth/session.ts` (klien Auth REST anonim: signup, refresh, baca/tulis sesi) dan `session.test.ts` (9 test); `app/src/storage/secure.ts` (SecureStore Android/iOS, fallback `localStorage` untuk web). `expo-secure-store` ~58.0.3 dipasang lewat `npx expo install` dan plugin ditambahkan ke `app/app.json`.
+  - Sesi disimpan di penyimpanan aman dengan kunci `patchradar.auth.session.v1`, berisi access token, refresh token, waktu kedaluwarsa, dan user id. Sesi dibaca ulang saat aplikasi dibuka sehingga tidak membuat pengguna baru setiap scan. Dua pemanggilan `ensureSession()` bersamaan memakai satu promise yang sama.
+  - Refresh dilakukan sekali bila token tersisa ≤ 60 detik atau sudah kedaluwarsa. Bila refresh ditolak (400/401), sesi dihapus agar percobaan berikutnya membuat sesi baru; gangguan jaringan tidak menghapus sesi. Pesan gagal memakai §12 baris 19, sedangkan kegagalan pembuatan sesi memakai baris 18.
+  - Layar Pindai menyiapkan sesi saat dibuka dan mengirim `Authorization: Bearer` lewat `accessToken` pada `requestScan`. Jika server membalas 401, klien me-refresh sekali lalu mengulang scan; bila masih gagal, Pindai dinonaktifkan dan tombol "Coba lagi" tersedia. Tab Riwayat tidak bergantung pada sesi sehingga tetap dapat dibuka.
+  - Bukti AC: test memverifikasi sesi tersimpan dipakai ulang tanpa request baru, dua pemanggilan bersamaan hanya membuat satu sesi, sesi kedaluwarsa di-refresh sekali dengan `refresh_token`, sesi dihapus saat refresh ditolak, pesan baris 18/19 tampil, data rusak diperlakukan sebagai belum punya sesi, dan pesan error tidak memuat token. Tidak ada `console.log` token.
+  - **[PERLU DIVERIFIKASI]** Anonymous sign-in di proyek Supabase remote (`umldsfkvifqoqfbouhca`) belum diaktifkan/diuji. Perubahan remote memerlukan persetujuan pengembang. Verifikasi sesi bertahan setelah aplikasi ditutup paksa, jumlah baris `auth.users` tidak bertambah antar-scan, dan perilaku build rilis harus dilakukan pada perangkat/emulator (dapat digabung ke `T-W3-07c`).
+  - Hasil: `npm test` 12 suite / 108 test lulus, `npm run typecheck` lulus, `npm run lint` lulus.
 
 ### T-W3-04 — Migrasi Supabase dan kebijakan RLS
 - **Tipe:** `[AGENT]`

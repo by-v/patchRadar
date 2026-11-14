@@ -4,6 +4,7 @@ import type { TextInputInstance } from 'react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { requestScan } from '@/api/scan';
+import { AUTH_MESSAGES, ensureSession, refreshSession } from '@/auth/session';
 import { Banner } from '@/components/banner';
 import { DarkCallToAction } from '@/components/dark-cta';
 import { PillInput } from '@/components/pill-input';
@@ -33,11 +34,16 @@ export default function ScanScreen() {
   const [loading, setLoading] = useState(false);
   const [slowHint, setSlowHint] = useState(false);
   const [scanError, setScanError] = useState<ScanFailure | null>(null);
+  const [sessionStatus, setSessionStatus] = useState<'checking' | 'ready' | 'error'>(
+    'checking',
+  );
+  const [sessionError, setSessionError] = useState<string | null>(null);
+  const [sessionAttempt, setSessionAttempt] = useState(0);
   const inputRef = useRef<TextInputInstance>(null);
 
   const validation = parseRepoLink(url);
   const error = showError && !validation.ok ? validation.error.message : undefined;
-  const canScan = validation.ok && !loading;
+  const canScan = validation.ok && !loading && sessionStatus === 'ready';
 
   useEffect(() => {
     if (!loading) {
@@ -47,6 +53,29 @@ export default function ScanScreen() {
     const timer = setTimeout(() => setSlowHint(true), SLOW_HINT_DELAY_MS);
     return () => clearTimeout(timer);
   }, [loading]);
+
+  // Sesi anonim disiapkan sekali saat layar dibuka; bila gagal, Pindai
+  // dinonaktifkan tetapi tab Riwayat tetap bisa dipakai (PRD §12 baris 18).
+  useEffect(() => {
+    let active = true;
+
+    void (async () => {
+      const auth = await ensureSession();
+      if (!active) return;
+      setSessionStatus(auth.ok ? 'ready' : 'error');
+      setSessionError(auth.ok ? null : auth.error.message);
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [sessionAttempt]);
+
+  function retrySession() {
+    setSessionStatus('checking');
+    setSessionError(null);
+    setSessionAttempt((attempt) => attempt + 1);
+  }
 
   async function handleScan() {
     if (loading) {
@@ -63,7 +92,39 @@ export default function ScanScreen() {
     setScanError(null);
     setLoading(true);
     try {
-      const result = await requestScan({ repoUrl: validation.value.url });
+      const auth = await ensureSession();
+      if (!auth.ok) {
+        setSessionStatus('error');
+        setSessionError(auth.error.message);
+        return;
+      }
+
+      let result = await requestScan({
+        repoUrl: validation.value.url,
+        accessToken: auth.session.accessToken,
+      });
+
+      // Token bisa kedaluwarsa di tengah jalan: refresh sekali lalu ulangi.
+      if (!result.ok && result.error.code === 'UNAUTHENTICATED') {
+        const refreshed = await refreshSession();
+        if (!refreshed.ok) {
+          setSessionStatus('error');
+          setSessionError(refreshed.error.message);
+          return;
+        }
+
+        result = await requestScan({
+          repoUrl: validation.value.url,
+          accessToken: refreshed.session.accessToken,
+        });
+
+        if (!result.ok && result.error.code === 'UNAUTHENTICATED') {
+          setSessionStatus('error');
+          setSessionError(AUTH_MESSAGES.SESSION_REFRESH_FAILED);
+          return;
+        }
+      }
+
       if (!result.ok) {
         setScanError(result.error);
         return;
@@ -145,10 +206,31 @@ export default function ScanScreen() {
         })}
       </View>
 
+      {sessionStatus === 'error' && sessionError ? (
+        <View style={styles.sessionBlock}>
+          <Banner message={sessionError} title="Sesi belum siap" variant="error" />
+          <Pressable
+            accessibilityLabel="Coba siapkan sesi"
+            accessibilityRole="button"
+            onPress={retrySession}
+            style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
+            <Text style={styles.retryText}>Coba lagi</Text>
+          </Pressable>
+        </View>
+      ) : null}
+
       <DarkCallToAction
         accessibilityHint="Memulai pemindaian dependensi repositori"
         disabled={!canScan}
-        eyebrow={loading ? 'Memeriksa dependensi…' : 'Siap dipindai'}
+        eyebrow={
+          loading
+            ? 'Memeriksa dependensi…'
+            : sessionStatus === 'checking'
+              ? 'Menyiapkan sesi…'
+              : sessionStatus === 'error'
+                ? 'Sesi belum siap'
+                : 'Siap dipindai'
+        }
         loading={loading}
         onPress={handleScan}
         title={loading ? 'Memindai…' : 'Mulai pemindaian'}
@@ -221,5 +303,25 @@ const styles = StyleSheet.create({
   note: {
     ...Typography.meta,
     color: Colors.light.textSecondary,
+  },
+  sessionBlock: {
+    gap: Spacing.two,
+    alignItems: 'flex-start',
+  },
+  retryButton: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.three,
+    borderRadius: Radius.pill,
+    borderWidth: 1,
+    borderColor: Colors.light.hairline,
+  },
+  retryText: {
+    ...Typography.body,
+    fontWeight: '600',
+    color: Colors.light.text,
+  },
+  pressed: {
+    opacity: 0.7,
   },
 });
