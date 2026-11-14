@@ -19,6 +19,55 @@ export interface OsvCacheStore {
   upsert(records: readonly OsvCacheRecord[]): Promise<void>;
 }
 
+export interface EpssCacheRecord {
+  cveId: string;
+  /** `null` menandai hasil kosong yang tetap di-cache (cache negatif). */
+  epss: number | null;
+  percentile: number | null;
+  fetchedAt: string;
+}
+
+export interface EpssCacheStore {
+  /** Baca beberapa CVE sekaligus; CVE yang tidak ada tidak dimasukkan. */
+  getMany(cveIds: readonly string[]): Promise<Map<string, EpssCacheRecord>>;
+  /** Tulis/ubah beberapa baris cache sekaligus. */
+  upsert(records: readonly EpssCacheRecord[]): Promise<void>;
+}
+
+export interface MemoryEpssCacheStore extends EpssCacheStore {
+  readonly records: Map<string, EpssCacheRecord>;
+  readonly writes: EpssCacheRecord[];
+  readCalls: number;
+}
+
+export function createMemoryEpssCacheStore(
+  seed: readonly EpssCacheRecord[] = [],
+): MemoryEpssCacheStore {
+  const records = new Map<string, EpssCacheRecord>();
+  for (const record of seed) records.set(record.cveId, record);
+
+  return {
+    records,
+    writes: [],
+    readCalls: 0,
+    async getMany(cveIds) {
+      this.readCalls += 1;
+      const found = new Map<string, EpssCacheRecord>();
+      for (const cveId of cveIds) {
+        const record = records.get(cveId);
+        if (record) found.set(cveId, record);
+      }
+      return found;
+    },
+    async upsert(next) {
+      for (const record of next) {
+        records.set(record.cveId, record);
+        this.writes.push(record);
+      }
+    },
+  };
+}
+
 export interface KevEntryRecord {
   cveId: string;
   vendor: string;

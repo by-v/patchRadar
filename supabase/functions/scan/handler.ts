@@ -32,7 +32,7 @@ import { matchKevWithTiming } from './kev-match.ts';
 import { assembleBaseFindings } from './findings.ts';
 import { fetchEpssScores } from './epss.ts';
 import { buildScanResponse, type ScanSuccessResponse, type SourceState } from './response.ts';
-import type { OsvCacheStore, KevStore } from './store.ts';
+import type { OsvCacheStore, KevStore, EpssCacheStore } from './store.ts';
 
 export const MAX_REQUEST_BODY_BYTES = 16 * 1024;
 export const MAX_PACKAGES = 1_500;
@@ -81,6 +81,7 @@ export interface ScanHandlerDependencies {
   registryFetchImpl?: FetchLike;
   osvStore?: OsvCacheStore;
   kevStore?: KevStore;
+  epssStore?: EpssCacheStore;
   registry?: RegistryResolver;
   logger?: ScanLogger;
   now?: () => number;
@@ -338,6 +339,8 @@ export async function handleScanRequest(
     ].sort();
     const epss = await fetchEpssScores(cveIds, {
       fetchImpl: dependencies.epssFetchImpl ?? dependencies.fetchImpl,
+      store: dependencies.epssStore,
+      now,
       sleep: dependencies.sleep,
       timings,
     });

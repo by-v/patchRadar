@@ -9,6 +9,7 @@
 
 import { handleScanRequest } from './handler.ts';
 import {
+  createSupabaseEpssCacheStore,
   createSupabaseKevStore,
   createSupabaseOsvCacheStore,
 } from './supabase-store.ts';
@@ -29,6 +30,7 @@ const stores =
     ? {
         osvStore: createSupabaseOsvCacheStore({ url: supabaseUrl, serviceRoleKey }),
         kevStore: createSupabaseKevStore({ url: supabaseUrl, serviceRoleKey }),
+        epssStore: createSupabaseEpssCacheStore({ url: supabaseUrl, serviceRoleKey }),
       }
     : {};
 

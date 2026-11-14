@@ -19,12 +19,15 @@
 
 import type { FetchLike } from './github.ts';
 import { createStageTimings, timed, type StageTimings } from './lib/timing.ts';
+import type { EpssCacheRecord, EpssCacheStore } from './store.ts';
 
 export const EPSS_BASE_URL = 'https://api.first.org/data/v1/epss';
 export const EPSS_MAX_CVES_PER_REQUEST = 100;
 export const EPSS_LIMIT = 1_000;
 export const EPSS_MAX_RETRIES = 2;
 export const EPSS_TIMEOUT_MS = 8_000;
+/** TTL mengikuti `Cache-Control: max-age=86400` dari FIRST (24 jam). */
+export const EPSS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
 export interface EpssScore {
   cveId: string;
@@ -33,8 +36,13 @@ export interface EpssScore {
   available: boolean;
 }
 
+export type EpssWarningCode =
+  | 'EPSS_UNAVAILABLE'
+  | 'EPSS_CACHE_READ_FAILED'
+  | 'EPSS_CACHE_WRITE_FAILED';
+
 export interface EpssWarning {
-  code: 'EPSS_UNAVAILABLE';
+  code: EpssWarningCode;
   message: string;
 }
 
@@ -42,7 +50,7 @@ export interface EpssResult {
   scores: Map<string, EpssScore>;
   warnings: EpssWarning[];
   partial: boolean;
-  sourceStatus: 'OK' | 'PARTIAL' | 'FAILED';
+  sourceStatus: 'OK' | 'CACHE' | 'PARTIAL' | 'FAILED';
   requests: number;
   timings: StageTimings;
 }
@@ -54,6 +62,9 @@ export interface EpssOptions {
   timeoutMs?: number;
   maxRetries?: number;
   timings?: StageTimings;
+  /** Bila kosong, alur berjalan tanpa cache (kompatibel dengan test lama). */
+  store?: EpssCacheStore;
+  ttlMs?: number;
 }
 
 interface EpssDataRow {
@@ -176,9 +187,29 @@ function buildUrl(cveIds: readonly string[]): string {
   return url.toString();
 }
 
+function isFresh(fetchedAt: string, nowMs: number, ttlMs: number): boolean {
+  const timestamp = Date.parse(fetchedAt);
+  return Number.isFinite(timestamp) && nowMs - timestamp <= ttlMs;
+}
+
+function scoreFromCache(record: EpssCacheRecord): EpssScore {
+  return {
+    cveId: record.cveId,
+    epss: record.epss,
+    percentile: record.percentile,
+    available: record.epss !== null,
+  };
+}
+
 /**
- * Ambil skor EPSS untuk semua CVE unik. Kegagalan tidak pernah melempar;
+ * Ambil skor EPSS untuk semua CVE unik. Kegagalan sumber tidak pernah melempar;
  * hasilnya `partial=true` + warning `EPSS_UNAVAILABLE` agar scan tetap 200.
+ *
+ * Bila `store` diberikan, CVE yang masih segar (TTL 24 jam) dilayani cache dan
+ * tidak masuk request. Hasil kosong ikut di-cache. Kegagalan baca/tulis cache
+ * hanya menjadi warning informatif (`EPSS_CACHE_*_FAILED`), bukan `partial`;
+ * `partial` tetap hanya dipicu kegagalan sumber EPSS. Saat sumber gagal, nilai
+ * cache kedaluwarsa dipakai sebagai fallback dan hasilnya parsial.
  */
 export async function fetchEpssScores(
   cveIds: readonly string[],
@@ -187,6 +218,8 @@ export async function fetchEpssScores(
   const timings = options.timings ?? createStageTimings();
   const warnings: EpssWarning[] = [];
   const scores = new Map<string, EpssScore>();
+  const nowMs = (options.now ?? Date.now)();
+  const ttlMs = options.ttlMs ?? EPSS_CACHE_TTL_MS;
 
   const unique = [...new Set(cveIds.map((id) => id.trim().toUpperCase()).filter(Boolean))].sort();
   for (const cveId of unique) {
@@ -197,15 +230,56 @@ export async function fetchEpssScores(
     return { scores, warnings, partial: false, sourceStatus: 'OK', requests: 0, timings };
   }
 
+  const store = options.store;
+  const fresh = new Set<string>();
+  const stale = new Map<string, EpssCacheRecord>();
+
+  if (store) {
+    try {
+      const cached = await timed(timings, 'epss.cache.read', () => store.getMany(unique));
+      for (const cveId of unique) {
+        const record = cached.get(cveId);
+        if (!record) continue;
+        if (isFresh(record.fetchedAt, nowMs, ttlMs)) {
+          fresh.add(cveId);
+          scores.set(cveId, scoreFromCache(record));
+        } else {
+          stale.set(cveId, record);
+        }
+      }
+    } catch {
+      // Tabel cache hilang/error tidak boleh menggagalkan scan; anggap miss.
+      warnings.push({
+        code: 'EPSS_CACHE_READ_FAILED',
+        message: 'Cache EPSS tidak dapat dibaca; skor diambil langsung dari sumber.',
+      });
+    }
+  }
+
+  if (fresh.size === unique.length) {
+    return {
+      scores,
+      warnings,
+      partial: false,
+      sourceStatus: 'CACHE',
+      requests: 0,
+      timings,
+    };
+  }
+
+  const pending = unique.filter((cveId) => !fresh.has(cveId));
   const context: RequestContext = {
     fetchImpl: options.fetchImpl ?? fetch,
     timeoutMs: options.timeoutMs ?? EPSS_TIMEOUT_MS,
     sleep: options.sleep ?? defaultSleep,
     maxRetries: options.maxRetries ?? EPSS_MAX_RETRIES,
   };
-  const chunks = chunk(unique, EPSS_MAX_CVES_PER_REQUEST);
+  const chunks = chunk(pending, EPSS_MAX_CVES_PER_REQUEST);
+  const fetchedAt = new Date(nowMs).toISOString();
+  const cacheWrites: EpssCacheRecord[] = [];
   let requests = 0;
   let failures = 0;
+  let staleServed = 0;
 
   await timed(timings, 'epss.fetch', async () => {
     for (const batch of chunks) {
@@ -213,23 +287,42 @@ export async function fetchEpssScores(
       try {
         const body = await fetchChunk(buildUrl(batch), context);
         const rows = Array.isArray(body.data) ? (body.data as EpssDataRow[]) : [];
+        const returned = new Map<string, EpssDataRow>();
         for (const row of rows) {
           const cveId = typeof row.cve === 'string' ? row.cve.trim().toUpperCase() : '';
           if (!cveId || !scores.has(cveId)) continue;
-          const epss = parseNumber(row.epss);
-          const percentile = parseNumber(row.percentile);
-          scores.set(cveId, {
-            cveId,
-            epss,
-            percentile,
-            available: epss !== null,
-          });
+          returned.set(cveId, row);
+        }
+        for (const cveId of batch) {
+          const row = returned.get(cveId);
+          const epss = row ? parseNumber(row.epss) : null;
+          const percentile = row ? parseNumber(row.percentile) : null;
+          scores.set(cveId, { cveId, epss, percentile, available: epss !== null });
+          // Cache negatif (epss null) tetap ditulis agar tidak ditanyakan ulang.
+          cacheWrites.push({ cveId, epss, percentile, fetchedAt });
         }
       } catch {
         failures += 1;
+        for (const cveId of batch) {
+          const record = stale.get(cveId);
+          if (!record) continue;
+          staleServed += 1;
+          scores.set(cveId, scoreFromCache(record));
+        }
       }
     }
   });
+
+  if (store && cacheWrites.length > 0) {
+    try {
+      await timed(timings, 'epss.cache.write', () => store.upsert(cacheWrites));
+    } catch {
+      warnings.push({
+        code: 'EPSS_CACHE_WRITE_FAILED',
+        message: 'Cache EPSS tidak dapat diperbarui; skor tetap dipakai untuk pemindaian ini.',
+      });
+    }
+  }
 
   if (failures === chunks.length) {
     warnings.push({
@@ -244,11 +337,16 @@ export async function fetchEpssScores(
   }
 
   const partial = failures > 0;
+  const sourceStatus = partial
+    ? failures === chunks.length && staleServed === 0
+      ? 'FAILED'
+      : 'PARTIAL'
+    : 'OK';
   return {
     scores,
     warnings,
     partial,
-    sourceStatus: partial ? (failures === chunks.length ? 'FAILED' : 'PARTIAL') : 'OK',
+    sourceStatus,
     requests,
     timings,
   };

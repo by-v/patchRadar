@@ -10,6 +10,8 @@
 
 import type { FetchLike } from './github.ts';
 import type {
+  EpssCacheRecord,
+  EpssCacheStore,
   KevEntryRecord,
   KevStore,
   OsvCacheRecord,
@@ -35,6 +37,9 @@ export interface SupabaseStoreOptions {
 
 /** Batas aman kunci per GET; 100 kunci ≈ 5,6 ribu karakter URL setelah encoding. */
 export const OSV_CACHE_READ_BATCH_SIZE = 100;
+
+/** Batas kunci per GET `epss_cache`; alasan sama dengan cache OSV. */
+export const EPSS_CACHE_READ_BATCH_SIZE = 100;
 
 interface PostgrestRow {
   [key: string]: unknown;
@@ -74,6 +79,15 @@ function inList(values: readonly string[]): string {
 
 function asString(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback;
+}
+
+function asNumeric(value: unknown): number | null {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (typeof value === 'string') {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
 }
 
 export function createSupabaseOsvCacheStore(options: SupabaseStoreOptions): OsvCacheStore {
@@ -125,6 +139,66 @@ export function createSupabaseOsvCacheStore(options: SupabaseStoreOptions): OsvC
         timeoutMs,
       );
       if (!response.ok) throw new Error(`Supabase osv_cache upsert gagal (${response.status}).`);
+    },
+  };
+}
+
+export function createSupabaseEpssCacheStore(options: SupabaseStoreOptions): EpssCacheStore {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const timeoutMs = options.timeoutMs ?? 8_000;
+  const batchSize = Math.max(1, options.cacheReadBatchSize ?? EPSS_CACHE_READ_BATCH_SIZE);
+  const auth = headers(options.serviceRoleKey);
+
+  return {
+    async getMany(cveIds) {
+      if (cveIds.length === 0) return new Map();
+      const found = new Map<string, EpssCacheRecord>();
+      for (let index = 0; index < cveIds.length; index += batchSize) {
+        const batch = cveIds.slice(index, index + batchSize);
+        const query = `epss_cache?select=cve_id,epss,percentile,fetched_at&cve_id=in.(${inList(batch)})`;
+        const response = await request(
+          fetchImpl,
+          endpoint(options.url, query),
+          { method: 'GET', headers: auth },
+          timeoutMs,
+        );
+        if (!response.ok) throw new Error(`Supabase epss_cache GET gagal (${response.status}).`);
+        const rows = (await response.json()) as PostgrestRow[];
+        for (const row of rows) {
+          const cveId = asString(row.cve_id);
+          if (!cveId) continue;
+          found.set(cveId, {
+            cveId,
+            epss: asNumeric(row.epss),
+            percentile: asNumeric(row.percentile),
+            fetchedAt: asString(row.fetched_at),
+          });
+        }
+      }
+      return found;
+    },
+
+    async upsert(records) {
+      if (records.length === 0) return;
+      const rows = records.map((record) => ({
+        cve_id: record.cveId,
+        epss: record.epss,
+        percentile: record.percentile,
+        fetched_at: record.fetchedAt,
+      }));
+      const response = await request(
+        fetchImpl,
+        endpoint(options.url, 'epss_cache'),
+        {
+          method: 'POST',
+          headers: headers(options.serviceRoleKey, {
+            prefer: 'resolution=merge-duplicates,return=minimal',
+          }),
+          body: JSON.stringify(rows),
+        },
+        timeoutMs,
+      );
+      if (!response.ok) throw new Error(`Supabase epss_cache upsert gagal (${response.status}).`);
     },
   };
 }

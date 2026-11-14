@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { handleScanRequest, type ScanLogEntry } from './handler.ts';
 import { scanErrorResponse } from './errors.ts';
 import { isAllowedGithubUrl } from './github.ts';
-import { createMemoryKevStore } from './store.ts';
+import { createMemoryEpssCacheStore, createMemoryKevStore, type EpssCacheStore } from './store.ts';
 
 const FIXTURES = new URL('../../../fixtures/lockfiles/', import.meta.url);
 const TOKEN = 'token-rahasia-yang-tidak-boleh-bocor';
@@ -537,17 +537,27 @@ function kevEntry(cveId: string, updatedAt: string) {
 async function runPipeline(options: {
   epssFail?: boolean;
   kevStore?: ReturnType<typeof createMemoryKevStore>;
+  epssStore?: EpssCacheStore;
+  epssCalls?: { count: number };
 } = {}) {
+  const baseExternal = pipelineExternal({ epssFail: options.epssFail });
+  const external = async (url: string, init?: RequestInit): Promise<Response | null> => {
+    if (options.epssCalls && new URL(url).hostname === 'api.first.org') {
+      options.epssCalls.count += 1;
+    }
+    return baseExternal(url, init);
+  };
   const fake = makeFetch({
     packageBody: fixture('small-100/package.json'),
     lockBody: fixture('small-100/package-lock.json'),
-    external: pipelineExternal({ epssFail: options.epssFail }),
+    external,
   });
   const logs: ScanLogEntry[] = [];
   const response = await handleScanRequest(scanRequest(), {
     token: TOKEN,
     fetchImpl: fake.fetchImpl,
     kevStore: options.kevStore ?? createMemoryKevStore([kevEntry('CVE-2099-0001', E2E_NOW_ISO)]),
+    epssStore: options.epssStore,
     now: () => E2E_NOW,
     sleep: async () => undefined,
     logger: (entry) => logs.push(entry),
@@ -663,6 +673,25 @@ test('EPSS gagal menghasilkan 200 parsial dengan warning dan findings tetap ada'
   assert.equal(findings[0]!.exploitation.epssAvailable, false);
   // KEV tetap menjadi pemicu FIX_NOW meski EPSS tidak tersedia.
   assert.equal(findings[0]!.priority.label, 'FIX_NOW');
+});
+
+test('scan kedua memakai cache EPSS dan tidak memanggil FIRST lagi', async () => {
+  const epssStore = createMemoryEpssCacheStore();
+  const epssCalls = { count: 0 };
+
+  const first = await runPipeline({ epssStore, epssCalls });
+  assert.equal((first.body.sourceStatus as Record<string, string>).epss, 'OK');
+  assert.equal(epssCalls.count, 1);
+
+  const second = await runPipeline({ epssStore, epssCalls });
+  assert.equal(second.response.status, 200);
+  assert.equal((second.body.sourceStatus as Record<string, string>).epss, 'CACHE');
+  assert.equal(second.body.partial, false);
+  assert.equal(epssCalls.count, 1);
+  assert.equal(
+    (second.body.findings as Array<Record<string, any>>)[0]!.exploitation.epss,
+    (first.body.findings as Array<Record<string, any>>)[0]!.exploitation.epss,
+  );
 });
 
 test('KEV kosong atau STALE tidak menghentikan scan dan memberi warning', async () => {

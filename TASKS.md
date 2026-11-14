@@ -1044,12 +1044,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Pastikan cache miss atau tabel tidak tersedia tetap menghasilkan parsial, bukan crash.
 - **Memenuhi:** `FR-10`, `NFR-15`, `R-05`
 - **Kriteria selesai (AC):**
-  - [ ] Scan kedua dengan CVE sama tidak memanggil EPSS untuk CVE yang masih valid di cache.
-  - [ ] Menghapus tabel cache tidak membuat scan gagal.
-  - [ ] Migrasi dapat dijalankan ulang tanpa error.
+  - [x] Scan kedua dengan CVE sama tidak memanggil EPSS untuk CVE yang masih valid di cache.
+  - [x] Menghapus tabel cache tidak membuat scan gagal.
+  - [x] Migrasi dapat dijalankan ulang tanpa error.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/migrations/20261114000000_epss_cache.sql`, `supabase/functions/scan/store.ts` (antarmuka + store memori `EpssCacheStore`), `supabase/functions/scan/supabase-store.ts` (`createSupabaseEpssCacheStore`, batch 100), dan perubahan `epss.ts`, `handler.ts`, `index.ts`.
+  - `fetchEpssScores()` membaca cache lebih dulu. CVE dengan `fetched_at` ≤ 24 jam dilayani cache tanpa request; CVE miss/kedaluwarsa diambil dari FIRST dan ditulis kembali. Hasil kosong (`epss=null`) ikut di-cache sebagai cache negatif. Bila semua CVE segar, `sourceStatus.epss="CACHE"` dan `requests=0`.
+  - Saat sumber gagal, nilai cache kedaluwarsa dipakai sebagai fallback dengan `partial=true` dan warning `EPSS_UNAVAILABLE`. Kegagalan baca/tulis cache hanya menghasilkan warning informatif `EPSS_CACHE_READ_FAILED`/`EPSS_CACHE_WRITE_FAILED`, tidak menyalakan `partial` dan tidak pernah melempar exception.
+  - AC 1 dibuktikan oleh test handler dua pemindaian dengan store yang sama: panggilan `api.first.org` tetap 1, respons kedua `sourceStatus.epss="CACHE"` dan nilai temuan sama. AC 2 dibuktikan unit test dengan store yang melempar error (simulasi tabel hilang); EPSS tetap dipanggil dan scan menghasilkan data. AC 3 dibuktikan dengan menjalankan file migrasi **dua kali** pada PostgreSQL lokal sementara (port 55439, peran `anon`/`authenticated`/`service_role` dibuat manual); keduanya berhasil dan indeks hanya dibuat sekali.
+  - Test edge: 168 lulus (`node --test "supabase/functions/scan/**/*.test.ts"`). Typecheck edge lulus (`tsc` strict, `--module esnext --moduleResolution bundler`). Regresi app: `npm run typecheck`, `npm run lint`, dan `npm test` lulus (9 suite, 86 test).
+  - **Belum dikerjakan (menunggu izin pengembang):** menerapkan migrasi ke proyek remote `umldsfkvifqoqfbouhca`, men-deploy ulang `scan`, dan membuktikan `sourceStatus.epss="CACHE"` pada dua scan produksi. Tidak ada tabel remote yang dihapus/diubah pada tugas ini.
 
 ### T-W3-01 — Skema SQLite dan repository lokal
 - **Tipe:** `[AGENT]`
@@ -1710,6 +1716,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 13 November 2026 | `T-W2-04` | Hasil scan disimpan sementara di memori (`app/src/lib/scan-session.ts`, maksimal 10 scan) sampai SQLite dibangun pada Minggu 3. Rute Detail `.../finding/[findingId]` dibuat sebagai placeholder agar navigasi dari kartu sudah berfungsi; isinya diisi pada `T-W2-05`. | PRD §10.1 menyebut fallback ke state navigasi; penyimpanan lokal baru dijadwalkan Minggu 3; menyimpan seluruh payload di parameter URL tidak aman dan tidak praktis. | Ya — keputusan implementasi sementara; tidak mengubah cakupan PRD |
 | 13 November 2026 | `T-W2-05` | Menambah dependensi `expo-clipboard` (~58.0.4) untuk tombol salin. Tautan referensi dibuka dengan `expo-web-browser` di iOS/Android dan `Linking.openURL` di web. Bila `fix.command` dari backend tersedia, nilainya dipakai; bila kosong, perintah dirakit dari `safeVersion` sesuai FR-19. | `expo-clipboard` adalah modul resmi Expo yang tersedia di Expo Go; `openBrowserAsync` di web memakai popup `window.open` yang mudah diblokir; kontrak backend sudah menyediakan `fix.command`. | Ya — keputusan implementasi; tidak mengubah cakupan PRD |
 | 13 November 2026 | `T-W2-03` (perbaikan web) | Edge Function `scan` menangani preflight `OPTIONS` dengan `204` dan mengirim header CORS (`access-control-allow-origin: *`, metode `POST, OPTIONS`, header `authorization, apikey, content-type, x-client-version`) pada semua respons, termasuk error. Wildcard dipakai karena MVP tidak memakai cookie/credentials. Fungsi di-deploy ulang dengan `npx supabase functions deploy scan --use-api --yes`. | Sebelumnya `OPTIONS` dijawab `405` tanpa header CORS sehingga browser memblokir permintaan dan klien menampilkan pesan `NETWORK` ("Tidak ada koneksi") meski jaringan normal; iOS/Android tidak terkena karena tanpa preflight. | Ya — pengembang menyetujui perbaikan dan deploy, 13 November 2026 |
+| 14 November 2026 | `T-W1-13` | Langkah tugas “cache miss atau tabel tidak tersedia tetap menghasilkan parsial” ditafsirkan sebagai **tidak boleh crash**, bukan `partial=true`. Cache miss normal dan kegagalan baca/tulis cache internal hanya menghasilkan warning informatif (`EPSS_CACHE_READ_FAILED`/`EPSS_CACHE_WRITE_FAILED`); `partial` tetap hanya dipicu kegagalan sumber EPSS (`EPSS_UNAVAILABLE`). TTL cache 24 jam dan hasil kosong ikut di-cache. Migrasi belum diterapkan dan fungsi belum di-deploy ke remote. | Konsisten dengan keputusan 10 November 2026 bahwa kegagalan cache internal tidak menyalakan `partial`; menyalakan `partial` pada scan pertama (cache kosong) akan menampilkan banner parsial meski data EPSS lengkap. TTL mengikuti `Cache-Control: max-age=86400`. | Implementasi lokal; izin perubahan remote belum diberikan |
 
 
 ---
