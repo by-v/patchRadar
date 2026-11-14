@@ -1069,13 +1069,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji dengan database in-memory.
 - **Memenuhi:** `FR-20`, `FR-21`, `NFR-07`, `NFR-16`
 - **Kriteria selesai (AC):**
-  - [ ] Skema tidak memuat `sync_state` dan memuat `persisted`.
-  - [ ] Migrasi dijalankan dua kali tanpa error.
-  - [ ] Simpan lalu baca mengembalikan payload yang sama.
-  - [ ] Unit test repository lulus.
+  - [x] Skema tidak memuat `sync_state` dan memuat `persisted`.
+  - [x] Migrasi dijalankan dua kali tanpa error.
+  - [x] Simpan lalu baca mengembalikan payload yang sama.
+  - [x] Unit test repository lulus.
 - **Estimasi:** 3 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `app/src/db/schema.ts`, `migrations.ts`, `repository.ts`, dan `repository.test.ts`. Dependensi `expo-sqlite` ~58.0.17 ditambahkan lewat `npx expo install` beserta plugin config di `app/app.json`; `@types/node` ditambahkan sebagai devDependency untuk adapter test `node:sqlite`.
+  - `schema.ts`: tabel `local_scans`, `local_findings`, `local_meta` sesuai PRD §8.2; tidak ada `sync_state`; `local_scans.persisted` menyimpan status cloud. Indeks `local_findings_scan_id_idx` mempercepat Detail. Antarmuka `SqliteDatabase` memisahkan repository dari modul native.
+  - `migrations.ts`: versi skema 1 di `PRAGMA user_version` dan dicerminkan ke `local_meta`. DDL memakai `IF NOT EXISTS`; migrasi menolak database dengan versi lebih baru. `openLocalDatabase()` membuka `patchradar.db`, mengaktifkan WAL, menjalankan migrasi, dan membungkus `expo-sqlite` ke antarmuka repository.
+  - `repository.ts`: `saveScanResult` (upsert scan + ganti seluruh temuan dalam transaksi), `listScanResults` (terbaru lebih dulu), `getScanResult`, `listScanFindings`, `getScanFinding`, dan `deleteScanResult`. Nilai dinamis selalu di-bind sebagai parameter; payload rusak dilewati saat daftar dan menghasilkan `null` saat baca tunggal.
+  - Test memakai SQLite in-memory `node:sqlite`, bukan modul native Expo. Bukti AC: kolom `persisted` ada dan `sync_state` tidak ada; migrasi dua kali lulus dan `user_version=1`; `listScanResults`/`getScanResult`/`listScanFindings`/`getScanFinding` mengembalikan payload yang identik; upsert tidak menduplikasi temuan; hapus membersihkan temuan terkait.
+  - Hasil: `npm test` 10 suite / 93 test lulus, `npm run typecheck` lulus, `npm run lint` lulus. Penyambungan repository ke layar Riwayat/Hasil/Detail tetap menjadi lingkup `T-W3-02`.
 
 ### T-W3-02 — Riwayat dan Detail dari SQLite serta mode offline
 - **Tipe:** `[AGENT]`
