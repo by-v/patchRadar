@@ -1,5 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Banner } from '@/components/banner';
@@ -11,34 +12,70 @@ import { MetaChip } from '@/components/meta-chip';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
-import { getRememberedScan } from '@/lib/scan-session';
+import { loadScanForDisplay, openDatabaseSafely, type LoadedScan } from '@/db/access';
 import {
   countFindingsByLabel,
   nonEmptyLabelCounts,
 } from '@/lib/scan-summary';
-import { formatRelativeTime } from '@/lib/time';
+import { formatLocalDateTime, formatRelativeTime } from '@/lib/time';
 
 /** PRD FR-17: di atas target 500 paket, tampilkan penjelasan repo besar. */
 const LARGE_REPO_THRESHOLD = 500;
 
+type LoadState =
+  | { status: 'loading' }
+  | { status: 'ready'; loaded: LoadedScan }
+  | { status: 'missing' };
+
 export default function ScanResultScreen() {
   const router = useRouter();
-  const { scanId } = useLocalSearchParams<{ scanId?: string }>();
-  const result = scanId ? getRememberedScan(scanId) : null;
+  const { scanId, saveFailed } = useLocalSearchParams<{
+    scanId?: string;
+    saveFailed?: string;
+  }>();
+  const [state, setState] = useState<LoadState>(() =>
+    scanId ? { status: 'loading' } : { status: 'missing' },
+  );
   const goToScan = () => router.navigate('/');
 
-  if (!result) {
+  // Baca dari SQLite tanpa jaringan; hasil sesi dipakai bila database gagal.
+  useEffect(() => {
+    if (!scanId) return undefined;
+    let active = true;
+
+    void (async () => {
+      const db = await openDatabaseSafely();
+      const loaded = await loadScanForDisplay(db, scanId);
+      if (!active) return;
+      setState(loaded ? { status: 'ready', loaded } : { status: 'missing' });
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [scanId]);
+
+  if (state.status === 'loading') {
+    return (
+      <Screen hasTabBar={false}>
+        <ScreenHeader onBack={() => router.back()} title="Hasil pemindaian" />
+        <Text style={styles.loading}>Memuat hasil…</Text>
+      </Screen>
+    );
+  }
+
+  if (state.status === 'missing') {
     return (
       <Screen hasTabBar={false}>
         <ScreenHeader
           onBack={() => router.back()}
-          subtitle="Data hasil tidak ditemukan pada sesi ini."
+          subtitle="Data hasil tidak ditemukan di perangkat ini."
           title="Hasil pemindaian"
         />
         <EmptyState
           actionLabel="Kembali ke Pindai"
           icon="alert-circle-outline"
-          message="Hasil hanya tersimpan selama sesi aplikasi. Pindai ulang repositori untuk melihat hasil terbaru."
+          message="Hasil tidak ditemukan pada penyimpanan perangkat. Pindai ulang repositori untuk melihat hasil terbaru."
           onAction={goToScan}
           title="Hasil tidak tersedia"
         />
@@ -46,6 +83,8 @@ export default function ScanResultScreen() {
     );
   }
 
+  const { result, source } = state.loaded;
+  const showSaveError = saveFailed === '1';
   const labelCounts = nonEmptyLabelCounts(countFindingsByLabel(result.findings));
   const warningMessage = result.warnings.map((warning) => `• ${warning.message}`).join('\n');
   const otherWarnings = result.partial
@@ -76,6 +115,21 @@ export default function ScanResultScreen() {
         subtitle={`Dipindai ${formatRelativeTime(result.scannedAt)}`}
         title={`${result.repo.owner}/${result.repo.name}`}
       />
+
+      {showSaveError ? (
+        <Banner
+          message="Hasil berhasil dipindai, tetapi gagal disimpan di perangkat."
+          title="Gagal menyimpan"
+          variant="error"
+        />
+      ) : null}
+
+      {source === 'CACHE' ? (
+        <View style={styles.cacheRow}>
+          <MetaChip icon="cloud-offline-outline" label="data dari cache" tone="warning" />
+          <Text style={styles.cacheTime}>Dipindai {formatLocalDateTime(result.scannedAt)}</Text>
+        </View>
+      ) : null}
 
       <GlassSurface style={styles.summary} variant="strong">
         <View style={styles.summaryTop}>
@@ -155,6 +209,20 @@ export default function ScanResultScreen() {
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    ...Typography.body,
+    color: Colors.light.textSecondary,
+  },
+  cacheRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  cacheTime: {
+    ...Typography.meta,
+    color: Colors.light.textSecondary,
+  },
   headerAction: {
     width: 40,
     height: 40,

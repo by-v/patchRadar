@@ -10,6 +10,7 @@ import { PillInput } from '@/components/pill-input';
 import { Screen } from '@/components/screen';
 import { Wordmark } from '@/components/wordmark';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { openDatabaseSafely, saveScanResultSafely } from '@/db/access';
 import { rememberScanResult } from '@/lib/scan-session';
 import { parseRepoLink } from '@/lib/url';
 import type { ScanFailure } from '@/types/scan';
@@ -68,10 +69,15 @@ export default function ScanScreen() {
         return;
       }
 
+      // Simpan lokal sebelum navigasi (FR-20). Simpanan memori tetap ada agar
+      // layar Hasil tidak kehilangan hasil ketika SQLite gagal.
       rememberScanResult(result.data);
+      const db = await openDatabaseSafely();
+      const saved = await saveScanResultSafely(db, result.data);
+
       router.push({
         pathname: '/scan/[scanId]',
-        params: { scanId: result.data.scanId },
+        params: { saveFailed: saved ? '0' : '1', scanId: result.data.scanId },
       });
     } finally {
       setLoading(false);

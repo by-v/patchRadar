@@ -10,6 +10,7 @@ import { MetaChip } from '@/components/meta-chip';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
 import { Colors, Spacing, Typography } from '@/constants/theme';
+import { loadScansForHistory, openDatabaseSafely } from '@/db/access';
 import { PRIORITY_LABELS } from '@/lib/labels';
 import { listRememberedScans } from '@/lib/scan-session';
 import { highestPriorityLabel } from '@/lib/scan-summary';
@@ -24,30 +25,41 @@ export default function HistoryScreen() {
   const router = useRouter();
   const [scans, setScans] = useState<ScanResult[]>(listRememberedScans);
 
-  // Hasil baru ditambahkan saat tab Pindai aktif, jadi daftar disegarkan
-  // setiap kali tab Riwayat dibuka kembali.
+  // SQLite adalah sumber utama; hasil sesi dipakai sementara/ketika database
+  // tidak tersedia. Daftar disegarkan setiap kali tab Riwayat dibuka kembali.
   useFocusEffect(
     useCallback(() => {
+      let active = true;
       setScans(listRememberedScans());
+
+      void (async () => {
+        const db = await openDatabaseSafely();
+        const stored = await loadScansForHistory(db);
+        if (active) setScans(stored);
+      })();
+
+      return () => {
+        active = false;
+      };
     }, []),
   );
 
   return (
     <Screen>
-      <ScreenHeader subtitle="Hasil pemindaian selama sesi aplikasi ini." title="Riwayat" />
+      <ScreenHeader subtitle="Hasil pemindaian tersimpan di perangkat ini." title="Riwayat" />
 
       {scans.length === 0 ? (
         <EmptyState
           actionLabel="Mulai pindai"
           icon="time-outline"
-          message="Hasil pemindaian akan muncul di sini setelah kamu memindai sebuah repositori. Riwayat belum tersimpan permanen; menutup aplikasi menghapus daftar ini."
+          message="Hasil pemindaian akan muncul di sini setelah kamu memindai sebuah repositori. Riwayat tersimpan di perangkat dan tetap bisa dibuka tanpa koneksi."
           onAction={() => router.navigate('/')}
           title="Belum ada pemindaian"
         />
       ) : (
         <View style={styles.list}>
           <Text style={styles.note}>
-            Tersimpan sementara selama sesi ini. Menutup aplikasi menghapus daftar di bawah.
+            Tersimpan di perangkat ini dan dapat dibuka tanpa koneksi internet.
           </Text>
           {scans.map((scan) => (
             <HistoryCard

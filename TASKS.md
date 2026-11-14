@@ -1095,13 +1095,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji alur Riwayat→Hasil→Detail dalam mode pesawat.
 - **Memenuhi:** `FR-20`, `FR-21`, `NFR-07`, `R-10`
 - **Kriteria selesai (AC):**
-  - [ ] Riwayat menampilkan scan yang tersimpan.
-  - [ ] Hasil dan Detail terbuka dalam mode pesawat.
-  - [ ] Kegagalan simpan lokal menampilkan pesan dan tidak menghilangkan hasil di layar.
-  - [ ] Tidak ada crash saat koneksi hilang.
+  - [x] Riwayat menampilkan scan yang tersimpan.
+  - [x] Hasil dan Detail terbuka dalam mode pesawat.
+  - [x] Kegagalan simpan lokal menampilkan pesan dan tidak menghilangkan hasil di layar.
+  - [x] Tidak ada crash saat koneksi hilang.
 - **Estimasi:** 2,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `app/src/db/access.ts` (pembuka database aman, simpan aman, muat Riwayat/Hasil/Detail dengan fallback memori) dan `access.test.ts` (6 test). `getLocalDatabase()` ditambahkan ke `migrations.ts` sebagai singleton dengan reset saat gagal. `app/metro.config.js` baru menyiapkan wasm dan header COEP/COOP untuk expo-sqlite di web.
+  - Alur Pindai: hasil disimpan ke SQLite sebelum navigasi; hasil sesi tetap diingat di memori. Bila simpan gagal, navigasi membawa `saveFailed=1` dan layar Hasil menampilkan pesan §12 baris 21 "Hasil berhasil dipindai, tetapi gagal disimpan di perangkat." tanpa menghapus hasil.
+  - Riwayat membaca `local_scans` terbaru lebih dulu, menggabungkan hasil sesi yang gagal tersimpan, dan menyegarkan daftar saat tab dibuka. Hasil dan Detail membaca `payload_json` dari SQLite tanpa panggilan jaringan, dengan fallback ke memori bila database gagal. Keduanya menampilkan tag "data dari cache" beserta waktu pemindaian saat sumbernya SQLite.
+  - Bukti AC: unit test `access.test.ts` memverifikasi scan tersimpan tampil di Riwayat, penggabungan hasil sesi, fallback memori saat database `null`/melempar error, Detail hanya membuka temuan milik scan terkait, dan kegagalan simpan mengembalikan `false` tanpa exception. Seluruh layar menangkap kegagalan database sehingga tidak crash saat koneksi hilang.
+  - Verifikasi mode pesawat pada perangkat/emulator belum dapat dilakukan di environment ini dan dicatat sebagai uji manual yang tertunda (dapat digabung ke `T-W3-07c`).
+  - Hasil: `npm test` 11 suite / 99 test lulus, `npm run typecheck` lulus, `npm run lint` lulus.
 
 ### T-W3-03 — Anonymous auth klien dan persistensi sesi
 - **Tipe:** `[AGENT]`

@@ -13,15 +13,20 @@ import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
 import { SeverityBadge } from '@/components/severity-badge';
 import { Colors, Fonts, Radius, Spacing, Typography } from '@/constants/theme';
+import {
+  loadFindingForDisplay,
+  openDatabaseSafely,
+  type LoadedFinding,
+} from '@/db/access';
 import { getFixAdvice, NO_SAFE_VERSION_MESSAGE } from '@/lib/command';
 import { PRIORITY_LABELS } from '@/lib/labels';
-import { getRememberedScan } from '@/lib/scan-session';
 import {
   formatCvss,
   formatEpssPercentile,
   formatEpssValue,
   formatScore,
 } from '@/lib/scan-summary';
+import { formatLocalDateTime } from '@/lib/time';
 
 const KEV_CATALOG_URL = 'https://www.cisa.gov/known-exploited-vulnerabilities-catalog';
 const COPY_FEEDBACK_MS = 2_500;
@@ -55,17 +60,39 @@ function DataCard({ label, children }: DataCardProps) {
   );
 }
 
+type LoadState =
+  | { status: 'loading' }
+  | { status: 'ready'; loaded: LoadedFinding }
+  | { status: 'missing' };
+
 export default function FindingDetailScreen() {
   const router = useRouter();
   const { scanId, findingId } = useLocalSearchParams<{
     scanId?: string;
     findingId?: string;
   }>();
-  const result = scanId ? getRememberedScan(scanId) : null;
-  const finding = result?.findings.find((entry) => entry.findingId === findingId) ?? null;
-
+  const [state, setState] = useState<LoadState>(() =>
+    scanId && findingId ? { status: 'loading' } : { status: 'missing' },
+  );
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const [failedLink, setFailedLink] = useState<string | null>(null);
+
+  // Detail dibaca dari SQLite; fallback ke hasil sesi ketika database gagal.
+  useEffect(() => {
+    if (!scanId || !findingId) return undefined;
+    let active = true;
+
+    void (async () => {
+      const db = await openDatabaseSafely();
+      const loaded = await loadFindingForDisplay(db, scanId, findingId);
+      if (!active) return;
+      setState(loaded ? { status: 'ready', loaded } : { status: 'missing' });
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [scanId, findingId]);
 
   useEffect(() => {
     if (copyState === 'idle') return undefined;
@@ -73,12 +100,21 @@ export default function FindingDetailScreen() {
     return () => clearTimeout(timer);
   }, [copyState]);
 
-  if (!result || !finding) {
+  if (state.status === 'loading') {
+    return (
+      <Screen hasTabBar={false}>
+        <ScreenHeader onBack={() => router.back()} title="Detail temuan" />
+        <Text style={styles.loading}>Memuat temuan…</Text>
+      </Screen>
+    );
+  }
+
+  if (state.status === 'missing') {
     return (
       <Screen hasTabBar={false}>
         <ScreenHeader
           onBack={() => router.back()}
-          subtitle="Data temuan tidak ditemukan pada sesi ini."
+          subtitle="Data temuan tidak ditemukan di perangkat ini."
           title="Detail temuan"
         />
         <EmptyState
@@ -90,6 +126,7 @@ export default function FindingDetailScreen() {
     );
   }
 
+  const { scan: result, finding, source } = state.loaded;
   const advice = getFixAdvice(finding);
   const warningMessage = result.warnings.map((warning) => `• ${warning.message}`).join('\n');
 
@@ -114,6 +151,13 @@ export default function FindingDetailScreen() {
         subtitle={`${result.repo.owner}/${result.repo.name}`}
         title="Detail temuan"
       />
+
+      {source === 'CACHE' ? (
+        <View style={styles.cacheRow}>
+          <MetaChip icon="cloud-offline-outline" label="data dari cache" tone="warning" />
+          <Text style={styles.cacheTime}>Dipindai {formatLocalDateTime(result.scannedAt)}</Text>
+        </View>
+      ) : null}
 
       <View style={styles.identity}>
         <View style={styles.identityTop}>
@@ -309,6 +353,20 @@ export default function FindingDetailScreen() {
 }
 
 const styles = StyleSheet.create({
+  loading: {
+    ...Typography.body,
+    color: Colors.light.textSecondary,
+  },
+  cacheRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  cacheTime: {
+    ...Typography.meta,
+    color: Colors.light.textSecondary,
+  },
   identity: {
     padding: Spacing.four,
     gap: Spacing.two,

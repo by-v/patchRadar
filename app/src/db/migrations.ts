@@ -74,6 +74,22 @@ export async function openLocalDatabase(name = 'patchradar.db'): Promise<SqliteD
   return adapter;
 }
 
+let databasePromise: Promise<SqliteDatabase> | null = null;
+
+/**
+ * Akses database bersama untuk seluruh layar. Koneksi dibuka sekali; bila
+ * pembukaan gagal, promise direset agar percobaan berikutnya bisa mencoba lagi.
+ */
+export function getLocalDatabase(): Promise<SqliteDatabase> {
+  if (!databasePromise) {
+    databasePromise = openLocalDatabase().catch((error: unknown) => {
+      databasePromise = null;
+      throw error;
+    });
+  }
+  return databasePromise;
+}
+
 /**
  * Bungkus `SQLiteDatabase` Expo agar cocok dengan antarmuka repository.
  * Parameter selalu diberikan sebagai array sehingga tidak ada varian variadik.
