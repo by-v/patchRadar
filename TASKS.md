@@ -995,13 +995,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Catat verdict dan blocker.
 - **Memenuhi:** `FR-17`, `NFR-03`, `NFR-10`, `NFR-13`, `R-13`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] Alur utama lulus di Expo Go iPhone dan APK Android (emulator atau HP pinjaman).
-  - [ ] Seluruh field FR-17 ada pada kartu.
-  - [ ] Build EAS percobaan berhasil.
-  - [ ] Verdict Go/No-Go tercatat.
+  - [x] Alur utama lulus di Expo Go iPhone dan APK Android (emulator atau HP pinjaman).
+  - [x] Seluruh field FR-17 ada pada kartu.
+  - [x] Build EAS percobaan berhasil.
+  - [x] Verdict Go/No-Go tercatat.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Laporan lengkap di `docs/week2-gate.md`; verdict **GO** tanpa blocker.
+  - Alur Pindai → Hasil → Detail → Riwayat → Tentang lulus di iPhone X (iOS 16.7.16, Expo SDK 58.0.23) dan APK Android di realme XT (Android 8). Dikonfirmasi pengembang 14 November 2026.
+  - Build EAS yang diuji: `d4c8dfa1-9003-4d13-826e-5c778ca255df` (`FINISHED`, commit `9114acc`, versionCode `1`). Tidak ada build baru; rebuild dari commit bersih dijadwalkan pada `T-W4-02`.
+  - Validasi URL lulus untuk format, host, path, serta normalisasi `.git`/garis miring/spasi. Kasus kosong: tombol nonaktif dan tidak ada request; pesan inline tidak dapat dipicu lewat tombol, sementara parser `EMPTY` diuji unit test.
+  - Seluruh field FR-17 terverifikasi pada kartu `hbs@4.4.0` dari `expressjs/express`; banner perkiraan, repositori besar, hasil parsial (`nestjs/nest`, 1.425 paket, `partial=true`), indikator loading 5 detik, dan empty state (`chalk/chalk`, 0 temuan) juga terverifikasi.
+  - Audit APK bersih: tidak ada `service_role`, token GitHub, private key, atau `.env`; anon key hanya publik. SHA-256 APK `63E1AD6AD36B810CD89D330E868E235353B579B9750D790CADC8191393113F3A`.
+  - Verifikasi otomatis 14 November 2026: `tsc --noEmit`, `expo lint`, dan Jest 9 suite/86 test lulus. `expo-doctor` 19/20 karena drift patch dependensi yang sudah ada sebelumnya.
 
 ### T-W2-10 — `[MANUAL]` Rekrut dan jadwalkan penguji
 - **Tipe:** `[MANUAL]`

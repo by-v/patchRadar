@@ -1,6 +1,6 @@
 # Environment Pengembangan — PatchRadar
 
-Catatan versi lingkungan pengembangan dan perangkat uji. Diperbarui saat verifikasi `T-D0-05` (9 November 2026) dan build EAS percobaan `T-W2-08` (13 November 2026).
+Catatan versi lingkungan pengembangan dan perangkat uji. Diperbarui saat verifikasi `T-D0-05` (9 November 2026), build EAS percobaan `T-W2-08` (13 November 2026), dan Gate Minggu 2 `T-W2-09` (14 November 2026).
 
 ## Perangkat Uji
 
@@ -100,6 +100,8 @@ Tidak ditemukan token, service role key, atau private key yang tertanam di file 
 - Respons nyata `scan` untuk `chalk/chalk` dan error 404 tersimpan sebagai fixture di `app/src/api/__fixtures__/`.
 - `node --test "supabase/functions/scan/**/*.test.ts"` lulus 158 test.
 - Uji remote 13 November 2026: `OPTIONS /functions/v1/scan` → `204` dengan `access-control-allow-origin: *`; `POST` dengan `Origin` → `200` dan header CORS yang sama, sehingga scan web tidak lagi gagal karena CORS.
+- **Gate Minggu 2 (14 November 2026):** alur Pindai → Hasil → Detail → Riwayat → Tentang lulus di iPhone X (iOS 16.7.16, Expo SDK 58.0.23) dan APK Android `d4c8dfa1` di realme XT (Android 8). `tsc --noEmit`, `expo lint`, dan Jest 9 suite/86 test lulus. Audit ulang APK bersih. Verdict **GO**; laporan di `docs/week2-gate.md`.
+- Respons nyata 14 November 2026 untuk bukti banner/empty state: `expressjs/express` 44 paket/1 temuan/`estimated=true`; `chalk/chalk` 9 paket/0 temuan; `nestjs/nest` 1.425 paket/77 temuan/`partial=true` (`LOCKFILE_PARTIAL`).
 
 ## Build EAS Percobaan (T-W2-08)
 
@@ -137,7 +139,7 @@ Isi APK diperiksa dengan membuka `assets/index.android.bundle` (3.303.852 byte) 
 
 Catatan:
 
-- Build ini dibuat saat konfigurasi EAS masih berada di working tree. Setelah `eas.json` dan `android.package` di-commit, rebuild dari commit bersih disarankan sebelum atau selama `T-W2-09` untuk memastikan reproduksibilitas.
+- Build ini dibuat saat konfigurasi EAS masih berada di working tree. `T-W2-09` memakai ulang build ini tanpa rebuild dari commit bersih; rebuild tetap dijadwalkan pada `T-W4-02` sebelum rilis untuk memastikan reproduksibilitas.
 - `npx expo-doctor` melaporkan 19/20 pada 13 November 2026 karena 10 paket tertinggal versi patch (mis. `expo` 58.0.23 vs ~58.0.25). Ini kondisi yang sudah ada sebelum `T-W2-08` dan tidak menghalangi build; penyelarasan versi patch dapat menjadi commit terpisah.
 
 ## Catatan Android
