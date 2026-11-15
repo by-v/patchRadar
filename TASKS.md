@@ -1164,7 +1164,6 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W3-05 — Penyimpanan cloud best-effort dan field `persisted`
 - **Tipe:** `[AGENT]`
-- **Status:** `[~]` — sebagian AC terbukti di remote; AC OSV gagal total (502) tanpa baris sukses belum diuji di remote.
 - **Tujuan:** Menyimpan riwayat cloud tanpa pernah menggagalkan scan yang sudah berhasil.
 - **Prasyarat:** `T-W1-12d`, `T-W3-04`
 - **File/folder:** `supabase/functions/scan/persist.ts`, `index.ts`, `persist.test.ts`
@@ -1179,10 +1178,11 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] Simulasi kegagalan menghasilkan 200, `persisted=false`, dan satu warning. (Terbukti di unit test).
   - [x] Label dan hasil tidak berubah karena kegagalan simpan. (Terbukti di unit test).
   - [x] Tidak ada retry klien.
-  - [!] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. **Belum diuji di remote pada Fase A** (tidak ada skenario 502 OSV total yang dijalankan); belum diverifikasi.
+  - [x] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. Bukti = **unit test** + **bukti remote 502 dari T-W1-12d** (requestId asli), **bukan satu uji remote tunggal**. Unit test: `supabase/functions/scan/handler.test.ts` `"OSV gagal total 502 tidak meninggalkan baris scans/findings"` (fetch & `createMemoryScanStore` tiruan, tanpa jaringan) → 502 `UPSTREAM_UNAVAILABLE`, `scanStore.saveCalls=0` (lulus 15 Nov 2026, raw: `tests 1, pass 1, fail 0`). Remote 502 (T-W1-12d, `scan-faulttest?mode=osv-fail`, fungsi uji sudah dihapus): `req_a325466ea90f49829c367306168bd506`, 502 `UPSTREAM_UNAVAILABLE` (`docs/due-diligence-log.md`, `TASKS.md` T-W1-12d).
 - **Estimasi:** 2 jam
+- [x] Tugas selesai
 - **Catatan hasil:**
-  - Kode baru belum ter-deploy pada 15 November 2026; sebagian terselesaikan 15 November 2026 setelah deploy `scan` v8 dan bukti Fase A (`docs/rls-test.md`, `docs/due-diligence-log.md`). AC OSV gagal total (502) tetap terbuka.
+  - Kode baru belum ter-deploy pada 15 November 2026; terselesaikan 15 November 2026 setelah deploy `scan` v8, bukti Fase A, dan konfirmasi AC 502 via unit test + bukti remote T-W1-12d (`docs/rls-test.md`, `docs/due-diligence-log.md`).
 
 ### T-W3-06 — Rate limit FR-25a per pengguna anonim
 - **Tipe:** `[AGENT]`
@@ -1344,6 +1344,24 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [ ] Tugas selesai
 - **Catatan hasil:**
 
+### T-W3-14 — (S) Tahap timed bernama untuk rate limit dan persist
+- **Tipe:** `[AGENT]`
+- **Status:** `[ ]` — **jangan dikerjakan** (prioritas S, ditunda).
+- **Tujuan:** Menambahkan tahap `timed` bernama untuk rate limit dan persist agar terlihat di `stages` log dashboard.
+- **Prasyarat:** `T-W3-05`, `T-W3-06`
+- **File/folder:** `supabase/functions/scan/handler.ts`, `rate-limit.ts`, `persist.ts`, test terkait
+- **Langkah:**
+  1. Bungkus `enforceRateLimit` dan `persistScanResult` (atau titik setara) dengan `timed(...)` memakai nama stage yang konsisten (mis. `rate_limit`, `persist`).
+  2. Pastikan `stages` pada log respons/handler memuat tahap tersebut tanpa mengubah perilaku.
+  3. Perbarui test dan bukti log dashboard bila dikerjakan.
+- **Memenuhi:** `NFR-12` (S)
+- **Kriteria selesai (AC):**
+  - [ ] Log `stages` memuat tahap bernama eksplisit untuk rate limit dan persist.
+  - [ ] Tidak ada perubahan perilaku fungsional/rate limit/persist.
+- **Estimasi:** 0,5 jam
+- [ ] Tugas selesai
+- **Catatan hasil:** Belum dikerjakan; dicatat karena Fase A menunjukkan tidak ada stage bernama eksplisit untuk rate limit/persist di log dashboard.
+
 ### T-W3-13 — `[GATE]` Gate Minggu 3
 - **Tipe:** `[GATE]`
 - **Tujuan:** Memastikan offline, cloud, RLS, rate limit, dan penanganan error siap masuk minggu rilis.
@@ -1445,12 +1463,14 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   1. Ekstrak/bongkar APK dan cari pola token, service role, dan private key.
   2. Jalankan ulang skrip uji RLS dengan dua sesi anonim pada build rilis.
   3. Periksa environment EAS untuk memastikan secret tidak masuk profil build.
-  4. Catat hasil dan bukti.
+  4. Uji ulang rate limit FR-25a (build rilis): tangkap `retryAfter` pada respons 429 (header dan/atau body) dengan keluaran mentah, lalu buktikan scan diterima lagi setelah jendela 10 menit berlalu (keluaran mentah status/requestId/kode).
+  5. Catat hasil dan bukti.
 - **Memenuhi:** `NFR-03`, `NFR-05`, `NFR-06`, `R-13`
 - **Kriteria selesai (AC):**
   - [ ] Pencarian string pada APK tidak menemukan secret.
   - [ ] Uji RLS dua pengguna lulus pada build rilis.
   - [ ] Environment EAS bebas dari service role/token GitHub.
+  - [ ] Rate limit FR-25a: 429 memuat `retryAfter` (header/body) dan scan diterima kembali setelah jendela berlalu, dengan keluaran mentah.
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
