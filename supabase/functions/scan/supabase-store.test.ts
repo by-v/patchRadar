@@ -3,9 +3,11 @@ import { strict as assert } from 'node:assert';
 import {
   createSupabaseEpssCacheStore,
   createSupabaseOsvCacheStore,
+  createSupabaseScanStore,
   EPSS_CACHE_READ_BATCH_SIZE,
   OSV_CACHE_READ_BATCH_SIZE,
 } from './supabase-store.ts';
+import type { FindingRecord, ScanRecord } from './store.ts';
 
 function keysInUrl(url: string): string[] {
   const value = new URL(url).searchParams.get('cache_key') ?? '';
@@ -179,4 +181,102 @@ test('epss upsert mengirim merge-duplicates tanpa mengembalikan baris', async ()
     { cve_id: 'CVE-2099-0001', epss: 0.42, percentile: 0.97, fetched_at: '2026-11-14T00:00:00.000Z' },
     { cve_id: 'CVE-2099-0002', epss: null, percentile: null, fetched_at: '2026-11-14T00:00:00.000Z' },
   ]);
+});
+
+const SCAN_RECORD: ScanRecord = {
+  id: '10000000-0000-4000-8000-0000000000aa',
+  userId: '00000000-0000-4000-8000-0000000000aa',
+  repoOwner: 'lodash',
+  repoName: 'lodash',
+  repoUrl: 'https://github.com/lodash/lodash',
+  status: 'COMPLETED',
+  manifestSource: 'LOCKFILE',
+  lockfileFormat: 'v3',
+  estimated: false,
+  totalPackages: 27,
+  affectedPackages: 1,
+  findingCount: 1,
+  partial: false,
+  warnings: [],
+  sourceStatus: { github: 'OK', osv: 'OK', kev: 'OK', epss: 'OK' },
+  engineVersion: '1.0.0',
+  durationMs: 120,
+  createdAt: '2026-11-15T10:00:00.000Z',
+};
+
+const FINDING_RECORD: FindingRecord = {
+  id: '20000000-0000-4000-8000-0000000000aa',
+  scanId: SCAN_RECORD.id,
+  osvId: 'GHSA-test-0001',
+  cveIds: ['CVE-2026-0001'],
+  packageName: 'lodash',
+  installedVersion: '4.0.0',
+  direct: true,
+  devOnly: false,
+  parentPackage: null,
+  severity: 'HIGH',
+  cvssScore: 7.5,
+  epss: 0.5,
+  epssPercentile: 0.9,
+  kev: true,
+  label: 'FIX_NOW',
+  score: 62.5,
+  reason: 'Ada di katalog KEV.',
+  fixVersion: '4.17.21',
+  fixCommand: 'npm install lodash@4.17.21',
+  summary: 'Contoh advisory.',
+  references: [{ label: 'Advisory', url: 'https://example.test/advisory' }],
+};
+
+test('ScanStore menulis scans lalu findings dengan kolom yang benar', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const store = createSupabaseScanStore({
+    url: 'https://contoh.supabase.co',
+    serviceRoleKey: 'kunci-uji',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      return new Response(null, { status: 201 });
+    },
+  });
+
+  await store.save(SCAN_RECORD, [FINDING_RECORD]);
+
+  assert.equal(calls.length, 2);
+  assert.ok(calls[0]!.url.endsWith('/rest/v1/scans'));
+  assert.equal(calls[0]!.init?.method, 'POST');
+  assert.equal(
+    (calls[0]!.init?.headers as Record<string, string>).prefer,
+    'return=minimal',
+  );
+  const scanBody = JSON.parse(String(calls[0]!.init?.body)) as Array<Record<string, unknown>>;
+  assert.equal(scanBody[0]?.id, SCAN_RECORD.id);
+  assert.equal(scanBody[0]?.user_id, SCAN_RECORD.userId);
+  assert.equal(scanBody[0]?.engine_version, '1.0.0');
+
+  assert.ok(calls[1]!.url.endsWith('/rest/v1/findings'));
+  const findingBody = JSON.parse(String(calls[1]!.init?.body)) as Array<Record<string, unknown>>;
+  assert.equal(findingBody[0]?.scan_id, SCAN_RECORD.id);
+  assert.deepEqual(findingBody[0]?.cve_ids, ['CVE-2026-0001']);
+  assert.equal(findingBody[0]?.fix_version, '4.17.21');
+  assert.deepEqual(findingBody[0]?.references, [
+    { label: 'Advisory', url: 'https://example.test/advisory' },
+  ]);
+});
+
+test('kegagalan findings menghapus baris scans yang sudah masuk lalu melempar error', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const store = createSupabaseScanStore({
+    url: 'https://contoh.supabase.co',
+    serviceRoleKey: 'kunci-uji',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      if (url.endsWith('/rest/v1/findings')) return new Response(null, { status: 500 });
+      return new Response(null, { status: 204 });
+    },
+  });
+
+  await assert.rejects(() => store.save(SCAN_RECORD, [FINDING_RECORD]), /findings insert gagal/);
+  assert.equal(calls.length, 3);
+  assert.equal(calls[2]!.init?.method, 'DELETE');
+  assert.ok(calls[2]!.url.includes(`scans?id=eq.${SCAN_RECORD.id}`));
 });

@@ -1178,14 +1178,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Pastikan tidak ada retry atau sinkronisasi ulang dari klien.
 - **Memenuhi:** `FR-22`, `FR-23`, `NFR-08`, `R-08`
 - **Kriteria selesai (AC):**
-  - [ ] Penyimpanan berhasil menulis satu baris `scans` dan findings terkait.
-  - [ ] Simulasi kegagalan menghasilkan 200, `persisted=false`, dan satu warning.
-  - [ ] Label dan hasil tidak berubah karena kegagalan simpan.
-  - [ ] Tidak ada retry klien.
-  - [ ] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. Ini AC lanjutan yang ditunda dari `T-W1-12d` karena tabel `scans` baru dibuat di Minggu 3.
+  - [x] Penyimpanan berhasil menulis satu baris `scans` dan findings terkait.
+  - [x] Simulasi kegagalan menghasilkan 200, `persisted=false`, dan satu warning.
+  - [x] Label dan hasil tidak berubah karena kegagalan simpan.
+  - [x] Tidak ada retry klien.
+  - [x] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. Ini AC lanjutan yang ditunda dari `T-W1-12d` karena tabel `scans` baru dibuat di Minggu 3.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/functions/scan/persist.ts` dan `persist.test.ts`; perubahan `handler.ts`, `index.ts`, `store.ts`, `supabase-store.ts`, `supabase-store.test.ts`, `handler.test.ts`.
+  - `persistScanResult()` memetakan respons final ke `ScanRecord`/`FindingRecord`, menyimpan lewat antarmuka `ScanStore`, lalu menetapkan `persisted=true` hanya bila seluruh penyimpanan berhasil. Kegagalan apa pun ditangkap, `persisted=false`, dan tepat satu warning `CLOUD_PERSIST_FAILED` ("Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat.") ditambahkan tanpa menyalakan `partial` dan tanpa mengubah label/skor/alasan.
+  - `createSupabaseScanStore` memakai service role untuk `POST /rest/v1/scans` lalu `POST /rest/v1/findings`. Bila insert findings gagal, baris `scans` dihapus best-effort agar tidak meninggalkan scan tanpa findings; kegagalan tetap dilaporkan sebagai kegagalan simpan. `index.ts` hanya membuat store ini bila `SUPABASE_URL` dan `SUPABASE_SERVICE_ROLE_KEY` tersedia.
+  - Identitas pengguna diambil dari klaim `sub` JWT yang sudah diverifikasi gateway (fungsi hanya mendekode payload, tidak mencetak token). Bila store tersedia tetapi `sub` tidak ada, hasil tetap 200 dengan `persisted=false` + `CLOUD_PERSIST_FAILED`.
+  - Penyimpanan dilakukan setelah seluruh pengayaan, skor, dan label selesai. Karena itu OSV gagal total (502) berhenti sebelum penyimpanan dan tidak meninggalkan baris `scans`/`findings`.
+  - Bukti AC: `persist.test.ts` (pemetaan scan/finding, simpan sukses, gagal simpan + satu warning tanpa ubah label, warning tidak ganda) dan `handler.test.ts` (simpan sukses `persisted=true` + 1 scan/2 findings; gagal simpan tetap 200 dengan label/status/partial sama; OSV 502 dengan `saveCalls=0` dan nol baris). `supabase-store.test.ts` memverifikasi body/kolom, header `Prefer`, urutan `scans`→`findings`, dan `DELETE` pembersihan saat findings gagal.
+  - Tidak ada retry atau sinkronisasi ulang yang ditambahkan di klien; klien tetap hanya memakai hasil 200 dan menyimpan lokal.
+  - Test edge: **178 lulus** (`node --test "supabase/functions/scan/**/*.test.ts"`); typecheck strict edge lulus. Migrasi masih **belum diterapkan ke remote** dan fungsi belum di-deploy, sehingga bukti baris nyata di Supabase menunggu izin pengembang.
 
 ### T-W3-06 — Rate limit FR-25a per pengguna anonim
 - **Tipe:** `[AGENT]`

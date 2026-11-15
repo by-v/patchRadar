@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { handleScanRequest, type ScanLogEntry } from './handler.ts';
 import { scanErrorResponse } from './errors.ts';
 import { isAllowedGithubUrl } from './github.ts';
-import { createMemoryEpssCacheStore, createMemoryKevStore, type EpssCacheStore } from './store.ts';
+import { createMemoryEpssCacheStore, createMemoryKevStore, createMemoryScanStore, type EpssCacheStore, type ScanStore } from './store.ts';
 
 const FIXTURES = new URL('../../../fixtures/lockfiles/', import.meta.url);
 const TOKEN = 'token-rahasia-yang-tidak-boleh-bocor';
@@ -439,6 +439,7 @@ test('error tak terduga dipetakan ke 500 INTERNAL tanpa detail sensitif', async 
 
 const E2E_NOW = Date.parse('2026-11-10T00:00:00.000Z');
 const E2E_NOW_ISO = new Date(E2E_NOW).toISOString();
+const E2E_USER_ID = '00000000-0000-4000-8000-0000000000aa';
 const OLD_KEV_ISO = '2026-11-01T00:00:00.000Z';
 
 function jsonBody(body: unknown, status = 200): Response {
@@ -477,11 +478,12 @@ const ADVISORIES: Record<string, unknown> = {
   },
 };
 
-function pipelineExternal(options: { epssFail?: boolean } = {}) {
+function pipelineExternal(options: { epssFail?: boolean; osvFail?: boolean } = {}) {
   return async (url: string, init?: RequestInit): Promise<Response | null> => {
     const parsed = new URL(url);
 
     if (parsed.hostname === 'api.osv.dev') {
+      if (options.osvFail === true) return new Response(null, { status: 503 });
       if (parsed.pathname === '/v1/querybatch') {
         const body = JSON.parse(String(init?.body ?? '{}')) as {
           queries?: Array<{ package?: { name?: string }; version?: string }>;
@@ -536,11 +538,14 @@ function kevEntry(cveId: string, updatedAt: string) {
 
 async function runPipeline(options: {
   epssFail?: boolean;
+  osvFail?: boolean;
   kevStore?: ReturnType<typeof createMemoryKevStore>;
   epssStore?: EpssCacheStore;
+  scanStore?: ScanStore;
+  userId?: string;
   epssCalls?: { count: number };
 } = {}) {
-  const baseExternal = pipelineExternal({ epssFail: options.epssFail });
+  const baseExternal = pipelineExternal({ epssFail: options.epssFail, osvFail: options.osvFail });
   const external = async (url: string, init?: RequestInit): Promise<Response | null> => {
     if (options.epssCalls && new URL(url).hostname === 'api.first.org') {
       options.epssCalls.count += 1;
@@ -558,6 +563,8 @@ async function runPipeline(options: {
     fetchImpl: fake.fetchImpl,
     kevStore: options.kevStore ?? createMemoryKevStore([kevEntry('CVE-2099-0001', E2E_NOW_ISO)]),
     epssStore: options.epssStore,
+    scanStore: options.scanStore,
+    userId: options.userId ?? (options.scanStore ? E2E_USER_ID : undefined),
     now: () => E2E_NOW,
     sleep: async () => undefined,
     logger: (entry) => logs.push(entry),
@@ -718,5 +725,54 @@ test('KEV kosong atau STALE tidak menghentikan scan dan memberi warning', async 
     ),
   );
   assert.equal((stale.body.findings as Array<Record<string, any>>)[0]!.exploitation.kev, true);
+});
+
+test('penyimpanan cloud berhasil menulis scans dan findings lalu persisted=true', async () => {
+  const store = createMemoryScanStore();
+  const { response, body } = await runPipeline({ scanStore: store });
+
+  assert.equal(response.status, 200);
+  assert.equal(body.persisted, true);
+  assert.equal(store.saveCalls, 1);
+  assert.equal(store.scans.length, 1);
+  assert.equal(store.scans[0]?.id, body.scanId);
+  assert.equal(store.scans[0]?.userId, E2E_USER_ID);
+  assert.equal(store.scans[0]?.findingCount, 2);
+  assert.equal(store.findings.length, 2);
+  assert.ok(store.findings.every((finding) => finding.scanId === body.scanId));
+  assert.equal(body.partial, false);
+});
+
+test('kegagalan simpan cloud tetap 200, persisted=false, satu warning, hasil tidak berubah', async () => {
+  const success = await runPipeline({ scanStore: createMemoryScanStore() });
+
+  const broken = createMemoryScanStore();
+  broken.failWith = new Error('simulasi cloud gagal');
+  const failed = await runPipeline({ scanStore: broken });
+
+  assert.equal(failed.response.status, 200);
+  assert.equal(failed.body.persisted, false);
+  assert.equal(broken.scans.length, 0);
+  const cloudWarnings = (failed.body.warnings as Array<{ code: string }>).filter(
+    (warning) => warning.code === 'CLOUD_PERSIST_FAILED',
+  );
+  assert.equal(cloudWarnings.length, 1);
+
+  const priorities = (body: Record<string, unknown>) =>
+    (body.findings as Array<{ priority: unknown }>).map((finding) => finding.priority);
+  assert.deepEqual(priorities(failed.body), priorities(success.body));
+  assert.equal(failed.body.status, success.body.status);
+  assert.equal(failed.body.partial, success.body.partial);
+});
+
+test('OSV gagal total 502 tidak meninggalkan baris scans/findings', async () => {
+  const store = createMemoryScanStore();
+  const { response, body } = await runPipeline({ osvFail: true, scanStore: store });
+
+  assert.equal(response.status, 502);
+  assert.equal((body.error as { code: string }).code, 'UPSTREAM_UNAVAILABLE');
+  assert.equal(store.saveCalls, 0);
+  assert.equal(store.scans.length, 0);
+  assert.equal(store.findings.length, 0);
 });
 

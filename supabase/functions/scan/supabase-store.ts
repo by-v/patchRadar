@@ -12,10 +12,13 @@ import type { FetchLike } from './github.ts';
 import type {
   EpssCacheRecord,
   EpssCacheStore,
+  FindingRecord,
   KevEntryRecord,
   KevStore,
   OsvCacheRecord,
   OsvCacheStore,
+  ScanRecord,
+  ScanStore,
 } from './store.ts';
 
 export interface SupabaseStoreOptions {
@@ -289,4 +292,120 @@ export function createSupabaseKevStore(options: SupabaseStoreOptions): KevStore 
       }
     },
   };
+}
+
+function scanRow(scan: ScanRecord): PostgrestRow {
+  return {
+    id: scan.id,
+    user_id: scan.userId,
+    repo_owner: scan.repoOwner,
+    repo_name: scan.repoName,
+    repo_url: scan.repoUrl,
+    status: scan.status,
+    manifest_source: scan.manifestSource,
+    lockfile_format: scan.lockfileFormat,
+    estimated: scan.estimated,
+    total_packages: scan.totalPackages,
+    affected_packages: scan.affectedPackages,
+    finding_count: scan.findingCount,
+    partial: scan.partial,
+    warnings: scan.warnings,
+    source_status: scan.sourceStatus,
+    engine_version: scan.engineVersion,
+    duration_ms: scan.durationMs,
+    created_at: scan.createdAt,
+  };
+}
+
+function findingRow(finding: FindingRecord): PostgrestRow {
+  return {
+    id: finding.id,
+    scan_id: finding.scanId,
+    osv_id: finding.osvId,
+    cve_ids: finding.cveIds,
+    package_name: finding.packageName,
+    installed_version: finding.installedVersion,
+    direct: finding.direct,
+    dev_only: finding.devOnly,
+    parent_package: finding.parentPackage,
+    severity: finding.severity,
+    cvss_score: finding.cvssScore,
+    epss: finding.epss,
+    epss_percentile: finding.epssPercentile,
+    kev: finding.kev,
+    label: finding.label,
+    score: finding.score,
+    reason: finding.reason,
+    fix_version: finding.fixVersion,
+    fix_command: finding.fixCommand,
+    summary: finding.summary,
+    references: finding.references,
+  };
+}
+
+export function createSupabaseScanStore(options: SupabaseStoreOptions): ScanStore {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const timeoutMs = options.timeoutMs ?? 8_000;
+  const auth = headers(options.serviceRoleKey);
+
+  return {
+    async save(scan, findings) {
+      const scanResponse = await request(
+        fetchImpl,
+        endpoint(options.url, 'scans'),
+        {
+          method: 'POST',
+          headers: headers(options.serviceRoleKey, { prefer: 'return=minimal' }),
+          body: JSON.stringify([scanRow(scan)]),
+        },
+        timeoutMs,
+      );
+      if (!scanResponse.ok) throw new Error(`Supabase scans insert gagal (${scanResponse.status}).`);
+
+      if (findings.length === 0) return;
+
+      let findingsResponse: Response;
+      try {
+        findingsResponse = await request(
+          fetchImpl,
+          endpoint(options.url, 'findings'),
+          {
+            method: 'POST',
+            headers: headers(options.serviceRoleKey, { prefer: 'return=minimal' }),
+            body: JSON.stringify(findings.map(findingRow)),
+          },
+          timeoutMs,
+        );
+      } catch (error) {
+        await deleteScan(fetchImpl, options, auth, scan.id, timeoutMs);
+        throw error;
+      }
+
+      if (!findingsResponse.ok) {
+        // Hindari baris `scans` tanpa findings; kegagalan hapus tetap dilaporkan
+        // sebagai kegagalan simpan dan tidak mengubah hasil scan.
+        await deleteScan(fetchImpl, options, auth, scan.id, timeoutMs);
+        throw new Error(`Supabase findings insert gagal (${findingsResponse.status}).`);
+      }
+    },
+  };
+}
+
+async function deleteScan(
+  fetchImpl: FetchLike,
+  options: SupabaseStoreOptions,
+  auth: Record<string, string>,
+  scanId: string,
+  timeoutMs: number,
+): Promise<void> {
+  try {
+    await request(
+      fetchImpl,
+      endpoint(options.url, `scans?id=eq.${encodeURIComponent(scanId)}`),
+      { method: 'DELETE', headers: auth },
+      timeoutMs,
+    );
+  } catch {
+    // Pembersihan best-effort; pemanggil tetap melaporkan kegagalan simpan.
+  }
 }

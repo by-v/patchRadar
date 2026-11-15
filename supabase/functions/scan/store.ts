@@ -121,6 +121,116 @@ export function createMemoryOsvCacheStore(
   };
 }
 
+export interface ScanRecord {
+  id: string;
+  userId: string;
+  repoOwner: string;
+  repoName: string;
+  repoUrl: string;
+  status: 'COMPLETED' | 'PARTIAL';
+  manifestSource: 'LOCKFILE' | 'PACKAGE_JSON';
+  lockfileFormat: 'v2' | 'v3' | null;
+  estimated: boolean;
+  totalPackages: number;
+  affectedPackages: number;
+  findingCount: number;
+  partial: boolean;
+  warnings: unknown;
+  sourceStatus: unknown;
+  engineVersion: string;
+  durationMs: number;
+  createdAt: string;
+}
+
+export interface FindingRecord {
+  id: string;
+  scanId: string;
+  osvId: string;
+  cveIds: string[];
+  packageName: string;
+  installedVersion: string;
+  direct: boolean;
+  devOnly: boolean;
+  parentPackage: string | null;
+  severity: string;
+  cvssScore: number | null;
+  epss: number | null;
+  epssPercentile: number | null;
+  kev: boolean;
+  label: string;
+  score: number;
+  reason: string;
+  fixVersion: string | null;
+  fixCommand: string | null;
+  summary: string;
+  references: unknown;
+}
+
+/** Penyimpanan cloud best-effort `scans` + `findings` (FR-22/FR-23). */
+export interface ScanStore {
+  /** Simpan satu scan beserta seluruh findings-nya; lempar error bila gagal. */
+  save(scan: ScanRecord, findings: readonly FindingRecord[]): Promise<void>;
+}
+
+export interface MemoryScanStore extends ScanStore {
+  readonly scans: ScanRecord[];
+  readonly findings: FindingRecord[];
+  saveCalls: number;
+  /** Bila diisi, `save` melempar error ini (simulasi cloud gagal). */
+  failWith: Error | null;
+}
+
+export function createMemoryScanStore(): MemoryScanStore {
+  return {
+    scans: [],
+    findings: [],
+    saveCalls: 0,
+    failWith: null,
+    async save(scan, findings) {
+      this.saveCalls += 1;
+      if (this.failWith) throw this.failWith;
+      this.scans.push(scan);
+      this.findings.push(...findings);
+    },
+  };
+}
+
+export interface RateLimitEventRecord {
+  userId: string;
+  kind: string;
+  createdAt: string;
+}
+
+/** Catatan pemakaian untuk rate limit FR-25a (hanya service role). */
+export interface RateLimitStore {
+  /** Kejadian pada/atau setelah `sinceIso`, urut lama → baru. */
+  listRecent(userId: string, kind: string, sinceIso: string): Promise<RateLimitEventRecord[]>;
+  record(event: RateLimitEventRecord): Promise<void>;
+}
+
+export interface MemoryRateLimitStore extends RateLimitStore {
+  readonly events: RateLimitEventRecord[];
+  listCalls: number;
+}
+
+export function createMemoryRateLimitStore(
+  seed: readonly RateLimitEventRecord[] = [],
+): MemoryRateLimitStore {
+  return {
+    events: [...seed],
+    listCalls: 0,
+    async listRecent(userId, kind, sinceIso) {
+      this.listCalls += 1;
+      return this.events
+        .filter((event) => event.userId === userId && event.kind === kind && event.createdAt >= sinceIso)
+        .sort((left, right) => left.createdAt.localeCompare(right.createdAt));
+    },
+    async record(event) {
+      this.events.push(event);
+    },
+  };
+}
+
 export interface MemoryKevStore extends KevStore {
   readonly entries: Map<string, KevEntryRecord>;
   replaceCalls: number;

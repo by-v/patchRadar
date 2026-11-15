@@ -32,7 +32,8 @@ import { matchKevWithTiming } from './kev-match.ts';
 import { assembleBaseFindings } from './findings.ts';
 import { fetchEpssScores } from './epss.ts';
 import { buildScanResponse, type ScanSuccessResponse, type SourceState } from './response.ts';
-import type { OsvCacheStore, KevStore, EpssCacheStore } from './store.ts';
+import { persistScanResult, markCloudPersistFailed } from './persist.ts';
+import type { OsvCacheStore, KevStore, EpssCacheStore, ScanStore } from './store.ts';
 
 export const MAX_REQUEST_BODY_BYTES = 16 * 1024;
 export const MAX_PACKAGES = 1_500;
@@ -82,6 +83,9 @@ export interface ScanHandlerDependencies {
   osvStore?: OsvCacheStore;
   kevStore?: KevStore;
   epssStore?: EpssCacheStore;
+  scanStore?: ScanStore;
+  /** Identitas pengguna dari JWT; unit test dapat menyuntik langsung. */
+  userId?: string | null;
   registry?: RegistryResolver;
   logger?: ScanLogger;
   now?: () => number;
@@ -99,6 +103,35 @@ function defaultLogger(entry: ScanLogEntry): void {
 
 function newRequestId(randomUUID: () => string): string {
   return `req_${randomUUID().replace(/-/g, '')}`;
+}
+
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function decodeBase64Url(value: string): string {
+  const normalized = value.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
+  return atob(padded);
+}
+
+/**
+ * Ambil `sub` dari JWT yang sudah diverifikasi gateway Supabase.
+ *
+ * Fungsi ini tidak memverifikasi tanda tangan; Edge Function di-deploy dengan
+ * verifikasi JWT platform tetap aktif. Token tidak pernah dicatat.
+ */
+export function userIdFromRequest(request: Request): string | null {
+  const header = request.headers.get('authorization');
+  if (!header || !header.toLowerCase().startsWith('bearer ')) return null;
+  const token = header.slice(7).trim();
+  const parts = token.split('.');
+  if (parts.length !== 3 || !parts[1]) return null;
+
+  try {
+    const payload = JSON.parse(decodeBase64Url(parts[1])) as { sub?: unknown };
+    return typeof payload.sub === 'string' && UUID_PATTERN.test(payload.sub) ? payload.sub : null;
+  } catch {
+    return null;
+  }
 }
 
 async function readJsonBody(request: Request): Promise<unknown> {
@@ -219,6 +252,8 @@ export async function handleScanRequest(
   const requestId = newRequestId(randomUUID);
   const started = now();
   const timings = createStageTimings();
+  const userId =
+    dependencies.userId !== undefined ? dependencies.userId : userIdFromRequest(request);
 
   // Preflight browser: balas sebelum validasi metode/body agar web tidak
   // diblokir CORS dan tidak menghasilkan "Tidak ada koneksi".
@@ -366,6 +401,14 @@ export async function handleScanRequest(
       }),
     );
 
+    response.timings.totalMs = Math.round(now() - started);
+    if (dependencies.scanStore) {
+      if (userId) {
+        await persistScanResult(response, userId, dependencies.scanStore);
+      } else {
+        markCloudPersistFailed(response);
+      }
+    }
     response.timings.totalMs = Math.round(now() - started);
     const serialized = await timed(timings, 'response.serialize', () => JSON.stringify(response));
 

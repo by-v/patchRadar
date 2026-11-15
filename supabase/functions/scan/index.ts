@@ -12,6 +12,7 @@ import {
   createSupabaseEpssCacheStore,
   createSupabaseKevStore,
   createSupabaseOsvCacheStore,
+  createSupabaseScanStore,
 } from './supabase-store.ts';
 
 declare const Deno: {
@@ -31,6 +32,7 @@ const stores =
         osvStore: createSupabaseOsvCacheStore({ url: supabaseUrl, serviceRoleKey }),
         kevStore: createSupabaseKevStore({ url: supabaseUrl, serviceRoleKey }),
         epssStore: createSupabaseEpssCacheStore({ url: supabaseUrl, serviceRoleKey }),
+        scanStore: createSupabaseScanStore({ url: supabaseUrl, serviceRoleKey }),
       }
     : {};
 
