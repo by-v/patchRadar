@@ -16,7 +16,7 @@
 | 4 | 23 kondisi error teruji tanpa crash | **[x]** (attestasi manual pengembang) | `docs/error-matrix.md`, test T-W3-07a/b/c + suite lulus; attestasi pengembang (Android, 15 Nov 2026): 23 kondisi diuji sesuai rencana tanpa crash (rincian per-kondisi/screenshot/keluaran mentah UI tidak dilampirkan); beberapa kondisi layanan nyata **belum diverifikasi** di lingkungan nyata |
 | 5 | `persisted=false` dan warning tampil benar | **[x]** (attestasi manual, simulasi terkontrol) | Kontrak/test server OK; UI diverifikasi via simulasi terkontrol klien (Android realme XT, Expo Go, axios, 16 Nov 2026): banner "Riwayat cloud — Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat" tampil, hasil/temuan tetap tampil, tanpa crash (attestasi, tanpa screenshot; deskripsi spesifik hasil tidak dirinci) |
 | 6 | Scan ke-6 menghasilkan 429 | **[x]** | A4 remote v8: ke-6 429 `RATE_LIMITED` `req_c937fcfcecfc45daaa768587dfca3822`, SQL `rate_limit_events` konsisten |
-| 7 | p95 hangat & CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat | **[~]** p95 hangat terukur, CPU dashboard belum diverifikasi | Pengukuran hangat 15 Nov 2026 (requestId di bawah); dashboard CPU tidak diberikan; keputusan dicatat |
+| 7 | p95 hangat & CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat | **[x]** | p95 hangat 15 Nov 2026 (p50 3084 ms, p95 4006 ms < 6 s, requestId tercatat); CPU/execution dashboard fungsi `scan` (Edge Functions > scan > Metrics, 24 jam terakhir per 16 Nov 2026): Avg Exec 3578 ms, Max 13762 ms, Avg CPU 70 ms, Max 179 ms, Avg Mem 9.2 MB; keputusan R-15/optimasi S dicatat |
 | 8 | Verdict Go/No-Go tercatat | **[x]** | Verdict **Go (bersyarat)** tercatat di dokumen ini dengan sisa risiko |
 
 ## Bukti per AC
@@ -63,10 +63,8 @@
   - Warm 4: HTTP 200, `req_c655d6c1c68b4ae9b45aee1ec63ed327`, `scanId 2ad1d924-5232-4c1e-9364-d787db86b1b8`, `totalMs=2919`, `persisted=true`.
   - Warm 5 (masih dalam sesi/jendela sama): HTTP 429 `RATE_LIMITED`, `req_bb74e537dd214eda835ba31aa6e6a9e6`, `errorCode RATE_LIMITED`.
   - Ringkasan warm sukses (n=4): `totalsMs [2919,3084,3440,4006]`, **p50 3084 ms, p95 4006 ms** (< 6.000 ms). Sumber cache hangat terlihat (OSV/KEV/EPSS CACHE).
-- **CPU dashboard `scan`:** **belum diverifikasi**. Pengembang melaporkan "49 Total Requests, 100.0% Success Rate" (tanpa metrik CPU/execution time, tanpa rentang waktu/sumber halaman). Angka tersebut bukan bukti CPU per scan.
-- **Keputusan R-15 / optimasi S:**
-  - **p95 hangat 4006 ms < 6 detik** pada sampel hangat terukur → tidak ada indikasi pelanggaran ambang p95 hangat dari pengukuran ini.
-  - **CPU per scan mendekati 1.400 ms:** **tidak dapat ditentukan** (dashboard CPU belum diverifikasi). Tidak mengaktifkan mitigasi R-15/optimasi S berdasarkan data CPU yang tidak ada; optimasi S (T-W3-12, T-W3-14, dll.) **tetap ditunda** sesuai keputusan sebelumnya. Jika dashboard nanti menunjukkan CPU mendekati/melebihi ambang, mitigasi R-15/optimasi S perlu dievaluasi ulang.
+- **CPU/execution dashboard `scan` (dilaporkan pengembang, 16 Nov 2026):** sumber **Edge Functions > scan > Metrics**, rentang **24 jam terakhir (per 16 Nov 2026)**. Data: **Average Execution Time 3.578 ms**, **Max Execution Time 13.762 ms**, **Average CPU Time 70 ms**, **Max CPU Time 179 ms**, **Average Memory Usage 9,2 MB** (Heap 73,8%, External 26,2%). (Screenshot/bukti visual mentah tidak dilampirkan; nilai dicatat sesuai laporan pengembang.)
+- **Keputusan R-15 / optimasi S:** **Tidak mengaktifkan** mitigasi R-15 dan **tidak mengambil** optimasi S yang ditunda saat ini (T-W3-12, T-W3-14 tetap ditunda). **Alasan:** p95 hangat 4.006 ms (< 6 s) tidak memicu ambang; CPU time avg 70 ms / max 179 ms jauh di bawah ~1.400 ms. Average execution time 3.578 ms konsisten di bawah ambang hangat; max execution time 13.762 ms tercatat sebagai observasi (invokasi lambat/cold/variasi) tanpa memicu kriteria gate yang ditetapkan.
 
 ### AC 8 — Verdict Go/No-Go tercatat
 - Lihat §Verdict.
@@ -75,20 +73,19 @@
 
 | Item | Status | Dampak / tindak lanjut |
 |---|---|---|
-| AC 5 UI `persisted=false` / `CLOUD_PERSIST_FAILED` | Ditutup dengan attestasi (simulasi terkontrol) | `[x]` berdasarkan kontrak/test server + attestasi UI simulasi terkontrol (Android realme XT, Expo Go, 16 Nov 2026; tanpa screenshot). Error `ExpoSQLite` native module yang dilaporkan adalah isu lingkungan/runtime lokal terpisah. |
-| AC 7 CPU dashboard | Belum diverifikasi | p95 hangat OK (4006 ms); keputusan CPU ditunda sampai ada metrik dashboard (waktu/rentang/sumber). |
-| AC 4 cakupan manual/UI per-kondisi | Ditutup dengan attestasi (bukti terbatas) | 23 kondisi terpetakan & teruji di suite; AC 4 `[x]` berdasarkan attestasi pengembang (rincian per-kondisi/screenshot tidak dilampirkan). Beberapa kondisi layanan nyata tetap **belum diverifikasi**. |
-| AC 1/4 bukti visual perangkat | Attestasi tanpa screenshot | Kredibilitas bergantung laporan pengembang. |
+| Bukti visual perangkat (AC 1/4/5) | Attestasi tanpa screenshot | AC 1/4/5 `[x]` berdasarkan attestasi (dan kontrak/test/simulasi terkontrol untuk AC 5); tidak ada screenshot mentah UI. |
+| AC 4 kondisi layanan nyata | Belum diverifikasi di lingkungan nyata (sebagian) | 23 kondisi terpetakan & teruji di suite; beberapa kondisi bergantung layanan nyata tetap **belum diverifikasi** (tertutup uji handler/tiruan). |
 | T-W3-06 `retryAfter` & scan diterima setelah jendela | Belum terverifikasi mentah | 429 terbukti (AC 6); sisa dibuktikan di **T-W4-04**. |
 | Uji ulang RLS pada build rilis | Wajib | **T-W4-04**. |
-| T-W3-12, T-W3-14 (S) | Ditunda/tidak dikerjakan | Tidak memblokir gate; evaluasi hanya jika Minggu 4 selesai lebih awal / diputuskan kemudian. |
+| AC 7 metrik dashboard tanpa screenshot | Nilai dilaporkan (teks) | CPU/execution dicatat sesuai laporan (Edge Functions > scan > Metrics, 24 jam per 16 Nov 2026); screenshot mentah dashboard tidak dilampirkan. |
+| T-W3-12, T-W3-14 (S) | Ditunda/tidak dikerjakan | Tidak memblokir gate; keputusan saat ini: tidak diaktifkan (R-15 tidak dipicu). |
 
 ## Verdict
 
 **Verdict: Go (bersyarat)** — dinyatakan pengembang ("Go") dan dicatat dengan syarat.
 
-**Dasar:** AC 1 (attestasi), AC 2 (RLS terisolasi terbukti remote v8), AC 3 (anonymous sign-in aktif & dipakai), AC 4 (attestasi pengembang + matriks/suite test lulus), AC 5 (kontrak/test server + attestasi UI simulasi terkontrol, tanpa screenshot), AC 6 (429 scan ke-6 terbukti), dan AC 8 lulus dengan bukti/keterangan yang tersedia; p95 hangat 4006 ms < 6 s. **CPU dashboard AC 7** tetap **belum diverifikasi**.
+**Dasar:** AC 1 (attestasi), AC 2 (RLS terisolasi terbukti remote v8), AC 3 (anonymous sign-in aktif & dipakai), AC 4 (attestasi pengembang + matriks/suite test lulus), AC 5 (kontrak/test server + attestasi UI simulasi terkontrol), AC 6 (429 scan ke-6 terbukti), AC 7 (p95 hangat 4006 ms < 6 s; CPU/execution dashboard `scan` 24 jam per 16 Nov 2026: Avg Exec 3578 ms, Max 13762 ms, Avg CPU 70 ms, Max 179 ms; keputusan R-15/optimasi S dicatat — tidak diaktifkan), dan AC 8 lulus dengan bukti/keterangan yang tersedia.
 
-**Syarat/keharusan tindak lanjut:** (1) uji ulang isolasi RLS pada build rilis (**T-W4-04**) termasuk pembuktian sisa T-W3-06 (`retryAfter`, pasca-jendela) sebagaimana direncanakan; (2) lengkapi bukti AC 5 UI `CLOUD_PERSIST_FAILED` bila dapat direproduksi; (3) lengkapi metrik CPU/execution dashboard `scan` (dengan rentang waktu & sumber) untuk menutup AC 7 sepenuhnya; (4) pertahankan sikap jujur "belum diverifikasi" untuk item tanpa bukti mentah.
+**Syarat/keharusan tindak lanjut:** (1) uji ulang isolasi RLS pada build rilis (**T-W4-04**) termasuk pembuktian sisa T-W3-06 (`retryAfter`, pasca-jendela) sebagaimana direncanakan; (2) pertahankan sikap jujur "belum diverifikasi"/keterbatasan bukti untuk item tanpa bukti mentah (attestasi tanpa screenshot, kondisi layanan nyata tertentu, metrik dashboard tanpa screenshot).
 
-**Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai, dengan risiko dan syarat di atas dicatat dan ditindaklanjuti (terutama T-W4-04). T-W3-13 **tidak** ditandai selesai penuh `[x]` di TASKS karena **AC 7** (CPU dashboard) belum sepenuhnya terbukti.
+**Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai. T-W3-13 ditandai selesai (`[x]`) di TASKS karena AC 1–8 terpenuhi sesuai bukti/keterangan yang tersedia, dengan sisa risiko tindak lanjut di atas (terutama T-W4-04).
