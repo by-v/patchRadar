@@ -1152,13 +1152,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Uji migrasi dari database kosong.
 - **Memenuhi:** `FR-22`, `NFR-05`, `NFR-15`, `R-08`
 - **Kriteria selesai (AC):**
-  - [ ] Semua tabel dibuat dari migrasi kosong tanpa error.
-  - [ ] RLS aktif pada seluruh tabel.
-  - [ ] Tidak ada policy `USING (true)` pada tabel pengguna.
-  - [ ] Klien anonim tidak dapat menulis ke tabel.
+  - [x] Semua tabel dibuat dari migrasi kosong tanpa error.
+  - [x] RLS aktif pada seluruh tabel.
+  - [x] Tidak ada policy `USING (true)` pada tabel pengguna.
+  - [x] Klien anonim tidak dapat menulis ke tabel.
 - **Estimasi:** 2,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/migrations/20261115000000_scans_findings_rate_limit.sql`. Tidak mengubah migrasi Minggu 1 maupun kode Edge Function.
+  - Tabel `scans` memuat kolom PRD §8.1 (`user_id` FK `auth.users`), `findings` memuat satu baris per paket+advisory dengan `scan_id` FK `on delete cascade`, dan `rate_limit_events` memakai `id` identity dengan indeks `(user_id, created_at desc)`. Kolom `references` dikutip karena kata kunci SQL.
+  - RLS diaktifkan pada ketiga tabel baru; `osv_cache`, `kev_entries`, dan `epss_cache` sudah mengaktifkan RLS di migrasi masing-masing. Policy baca hanya untuk role `authenticated`: `scans_select_own` (`user_id = auth.uid()`) dan `findings_select_own_scan` (`exists` scan milik `auth.uid()`). Tidak ada policy tulis dan tidak ada policy `USING (true)`.
+  - Hak akses: `anon`/`authenticated` dicabut seluruhnya lalu hanya diberi `SELECT` pada `scans` dan `findings`; `rate_limit_events` dan tabel cache tidak dapat diakses klien; `service_role` mendapat seluruh hak untuk Edge Function. Sesi anonim Supabase memakai role `authenticated`, sehingga isolasi tetap berlaku lewat `auth.uid()`.
+  - Bukti AC: PostgreSQL 18 lokal (port 55441) dengan role `anon`/`authenticated`/`service_role` serta tiruan `auth.users` + `auth.uid()`. Keempat migrasi dijalankan berurutan dari database kosong tanpa error; migrasi baru dijalankan ulang tanpa error. Asersi SQL membuktikan RLS aktif pada enam tabel, tidak ada policy `USING (true)`, pengguna A hanya melihat 1 scan/1 finding miliknya (bukan milik B), serta `INSERT`/`UPDATE`/`DELETE` `scans`, `INSERT` `findings`, dan seluruh akses `rate_limit_events` ditolak untuk `authenticated`; role `anon` juga ditolak membaca `scans`/`findings`; `service_role` tetap dapat menulis.
+  - Migrasi **belum diterapkan ke proyek remote** (perubahan remote masih menunggu izin pengembang). Penerapan dan pembuktian baris nyata menjadi langkah pertama `T-W3-05`.
 
 ### T-W3-05 — Penyimpanan cloud best-effort dan field `persisted`
 - **Tipe:** `[AGENT]`
