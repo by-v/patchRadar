@@ -1368,7 +1368,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 ### T-W3-13 — `[GATE]` Gate Minggu 3
 - **Tipe:** `[GATE]`
 - **Tujuan:** Memastikan offline, cloud, RLS, rate limit, dan penanganan error siap masuk minggu rilis.
-- **Prasyarat:** `T-W3-01` s.d. `T-W3-06`, `T-W3-07a` s.d. `T-W3-07c`, `T-W3-08`; `T-W1-13`, `T-W3-11`, `T-W3-12` bila fitur S dipertahankan
+- **Prasyarat:** `T-W3-01` s.d. `T-W3-06`, `T-W3-07a` s.d. `T-W3-07c`, `T-W3-08`; `T-W1-13`, `T-W3-11`, `T-W3-12` bila fitur S dipertahankan (T-W3-12 ditunda/tidak dipertahankan)
 - **File/folder:** `docs/week3-gate.md`
 - **Langkah:**
   1. Uji alur offline penuh.
@@ -1380,17 +1380,21 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   7. Catat verdict dan sisa risiko.
 - **Memenuhi:** `FR-22`, `FR-23`, `FR-24`, `FR-25a`, `NFR-05`, `NFR-07`, `R-08`, `R-09`, `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] Riwayat→Hasil→Detail berhasil dalam mode pesawat.
-  - [ ] Dua pengguna anonim terisolasi.
-  - [ ] Gerbang anonymous sign-in punya verdict Go/No-Go.
-  - [ ] 23 kondisi error teruji tanpa crash.
-  - [ ] `persisted=false` dan warning tampil benar.
-  - [ ] Scan ke-6 menghasilkan 429.
-  - [ ] p95 hangat dan CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat.
-  - [ ] Verdict Go/No-Go tercatat.
+  - [x] Riwayat→Hasil→Detail berhasil dalam mode pesawat. (Attestasi manual pengembang, Android, 15 Nov 2026: Riwayat→Hasil→Detail saat mode pesawat tanpa crash; detail perangkat/OS & screenshot **belum diverifikasi**.)
+  - [x] Dua pengguna anonim terisolasi. (A3 remote v8: `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, `scanId 14671da2-19a2-4bfa-aad7-c08a7a76d763`, `leakDetected=false`, SQL scans 2/findings 4/events 7 & pg_policies sesuai; `docs/rls-test.md`, `docs/week3-gate.md`. Uji ulang wajib di build rilis T-W4-04.)
+  - [x] Gerbang anonymous sign-in punya verdict Go/No-Go. (Bukti due diligence 15 Nov 2026; verdict **Go (bersyarat)** di `docs/week3-gate.md`.)
+  - [ ] 23 kondisi error teruji tanpa crash. **Belum sepenuhnya diverifikasi:** `docs/error-matrix.md` + T-W3-07a/b/c & suite lulus (edge 196, app 121, 15 Nov 2026) mendukung; bukti manual UI terbatas ("kondisi error sesuai rencana, aman" + skenario scan offline menampilkan pesan gagal & tombol Riwayat tanpa crash) dan beberapa kondisi layanan nyata belum diverifikasi — tidak semua 23 terdokumentasi per-kondisi dengan bukti manual/perangkat.
+  - [ ] `persisted=false` dan warning tampil benar. **Belum diverifikasi (UI end-to-end):** kontrak/test server OK (200, `persisted=false`, `CLOUD_PERSIST_FAILED`, hasil tak berubah) dan kontras sukses A2/A3 `persisted=true`; tidak ada bukti UI. Laporan pengembang: "tidak teramati/tidak bisa didemonstrasikan" (kejadian "gagal tersimpan" yang dilaporkan disertai `Cannot find native module ExpoSQLite`, bukan bukti jalur `CLOUD_PERSIST_FAILED`).
+  - [x] Scan ke-6 menghasilkan 429. (A4 remote v8: scan ke-6 429 `RATE_LIMITED` `req_c937fcfcecfc45daaa768587dfca3822`, 5 sebelumnya 404 `REPO_NOT_FOUND_OR_PRIVATE`, `rate_limit_events` konsisten; sisa T-W3-06 `retryAfter`/pasca-jendela → T-W4-04.)
+  - [ ] p95 hangat dan CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat. **Parsial:** p95 hangat terukur 15 Nov 2026 (axios/axios, warmup `req_a4f6f1d897f443a18f1f9014c33d1d81` 5713ms; warm 1–4 200 sukses `req_22ad076a2d314edea401c79fd69bf896` 3440ms, `req_a9c8709547ee488f993878b3153f1c5b` 4006ms, `req_88a9e6de716d4a7c904751d60bcdc4c7` 3084ms, `req_c655d6c1c68b4ae9b45aee1ec63ed327` 2919ms; warm 5 429 `req_bb74e537dd214eda835ba31aa6e6a9e6`; p50 3084ms, p95 4006ms < 6s). **CPU dashboard belum diverifikasi** (pengembang memberi "49 Total Requests, 100.0% Success Rate" tanpa CPU/execution time & rentang/sumber). Keputusan R-15/optimasi S dicatat di `docs/week3-gate.md` (tidak diaktifkan berdasar data CPU yang belum ada; S tetap ditunda).
+  - [x] Verdict Go/No-Go tercatat. (**Go bersyarat**, `docs/week3-gate.md`; syarat: RLS ulang build rilis & sisa T-W3-06 di T-W4-04, lengkapi bukti AC5 UI & AC7 CPU dashboard.)
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [~] Tugas selesai — **parsial** (gate dievaluasi dan verdict Go bersyarat tercatat; AC 4/5/7 belum sepenuhnya `[x]` karena bukti belum lengkap). `docs/week3-gate.md` dibuat.
 - **Catatan hasil:**
+  - `docs/week3-gate.md`: bukti AC 1–8, sisa risiko, verdict **Go (bersyarat)** (keputusan pengembang: "Go").
+  - Bukti manual pengembang (15 Nov 2026): AC1 Android Riwayat→Hasil→Detail offline tanpa crash; AC4 skenario scan offline menampilkan pesan gagal + tombol Riwayat tanpa crash & "kondisi error sesuai rencana"; AC5 tidak teramati/demonstrasi UI `CLOUD_PERSIST_FAILED` (laporan "gagal tersimpan" disertai `Cannot find native module ExpoSQLite`, bukan bukti AC5); AC7 dashboard hanya 49 requests/100% success (CPU belum diberikan).
+  - Verifikasi lokal 15 Nov 2026: edge scan tests `196 pass, 0 fail`; app `lint 0`, `typecheck 0`, `121 pass, 0 fail`.
+  - Pengukuran p95 hangat (izin, remote tulis data): warmup `req_a4f6f1d897f443a18f1f9014c33d1d81`, warm 1–4 200 sukses `req_22ad076a2d314edea401c79fd69bf896`/`req_a9c8709547ee488f993878b3153f1c5b`/`req_88a9e6de716d4a7c904751d60bcdc4c7`/`req_c655d6c1c68b4ae9b45aee1ec63ed327`, warm 5 429 `req_bb74e537dd214eda835ba31aa6e6a9e6`; p50 3084ms, p95 4006ms (<6s). CPU dashboard **belum diverifikasi**.
 
 ---
 
