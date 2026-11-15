@@ -21,13 +21,13 @@ Sumber kondisi: `docs/PRD.md` §12 (23 kondisi). Setiap baris dipetakan ke tugas
 
 | No | Kondisi (ringkas) | Perilaku | Bukti uji | Status |
 |---:|---|---|---|---|
-| 11 | GitHub rate limit | Layar error; tombol coba lagi setelah waktu | — | `[ ]` |
-| 12 | OSV rate limit/5xx | 502; tawarkan hasil cache terakhir | — | `[ ]` |
-| 13 | EPSS gagal | 200 parsial; banner peringatan | — | `[ ]` |
-| 14 | KEV gagal, salinan lama ada | 200 parsial; `sourceStatus.kev=STALE` | — | `[ ]` |
-| 15 | KEV belum pernah tersedia | 200 parsial; banner | — | `[ ]` |
-| 16 | Timeout total | 504; tawarkan cache dan coba lagi | — | `[ ]` |
-| 20 | Batas laju aplikasi | 429; hitung mundur di UI | — | `[ ]` |
+| 11 | GitHub rate limit | Layar error; `scope=github`; tombol coba lagi setelah waktu | `github.test.ts` — 403 `x-ratelimit-remaining=0`/429, `scope`, `retryAfter`, pesan GitHub; `handler.test.ts` — "rate limit 429..."; `scan.test.ts` — membedakan pesan GitHub/aplikasi | `[x]` |
+| 12 | OSV rate limit/5xx | 502; tawarkan hasil cache terakhir | `osv.test.ts` — "429 dan 5xx diulang maksimum 2 kali", "kegagalan OSV total menjadi ScanError 502"; `handler.test.ts` — upstream 5xx 502; `scan.test.ts` — pesan 502 + Riwayat | `[x]` |
+| 13 | EPSS gagal | 200 parsial; banner peringatan | `epss.test.ts` — timeout/5xx dan respons kosong menjadi `EPSS_UNAVAILABLE`; `handler.test.ts` — "EPSS gagal menghasilkan 200 parsial..." | `[x]` |
+| 14 | KEV gagal, salinan lama ada | 200 parsial; `sourceStatus.kev=STALE` | `kev.test.ts` — "refresh gagal dengan salinan lama menghasilkan STALE"; `handler.test.ts` — "KEV kosong atau STALE..." | `[x]` |
+| 15 | KEV belum pernah tersedia | 200 parsial; banner | `kev.test.ts` — "belum ada salinan dan refresh gagal..." (`KEV_UNAVAILABLE`); `handler.test.ts` — warning KEV | `[x]` |
+| 16 | Timeout total | 504; tawarkan cache dan coba lagi | `handler.test.ts` — "timeout menghasilkan 504 SCAN_TIMEOUT"; `github.test.ts` — AbortController; `scan.test.ts` — pesan 504 + Riwayat | `[x]` |
+| 20 | Batas laju aplikasi | 429; `scope=app`; hitung mundur di UI | `rate-limit.test.ts` — 5 diizinkan, ke-6 429 `retryAfter=600`, jendela bergulir; `handler.test.ts` — scan ke-6 sebelum fetch; `scan.test.ts` — pesan aplikasi; `countdown.test.ts` — format `menit:detik` | `[x]` |
 
 ## Kelompok C — jaringan, auth, dan cloud (`T-W3-07c`)
 
@@ -45,3 +45,6 @@ Sumber kondisi: `docs/PRD.md` §12 (23 kondisi). Setiap baris dipetakan ke tugas
 - Teks kondisi 1–4, 18, 19, 21–23 dan pemetaan presentasi berada di `app/src/errors/messages.ts`; `REPO_LINK_MESSAGES` dan `AUTH_MESSAGES` diekspor ulang dari modul asalnya agar pemanggil lama tetap bekerja.
 - Kondisi 10 bukan error penghenti: respons tetap 200 dengan `manifest.estimated=true` dan warning `LOCKFILE_INVALID_JSON`, `LOCKFILE_V1`, `LOCKFILE_UNSUPPORTED`, atau `LOCKFILE_MISSING`.
 - Kondisi 5–9 tampil sebagai layar error di layar Pindai dengan tombol **Coba lagi** dan **Kembali**; kondisi 1–4 tetap inline di bawah input.
+- Kondisi 11 dan 20 memakai kode `RATE_LIMITED` yang sama, tetapi body menambahkan `scope: "github"` atau `scope: "app"` agar pesan dan hitung mundur tepat. Klien lama yang tidak membaca `scope` tetap mendapat pesan batas aplikasi.
+- Redirect GitHub: `fetchAllowedText` hanya mengikuti **satu** 301 dan hanya bila `Location` tetap `https://api.github.com` tanpa userinfo/port non-standar. Redirect berantai, host lain, alamat privat/loopback, skema turun, dan `raw.githubusercontent.com` sebagai tujuan ditolak dengan 502. `github.test.ts` menguji seluruh kasus ini, termasuk `resolveSafeGithubRedirect` secara langsung.
+- Kegagalan pengayaan (12–16) tidak menyamar sebagai hasil lengkap: OSV total gagal berhenti 502; EPSS/KEV gagal tetap 200 dengan `partial=true`, `sourceStatus` yang sesuai, dan warning Indonesia di banner Hasil.

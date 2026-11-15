@@ -2,7 +2,9 @@
  * Klien GitHub untuk `scan` tahap 1.
  *
  * - Hanya boleh memanggil `api.github.com` dan `raw.githubusercontent.com`.
- * - Redirect tidak diikuti (`redirect: "manual"`); 3xx dianggap upstream error.
+ * - Redirect 301 diikuti maksimal satu hop hanya di `api.github.com`; redirect
+ *   berantai, host lain, alamat privat/loopback, skema turun, userinfo, atau
+ *   port non-standar ditolak (PRD §12 baris 11, T-W3-07b).
  * - Setiap fetch memakai AbortController dan batas ukuran body.
  * - Token hanya dikirim ke api.github.com; tidak pernah dicatat/dikembalikan.
  *
@@ -45,9 +47,55 @@ export function isAllowedGithubUrl(rawUrl: string): boolean {
   return (
     url.protocol === 'https:' &&
     ALLOWED_GITHUB_HOSTS.has(url.hostname) &&
+    url.port === '' &&
     url.username === '' &&
     url.password === ''
   );
+}
+
+/**
+ * Validasi tujuan redirect 301. Hanya `api.github.com` tanpa userinfo/port dan
+ * tetap HTTPS yang diizinkan; `raw.githubusercontent.com` tidak boleh menjadi
+ * tujuan redirect.
+ */
+export function resolveSafeGithubRedirect(
+  location: string | null,
+  baseUrl: string,
+): string | null {
+  if (location === null || location.trim().length === 0) return null;
+
+  let base: URL;
+  let target: URL;
+  try {
+    base = new URL(baseUrl);
+    target = new URL(location, base);
+  } catch {
+    return null;
+  }
+
+  if (base.hostname !== 'api.github.com') return null;
+  if (target.protocol !== 'https:') return null;
+  if (target.hostname !== 'api.github.com') return null;
+  if (target.username !== '' || target.password !== '') return null;
+  if (target.port !== '') return null;
+  return target.href;
+}
+
+function githubRateLimitError(headers: Headers): ScanError {
+  const retryAfter = retryAfterSeconds(headers);
+  const message =
+    retryAfter === null
+      ? 'Batas permintaan GitHub tercapai. Coba lagi sebentar lagi.'
+      : `Batas permintaan GitHub tercapai. Coba lagi dalam ${Math.max(
+          1,
+          Math.ceil(retryAfter / 60),
+        )} menit.`;
+
+  return new ScanError('RATE_LIMITED', {
+    message,
+    retryAfter,
+    scope: 'github',
+  });
 }
 
 function retryAfterSeconds(headers: Headers): number | null {
@@ -72,12 +120,12 @@ export function mapGithubHttpError(
   context: 'metadata' | 'file',
 ): ScanError {
   if (status === 429) {
-    return new ScanError('RATE_LIMITED', { retryAfter: retryAfterSeconds(headers) });
+    return githubRateLimitError(headers);
   }
 
   if (status === 403) {
     if (headers.get('x-ratelimit-remaining') === '0') {
-      return new ScanError('RATE_LIMITED', { retryAfter: retryAfterSeconds(headers) });
+      return githubRateLimitError(headers);
     }
     if (context === 'metadata') {
       return new ScanError('REPO_PRIVATE_OR_FORBIDDEN');
@@ -162,19 +210,49 @@ export async function fetchAllowedText(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), options.timeoutMs);
   try {
-    let response: Response;
-    try {
-      response = await options.fetchImpl(rawUrl, {
+    const request = (url: string): Promise<Response> =>
+      options.fetchImpl(url, {
         ...init,
         redirect: 'manual',
         signal: controller.signal,
       });
+
+    let response: Response;
+    try {
+      response = await request(rawUrl);
     } catch (error) {
       if (controller.signal.aborted) throw abortableError(error);
       throw networkError(error);
     }
 
-    if (response.status >= 300 && response.status < 400) {
+    if (response.status === 301) {
+      const redirectUrl = resolveSafeGithubRedirect(
+        response.headers.get('location'),
+        rawUrl,
+      );
+      if (redirectUrl === null) {
+        await response.body?.cancel().catch(() => undefined);
+        throw new ScanError('UPSTREAM_UNAVAILABLE', {
+          message:
+            'GitHub mengalihkan ke alamat yang tidak diizinkan; redirect ditolak.',
+        });
+      }
+
+      // Tepat satu hop; redirect berikutnya selalu ditolak.
+      try {
+        response = await request(redirectUrl);
+      } catch (error) {
+        if (controller.signal.aborted) throw abortableError(error);
+        throw networkError(error);
+      }
+      if (response.status >= 300 && response.status < 400) {
+        await response.body?.cancel().catch(() => undefined);
+        throw new ScanError('UPSTREAM_UNAVAILABLE', {
+          message: 'Rantai redirect GitHub tidak diizinkan.',
+        });
+      }
+    } else if (response.status >= 300 && response.status < 400) {
+      await response.body?.cancel().catch(() => undefined);
       throw new ScanError('UPSTREAM_UNAVAILABLE', {
         message: 'Upstream mengalihkan ke alamat lain; redirect tidak diikuti.',
       });

@@ -45,6 +45,7 @@ export async function enforceRateLimit(options: {
     throw new ScanError('RATE_LIMITED', {
       message: rateLimitMessage(retryAfter),
       retryAfter,
+      scope: 'app',
     });
   }
 

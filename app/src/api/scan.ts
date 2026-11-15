@@ -6,6 +6,7 @@ import {
   rateLimitMessage,
   requestIdSuffix,
   SCAN_ERROR_MESSAGES,
+  type RateLimitScope,
 } from '@/errors/messages';
 import type {
   LockfileFormat,
@@ -130,6 +131,10 @@ function asNullableNumber(value: unknown): number | null | undefined {
 
 function asBoolean(value: unknown): boolean | null {
   return typeof value === 'boolean' ? value : null;
+}
+
+function asRateLimitScope(value: unknown): RateLimitScope | null {
+  return value === 'app' || value === 'github' ? value : null;
 }
 
 function parseSourceStatus(value: unknown): ScanSourceStatus | null {
@@ -391,13 +396,14 @@ export function mapServerError(
   const serverRetryable = error === null ? null : asBoolean(error.retryable);
   const retryAfterSeconds =
     error === null ? null : readRetryAfterSeconds(error, retryAfterHeader);
+  const rateLimitScope = error === null ? null : asRateLimitScope(error.scope);
 
   const knownCode = code !== null && code in SCAN_ERROR_MESSAGES ? code : null;
   const resolvedCode = (knownCode ?? STATUS_CODES[status] ?? 'UNKNOWN') as ScanErrorCode;
 
   let message: string;
   if (resolvedCode === 'RATE_LIMITED') {
-    message = rateLimitMessage(retryAfterSeconds);
+    message = rateLimitMessage(retryAfterSeconds, rateLimitScope);
   } else if (resolvedCode in SCAN_ERROR_MESSAGES) {
     message = SCAN_ERROR_MESSAGES[resolvedCode];
   } else {
@@ -419,6 +425,7 @@ export function mapServerError(
       serverRetryable ?? RETRYABLE[resolvedCode] ?? (status >= 500 || status === 429),
     requestId,
     retryAfterSeconds,
+    rateLimitScope,
     status,
   };
 }
@@ -441,6 +448,7 @@ function failure(
       retryable: RETRYABLE[code] ?? true,
       requestId: options.requestId ?? null,
       retryAfterSeconds: options.retryAfterSeconds ?? null,
+      rateLimitScope: null,
       status: options.status ?? null,
     },
   };

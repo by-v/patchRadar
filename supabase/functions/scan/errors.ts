@@ -21,6 +21,9 @@ export type ScanErrorCode =
   | 'INTERNAL'
   | 'METHOD_NOT_ALLOWED';
 
+/** Membedakan batas GitHub (PRD §12 baris 11) dari batas aplikasi (baris 20). */
+export type RateLimitScope = 'app' | 'github';
+
 const DEFAULT_STATUS: Readonly<Record<ScanErrorCode, number>> = {
   INVALID_URL: 400,
   UNAUTHENTICATED: 401,
@@ -73,10 +76,16 @@ export class ScanError extends Error {
   readonly status: number;
   readonly retryable: boolean;
   readonly retryAfter: number | null;
+  readonly scope: RateLimitScope | null;
 
   constructor(
     code: ScanErrorCode,
-    options: { message?: string; retryAfter?: number | null; cause?: unknown } = {},
+    options: {
+      message?: string;
+      retryAfter?: number | null;
+      scope?: RateLimitScope | null;
+      cause?: unknown;
+    } = {},
   ) {
     super(options.message ?? DEFAULT_MESSAGE[code]);
     this.name = 'ScanError';
@@ -84,6 +93,7 @@ export class ScanError extends Error {
     this.status = DEFAULT_STATUS[code];
     this.retryable = DEFAULT_RETRYABLE[code];
     this.retryAfter = options.retryAfter ?? null;
+    this.scope = code === 'RATE_LIMITED' ? (options.scope ?? null) : null;
     if (options.cause !== undefined) this.cause = options.cause;
   }
 }
@@ -95,6 +105,7 @@ export interface ScanErrorBody {
     retryable: boolean;
     requestId: string;
     retryAfter?: number;
+    scope?: RateLimitScope;
   };
 }
 
@@ -134,8 +145,9 @@ export function scanErrorResponse(error: unknown, requestId: string): Response {
     },
   };
 
-  if (scanError.code === 'RATE_LIMITED' && scanError.retryAfter !== null) {
-    body.error.retryAfter = scanError.retryAfter;
+  if (scanError.code === 'RATE_LIMITED') {
+    if (scanError.retryAfter !== null) body.error.retryAfter = scanError.retryAfter;
+    if (scanError.scope !== null) body.error.scope = scanError.scope;
   }
 
   const headers: Record<string, string> = {};

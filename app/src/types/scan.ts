@@ -13,6 +13,9 @@ export type SeverityLevel = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'UNKNOWN';
 export type PriorityLabel = 'FIX_NOW' | 'SCHEDULE' | 'MONITOR';
 export type SourceState = 'OK' | 'CACHE' | 'PARTIAL' | 'STALE' | 'EMPTY' | 'FAILED';
 
+/** Asal batas laju 429: aplikasi (FR-25a) atau GitHub (PRD §12 baris 11). */
+export type RateLimitScope = 'app' | 'github';
+
 export type ScanWarning = {
   code: string;
   message: string;
@@ -132,6 +135,7 @@ export type ScanFailure = {
   retryable: boolean;
   requestId: string | null;
   retryAfterSeconds: number | null;
+  rateLimitScope: RateLimitScope | null;
   status: number | null;
 };
 

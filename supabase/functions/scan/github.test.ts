@@ -6,6 +6,7 @@ import {
   fetchRepoMetadata,
   isAllowedGithubUrl,
   mapGithubHttpError,
+  resolveSafeGithubRedirect,
 } from './github.ts';
 import { ScanError } from './errors.ts';
 
@@ -29,6 +30,7 @@ test('allowlist host hanya API/raw GitHub dengan HTTPS', () => {
     'https://api.github.com.evil.com/x',
     'https://raw.githubusercontent.com@evil.com/x',
     'https://user@api.github.com/x',
+    'https://api.github.com:8443/repos/a/b',
     'not-a-url',
   ]) {
     assert.equal(isAllowedGithubUrl(value), false, value);
@@ -91,12 +93,123 @@ test('file raw tidak mengirim token dan memakai branch yang di-encode per segmen
   assert.equal(result?.text, '{"name":"b"}');
 });
 
-test('redirect 3xx tidak diikuti dan menjadi UPSTREAM_UNAVAILABLE', async () => {
+test('redirect aman hanya menerima api.github.com tanpa userinfo, port, atau skema turun', () => {
+  const base = 'https://api.github.com/repos/a/b';
+  assert.equal(
+    resolveSafeGithubRedirect('https://api.github.com/repositories/1', base),
+    'https://api.github.com/repositories/1',
+  );
+  assert.equal(
+    resolveSafeGithubRedirect('/repositories/1', base),
+    'https://api.github.com/repositories/1',
+  );
+
+  for (const location of [
+    'https://evil.com/',
+    'https://raw.githubusercontent.com/a/b/main/package.json',
+    'https://api.github.com@evil.com/',
+    'https://user:pass@api.github.com/repos/a/b',
+    'https://api.github.com:8443/repos/a/b',
+    'http://api.github.com/repos/a/b',
+    'https://127.0.0.1/repos/a/b',
+    'https://[::1]/repos/a/b',
+    '',
+  ]) {
+    assert.equal(resolveSafeGithubRedirect(location, base), null, location);
+  }
+
+  // raw.githubusercontent.com tidak boleh menjadi basis follow redirect.
+  assert.equal(
+    resolveSafeGithubRedirect(
+      'https://api.github.com/repositories/1',
+      'https://raw.githubusercontent.com/a/b/main/package.json',
+    ),
+    null,
+  );
+});
+
+test('301 aman diikuti tepat satu hop dan token tetap hanya ke api.github.com', async () => {
+  const calls: Array<{ url: string; auth: string | null }> = [];
+  const result = await fetchRepoMetadata('a', 'b', {
+    token: 'token-rahasia',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, auth: new Headers(init?.headers).get('authorization') });
+      if (calls.length === 1) {
+        return new Response(null, {
+          status: 301,
+          headers: { location: '/repositories/123' },
+        });
+      }
+      return jsonResponse({ default_branch: 'main' });
+    },
+  });
+
+  assert.equal(result.defaultBranch, 'main');
+  assert.deepEqual(calls, [
+    { url: 'https://api.github.com/repos/a/b', auth: 'Bearer token-rahasia' },
+    { url: 'https://api.github.com/repositories/123', auth: 'Bearer token-rahasia' },
+  ]);
+});
+
+test('redirect 301 berbahaya ditolak tanpa hop kedua', async () => {
+  const unsafeLocations = [
+    'https://evil.com/',
+    'https://api.github.com@evil.com/',
+    'https://api.github.com:8443/repos/a/b',
+    'http://api.github.com/repos/a/b',
+    'https://127.0.0.1/repos/a/b',
+    'https://raw.githubusercontent.com/a/b/main/package.json',
+  ];
+
+  for (const location of unsafeLocations) {
+    let calls = 0;
+    await assert.rejects(
+      fetchRepoMetadata('a', 'b', {
+        token: 'x',
+        fetchImpl: async () => {
+          calls += 1;
+          return new Response(null, { status: 301, headers: { location } });
+        },
+      }),
+      (error: unknown) => {
+        assert.ok(error instanceof ScanError);
+        assert.equal(error.code, 'UPSTREAM_UNAVAILABLE');
+        assert.match(error.message, /redirect ditolak/);
+        return true;
+      },
+      location,
+    );
+    assert.equal(calls, 1, location);
+  }
+});
+
+test('rantai redirect dan redirect selain 301 tetap ditolak', async () => {
+  let calls = 0;
+  await assert.rejects(
+    fetchRepoMetadata('a', 'b', {
+      token: 'x',
+      fetchImpl: async () => {
+        calls += 1;
+        return new Response(null, {
+          status: 301,
+          headers: { location: '/repositories/123' },
+        });
+      },
+    }),
+    (error: unknown) => {
+      assert.ok(error instanceof ScanError);
+      assert.equal(error.code, 'UPSTREAM_UNAVAILABLE');
+      assert.match(error.message, /Rantai redirect/);
+      return true;
+    },
+  );
+  assert.equal(calls, 2);
+
   await assert.rejects(
     fetchRepoMetadata('a', 'b', {
       token: 'x',
       fetchImpl: async () =>
-        new Response(null, { status: 302, headers: { location: 'https://evil.com/' } }),
+        new Response(null, { status: 302, headers: { location: 'https://api.github.com/x' } }),
     }),
     isScanError('UPSTREAM_UNAVAILABLE'),
   );
@@ -139,10 +252,16 @@ test('status GitHub dipetakan: 404, 403 privat, 403 rate limit, 429, 5xx', async
   );
   assert.equal(rateLimited.code, 'RATE_LIMITED');
   assert.equal(rateLimited.retryAfter, 30);
+  assert.equal(rateLimited.scope, 'github');
+  assert.equal(
+    rateLimited.message,
+    'Batas permintaan GitHub tercapai. Coba lagi dalam 1 menit.',
+  );
 
   const tooMany = mapGithubHttpError(429, new Headers({ 'retry-after': '7' }), 'metadata');
   assert.equal(tooMany.code, 'RATE_LIMITED');
   assert.equal(tooMany.retryAfter, 7);
+  assert.equal(tooMany.scope, 'github');
 
   await assert.rejects(
     fetchRepoMetadata('a', 'b', { token: 'x', fetchImpl: async () => jsonResponse({}, 502) }),

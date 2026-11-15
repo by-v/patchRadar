@@ -225,7 +225,114 @@ describe('requestScan — respons error', () => {
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.error.retryAfterSeconds).toBe(90);
+    expect(result.error.rateLimitScope).toBeNull();
     expect(result.error.message).toBe('Terlalu banyak pemindaian. Coba lagi dalam 2 menit.');
+  });
+
+  it('membedakan batas GitHub dari batas aplikasi pada 429', async () => {
+    const github = await requestScan({
+      repoUrl: 'https://github.com/a/b',
+      config: CONFIG,
+      fetchImpl: fetchMock(
+        jsonResponse(
+          {
+            error: {
+              code: 'RATE_LIMITED',
+              message: 'Batas permintaan GitHub tercapai.',
+              retryable: true,
+              requestId: 'req_github',
+              retryAfter: 60,
+              scope: 'github',
+            },
+          },
+          { status: 429 },
+        ),
+      ),
+    });
+
+    expect(github.ok).toBe(false);
+    if (github.ok) return;
+    expect(github.error.rateLimitScope).toBe('github');
+    expect(github.error.message).toBe(
+      'Batas permintaan GitHub tercapai. Coba lagi dalam 1 menit.',
+    );
+
+    const app = await requestScan({
+      repoUrl: 'https://github.com/a/b',
+      config: CONFIG,
+      fetchImpl: fetchMock(
+        jsonResponse(
+          {
+            error: {
+              code: 'RATE_LIMITED',
+              message: 'Batas pemindaian tercapai.',
+              retryable: true,
+              requestId: 'req_app',
+              retryAfter: 600,
+              scope: 'app',
+            },
+          },
+          { status: 429 },
+        ),
+      ),
+    });
+
+    expect(app.ok).toBe(false);
+    if (app.ok) return;
+    expect(app.error.rateLimitScope).toBe('app');
+    expect(app.error.message).toBe(
+      'Terlalu banyak pemindaian. Coba lagi dalam 10 menit.',
+    );
+  });
+
+  it('memetakan OSV 502 dan timeout total ke pesan penghentian yang sesuai', async () => {
+    const upstream = await requestScan({
+      repoUrl: 'https://github.com/a/b',
+      config: CONFIG,
+      fetchImpl: fetchMock(
+        jsonResponse(
+          {
+            error: {
+              code: 'UPSTREAM_UNAVAILABLE',
+              message: 'Layanan OSV tidak dapat dihubungi.',
+              retryable: true,
+              requestId: 'req_osv',
+            },
+          },
+          { status: 502 },
+        ),
+      ),
+    });
+    expect(upstream.ok).toBe(false);
+    if (upstream.ok) return;
+    expect(upstream.error.code).toBe('UPSTREAM_UNAVAILABLE');
+    expect(upstream.error.message).toBe(
+      'Layanan kerentanan sedang sibuk. Coba lagi sebentar lagi.',
+    );
+
+    const timeout = await requestScan({
+      repoUrl: 'https://github.com/a/b',
+      config: CONFIG,
+      fetchImpl: fetchMock(
+        jsonResponse(
+          {
+            error: {
+              code: 'SCAN_TIMEOUT',
+              message: 'Waktu habis.',
+              retryable: true,
+              requestId: 'req_timeout',
+            },
+          },
+          { status: 504 },
+        ),
+      ),
+    });
+    expect(timeout.ok).toBe(false);
+    if (timeout.ok) return;
+    expect(timeout.error.code).toBe('SCAN_TIMEOUT');
+    expect(timeout.error.message).toBe(
+      'Pemindaian melebihi batas waktu. Coba lagi atau pindai repositori yang lebih kecil.',
+    );
   });
 
   it('memakai kode HTTP bila body error tidak dapat dibaca', async () => {

@@ -1263,14 +1263,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Uji seluruh kondisi kelompok B, termasuk kasus SSRF redirect, dan perbarui bukti di `docs/error-matrix.md`.
 - **Memenuhi:** `FR-24`, `NFR-02`, `NFR-08`, `R-05`
 - **Kriteria selesai (AC):**
-  - [ ] Kondisi 11–16 dan 20 memiliki pesan Indonesia serta kode/status yang benar.
-  - [ ] Kegagalan pengayaan tidak menyamar sebagai hasil lengkap.
-  - [ ] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
-  - [ ] Tidak ada crash pada seluruh kondisi kelompok B.
-  - [ ] Redirect 301 diikuti maksimal satu hop hanya ke `api.github.com` yang aman; redirect ke host lain, alamat privat/loopback, skema turun, userinfo/port, atau rantai redirect tetap ditolak dengan pesan khusus.
+  - [x] Kondisi 11–16 dan 20 memiliki pesan Indonesia serta kode/status yang benar.
+  - [x] Kegagalan pengayaan tidak menyamar sebagai hasil lengkap.
+  - [x] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
+  - [x] Tidak ada crash pada seluruh kondisi kelompok B.
+  - [x] Redirect 301 diikuti maksimal satu hop hanya ke `api.github.com` yang aman; redirect ke host lain, alamat privat/loopback, skema turun, userinfo/port, atau rantai redirect tetap ditolak dengan pesan khusus.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Perubahan server: `errors.ts` (tipe/field `scope` pada `ScanError` dan body 429), `github.ts` (redirect 301 aman dan pesan batas GitHub), `rate-limit.ts` (`scope: 'app'`). Perubahan klien: `app/src/types/scan.ts` (`rateLimitScope`), `app/src/api/scan.ts` (membaca `scope`), `app/src/errors/messages.ts` (pesan GitHub vs aplikasi), layar Pindai (hitung mundur dengan awalan yang tepat), serta tes `github.test.ts` dan `scan.test.ts`.
+  - Redirect: hanya status **301** yang diikuti, tepat satu hop, hanya bila basis dan tujuan tetap `https://api.github.com` tanpa userinfo, tanpa port non-standar, dan tidak menurunkan skema. Lokasi relatif di dalam `api.github.com` diterima. Redirect berantai, host lain (`evil.com`, `raw.githubusercontent.com`), `127.0.0.1`/loopback, `http://`, userinfo, dan port `:8443` ditolak 502 dengan pesan "GitHub mengalihkan ke alamat yang tidak diizinkan; redirect ditolak." atau "Rantai redirect GitHub tidak diizinkan." Token tetap hanya dikirim ke `api.github.com`, termasuk pada hop yang sah.
+  - Batas laju: `RATE_LIMITED` tetap satu kode kontrak, tetapi body 429 menambahkan `scope` (`github`/`app`). GitHub memakai pesan "Batas permintaan GitHub tercapai. Coba lagi dalam {n} menit."; aplikasi memakai "Terlalu banyak pemindaian. Coba lagi dalam {n} menit.". Bila `scope` tidak ada, klien memakai pesan aplikasi agar kompatibel. UI Pindai menampilkan hitung mundur `menit:detik` dengan awalan sesuai scope.
+  - OSV 429/5xx diulang terbatas lalu menjadi 502 `UPSTREAM_UNAVAILABLE` bila seluruh chunk gagal; EPSS gagal tetap 200 `partial=true` + `EPSS_UNAVAILABLE`; KEV gagal dengan salinan lama menjadi `STALE`, tanpa salinan menjadi `EMPTY`/`KEV_UNAVAILABLE`; timeout menjadi 504 `SCAN_TIMEOUT`. Tidak ada kegagalan pengayaan yang diberi status `COMPLETED` atau menghapus findings yang sudah ada.
+  - Bukti AC: `github.test.ts` (tabel `resolveSafeGithubRedirect`, hop aman + token, enam tujuan berbahaya, rantai redirect, 302, mapping 403/429 dengan `scope`), `kev.test.ts`/`epss.test.ts`/`osv.test.ts` (STALE, EMPTY, EPSS parsial, OSV 429/5xx/502), `handler.test.ts` (429, 502, 504, KEV/EPSS parsial), `rate-limit.test.ts` (scan ke-6), dan `scan.test.ts` (pesan 429 GitHub/aplikasi, 502, 504).
+  - Test edge: **189 lulus**; typecheck strict edge lulus. App: `npm run lint`, `npm run typecheck`, dan **119 test** lulus. Catatan: verifikasi 429 GitHub/OSV pada layanan nyata tetap menunggu izin/deploy remote.
 
 ### T-W3-07c — Matriks error kelompok C: jaringan, auth, dan cloud (kondisi 17–19, 21–23)
 - **Tipe:** `[AGENT]`

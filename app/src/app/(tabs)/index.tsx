@@ -55,9 +55,13 @@ export default function ScanScreen() {
     retryDeadline === null ? 0 : Math.max(0, Math.ceil((retryDeadline - clockNow) / 1000));
   const canScan =
     validation.ok && !loading && sessionStatus === 'ready' && retryRemaining === 0;
+  const rateLimitPrefix =
+    scanError?.rateLimitScope === 'github'
+      ? 'Batas permintaan GitHub tercapai.'
+      : 'Batas pemindaian tercapai.';
   const scanErrorMessage = scanError
     ? scanError.code === 'RATE_LIMITED' && retryRemaining > 0
-      ? `Batas pemindaian tercapai. Tunggu ${formatCountdown(retryRemaining)} sebelum mencoba lagi.`
+      ? `${rateLimitPrefix} Tunggu ${formatCountdown(retryRemaining)} sebelum mencoba lagi.`
       : scanError.message
     : null;
   // PRD §12: error penghenti tampil sebagai layar dengan tindakan, bukan banner.

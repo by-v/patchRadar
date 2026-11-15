@@ -6,7 +6,9 @@
  * "repositori"); kode dan identifier tetap berbahasa Inggris.
  */
 
-import type { ScanErrorCode } from '@/types/scan';
+import type { RateLimitScope, ScanErrorCode } from '@/types/scan';
+
+export type { RateLimitScope };
 
 /** Teks PRD §12 baris 1–4. */
 export const REPO_LINK_MESSAGES = {
@@ -61,9 +63,6 @@ export const SCAN_ERROR_MESSAGES: Readonly<Record<ScanErrorCode, string>> = {
   CONFIG: 'Konfigurasi aplikasi belum lengkap. Hubungi pengembang.',
   UNKNOWN: 'Terjadi kesalahan saat memindai. Coba lagi.',
 };
-
-/** Cakupan batas laju pada kontrak error (PRD §12 baris 11 dan 20). */
-export type RateLimitScope = 'app' | 'github';
 
 function retryAfterMinutes(seconds: number): number {
   return Math.max(1, Math.ceil(seconds / 60));
