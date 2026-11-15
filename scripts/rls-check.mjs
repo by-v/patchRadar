@@ -155,6 +155,11 @@ async function main() {
   const scanA = await scan(baseUrl, anonKey, tokenA);
   const scanBody = scanA.body ?? {};
   const requestId = scanBody.requestId ?? null;
+  const warningCodes = Array.isArray(scanBody.warnings)
+    ? scanBody.warnings
+        .map((warning) => (warning && typeof warning.code === 'string' ? warning.code : null))
+        .filter((code) => code !== null)
+    : null;
   print({
     check: 'scan_A',
     http: scanA.status,
@@ -162,6 +167,7 @@ async function main() {
     requestId,
     scanId: typeof scanBody.scanId === 'string' ? scanBody.scanId : null,
     persisted: scanBody.persisted ?? null,
+    warningCodes,
   });
 
   if (scanA.status !== 200 || typeof scanBody.scanId !== 'string') {

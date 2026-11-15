@@ -1,6 +1,13 @@
 # AGENTS.md — Aturan Kerja Agent AI PatchRadar
 
+## Aturan Tambahan (15 Nov 2026)
+- (1) Jangan melaporkan hasil uji yang tidak benar-benar dijalankan.
+- (2) Setiap laporan hasil uji wajib menyertakan keluaran mentah terminal (tanpa kunci/token) beserta `requestId`.
+- (3) Jangan mencentang AC tanpa keluaran mentah pendukung.
+- (4) Jika hasil tidak pasti, tulis "belum diverifikasi".
+
 Dokumen ini berlaku untuk semua agent yang mengerjakan repositori ini.
+
 
 ## Sumber kebenaran
 - `docs/PRD.md` v1.1 adalah satu-satunya sumber kebenaran. Baca bagian yang relevan sebelum bekerja.
