@@ -3,6 +3,7 @@ import { strict as assert } from 'node:assert';
 import {
   createSupabaseEpssCacheStore,
   createSupabaseOsvCacheStore,
+  createSupabaseRateLimitStore,
   createSupabaseScanStore,
   EPSS_CACHE_READ_BATCH_SIZE,
   OSV_CACHE_READ_BATCH_SIZE,
@@ -279,4 +280,55 @@ test('kegagalan findings menghapus baris scans yang sudah masuk lalu melempar er
   assert.equal(calls.length, 3);
   assert.equal(calls[2]!.init?.method, 'DELETE');
   assert.ok(calls[2]!.url.includes(`scans?id=eq.${SCAN_RECORD.id}`));
+});
+
+test('RateLimitStore membaca jendela per pengguna dan mencatat scan', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const store = createSupabaseRateLimitStore({
+    url: 'https://contoh.supabase.co',
+    serviceRoleKey: 'kunci-uji',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      if (init?.method === 'GET') {
+        return new Response(
+          JSON.stringify([
+            {
+              user_id: SCAN_RECORD.userId,
+              kind: 'scan',
+              created_at: '2026-11-15T09:55:00.000Z',
+            },
+          ]),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+      return new Response(null, { status: 201 });
+    },
+  });
+
+  const since = '2026-11-15T09:50:00.000Z';
+  const events = await store.listRecent(SCAN_RECORD.userId, 'scan', since);
+
+  assert.deepEqual(events, [
+    { userId: SCAN_RECORD.userId, kind: 'scan', createdAt: '2026-11-15T09:55:00.000Z' },
+  ]);
+  const listUrl = calls[0]!.url;
+  assert.ok(listUrl.includes('/rest/v1/rate_limit_events?'));
+  assert.ok(listUrl.includes(`user_id=eq.${SCAN_RECORD.userId}`));
+  assert.ok(listUrl.includes('kind=eq.scan'));
+  assert.ok(listUrl.includes('created_at=gte.2026-11-15T09%3A50%3A00.000Z'));
+  assert.ok(listUrl.includes('order=created_at.asc'));
+
+  await store.record({
+    userId: SCAN_RECORD.userId,
+    kind: 'scan',
+    createdAt: '2026-11-15T10:00:00.000Z',
+  });
+  assert.equal(calls[1]!.init?.method, 'POST');
+  assert.deepEqual(JSON.parse(String(calls[1]!.init?.body)), [
+    {
+      user_id: SCAN_RECORD.userId,
+      kind: 'scan',
+      created_at: '2026-11-15T10:00:00.000Z',
+    },
+  ]);
 });

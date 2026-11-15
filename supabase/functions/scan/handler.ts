@@ -33,7 +33,8 @@ import { assembleBaseFindings } from './findings.ts';
 import { fetchEpssScores } from './epss.ts';
 import { buildScanResponse, type ScanSuccessResponse, type SourceState } from './response.ts';
 import { persistScanResult, markCloudPersistFailed } from './persist.ts';
-import type { OsvCacheStore, KevStore, EpssCacheStore, ScanStore } from './store.ts';
+import { enforceRateLimit } from './rate-limit.ts';
+import type { OsvCacheStore, KevStore, EpssCacheStore, ScanStore, RateLimitStore } from './store.ts';
 
 export const MAX_REQUEST_BODY_BYTES = 16 * 1024;
 export const MAX_PACKAGES = 1_500;
@@ -84,6 +85,7 @@ export interface ScanHandlerDependencies {
   kevStore?: KevStore;
   epssStore?: EpssCacheStore;
   scanStore?: ScanStore;
+  rateLimitStore?: RateLimitStore;
   /** Identitas pengguna dari JWT; unit test dapat menyuntik langsung. */
   userId?: string | null;
   registry?: RegistryResolver;
@@ -288,6 +290,12 @@ export async function handleScanRequest(
       throw new ScanError('UPSTREAM_UNAVAILABLE', {
         message: 'Token GitHub server belum dikonfigurasi.',
       });
+    }
+
+    // FR-25a: batas ditegakkan di server sebelum pekerjaan eksternal apa pun.
+    if (dependencies.rateLimitStore) {
+      if (!userId) throw new ScanError('UNAUTHENTICATED');
+      await enforceRateLimit({ store: dependencies.rateLimitStore, userId, now });
     }
 
     const clientOptions = {

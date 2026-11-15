@@ -12,6 +12,7 @@ import {
   createSupabaseEpssCacheStore,
   createSupabaseKevStore,
   createSupabaseOsvCacheStore,
+  createSupabaseRateLimitStore,
   createSupabaseScanStore,
 } from './supabase-store.ts';
 
@@ -33,6 +34,7 @@ const stores =
         kevStore: createSupabaseKevStore({ url: supabaseUrl, serviceRoleKey }),
         epssStore: createSupabaseEpssCacheStore({ url: supabaseUrl, serviceRoleKey }),
         scanStore: createSupabaseScanStore({ url: supabaseUrl, serviceRoleKey }),
+        rateLimitStore: createSupabaseRateLimitStore({ url: supabaseUrl, serviceRoleKey }),
       }
     : {};
 

@@ -12,6 +12,7 @@ import { Screen } from '@/components/screen';
 import { Wordmark } from '@/components/wordmark';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
 import { openDatabaseSafely, saveScanResultSafely } from '@/db/access';
+import { formatCountdown } from '@/lib/countdown';
 import { rememberScanResult } from '@/lib/scan-session';
 import { parseRepoLink } from '@/lib/url';
 import type { ScanFailure } from '@/types/scan';
@@ -39,11 +40,34 @@ export default function ScanScreen() {
   );
   const [sessionError, setSessionError] = useState<string | null>(null);
   const [sessionAttempt, setSessionAttempt] = useState(0);
+  const [retryDeadline, setRetryDeadline] = useState<number | null>(null);
+  const [clockNow, setClockNow] = useState(() => Date.now());
   const inputRef = useRef<TextInputInstance>(null);
 
   const validation = parseRepoLink(url);
   const error = showError && !validation.ok ? validation.error.message : undefined;
-  const canScan = validation.ok && !loading && sessionStatus === 'ready';
+  const retryRemaining =
+    retryDeadline === null ? 0 : Math.max(0, Math.ceil((retryDeadline - clockNow) / 1000));
+  const canScan =
+    validation.ok && !loading && sessionStatus === 'ready' && retryRemaining === 0;
+  const scanErrorMessage = scanError
+    ? scanError.code === 'RATE_LIMITED' && retryRemaining > 0
+      ? `Batas pemindaian tercapai. Tunggu ${formatCountdown(retryRemaining)} sebelum mencoba lagi.`
+      : scanError.message
+    : null;
+
+  // Hitung mundur 429 FR-25a. Backend tetap menolak walau UI ini dilewati.
+  useEffect(() => {
+    if (retryDeadline === null) return;
+
+    const timer = setInterval(() => {
+      const nowMs = Date.now();
+      setClockNow(nowMs);
+      if (nowMs >= retryDeadline) setRetryDeadline(null);
+    }, 1_000);
+
+    return () => clearInterval(timer);
+  }, [retryDeadline]);
 
   useEffect(() => {
     if (!loading) {
@@ -126,9 +150,17 @@ export default function ScanScreen() {
       }
 
       if (!result.ok) {
+        if (result.error.code === 'RATE_LIMITED' && result.error.retryAfterSeconds) {
+          const nowMs = Date.now();
+          setClockNow(nowMs);
+          setRetryDeadline(nowMs + result.error.retryAfterSeconds * 1000);
+        } else {
+          setRetryDeadline(null);
+        }
         setScanError(result.error);
         return;
       }
+      setRetryDeadline(null);
 
       // Simpan lokal sebelum navigasi (FR-20). Simpanan memori tetap ada agar
       // layar Hasil tidak kehilangan hasil ketika SQLite gagal.
@@ -173,7 +205,11 @@ export default function ScanScreen() {
           }}
           onChangeText={(value) => {
             setUrl(value);
-            setScanError(null);
+            // Pertahankan hitung mundur 429 agar pengguna tidak mengira kuota
+            // sudah pulih hanya karena tautan diubah.
+            if (scanError?.code !== 'RATE_LIMITED') {
+              setScanError(null);
+            }
           }}
           onSubmitEditing={handleScan}
           placeholder="https://github.com/pemilik/repo"
@@ -236,8 +272,8 @@ export default function ScanScreen() {
         title={loading ? 'Memindai…' : 'Mulai pemindaian'}
       />
 
-      {scanError ? (
-        <Banner message={scanError.message} title="Pemindaian gagal" variant="error" />
+      {scanError && scanErrorMessage ? (
+        <Banner message={scanErrorMessage} title="Pemindaian gagal" variant="error" />
       ) : null}
 
       {loading && slowHint ? (

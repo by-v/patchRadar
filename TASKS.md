@@ -1207,13 +1207,22 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji bahwa pembatasan berjalan di server, bukan hanya UI.
 - **Memenuhi:** `FR-25a`, `NFR-08`, `R-09`
 - **Kriteria selesai (AC):**
-  - [ ] Scan ke-6 dalam 10 menit menghasilkan 429 dengan `retryAfter`.
-  - [ ] Setelah jendela berlalu, scan diterima.
-  - [ ] UI menampilkan hitung mundur; backend tetap menolak walau UI dilewati.
-  - [ ] Tidak ada akun baru yang dibuat untuk mengakali batas.
+  - [x] Scan ke-6 dalam 10 menit menghasilkan 429 dengan `retryAfter`.
+  - [x] Setelah jendela berlalu, scan diterima.
+  - [x] UI menampilkan hitung mundur; backend tetap menolak walau UI dilewati.
+  - [x] Tidak ada akun baru yang dibuat untuk mengakali batas.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `supabase/functions/scan/rate-limit.ts`, `rate-limit.test.ts`, `app/src/lib/countdown.ts`, `countdown.test.ts`; perubahan `handler.ts`, `index.ts`, `supabase-store.ts`, `supabase-store.test.ts`, `handler.test.ts`, dan layar Pindai `app/src/app/(tabs)/index.tsx`.
+  - Batas ditetapkan 5 scan per 10 menit per `user_id` dari klaim `sub` JWT (FR-25a). Pemeriksaan dan pencatatan dilakukan di server sebelum fetch GitHub; scan yang ditolak tidak memanggil sumber eksternal apa pun. `retryAfter` dihitung dari kejadian tertua yang masih berada di jendela bergulir (detik, minimal 1).
+  - `createSupabaseRateLimitStore` membaca `rate_limit_events` per `user_id`+`kind`+`created_at >= since` urut lama→baru dan mencatat kejadian baru memakai service role. `enforceRateLimit` mengisi tabel memori pada test.
+  - Respons 429 memakai `ScanError('RATE_LIMITED')` sehingga body memuat `code`, `retryable=true`, `requestId`, `retryAfter`, dan header `Retry-After`. Bila `rateLimitStore` aktif tetapi `sub` tidak ada, server menolak dengan 401 `UNAUTHENTICATED`.
+  - UI Pindai menyimpan tenggat dari `retryAfterSeconds`, menampilkan hitung mundur `menit:detik` di banner, dan menonaktifkan tombol sampai hitung mundur habis. Mengubah tautan tidak menghapus hitung mundur. Backend tetap menolak jika UI dilewati atau state diubah.
+  - Bukti AC: `rate-limit.test.ts` membuktikan 5 scan diizinkan, scan ke-6 429 `retryAfter=600`, jendela bergulir menerima scan lagi setelah 10 menit, `retryAfter` 60 detik saat kejadian tertua berumur 9 menit, serta kuota terpisah per pengguna. `handler.test.ts` membuktikan scan ke-6 429 sebelum fetch GitHub (`fake.calls=0`), header `retry-after=600`, dan pengguna lain tetap 200.
+  - "Tidak ada akun baru": klien memakai sesi anonim yang sama (dibuktikan `T-W3-03`) dan `requestScan` tidak membuat sesi baru; rate limit dihitung dari `sub` yang sama. Tidak ada perubahan alur auth pada tugas ini.
+  - Test edge: **186 lulus** (`node --test "supabase/functions/scan/**/*.test.ts"`); typecheck strict edge lulus. App: `npm run lint`, `npm run typecheck`, dan `npm test` (13 suite/110 test) lulus.
+  - Migrasi dan fungsi masih **belum diterapkan/di-deploy ke remote**, sehingga bukti 429 pada Supabase sungguhan menunggu izin pengembang.
 
 ### T-W3-07a — Matriks error kelompok A: masukan dan manifest (kondisi 1–10)
 - **Tipe:** `[AGENT]`

@@ -17,6 +17,8 @@ import type {
   KevStore,
   OsvCacheRecord,
   OsvCacheStore,
+  RateLimitEventRecord,
+  RateLimitStore,
   ScanRecord,
   ScanStore,
 } from './store.ts';
@@ -408,4 +410,62 @@ async function deleteScan(
   } catch {
     // Pembersihan best-effort; pemanggil tetap melaporkan kegagalan simpan.
   }
+}
+
+export function createSupabaseRateLimitStore(options: SupabaseStoreOptions): RateLimitStore {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const timeoutMs = options.timeoutMs ?? 8_000;
+  const auth = headers(options.serviceRoleKey);
+
+  return {
+    async listRecent(userId, kind, sinceIso) {
+      const query =
+        'rate_limit_events?select=user_id,kind,created_at' +
+        `&user_id=eq.${encodeURIComponent(userId)}` +
+        `&kind=eq.${encodeURIComponent(kind)}` +
+        `&created_at=gte.${encodeURIComponent(sinceIso)}` +
+        '&order=created_at.asc';
+      const response = await request(
+        fetchImpl,
+        endpoint(options.url, query),
+        { method: 'GET', headers: auth },
+        timeoutMs,
+      );
+      if (!response.ok) {
+        throw new Error(`Supabase rate_limit_events GET gagal (${response.status}).`);
+      }
+
+      const rows = (await response.json()) as PostgrestRow[];
+      const events: RateLimitEventRecord[] = [];
+      for (const row of rows) {
+        const eventUserId = asString(row.user_id);
+        const createdAt = asString(row.created_at);
+        if (!eventUserId || !createdAt) continue;
+        events.push({ userId: eventUserId, kind: asString(row.kind), createdAt });
+      }
+      return events;
+    },
+
+    async record(event) {
+      const response = await request(
+        fetchImpl,
+        endpoint(options.url, 'rate_limit_events'),
+        {
+          method: 'POST',
+          headers: headers(options.serviceRoleKey, { prefer: 'return=minimal' }),
+          body: JSON.stringify([
+            {
+              user_id: event.userId,
+              kind: event.kind,
+              created_at: event.createdAt,
+            },
+          ]),
+        },
+        timeoutMs,
+      );
+      if (!response.ok) {
+        throw new Error(`Supabase rate_limit_events insert gagal (${response.status}).`);
+      }
+    },
+  };
 }

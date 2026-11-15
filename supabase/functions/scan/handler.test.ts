@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { handleScanRequest, type ScanLogEntry } from './handler.ts';
 import { scanErrorResponse } from './errors.ts';
 import { isAllowedGithubUrl } from './github.ts';
-import { createMemoryEpssCacheStore, createMemoryKevStore, createMemoryScanStore, type EpssCacheStore, type ScanStore } from './store.ts';
+import { createMemoryEpssCacheStore, createMemoryKevStore, createMemoryRateLimitStore, createMemoryScanStore, type EpssCacheStore, type RateLimitStore, type ScanStore } from './store.ts';
 
 const FIXTURES = new URL('../../../fixtures/lockfiles/', import.meta.url);
 const TOKEN = 'token-rahasia-yang-tidak-boleh-bocor';
@@ -542,6 +542,7 @@ async function runPipeline(options: {
   kevStore?: ReturnType<typeof createMemoryKevStore>;
   epssStore?: EpssCacheStore;
   scanStore?: ScanStore;
+  rateLimitStore?: RateLimitStore;
   userId?: string;
   epssCalls?: { count: number };
 } = {}) {
@@ -564,7 +565,10 @@ async function runPipeline(options: {
     kevStore: options.kevStore ?? createMemoryKevStore([kevEntry('CVE-2099-0001', E2E_NOW_ISO)]),
     epssStore: options.epssStore,
     scanStore: options.scanStore,
-    userId: options.userId ?? (options.scanStore ? E2E_USER_ID : undefined),
+    rateLimitStore: options.rateLimitStore,
+    userId:
+      options.userId ??
+      (options.scanStore || options.rateLimitStore ? E2E_USER_ID : undefined),
     now: () => E2E_NOW,
     sleep: async () => undefined,
     logger: (entry) => logs.push(entry),
@@ -775,4 +779,38 @@ test('OSV gagal total 502 tidak meninggalkan baris scans/findings', async () => 
   assert.equal(store.scans.length, 0);
   assert.equal(store.findings.length, 0);
 });
+
+test('scan keenam dalam 10 menit ditolak 429 sebelum fetch GitHub', async () => {
+  const rateLimitStore = createMemoryRateLimitStore();
+  for (let index = 1; index <= 5; index += 1) {
+    const allowed = await runPipeline({ rateLimitStore });
+    assert.equal(allowed.response.status, 200);
+  }
+
+  const blocked = await runPipeline({ rateLimitStore });
+  const error = blocked.body.error as { code: string; retryAfter: number };
+
+  assert.equal(blocked.response.status, 429);
+  assert.equal(error.code, 'RATE_LIMITED');
+  assert.equal(error.retryAfter, 600);
+  assert.equal(blocked.response.headers.get('retry-after'), '600');
+  assert.equal(blocked.fake.calls.length, 0);
+  assert.equal(rateLimitStore.events.length, 5);
+});
+
+test('pengguna anonim lain tidak terkena kuota pengguna pertama', async () => {
+  const rateLimitStore = createMemoryRateLimitStore();
+  for (let index = 1; index <= 5; index += 1) {
+    await runPipeline({ rateLimitStore });
+  }
+  const blocked = await runPipeline({ rateLimitStore });
+  assert.equal(blocked.response.status, 429);
+
+  const other = await runPipeline({
+    rateLimitStore,
+    userId: '00000000-0000-4000-8000-0000000000bb',
+  });
+  assert.equal(other.response.status, 200);
+});
+
 
