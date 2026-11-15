@@ -1236,13 +1236,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji seluruh kondisi kelompok A dan catat buktinya.
 - **Memenuhi:** `FR-24`, `NFR-02`, `NFR-08`, `NFR-09`, `R-02`
 - **Kriteria selesai (AC):**
-  - [ ] Tabel penugasan 23 kondisi lengkap dan tidak ada baris yang tidak bertugas.
-  - [ ] Kondisi 1–10 memiliki pesan Indonesia dan perilaku yang sesuai.
-  - [ ] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
-  - [ ] Tidak ada crash pada seluruh kondisi kelompok A.
+  - [x] Tabel penugasan 23 kondisi lengkap dan tidak ada baris yang tidak bertugas.
+  - [x] Kondisi 1–10 memiliki pesan Indonesia dan perilaku yang sesuai.
+  - [x] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
+  - [x] Tidak ada crash pada seluruh kondisi kelompok A.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - File baru: `app/src/errors/messages.ts` dan `messages.test.ts`. Perubahan: `app/src/lib/url.ts` dan `app/src/auth/session.ts` (re-export dari katalog pusat), `app/src/api/scan.ts` (memakai katalog yang sama), layar Pindai `app/src/app/(tabs)/index.tsx` (layar error penghenti), serta `docs/error-matrix.md`.
+  - `docs/error-matrix.md` kini memuat tabel 23 kondisi per kelompok beserta perilaku, bukti uji, dan status. Baris kelompok A sudah terisi bukti; baris B/C diisi pada `T-W3-07b`/`T-W3-07c`.
+  - Kondisi 1–4 tetap inline di bawah input dengan fokus ke input dan tanpa request. Kondisi 5–9 (404, 403, 404 ambigu, tanpa `package.json`, melebihi 5 MB/1.500 paket) tampil sebagai layar error Pindai dengan tombol **Coba lagi** dan **Kembali**; `requestId` ditampilkan bila ada. Kondisi 10 tetap 200 dengan fallback `package.json`, `manifest.estimated=true`, dan warning lockfile.
+  - Semua pesan pengguna berasal dari `app/src/errors/messages.ts`; tidak ada stack trace, nama exception, atau pesan Inggris. `REPO_LINK_MESSAGES` dan `AUTH_MESSAGES` diekspor ulang sehingga pemanggil lama tidak berubah.
+  - Bukti AC: `url.test.ts` (kondisi 1–4), `handler.test.ts` (404, 403, 404 ambigu, 422, 413 5 MB/1.500 paket), `lib/lockfile.test.ts` (fallback v1/rusak/tidak didukung), `scan.test.ts` (pemetaan pesan 404), dan `messages.test.ts` (kelengkapan pesan, klasifikasi inline/layar, tidak ada teks Inggris/stack trace).
+  - Test app: **117 lulus** (14 suite); `npm run lint` dan `npm run typecheck` lulus. Test edge: **186 lulus**. Kondisi 10 diuji di level parser/handler, bukan sebagai error penghenti.
 
 ### T-W3-07b — Matriks error kelompok B: sumber eksternal dan batas laju (kondisi 11–16, 20)
 - **Tipe:** `[AGENT]`

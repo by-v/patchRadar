@@ -8,7 +8,10 @@
  */
 
 import { readSupabaseConfig, type SupabaseConfig } from '@/config/env';
+import { AUTH_MESSAGES } from '@/errors/messages';
 import { secureStorage, type SecureStorage } from '@/storage/secure';
+
+export { AUTH_MESSAGES };
 
 export type AuthSession = {
   accessToken: string;
@@ -26,12 +29,6 @@ export type AuthError = {
 };
 
 export type AuthResult = { ok: true; session: AuthSession } | { ok: false; error: AuthError };
-
-/** Teks PRD §12 baris 18 dan 19. */
-export const AUTH_MESSAGES = {
-  SESSION_UNAVAILABLE: 'Sesi belum siap. Periksa koneksi lalu coba lagi.',
-  SESSION_REFRESH_FAILED: 'Sesi diperbarui. Silakan coba lagi.',
-} as const;
 
 export const AUTH_STORAGE_KEY = 'patchradar.auth.session.v1';
 

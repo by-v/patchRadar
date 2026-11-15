@@ -9,9 +9,14 @@ import { Banner } from '@/components/banner';
 import { DarkCallToAction } from '@/components/dark-cta';
 import { PillInput } from '@/components/pill-input';
 import { Screen } from '@/components/screen';
+import { ScreenHeader } from '@/components/screen-header';
 import { Wordmark } from '@/components/wordmark';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
 import { openDatabaseSafely, saveScanResultSafely } from '@/db/access';
+import {
+  isBlockingScanError,
+  offersHistory,
+} from '@/errors/messages';
 import { formatCountdown } from '@/lib/countdown';
 import { rememberScanResult } from '@/lib/scan-session';
 import { parseRepoLink } from '@/lib/url';
@@ -55,6 +60,10 @@ export default function ScanScreen() {
       ? `Batas pemindaian tercapai. Tunggu ${formatCountdown(retryRemaining)} sebelum mencoba lagi.`
       : scanError.message
     : null;
+  // PRD §12: error penghenti tampil sebagai layar dengan tindakan, bukan banner.
+  const blockingError =
+    scanError !== null && isBlockingScanError(scanError.code) ? scanError : null;
+  const canOpenHistory = blockingError !== null && offersHistory(blockingError.code);
 
   // Hitung mundur 429 FR-25a. Backend tetap menolak walau UI ini dilewati.
   useEffect(() => {
@@ -99,6 +108,14 @@ export default function ScanScreen() {
     setSessionStatus('checking');
     setSessionError(null);
     setSessionAttempt((attempt) => attempt + 1);
+  }
+
+  function dismissScanError() {
+    setScanError(null);
+  }
+
+  function openHistory() {
+    router.navigate('/riwayat');
   }
 
   async function handleScan() {
@@ -181,6 +198,44 @@ export default function ScanScreen() {
     <Screen avoidKeyboard>
       <Wordmark />
 
+      {blockingError ? (
+        <View style={styles.errorBlock}>
+          <ScreenHeader
+            onBack={dismissScanError}
+            subtitle={
+              blockingError.requestId ? `Kode: ${blockingError.requestId}` : undefined
+            }
+            title="Pemindaian gagal"
+          />
+          <Banner message={blockingError.message} variant="error" />
+          <View style={styles.errorActions}>
+            <Pressable
+              accessibilityLabel="Coba lagi"
+              accessibilityRole="button"
+              onPress={handleScan}
+              style={({ pressed }) => [styles.primaryButton, pressed && styles.pressed]}>
+              <Text style={styles.primaryText}>Coba lagi</Text>
+            </Pressable>
+            {canOpenHistory ? (
+              <Pressable
+                accessibilityLabel="Buka Riwayat"
+                accessibilityRole="button"
+                onPress={openHistory}
+                style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
+                <Text style={styles.retryText}>Buka Riwayat</Text>
+              </Pressable>
+            ) : null}
+            <Pressable
+              accessibilityLabel="Kembali ke input"
+              accessibilityRole="button"
+              onPress={dismissScanError}
+              style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
+              <Text style={styles.retryText}>Kembali</Text>
+            </Pressable>
+          </View>
+        </View>
+      ) : (
+        <>
       <View style={styles.heading}>
         <Text style={styles.title}>Pindai repositori</Text>
         <Text style={styles.subtitle}>
@@ -284,6 +339,8 @@ export default function ScanScreen() {
         Maksimal 1.500 paket unik per pemindaian. Repositori besar dapat memakan waktu hingga 25
         detik.
       </Text>
+        </>
+      )}
     </Screen>
   );
 }
@@ -343,6 +400,27 @@ const styles = StyleSheet.create({
   sessionBlock: {
     gap: Spacing.two,
     alignItems: 'flex-start',
+  },
+  errorBlock: {
+    gap: Spacing.three,
+  },
+  errorActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  primaryButton: {
+    minHeight: 44,
+    justifyContent: 'center',
+    paddingHorizontal: Spacing.three,
+    borderRadius: Radius.pill,
+    backgroundColor: Colors.light.darkAccent,
+  },
+  primaryText: {
+    ...Typography.body,
+    fontWeight: '600',
+    color: Colors.light.textOnDark,
   },
   retryButton: {
     minHeight: 44,

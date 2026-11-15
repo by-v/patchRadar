@@ -1,9 +1,6 @@
-export const REPO_LINK_MESSAGES = {
-  empty: 'Tempel tautan repositori GitHub terlebih dahulu.',
-  format: 'Tautan tidak valid. Gunakan format https://github.com/pemilik/repositori.',
-  host: 'Hanya tautan github.com yang didukung.',
-  path: 'Gunakan tautan halaman utama repositori, tanpa /tree, /blob, atau parameter.',
-} as const;
+import { REPO_LINK_MESSAGES } from '@/errors/messages';
+
+export { REPO_LINK_MESSAGES };
 
 export type RepoLinkErrorCode = 'EMPTY' | 'FORMAT' | 'HOST' | 'PATH';
 

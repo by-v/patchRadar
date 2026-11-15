@@ -1,6 +1,12 @@
 import Constants from 'expo-constants';
 
 import { readSupabaseConfig, type SupabaseConfig } from '@/config/env';
+import {
+  invalidResponseMessage,
+  rateLimitMessage,
+  requestIdSuffix,
+  SCAN_ERROR_MESSAGES,
+} from '@/errors/messages';
 import type {
   LockfileFormat,
   ManifestSource,
@@ -58,31 +64,6 @@ const SOURCE_STATE_VALUES: ReadonlySet<string> = new Set<SourceState>([
   'EMPTY',
   'FAILED',
 ]);
-
-const USER_MESSAGES: Readonly<Record<string, string>> = {
-  INVALID_URL: 'Tautan tidak valid. Gunakan format https://github.com/pemilik/repositori.',
-  UNAUTHENTICATED: 'Sesi belum siap. Periksa koneksi lalu coba lagi.',
-  REPO_PRIVATE_OR_FORBIDDEN:
-    'Repositori ini privat atau tidak dapat diakses. PatchRadar hanya memindai repositori publik.',
-  REPO_NOT_FOUND: 'Repositori tidak ditemukan. Periksa ejaan pemilik dan nama repositori.',
-  REPO_NOT_FOUND_OR_PRIVATE:
-    'Repositori tidak ditemukan atau bersifat privat. PatchRadar hanya bisa memindai repositori publik.',
-  NO_PACKAGE_JSON:
-    'package.json tidak ditemukan di folder utama repositori. PatchRadar hanya memindai berkas dependensi di folder utama.',
-  MANIFEST_TOO_LARGE:
-    'Repositori melebihi batas ukuran sementara (5 MB atau 1.500 paket). Coba repositori yang lebih kecil.',
-  RATE_LIMITED: 'Terlalu banyak pemindaian. Coba lagi sebentar lagi.',
-  UPSTREAM_UNAVAILABLE: 'Layanan kerentanan sedang sibuk. Coba lagi sebentar lagi.',
-  SCAN_TIMEOUT:
-    'Pemindaian melebihi batas waktu. Coba lagi atau pindai repositori yang lebih kecil.',
-  INTERNAL: 'Terjadi kesalahan pada server. Coba lagi.',
-  METHOD_NOT_ALLOWED: 'Metode permintaan tidak didukung.',
-  NETWORK: 'Tidak ada koneksi. Periksa jaringan lalu coba lagi.',
-  TIMEOUT: 'Pemindaian melebihi batas waktu. Coba lagi atau pindai repositori yang lebih kecil.',
-  INVALID_RESPONSE: 'Terjadi kesalahan saat membaca hasil. Coba lagi.',
-  CONFIG: 'Konfigurasi aplikasi belum lengkap. Hubungi pengembang.',
-  UNKNOWN: 'Terjadi kesalahan saat memindai. Coba lagi.',
-};
 
 const RETRYABLE: Readonly<Record<string, boolean>> = {
   INVALID_URL: false,
@@ -396,18 +377,6 @@ function readRetryAfterSeconds(error: JsonObject, retryAfterHeader: string | nul
   return null;
 }
 
-function rateLimitMessage(retryAfterSeconds: number | null): string {
-  if (retryAfterSeconds === null) {
-    return 'Terlalu banyak pemindaian. Coba lagi sebentar lagi.';
-  }
-  const minutes = Math.max(1, Math.ceil(retryAfterSeconds / 60));
-  return `Terlalu banyak pemindaian. Coba lagi dalam ${minutes} menit.`;
-}
-
-function requestIdSuffix(requestId: string | null): string {
-  return requestId === null ? '' : ` Kode: ${requestId}.`;
-}
-
 export function mapServerError(
   status: number,
   body: unknown,
@@ -423,16 +392,16 @@ export function mapServerError(
   const retryAfterSeconds =
     error === null ? null : readRetryAfterSeconds(error, retryAfterHeader);
 
-  const knownCode = code !== null && code in USER_MESSAGES ? code : null;
+  const knownCode = code !== null && code in SCAN_ERROR_MESSAGES ? code : null;
   const resolvedCode = (knownCode ?? STATUS_CODES[status] ?? 'UNKNOWN') as ScanErrorCode;
 
   let message: string;
   if (resolvedCode === 'RATE_LIMITED') {
     message = rateLimitMessage(retryAfterSeconds);
-  } else if (resolvedCode in USER_MESSAGES) {
-    message = USER_MESSAGES[resolvedCode] ?? USER_MESSAGES.UNKNOWN ?? '';
+  } else if (resolvedCode in SCAN_ERROR_MESSAGES) {
+    message = SCAN_ERROR_MESSAGES[resolvedCode];
   } else {
-    message = serverMessage ?? USER_MESSAGES.UNKNOWN ?? '';
+    message = serverMessage ?? SCAN_ERROR_MESSAGES.UNKNOWN;
   }
 
   if (
@@ -463,7 +432,7 @@ function failure(
     status?: number | null;
   } = {},
 ): ScanResponse {
-  const message = options.message ?? USER_MESSAGES[code] ?? USER_MESSAGES.UNKNOWN ?? '';
+  const message = options.message ?? SCAN_ERROR_MESSAGES[code] ?? SCAN_ERROR_MESSAGES.UNKNOWN;
   return {
     ok: false,
     error: {
@@ -479,7 +448,7 @@ function failure(
 
 function invalidResponse(requestId: string | null): ScanResponse {
   return failure('INVALID_RESPONSE', {
-    message: `${USER_MESSAGES.INVALID_RESPONSE ?? ''}${requestIdSuffix(requestId)}`,
+    message: invalidResponseMessage(requestId),
     requestId,
     status: 200,
   });
