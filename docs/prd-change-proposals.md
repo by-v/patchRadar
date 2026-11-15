@@ -111,3 +111,13 @@ Konsekuensi teknis yang sudah diterapkan pada 12 November 2026:
 
 Usulan teks PRD: tambahkan web pada daftar platform ยง10, perluas NFR-16 agar mencakup uji peramban (Chrome desktop dan lebar 360 px), dan nyatakan SSR tidak dipakai. Batas minimal: alur Pindai, Hasil, Detail, Riwayat, Tentang berjalan di peramban tanpa error console.
 
+
+## 6. Kegagalan konfigurasi server eksplisit, bukan fallback senyap (usulan, insiden 15 Nov 2026)
+
+**Konteks:** fungsi scan ter-deploy (v6) menjalankan pipeline tanpa store cloud/rate-limit karena komposisi lama diam-diam memakai {} saat SUPABASE_URL/SUPABASE_SERVICE_ROLE_KEY tidak terpakai, sehingga persisted=false tanpa CLOUD_PERSIST_FAILED, scans/findings/rate_limit_events tetap kosong, dan RLS/rate limit tidak dapat dibuktikan.
+
+**Perubahan perilaku (lokal, belum di-deploy):** bila SUPABASE_URL atau SUPABASE_SERVICE_ROLE_KEY tidak tersedia, runtime tidak menjalankan scan; setiap permintaan (selain preflight CORS) mengembalikan 500 dengan kode SERVER_MISCONFIGURED, pesan klien generik "Layanan sedang tidak dapat digunakan. Coba lagi nanti." (tanpa nama variabel/nilai), dan log server mencatat nama variabel yang hilang tanpa nilai (event: "scan.misconfigured"). GITHUB_TOKEN tetap ditangani seperti sebelumnya.
+
+**Menyimpang dari PRD saat ini:** PRD tidak mendefinisikan kode SERVER_MISCONFIGURED dan implementasi sebelumnya memakai fallback senyap. Namun fallback senyap menyebabkan insiden ini; perilaku eksplisit dipilih agar kegagalan konfigurasi terdeteksi sebelum uji/produksi.
+
+**Usulan teks PRD:** tambahkan kode error konfigurasi server (500, retryable, tanpa detail internal) di ง9.4/ง12, dan nyatakan bahwa penyimpanan cloud serta rate limit FR-25a adalah dependensi wajib runtime scan (bukan opsional diam-diam). Catat juga bahwa deploy harus diverifikasi dengan bukti hash sumber dan log stages (rate limit/persist).

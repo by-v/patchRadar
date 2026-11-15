@@ -19,6 +19,7 @@ export type ScanErrorCode =
   | 'UPSTREAM_UNAVAILABLE'
   | 'SCAN_TIMEOUT'
   | 'INTERNAL'
+  | 'SERVER_MISCONFIGURED'
   | 'METHOD_NOT_ALLOWED';
 
 /** Membedakan batas GitHub (PRD §12 baris 11) dari batas aplikasi (baris 20). */
@@ -36,6 +37,7 @@ const DEFAULT_STATUS: Readonly<Record<ScanErrorCode, number>> = {
   UPSTREAM_UNAVAILABLE: 502,
   SCAN_TIMEOUT: 504,
   INTERNAL: 500,
+  SERVER_MISCONFIGURED: 500,
   METHOD_NOT_ALLOWED: 405,
 };
 
@@ -51,6 +53,7 @@ const DEFAULT_RETRYABLE: Readonly<Record<ScanErrorCode, boolean>> = {
   UPSTREAM_UNAVAILABLE: true,
   SCAN_TIMEOUT: true,
   INTERNAL: true,
+  SERVER_MISCONFIGURED: true,
   METHOD_NOT_ALLOWED: false,
 };
 
@@ -68,6 +71,7 @@ const DEFAULT_MESSAGE: Readonly<Record<ScanErrorCode, string>> = {
   UPSTREAM_UNAVAILABLE: 'Layanan upstream sedang bermasalah. Coba lagi sebentar lagi.',
   SCAN_TIMEOUT: 'Pemindaian melebihi batas waktu. Coba lagi atau pindai repo yang lebih kecil.',
   INTERNAL: 'Terjadi kesalahan internal. Coba lagi dengan kode permintaan yang tertera.',
+  SERVER_MISCONFIGURED: 'Layanan sedang tidak dapat digunakan. Coba lagi nanti.',
   METHOD_NOT_ALLOWED: 'Metode permintaan tidak didukung.',
 };
 

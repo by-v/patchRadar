@@ -5,6 +5,7 @@
 - (2) Setiap laporan hasil uji wajib menyertakan keluaran mentah terminal (tanpa kunci/token) beserta `requestId`.
 - (3) Jangan mencentang AC tanpa keluaran mentah pendukung.
 - (4) Jika hasil tidak pasti, tulis "belum diverifikasi".
+- (5) Setelah deploy, verifikasi dengan keluaran mentah: `functions list` (versi naik dan `updated_at` baru), unduh sumber deployed dan bandingkan SHA-256 dengan lokal (seharusnya SAME untuk semua berkas), lalu scan uji dan tampilkan stages di log yang memuat tahap rate limit dan persist. Jangan melaporkan "deploy berhasil" tanpa tiga bukti itu.
 
 Dokumen ini berlaku untuk semua agent yang mengerjakan repositori ini.
 
