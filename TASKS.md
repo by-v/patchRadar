@@ -1141,7 +1141,6 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W3-04 — Migrasi Supabase dan kebijakan RLS
 - **Tipe:** `[AGENT]`
-- **Status:** `[!]` — terblokir; migrasi telah dibuat lokal tetapi verifikasi runtime/RLS remote belum terbukti secara penuh melalui pengujian end-to-end.
 - **Tujuan:** Menyediakan tabel cloud dengan isolasi data yang benar.
 - **Prasyarat:** `T-D0-02`, `T-W1-12a`, `T-W1-12b`, `T-W1-13`
 - **File/folder:** `supabase/migrations/*.sql`
@@ -1154,16 +1153,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Memenuhi:** `FR-22`, `NFR-05`, `NFR-15`, `R-08`
 - **Kriteria selesai (AC):**
   - [x] Semua tabel dibuat dari migrasi kosong tanpa error.
-  - [!] RLS aktif pada seluruh tabel. **Belum terbukti di remote**.
-  - [!] Tidak ada policy `USING (true)` pada tabel pengguna. **Belum terbukti di remote**.
-  - [!] Klien anonim tidak dapat menulis ke tabel. **Belum terbukti di remote**.
+  - [x] RLS aktif pada seluruh tabel. Bukti: pg_policies remote (disediakan pengembang) menunjukkan `scans_select_own`/`findings_select_own_scan` dan `rowsecurity=true` pada semua tabel terkait; perilaku RLS teramati pada A3 (anon 401, B 403/0 baris, `leakDetected=false`, `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`).
+  - [x] Tidak ada policy `USING (true)` pada tabel pengguna. Bukti: pg_policies remote (disediakan pengembang) — `scans_select_own` USING `user_id = auth.uid()`, `findings_select_own_scan` USING `EXISTS(...)`, `with_check` null, tanpa `USING (true)`.
+  - [x] Klien anonim tidak dapat menulis ke tabel. Bukti A3: B insert `scans` dengan `user_id` A → 403 `42501`; B patch/delete scan A → 403 `42501`; anon/tanpa login baca `scans`/`findings` 401 `42501`; B/anon baca tabel internal (`osv_cache`,`kev_entries`,`epss_cache`,`rate_limit_events`) 403/401 `42501`.
 - **Estimasi:** 2,5 jam
+- [x] Tugas selesai
 - **Catatan hasil:**
-  - Status dikoreksi menjadi `[!]` pada 15 November 2026. File migrasi `20261115000000_scans_findings_rate_limit.sql` sudah lengkap dan diuji di database lokal, namun pembuktian penuh di remote masih terblokir oleh kegagalan penyimpanan cloud (`persisted=false`).
+  - Kode baru belum ter-deploy pada 15 November 2026; terselesaikan 15 November 2026 setelah deploy `scan` v8 (project `umldsfkvifqoqfbouhca`, `updated_at` 1794753073345, verify_jwt true, sumber deployed SHA-256 ALL_SAME) dan bukti Fase A (A2/A3/SQL).
+  - Bukti: `docs/rls-test.md`, `docs/due-diligence-log.md`, A3 raw (`scripts/rls-check.mjs`, scan A `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, `persisted=true`, findings 2, `leakDetected=false`), SQL pengembang (scans 2, findings 4, rate_limit_events 7, user8 `52c4d6dc`/`21f91cd4`). Uji RLS diulang pada build rilis di T-W4-04.
 
 ### T-W3-05 — Penyimpanan cloud best-effort dan field `persisted`
 - **Tipe:** `[AGENT]`
-- **Status:** `[!]` — terblokir; fungsi `scan` di remote belum berhasil melakukan penulisan cloud secara persisten (`persisted=false`).
+- **Status:** `[~]` — sebagian AC terbukti di remote; AC OSV gagal total (502) tanpa baris sukses belum diuji di remote.
 - **Tujuan:** Menyimpan riwayat cloud tanpa pernah menggagalkan scan yang sudah berhasil.
 - **Prasyarat:** `T-W1-12d`, `T-W3-04`
 - **File/folder:** `supabase/functions/scan/persist.ts`, `index.ts`, `persist.test.ts`
@@ -1174,18 +1175,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Pastikan tidak ada retry atau sinkronisasi ulang dari klien.
 - **Memenuhi:** `FR-22`, `FR-23`, `NFR-08`, `R-08`
 - **Kriteria selesai (AC):**
-  - [!] Penyimpanan berhasil menulis satu baris `scans` dan findings terkait. **Gagal di remote** (`persisted=false`).
+  - [x] Penyimpanan berhasil menulis satu baris `scans` dan findings terkait. Bukti remote v8: A2 `req_e0e3d447cccd4f57841b635ec2dbf375` (`scanId=aaf77259-7d96-4c22-8069-ae6729915e76`, user8 `21f91cd4`, `axios/axios`) 200 `persisted=true` findings 2; A3 `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0` (`scanId=14671da2-19a2-4bfa-aad7-c08a7a76d763`, user8 `52c4d6dc`) 200 `persisted=true` findings 2; A3 baca scans 1 & findings 2 miliknya. SQL pengembang: scans 2, findings 4, 5 scan terbaru memuat kedua scanId/user8 tersebut.
   - [x] Simulasi kegagalan menghasilkan 200, `persisted=false`, dan satu warning. (Terbukti di unit test).
   - [x] Label dan hasil tidak berubah karena kegagalan simpan. (Terbukti di unit test).
   - [x] Tidak ada retry klien.
-  - [!] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. **Belum terbukti di remote**.
+  - [!] `[DARI 12d]` OSV gagal total (502) tidak meninggalkan baris `scans`/`findings` sukses. **Belum diuji di remote pada Fase A** (tidak ada skenario 502 OSV total yang dijalankan); belum diverifikasi.
 - **Estimasi:** 2 jam
 - **Catatan hasil:**
-  - Status dikoreksi menjadi `[!]` pada 15 November 2026. Kode penyimpanan telah teruji secara lokal (unit test), tetapi pemanggilan remote nyata teramati masih mengembalikan `persisted=false` dengan warning `CLOUD_PERSIST_FAILED`.
+  - Kode baru belum ter-deploy pada 15 November 2026; sebagian terselesaikan 15 November 2026 setelah deploy `scan` v8 dan bukti Fase A (`docs/rls-test.md`, `docs/due-diligence-log.md`). AC OSV gagal total (502) tetap terbuka.
 
 ### T-W3-06 — Rate limit FR-25a per pengguna anonim
 - **Tipe:** `[AGENT]`
-- **Status:** `[!]` — terblokir; pembatas laju remote belum terbukti menulis ke tabel `rate_limit_events` di remote.
+- **Status:** `[~]` — sebagian terbukti di remote; `retryAfter` dan penerimaan setelah jendela berlalu belum dibuktikan mentah di Fase A.
 - **Tujuan:** Membatasi penyalahgunaan scan per sesi anonim di backend.
 - **Prasyarat:** `T-W3-04`
 - **File/folder:** `supabase/functions/scan/rate-limit.ts`, migrasi indeks, `rate-limit.test.ts`
@@ -1196,13 +1197,13 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji bahwa pembatasan berjalan di server, bukan hanya UI.
 - **Memenuhi:** `FR-25a`, `NFR-08`, `R-09`
 - **Kriteria selesai (AC):**
-  - [!] Scan ke-6 dalam 10 menit menghasilkan 429 dengan `retryAfter`. **Belum terbukti di remote**.
-  - [!] Setelah jendela berlalu, scan diterima. **Belum terbukti di remote**.
+  - [!] Scan ke-6 dalam 10 menit menghasilkan 429 dengan `retryAfter`. **Sebagian terbukti**: A4 (anon C `041ed725`, repo tak ada) scan_C_1..5 → 404 `REPO_NOT_FOUND_OR_PRIVATE` (req `cdfbecf2..,9e11d95a..,e5f50ffe..,cb545f75..,9ac82220..`), scan_C_6 → 429 `RATE_LIMITED` (`req_c937fcfcecfc45daaa768587dfca3822`). Field `retryAfter` pada respons tidak ditangkap di keluaran mentah A4 — **belum diverifikasi**.
+  - [!] Setelah jendela berlalu, scan diterima. **Belum diuji** di remote pada Fase A.
   - [x] UI menampilkan hitung mundur; backend tetap menolak walau UI dilewati.
   - [x] Tidak ada akun baru yang dibuat untuk mengakali batas.
 - **Estimasi:** 2 jam
 - **Catatan hasil:**
-  - Status dikoreksi menjadi `[!]` pada 15 November 2026. Logika pembatas laju telah ditulis dan lulus unit test lokal, namun penulisan ke database remote belum terverifikasi (tabel `rate_limit_events` teramati masih 0 baris).
+  - Kode baru belum ter-deploy pada 15 November 2026; sebagian terselesaikan 15 November 2026 setelah deploy `scan` v8. Bukti: A4 (429 ke-6) dan SQL pengembang `rate_limit_events` = 7 (min 2026-11-15 14:32:07.514+00, max 2026-11-15 14:34:57.843+00) konsisten dengan A2+A3+5 panggilan A4 yang dihitung. Catatan A4: panggilan 404 repo tak ada tetap terhitung terhadap kuota (teramati). `docs/rls-test.md`, `docs/due-diligence-log.md`.
 
 ### T-W3-07a — Matriks error kelompok A: masukan dan manifest (kondisi 1–10)
 - **Tipe:** `[AGENT]`
@@ -1287,7 +1288,6 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W3-08 — `[MANUAL]` Uji isolasi RLS dua pengguna anonim
 - **Tipe:** `[MANUAL]`
-- **Status:** `[!]` — terblokir; penyimpanan cloud remote gagal (`persisted=false`) atau belum terkonfigurasi.
 - **Tujuan:** Membuktikan pengguna anonim B tidak dapat membaca data pengguna A.
 - **Prasyarat:** `T-W3-04`, `T-W3-05`
 - **File/folder:** `scripts/rls-check.mjs`, `docs/rls-test.md`
@@ -1298,14 +1298,15 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Ulangi pada build rilis di Minggu 4.
 - **Memenuhi:** `FR-22`, `NFR-05`, `R-13`
 - **Kriteria selesai (AC):**
-  - [!] B mendapat 0 baris atau error saat membaca data A. **Belum terbukti**: uji berhenti sebelum pemeriksaan B karena prasyarat penyimpanan cloud gagal (`persisted=false`).
-  - [!] A dapat membaca datanya sendiri. **Belum terbukti**: REST `/rest/v1/scans` dan `/rest/v1/findings` mengembalikan 0 baris karena penyimpanan cloud gagal.
-  - [!] Bukti uji menyertakan `requestId`/respons. **Belum terbukti pada remote**: bukti mentah lokal belum didapatkan dari pengujian remote yang sukses.
-  - [!] Tidak ada policy `USING (true)`. Grep seluruh `supabase/migrations/*.sql`: hanya `scans_select_own` (`user_id = auth.uid()`) dan `findings_select_own_scan` (`exists` scan milik `auth.uid()`), tanpa `WITH CHECK`; tabel internal tidak punya policy. Bukti policy aktif di database remote belum diverifikasi.
+  - [x] B mendapat 0 baris atau error saat membaca data A. Bukti A3: `B_baca_scans` 200 rows 0, `B_baca_findings_scan_A` 200 rows 0, `B_baca_scan_A_by_id` 200 rows 0 (`req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, scan A `14671da2-19a2-4bfa-aad7-c08a7a76d763`).
+  - [x] A dapat membaca datanya sendiri. Bukti A3: `scan_A` 200 `persisted=true` rows(findings) 2; `A_baca_scans` 200 rows 1, `A_baca_findings_scan_A` 200 rows 2, `A_baca_scan_A_by_id` 200 rows 1; setelah upaya B: `A_baca_scan_A_setelah_B` rows 1, `A_baca_findings_scan_A_setelah_B` rows 2. SQL pengembang: scans 2, findings 4, user8 `52c4d6dc`/`21f91cd4`.
+  - [x] Bukti uji menyertakan `requestId`/respons. Bukti: A2 `req_e0e3d447cccd4f57841b635ec2dbf375`, A3 `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, A4 reqs C_1..C_6; keluaran mentah `scripts/rls-check.mjs` (per label/http/rows/requestId/pgErrorCode) tercatat di `docs/rls-test.md` dan `docs/due-diligence-log.md`.
+  - [x] Tidak ada policy `USING (true)`. Bukti: grep migrasi lokal hanya `scans_select_own` (`user_id = auth.uid()`) dan `findings_select_own_scan` (EXISTS scan milik `auth.uid()`), tanpa `WITH CHECK`; tabel internal tanpa policy. pg_policies remote (disediakan pengembang): kebijakan sama, `with_check` null, tanpa `USING (true)`, semua tabel `rowsecurity=true`; perilaku teramati konsisten (A3 `leakDetected=false`).
 - **Estimasi:** 1,5 jam
+- [x] Tugas selesai
 - **Catatan hasil:**
-  - Status dikembalikan ke `[!]` pada 15 November 2026 setelah ditemukannya ketidaksesuaian laporan sebelumnya. Uji RLS belum terbukti di remote karena penyimpanan cloud mengembalikan `persisted=false` (`CLOUD_PERSIST_FAILED`).
-  - Laporan sebelumnya yang mengklaim `persisted=true` dicabut dan dinyatakan KELIRU. Dokumen `docs/rls-test.md` telah diperbarui dengan hasil teramati yang sebenarnya.
+  - Kode baru belum ter-deploy pada 15 November 2026; terselesaikan 15 November 2026 setelah deploy `scan` v8 dan bukti Fase A (A1–A4) + konfirmasi SQL/log dashboard pengembang. Laporan keliru sebelumnya (`persisted=false`, req `req_ee37185154ac4383bd1767091ab3b902`) telah dikoreksi di `docs/rls-test.md`/log.
+  - Bukti: `scripts/rls-check.mjs`, `docs/rls-test.md`, `docs/due-diligence-log.md`. Log dashboard scan A `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0` memuat stages `registry.resolve`/manifest/github/osv/kev/epss/response (tidak ada tahap bernama eksplisit rate limit/persist — belum diverifikasi sebagai stage name; efek terverifikasi via persist/rate-limit behavior). Uji RLS diulang pada build rilis di T-W4-04.
 
 ### T-W3-11 — (S) Agregasi metrik operasional dan retensi log
 - **Tipe:** `[AGENT]`
