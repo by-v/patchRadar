@@ -1022,11 +1022,11 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Perbarui jadwal bila ada yang membatalkan.
 - **Memenuhi:** `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] Daftar berisi minimal 5 calon penguji dengan nama panggilan saja.
-  - [ ] Minimal 5 orang sudah mengonfirmasi tanggal sesi.
-  - [ ] Tidak ada data pribadi selain nama panggilan yang disimpan.
+  - [x] Daftar berisi minimal 5 calon penguji dengan nama panggilan saja.
+  - [x] Minimal 5 orang sudah mengonfirmasi tanggal sesi.
+  - [x] Tidak ada data pribadi selain nama panggilan yang disimpan.
 - **Estimasi:** 0,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
 
 ---
