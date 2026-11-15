@@ -121,3 +121,11 @@ Usulan teks PRD: tambahkan web pada daftar platform ยง10, perluas NFR-16 agar me
 **Menyimpang dari PRD saat ini:** PRD tidak mendefinisikan kode SERVER_MISCONFIGURED dan implementasi sebelumnya memakai fallback senyap. Namun fallback senyap menyebabkan insiden ini; perilaku eksplisit dipilih agar kegagalan konfigurasi terdeteksi sebelum uji/produksi.
 
 **Usulan teks PRD:** tambahkan kode error konfigurasi server (500, retryable, tanpa detail internal) di ง9.4/ง12, dan nyatakan bahwa penyimpanan cloud serta rate limit FR-25a adalah dependensi wajib runtime scan (bukan opsional diam-diam). Catat juga bahwa deploy harus diverifikasi dengan bukti hash sumber dan log stages (rate limit/persist).
+
+## 7. Panggilan 404 tetap menghitung kuota rate limit (teramati, usulan pencatatan)
+
+**Pengamatan (Fase A A4, 15 Nov 2026, remote v8):** pengguna anonim baru (userId8  41ed725) memanggil scan 6x berurutan ke repo tak ada patchradar-uji-tidak-ada-xyz/repo-tidak-ada-12345. Hasil: scan_C_1..5 -> 404 REPO_NOT_FOUND_OR_PRIVATE (req cdfbecf2..,9e11d95a..,e5f50ffe..,cb545f75..,9ac82220..), scan_C_6 -> 429 RATE_LIMITED (eq_c937fcfcecfc45daaa768587dfca3822). **Panggilan yang menghasilkan 404 tetap terhitung terhadap kuota rate limit** FR-25a.
+
+**Implikasi:** perilaku ini membatasi penyalahgunaan (probe repo/kuota) tetapi dapat mengejutkan pengguna yang salah mengetik URL; batas 5/10 menit per pengguna anonim tetap berlaku meski target repo tidak ditemukan. **Belum dinyatakan eksplisit** di PRD FR-25a/ยง12/ยง15.
+
+**Usulan:** catat sebagai keterbatasan/perilaku yang diketahui di PRD dan di materi pengguna bila relevan; tidak mengubah implementasi tanpa persetujuan. Status: teramati (A4), bukan bug yang diperbaiki di perubahan ini.
