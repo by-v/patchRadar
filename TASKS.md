@@ -1317,13 +1317,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Ulangi pada build rilis di Minggu 4.
 - **Memenuhi:** `FR-22`, `NFR-05`, `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] B mendapat 0 baris atau error saat membaca data A.
-  - [ ] A dapat membaca datanya sendiri.
-  - [ ] Bukti uji menyertakan `requestId`/respons, bukan hanya tangkapan layar dashboard.
-  - [ ] Tidak ada policy `USING (true)`.
+  - [!] B mendapat 0 baris atau error saat membaca data A. **Belum terbukti**: uji berhenti sebelum pemeriksaan B karena prasyarat penyimpanan cloud gagal.
+  - [!] A dapat membaca datanya sendiri. **Gagal**: REST `/rest/v1/scans`, `/rest/v1/findings`, dan scan A by id mengembalikan HTTP 404.
+  - [x] Bukti uji menyertakan `requestId`/respons, bukan hanya tangkapan layar dashboard. `requestId=req_ee553fc2d99740babab507e2e71d2d7e` tercatat di `docs/rls-test.md`.
+  - [x] Tidak ada policy `USING (true)`. Grep seluruh `supabase/migrations/*.sql`: hanya `scans_select_own` (`user_id = auth.uid()`) dan `findings_select_own_scan` (`exists` scan milik `auth.uid()`), tanpa `WITH CHECK`; tabel internal tidak punya policy. Bukti policy aktif di database remote akan ditambahkan pengembang lewat SQL dashboard.
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [!] Tugas selesai — terblokir sampai migrasi Minggu 3 diterapkan ke remote dan Edge Function `scan` di-deploy ulang dengan penyimpanan cloud.
 - **Catatan hasil:**
+  - File baru: `scripts/rls-check.mjs` (dua sesi anonim, satu scan A, baca/ubah/hapus/sisip lintas pengguna, tabel internal, tanpa login) dan `docs/rls-test.md` (keluaran persis, tabel harapan vs aktual, grep policy, keterbatasan).
+  - Perintah: `node --env-file=app/.env scripts/rls-check.mjs`. Skrip tidak membaca/mencetak isi `app/.env`, anon key, token, atau JWT; user id dipotong 8 karakter. Tidak memakai `service_role`, tidak ada `db push`/deploy/`secrets set`.
+  - Hasil sesi: A `c138a815…`, B `3ae12066…` (berbeda). Scan A HTTP 200, `requestId=req_ee553fc2d99740babab507e2e71d2d7e`, `scanId=d9c45f6e-1ce3-4bdd-80c9-c5f43084194a`, tetapi **`persisted=false`**. Ketiga bacaan A ke `scans`/`findings`/scan by id menghasilkan **HTTP 404**. Sesuai aturan, uji dinyatakan **TIDAK VALID** dan pemeriksaan B–H tidak dijalankan; isolasi tidak diklaim.
+  - Penyebab: tabel `scans`/`findings` belum tersedia di remote (HTTP 404) dan fungsi belum menyimpan cloud (`persisted=false`), konsisten dengan catatan `T-W3-04`/`T-W3-05` bahwa migrasi dan deploy masih menunggu izin pengembang. Menerapkan migrasi/deploy berada di luar izin uji ini, jadi tidak dilakukan.
+  - Data uji A tidak tersimpan sehingga tidak ada baris yang ditinggalkan. Pemeriksaan policy dari file migrasi tidak menemukan `USING (true)`; bukti database langsung akan ditambahkan pengembang lewat SQL dashboard.
+  - Uji wajib diulang pada build rilis Minggu 4 melalui `T-W4-04` (langkah 2 dan AC "Uji RLS dua pengguna lulus pada build rilis").
 
 ### T-W3-11 — (S) Agregasi metrik operasional dan retensi log
 - **Tipe:** `[AGENT]`
@@ -1782,6 +1788,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 13 November 2026 | `T-W2-03` (perbaikan web) | Edge Function `scan` menangani preflight `OPTIONS` dengan `204` dan mengirim header CORS (`access-control-allow-origin: *`, metode `POST, OPTIONS`, header `authorization, apikey, content-type, x-client-version`) pada semua respons, termasuk error. Wildcard dipakai karena MVP tidak memakai cookie/credentials. Fungsi di-deploy ulang dengan `npx supabase functions deploy scan --use-api --yes`. | Sebelumnya `OPTIONS` dijawab `405` tanpa header CORS sehingga browser memblokir permintaan dan klien menampilkan pesan `NETWORK` ("Tidak ada koneksi") meski jaringan normal; iOS/Android tidak terkena karena tanpa preflight. | Ya — pengembang menyetujui perbaikan dan deploy, 13 November 2026 |
 | 14 November 2026 | `T-W1-13` | Langkah tugas “cache miss atau tabel tidak tersedia tetap menghasilkan parsial” ditafsirkan sebagai **tidak boleh crash**, bukan `partial=true`. Cache miss normal dan kegagalan baca/tulis cache internal hanya menghasilkan warning informatif (`EPSS_CACHE_READ_FAILED`/`EPSS_CACHE_WRITE_FAILED`); `partial` tetap hanya dipicu kegagalan sumber EPSS (`EPSS_UNAVAILABLE`). TTL cache 24 jam dan hasil kosong ikut di-cache. Migrasi belum diterapkan dan fungsi belum di-deploy ke remote. | Konsisten dengan keputusan 10 November 2026 bahwa kegagalan cache internal tidak menyalakan `partial`; menyalakan `partial` pada scan pertama (cache kosong) akan menampilkan banner parsial meski data EPSS lengkap. TTL mengikuti `Cache-Control: max-age=86400`. | Implementasi lokal; izin perubahan remote belum diberikan |
 | 15 November 2026 | `T-W3-02`, `T-W3-03` | Selama Expo Go iOS dari App Store masih 58.0.5, perangkat uji utama dipindah ke Android; iPhone tetap dipakai sebagai pembanding dengan protokol tutup paksa Expo Go lalu scan ulang (atau tombol Reload pada red screen). Alternatif berbayar (`npx eas-cli@latest go`/TestFlight dan development build) ditolak untuk sementara. Keputusan ini hanya mengubah cara pengujian, bukan kode atau cakupan PRD. | Expo Go iOS 58.0.5 (versi terbaru di App Store, rilis 22 Oktober 2026) terkena bug reload expo/expo#52146: setiap full reload memunculkan `[runtime not ready] Cannot find native module 'ExpoAsset'`; perbaikan belum tersedia di App Store. PRD baris 26 dan NFR-10 memang menuntut uji pada perangkat Android fisik. | Ya — instruksi pengembang, 15 November 2026 |
+| 15 November 2026 | `T-W3-08` | Penyimpangan terkontrol: tugas bertanda `[MANUAL]` dikerjakan agent karena seluruh langkahnya berupa skrip, dengan izin terbatas hanya menjalankan `node --env-file=app/.env scripts/rls-check.mjs` (dua sesi anonim, satu scan A, baca/ubah/hapus/sisip via REST) tanpa `service_role`, deploy, `db push`, atau `secrets set`. Skrip tidak mencetak/menyimpan isi `app/.env`, kunci, token, atau JWT. Hasil: `persisted=false` dan REST `scans`/`findings` HTTP 404, sehingga uji tidak valid dan tugas ditandai `[!]`; pengembang akan memverifikasi policy lewat SQL dashboard. | Migrasi Minggu 3 belum diterapkan ke remote dan Edge Function belum di-deploy ulang dengan penyimpanan cloud; menerapkannya memerlukan izin yang tidak diberikan pada uji ini. Isolasi tidak boleh diklaim tanpa bukti baris nyata. | Ya — instruksi pengembang, 15 November 2026 |
 
 
 ---
