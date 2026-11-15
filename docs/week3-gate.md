@@ -14,7 +14,7 @@
 | 2 | Dua pengguna anonim terisolasi | **[x]** | A3/Fase B: `scripts/rls-check.mjs`, `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, SQL/pg_policies, `docs/rls-test.md` |
 | 3 | Gerbang anonymous sign-in punya verdict Go/No-Go | **[x]** | Due diligence 15 Nov 2026 + bukti scan A2/A3; verdict pengembang: **Go** (§Verdict) |
 | 4 | 23 kondisi error teruji tanpa crash | **[x]** (attestasi manual pengembang) | `docs/error-matrix.md`, test T-W3-07a/b/c + suite lulus; attestasi pengembang (Android, 15 Nov 2026): 23 kondisi diuji sesuai rencana tanpa crash (rincian per-kondisi/screenshot/keluaran mentah UI tidak dilampirkan); beberapa kondisi layanan nyata **belum diverifikasi** di lingkungan nyata |
-| 5 | `persisted=false` dan warning tampil benar | **[ ]** belum diverifikasi (UI end-to-end) | Kontrak/test server OK; tidak ada bukti UI `CLOUD_PERSIST_FAILED`; laporan pengembang menunjukkan error native lain |
+| 5 | `persisted=false` dan warning tampil benar | **[x]** (attestasi manual, simulasi terkontrol) | Kontrak/test server OK; UI diverifikasi via simulasi terkontrol klien (Android realme XT, Expo Go, axios, 16 Nov 2026): banner "Riwayat cloud — Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat" tampil, hasil/temuan tetap tampil, tanpa crash (attestasi, tanpa screenshot; deskripsi spesifik hasil tidak dirinci) |
 | 6 | Scan ke-6 menghasilkan 429 | **[x]** | A4 remote v8: ke-6 429 `RATE_LIMITED` `req_c937fcfcecfc45daaa768587dfca3822`, SQL `rate_limit_events` konsisten |
 | 7 | p95 hangat & CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat | **[~]** p95 hangat terukur, CPU dashboard belum diverifikasi | Pengukuran hangat 15 Nov 2026 (requestId di bawah); dashboard CPU tidak diberikan; keputusan dicatat |
 | 8 | Verdict Go/No-Go tercatat | **[x]** | Verdict **Go (bersyarat)** tercatat di dokumen ini dengan sisa risiko |
@@ -47,8 +47,8 @@
 
 ### AC 5 — `persisted=false` dan warning tampil benar
 - **Bukti kontrak/server (ada):** unit/integrasi test persist/handler/composition menunjukkan kegagalan simpan cloud → respons 200 dengan `persisted=false`, warning `CLOUD_PERSIST_FAILED`, hasil/temuan tidak berubah (rujuk test T-W3-07c/handler/persist). Kontras sukses: A2 `req_e0e3d447cccd4f57841b635ec2dbf375` dan A3 `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0` (`persisted=true`, warningCodes kosong).
-- **Bukti UI end-to-end:** **belum diverifikasi**. Laporan pengembang: "tidak teramati/ tidak bisa didemonstrasikan" untuk tampilan warning `persisted=false`/`CLOUD_PERSIST_FAILED`. Pengembang melaporkan kejadian "gagal tersimpan" dengan error: `ERROR [Error: Cannot find native module 'ExpoSQLite']` (stack: `requireNativeModule.js` → `expo-sqlite/...` → `async-require/asyncRequireModule.ts`). Error ini adalah **kegagalan modul native lokal (ExpoSQLite)**, bukan bukti jalur `persisted=false`/`CLOUD_PERSIST_FAILED` dari cloud; tidak dapat dipakai untuk mencentang AC 5.
-- **Status:** AC **tidak lulus** (belum ada bukti UI warning cloud tampil benar).
+- **Bukti UI (attestasi manual, simulasi terkontrol, 16 Nov 2026):** Android realme XT, Expo Go, repo `https://github.com/axios/axios`. Metode: respons scan dimodifikasi sementara di klien (`app/src/api/scan.ts`) agar `persisted=false` dan menambah warning `CLOUD_PERSIST_FAILED` (simulasi terkontrol, bukan kegagalan DB produksi). Pengembang melaporkan: banner "Riwayat cloud — Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat" tampil: **ya**; hasil/temuan tetap tampil: **ya** (deskripsi spesifik tampilan hasil tidak dirinci); tanpa crash: **ya**. **Bukti visual/screenshot tidak dilampirkan** (attestasi pengujian nyata).
+- **Catatan:** laporan sebelumnya tentang `ERROR [Error: Cannot find native module 'ExpoSQLite']` adalah kegagalan modul native lokal terpisah, bukan bukti jalur `CLOUD_PERSIST_FAILED` (tetap dicatat terpisah sebagai isu lingkungan, bukan penentu AC 5). `app/src/api/scan.ts` diperiksa pada 16 Nov 2026: tidak ditemukan marker mock sementara (dikembalikan seperti semula). AC dicentang berdasarkan kombinasi kontrak/test server + attestasi UI terkontrol dengan keterbatasan bukti di atas.
 
 ### AC 6 — Scan ke-6 menghasilkan 429
 - **Bukti terverifikasi (A4, remote v8, 15 Nov 2026):** anon C `041ed725`, repo tak ada. `scan_C_1..5` → 404 `REPO_NOT_FOUND_OR_PRIVATE` (req `cdfbecf2..,9e11d95a..,e5f50ffe..,cb545f75..,9ac82220..` sesuai `docs/rls-test.md`), `scan_C_6` → **429 `RATE_LIMITED`** `req_c937fcfcecfc45daaa768587dfca3822`. Respons 404 terhitung kuota (sesuai temuan A4). SQL agregat: `rate_limit_events` events 7 konsisten (A2+A3+5, Q6 di `docs/metrics.md`).
@@ -75,7 +75,7 @@
 
 | Item | Status | Dampak / tindak lanjut |
 |---|---|---|
-| AC 5 UI `persisted=false` / `CLOUD_PERSIST_FAILED` | Belum diverifikasi | Kontrak server teruji; perlu bukti UI end-to-end bila skenario dapat direproduksi. Error `ExpoSQLite` native module yang dilaporkan adalah isu lingkungan/runtime lokal terpisah (bukan bukti AC 5). |
+| AC 5 UI `persisted=false` / `CLOUD_PERSIST_FAILED` | Ditutup dengan attestasi (simulasi terkontrol) | `[x]` berdasarkan kontrak/test server + attestasi UI simulasi terkontrol (Android realme XT, Expo Go, 16 Nov 2026; tanpa screenshot). Error `ExpoSQLite` native module yang dilaporkan adalah isu lingkungan/runtime lokal terpisah. |
 | AC 7 CPU dashboard | Belum diverifikasi | p95 hangat OK (4006 ms); keputusan CPU ditunda sampai ada metrik dashboard (waktu/rentang/sumber). |
 | AC 4 cakupan manual/UI per-kondisi | Ditutup dengan attestasi (bukti terbatas) | 23 kondisi terpetakan & teruji di suite; AC 4 `[x]` berdasarkan attestasi pengembang (rincian per-kondisi/screenshot tidak dilampirkan). Beberapa kondisi layanan nyata tetap **belum diverifikasi**. |
 | AC 1/4 bukti visual perangkat | Attestasi tanpa screenshot | Kredibilitas bergantung laporan pengembang. |
@@ -87,8 +87,8 @@
 
 **Verdict: Go (bersyarat)** — dinyatakan pengembang ("Go") dan dicatat dengan syarat.
 
-**Dasar:** AC 1 (attestasi), AC 2 (RLS terisolasi terbukti remote v8), AC 3 (anonymous sign-in aktif & dipakai), AC 4 (attestasi pengembang + matriks/suite test lulus, keterbatasan bukti per-kondisi dicatat), AC 6 (429 scan ke-6 terbukti), dan AC 8 lulus dengan bukti/keterangan yang tersedia; p95 hangat 4006 ms < 6 s. AC 5 (UI `persisted=false`) dan CPU dashboard AC 7 tetap **belum diverifikasi**.
+**Dasar:** AC 1 (attestasi), AC 2 (RLS terisolasi terbukti remote v8), AC 3 (anonymous sign-in aktif & dipakai), AC 4 (attestasi pengembang + matriks/suite test lulus), AC 5 (kontrak/test server + attestasi UI simulasi terkontrol, tanpa screenshot), AC 6 (429 scan ke-6 terbukti), dan AC 8 lulus dengan bukti/keterangan yang tersedia; p95 hangat 4006 ms < 6 s. **CPU dashboard AC 7** tetap **belum diverifikasi**.
 
 **Syarat/keharusan tindak lanjut:** (1) uji ulang isolasi RLS pada build rilis (**T-W4-04**) termasuk pembuktian sisa T-W3-06 (`retryAfter`, pasca-jendela) sebagaimana direncanakan; (2) lengkapi bukti AC 5 UI `CLOUD_PERSIST_FAILED` bila dapat direproduksi; (3) lengkapi metrik CPU/execution dashboard `scan` (dengan rentang waktu & sumber) untuk menutup AC 7 sepenuhnya; (4) pertahankan sikap jujur "belum diverifikasi" untuk item tanpa bukti mentah.
 
-**Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai, dengan risiko dan syarat di atas dicatat dan ditindaklanjuti (terutama T-W4-04). T-W3-13 **tidak** ditandai selesai penuh `[x]` di TASKS karena AC 5 dan AC 7 belum sepenuhnya terbukti.
+**Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai, dengan risiko dan syarat di atas dicatat dan ditindaklanjuti (terutama T-W4-04). T-W3-13 **tidak** ditandai selesai penuh `[x]` di TASKS karena **AC 7** (CPU dashboard) belum sepenuhnya terbukti.
