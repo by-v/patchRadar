@@ -13,7 +13,7 @@
 | 1 | Riwayat→Hasil→Detail berhasil dalam mode pesawat | **[x]** (attestasi manual pengembang) | Laporan manual pengembang (Android, 15 Nov 2026) |
 | 2 | Dua pengguna anonim terisolasi | **[x]** | A3/Fase B: `scripts/rls-check.mjs`, `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, SQL/pg_policies, `docs/rls-test.md` |
 | 3 | Gerbang anonymous sign-in punya verdict Go/No-Go | **[x]** | Due diligence 15 Nov 2026 + bukti scan A2/A3; verdict pengembang: **Go** (§Verdict) |
-| 4 | 23 kondisi error teruji tanpa crash | **[~]** belum sepenuhnya `[x]` | `docs/error-matrix.md`, test T-W3-07a/b/c + suite lulus; bukti manual UI terbatas; beberapa kondisi layanan nyata **belum diverifikasi** |
+| 4 | 23 kondisi error teruji tanpa crash | **[x]** (attestasi manual pengembang) | `docs/error-matrix.md`, test T-W3-07a/b/c + suite lulus; attestasi pengembang (Android, 15 Nov 2026): 23 kondisi diuji sesuai rencana tanpa crash (rincian per-kondisi/screenshot/keluaran mentah UI tidak dilampirkan); beberapa kondisi layanan nyata **belum diverifikasi** di lingkungan nyata |
 | 5 | `persisted=false` dan warning tampil benar | **[ ]** belum diverifikasi (UI end-to-end) | Kontrak/test server OK; tidak ada bukti UI `CLOUD_PERSIST_FAILED`; laporan pengembang menunjukkan error native lain |
 | 6 | Scan ke-6 menghasilkan 429 | **[x]** | A4 remote v8: ke-6 429 `RATE_LIMITED` `req_c937fcfcecfc45daaa768587dfca3822`, SQL `rate_limit_events` konsisten |
 | 7 | p95 hangat & CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat | **[~]** p95 hangat terukur, CPU dashboard belum diverifikasi | Pengukuran hangat 15 Nov 2026 (requestId di bawah); dashboard CPU tidak diberikan; keputusan dicatat |
@@ -42,8 +42,8 @@
 - **Bukti otomatis (keluaran mentah ringkas, 15 Nov 2026):**
   - Edge: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 196, pass 196, fail 0, duration_ms 2462.4617, scan_exit=0`.
   - App (`app/`): `npm run lint` exit 0, `npm run typecheck` exit 0, `npm test -- --ci` → `Test Suites: 14 passed, Tests: 121 passed, fail 0, test=0`.
-- **Bukti manual pengembang (15 Nov 2026):** AC1 offline (Riwayat→Hasil→Detail, Android, tanpa crash). Skenario offline scan: "pengujian mode offline dan dilakukan scanning link GitHub dalam keadaan offline — menampilkan pesan \"pemindaian gagal, dan dibawahnya ada button yang menuju buka Riwayat\" — tidak ada crash". Pernyataan umum: "kondisi error sesuai dengan yang direncanakan dan tidak ada yang keluar dari rencana, jadi aman".
-- **Keterbatasan:** bukti manual UI terbatas (screenshot/daftar rinci kondisi yang dicoba tidak dilampirkan). Beberapa kondisi bergantung layanan nyata tetap **belum diverifikasi** di lingkungan nyata (sesuai catatan `error-matrix.md`, mis. 429 GitHub/OSV/EPSS real, auth rate limit nyata, edge runtime error nyata), namun tertutup oleh uji handler/tiruan dan dinyatakan tanpa crash pada skenario teruji. AC **tidak dicentang penuh** karena cakupan bukti manual/perangkat tidak terdokumentasi per-kondisi.
+- **Attestasi manual pengembang (15 Nov 2026, Android, disetujui untuk penutupan AC 4):** pengembang menyatakan 23 kondisi error telah diuji dan hasilnya sesuai rencana tanpa crash (termasuk skenario scan offline yang menampilkan pesan gagal dan tombol buka Riwayat tanpa crash). **Rincian per-kondisi, screenshot, dan keluaran mentah UI tidak dilampirkan**; klaim manual dicatat sebagai attestasi.
+- **Keterbatasan:** beberapa kondisi bergantung layanan nyata tetap **belum diverifikasi** di lingkungan nyata (sesuai catatan `error-matrix.md`, mis. 429 GitHub/OSV/EPSS real, auth rate limit nyata, edge runtime error nyata), namun tertutup oleh uji handler/tiruan pada suite yang lulus. AC dicentang berdasarkan kombinasi attestasi manual + bukti otomatis/matriks dengan keterbatasan di atas.
 
 ### AC 5 — `persisted=false` dan warning tampil benar
 - **Bukti kontrak/server (ada):** unit/integrasi test persist/handler/composition menunjukkan kegagalan simpan cloud → respons 200 dengan `persisted=false`, warning `CLOUD_PERSIST_FAILED`, hasil/temuan tidak berubah (rujuk test T-W3-07c/handler/persist). Kontras sukses: A2 `req_e0e3d447cccd4f57841b635ec2dbf375` dan A3 `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0` (`persisted=true`, warningCodes kosong).
@@ -77,7 +77,7 @@
 |---|---|---|
 | AC 5 UI `persisted=false` / `CLOUD_PERSIST_FAILED` | Belum diverifikasi | Kontrak server teruji; perlu bukti UI end-to-end bila skenario dapat direproduksi. Error `ExpoSQLite` native module yang dilaporkan adalah isu lingkungan/runtime lokal terpisah (bukan bukti AC 5). |
 | AC 7 CPU dashboard | Belum diverifikasi | p95 hangat OK (4006 ms); keputusan CPU ditunda sampai ada metrik dashboard (waktu/rentang/sumber). |
-| AC 4 cakupan manual/UI per-kondisi | Bukti parsial | 23 kondisi terpetakan & teruji di suite; bukti manual terbatas; beberapa kondisi layanan nyata belum diverifikasi. |
+| AC 4 cakupan manual/UI per-kondisi | Ditutup dengan attestasi (bukti terbatas) | 23 kondisi terpetakan & teruji di suite; AC 4 `[x]` berdasarkan attestasi pengembang (rincian per-kondisi/screenshot tidak dilampirkan). Beberapa kondisi layanan nyata tetap **belum diverifikasi**. |
 | AC 1/4 bukti visual perangkat | Attestasi tanpa screenshot | Kredibilitas bergantung laporan pengembang. |
 | T-W3-06 `retryAfter` & scan diterima setelah jendela | Belum terverifikasi mentah | 429 terbukti (AC 6); sisa dibuktikan di **T-W4-04**. |
 | Uji ulang RLS pada build rilis | Wajib | **T-W4-04**. |
@@ -87,8 +87,8 @@
 
 **Verdict: Go (bersyarat)** — dinyatakan pengembang ("Go") dan dicatat dengan syarat.
 
-**Dasar:** AC 1 (attestasi), AC 2 (RLS terisolasi terbukti remote v8), AC 3 (anonymous sign-in aktif & dipakai), AC 6 (429 scan ke-6 terbukti) lulus dengan bukti yang tersedia; AC 4 didukung kuat oleh matriks + suite test lulus dan laporan manual tanpa crash (namun tidak sepenuhnya `[x]` karena cakupan bukti manual/layanan nyata terbatas); p95 hangat 4006 ms < 6 s.
+**Dasar:** AC 1 (attestasi), AC 2 (RLS terisolasi terbukti remote v8), AC 3 (anonymous sign-in aktif & dipakai), AC 4 (attestasi pengembang + matriks/suite test lulus, keterbatasan bukti per-kondisi dicatat), AC 6 (429 scan ke-6 terbukti), dan AC 8 lulus dengan bukti/keterangan yang tersedia; p95 hangat 4006 ms < 6 s. AC 5 (UI `persisted=false`) dan CPU dashboard AC 7 tetap **belum diverifikasi**.
 
 **Syarat/keharusan tindak lanjut:** (1) uji ulang isolasi RLS pada build rilis (**T-W4-04**) termasuk pembuktian sisa T-W3-06 (`retryAfter`, pasca-jendela) sebagaimana direncanakan; (2) lengkapi bukti AC 5 UI `CLOUD_PERSIST_FAILED` bila dapat direproduksi; (3) lengkapi metrik CPU/execution dashboard `scan` (dengan rentang waktu & sumber) untuk menutup AC 7 sepenuhnya; (4) pertahankan sikap jujur "belum diverifikasi" untuk item tanpa bukti mentah.
 
-**Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai, dengan risiko dan syarat di atas dicatat dan ditindaklanjuti (terutama T-W4-04). T-W3-13 **tidak** ditandai selesai penuh `[x]` di TASKS karena AC 4/5/7 belum sepenuhnya terbukti.
+**Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai, dengan risiko dan syarat di atas dicatat dan ditindaklanjuti (terutama T-W4-04). T-W3-13 **tidak** ditandai selesai penuh `[x]` di TASKS karena AC 5 dan AC 7 belum sepenuhnya terbukti.
