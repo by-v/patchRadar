@@ -304,13 +304,22 @@ export default function ScanScreen() {
       {sessionStatus === 'error' && sessionError ? (
         <View style={styles.sessionBlock}>
           <Banner message={sessionError} title="Sesi belum siap" variant="error" />
-          <Pressable
-            accessibilityLabel="Coba siapkan sesi"
-            accessibilityRole="button"
-            onPress={retrySession}
-            style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
-            <Text style={styles.retryText}>Coba lagi</Text>
-          </Pressable>
+          <View style={styles.errorActions}>
+            <Pressable
+              accessibilityLabel="Coba siapkan sesi"
+              accessibilityRole="button"
+              onPress={retrySession}
+              style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
+              <Text style={styles.retryText}>Coba lagi</Text>
+            </Pressable>
+            <Pressable
+              accessibilityLabel="Buka Riwayat"
+              accessibilityRole="button"
+              onPress={openHistory}
+              style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
+              <Text style={styles.retryText}>Buka Riwayat</Text>
+            </Pressable>
+          </View>
         </View>
       ) : null}
 
@@ -332,7 +341,18 @@ export default function ScanScreen() {
       />
 
       {scanError && scanErrorMessage ? (
-        <Banner message={scanErrorMessage} title="Pemindaian gagal" variant="error" />
+        <View style={styles.inlineError}>
+          <Banner message={scanErrorMessage} title="Pemindaian gagal" variant="error" />
+          {scanError.code === 'NETWORK' ? (
+            <Pressable
+              accessibilityLabel="Buka Riwayat"
+              accessibilityRole="button"
+              onPress={openHistory}
+              style={({ pressed }) => [styles.retryButton, pressed && styles.pressed]}>
+              <Text style={styles.retryText}>Buka Riwayat</Text>
+            </Pressable>
+          ) : null}
+        </View>
       ) : null}
 
       {loading && slowHint ? (
@@ -402,6 +422,10 @@ const styles = StyleSheet.create({
     color: Colors.light.textSecondary,
   },
   sessionBlock: {
+    gap: Spacing.two,
+    alignItems: 'flex-start',
+  },
+  inlineError: {
     gap: Spacing.two,
     alignItems: 'flex-start',
   },

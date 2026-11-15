@@ -24,8 +24,9 @@ export const AUTH_MESSAGES = {
   SESSION_REFRESH_FAILED: 'Sesi diperbarui. Silakan coba lagi.',
 } as const;
 
-/** Teks PRD §12 baris 17; tautan Riwayat ditambahkan pada T-W3-07c. */
-export const OFFLINE_MESSAGE = 'Tidak ada koneksi. Periksa jaringan lalu coba lagi.';
+/** Teks PRD §12 baris 17; Riwayat tetap dapat dibuka tanpa jaringan. */
+export const OFFLINE_MESSAGE =
+  'Tidak ada koneksi. Hasil tersimpan tetap bisa dibuka dari Riwayat.';
 
 /** Teks PRD §12 baris 21. */
 export const SQLITE_SAVE_FAILED_MESSAGE =

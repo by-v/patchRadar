@@ -14,6 +14,10 @@ import { ScreenHeader } from '@/components/screen-header';
 import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
 import { loadScanForDisplay, openDatabaseSafely, type LoadedScan } from '@/db/access';
 import {
+  CLOUD_PERSIST_FAILED_MESSAGE,
+  SQLITE_SAVE_FAILED_MESSAGE,
+} from '@/errors/messages';
+import {
   countFindingsByLabel,
   nonEmptyLabelCounts,
 } from '@/lib/scan-summary';
@@ -86,10 +90,17 @@ export default function ScanResultScreen() {
   const { result, source } = state.loaded;
   const showSaveError = saveFailed === '1';
   const labelCounts = nonEmptyLabelCounts(countFindingsByLabel(result.findings));
-  const warningMessage = result.warnings.map((warning) => `• ${warning.message}`).join('\n');
+  // Kondisi 23 punya banner sendiri agar tidak tercampur daftar warning lain.
+  const cloudPersistFailed = result.warnings.some(
+    (warning) => warning.code === 'CLOUD_PERSIST_FAILED',
+  );
+  const visibleWarnings = result.warnings.filter(
+    (warning) => warning.code !== 'CLOUD_PERSIST_FAILED',
+  );
+  const warningMessage = visibleWarnings.map((warning) => `• ${warning.message}`).join('\n');
   const otherWarnings = result.partial
     ? []
-    : result.warnings.filter(
+    : visibleWarnings.filter(
         (warning) => !(result.manifest.estimated && warning.code === 'LOCKFILE_MISSING'),
       );
   const otherWarningMessage = otherWarnings
@@ -118,9 +129,17 @@ export default function ScanResultScreen() {
 
       {showSaveError ? (
         <Banner
-          message="Hasil berhasil dipindai, tetapi gagal disimpan di perangkat."
+          message={SQLITE_SAVE_FAILED_MESSAGE}
           title="Gagal menyimpan"
           variant="error"
+        />
+      ) : null}
+
+      {cloudPersistFailed ? (
+        <Banner
+          message={CLOUD_PERSIST_FAILED_MESSAGE}
+          title="Riwayat cloud"
+          variant="warning"
         />
       ) : null}
 

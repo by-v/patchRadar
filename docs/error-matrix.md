@@ -33,12 +33,12 @@ Sumber kondisi: `docs/PRD.md` §12 (23 kondisi). Setiap baris dipetakan ke tugas
 
 | No | Kondisi (ringkas) | Perilaku | Bukti uji | Status |
 |---:|---|---|---|---|
-| 17 | Tidak ada koneksi | Inline; tautan ke Riwayat; tanpa retry otomatis | — | `[ ]` |
-| 18 | Sesi anonim gagal dibuat | Pindai nonaktif; Riwayat tetap bisa dibuka | — | `[ ]` |
-| 19 | JWT kedaluwarsa | Refresh sekali; jika gagal minta coba lagi | — | `[ ]` |
-| 21 | Gagal simpan SQLite | Tetap tampilkan Hasil; Riwayat tidak bertambah | — | `[ ]` |
-| 22 | Respons server tidak valid | Pesan dengan `requestId`; tombol coba lagi | — | `[ ]` |
-| 23 | Gagal simpan cloud | 200 `persisted=false` + warning; hasil tetap tampil | — | `[ ]` |
+| 17 | Tidak ada koneksi | Banner inline + **Buka Riwayat**; tanpa retry otomatis | `scan.test.ts` — "memetakan kegagalan fetch menjadi NETWORK" (teks PRD baris 17); `messages.test.ts` — teks offline; `access.test.ts` — "tetap membuka Riwayat tanpa database, mis. saat offline"; `riwayat.tsx` membaca SQLite/memori tanpa jaringan | `[x]` |
+| 18 | Sesi anonim gagal dibuat | Pindai nonaktif; **Buka Riwayat** dan **Coba lagi** tersedia | `session.test.ts` — "menampilkan pesan baris 18 saat pembuatan sesi gagal"; layar Pindai: `canScan` mensyaratkan `sessionStatus === 'ready'`, tab Riwayat tetap aktif | `[x]` |
+| 19 | JWT kedaluwarsa | Refresh sekali; bila ditolak minta tekan coba lagi | `session.test.ts` — "me-refresh sekali ketika sesi mendekati kedaluwarsa", "menampilkan pesan baris 19 saat refresh gagal karena jaringan tanpa menghapus sesi", "menghapus sesi bila refresh token ditolak"; layar Pindai mengulang sekali setelah `UNAUTHENTICATED` | `[x]` |
+| 21 | Gagal simpan SQLite | Tetap tampilkan Hasil; banner gagal simpan; Riwayat memakai hasil sesi | `access.test.ts` — "melaporkan kegagalan simpan tanpa melempar exception", "menggabungkan hasil sesi yang gagal disimpan ke Riwayat"; layar Hasil memakai `SQLITE_SAVE_FAILED_MESSAGE` | `[x]` |
+| 22 | Respons server tidak valid | Pesan + `requestId`; tombol coba lagi di layar error | `scan.test.ts` — "menolak respons 200 yang tidak lengkap dengan kode requestId", "menolak body non-JSON pada 200"; `messages.test.ts` — `invalidResponseMessage` | `[x]` |
+| 23 | Gagal simpan cloud | 200 `persisted=false` + warning `CLOUD_PERSIST_FAILED`; hasil tetap tampil dengan banner terpisah | `persist.test.ts` — "kegagalan simpan menghasilkan persisted=false..."; `handler.test.ts` — "kegagalan simpan cloud tetap 200..."; `scan.test.ts` — "menganggap partial dan persisted=false sebagai hasil sah" | `[x]` |
 
 ## Catatan bukti
 
@@ -48,3 +48,6 @@ Sumber kondisi: `docs/PRD.md` §12 (23 kondisi). Setiap baris dipetakan ke tugas
 - Kondisi 11 dan 20 memakai kode `RATE_LIMITED` yang sama, tetapi body menambahkan `scope: "github"` atau `scope: "app"` agar pesan dan hitung mundur tepat. Klien lama yang tidak membaca `scope` tetap mendapat pesan batas aplikasi.
 - Redirect GitHub: `fetchAllowedText` hanya mengikuti **satu** 301 dan hanya bila `Location` tetap `https://api.github.com` tanpa userinfo/port non-standar. Redirect berantai, host lain, alamat privat/loopback, skema turun, dan `raw.githubusercontent.com` sebagai tujuan ditolak dengan 502. `github.test.ts` menguji seluruh kasus ini, termasuk `resolveSafeGithubRedirect` secara langsung.
 - Kegagalan pengayaan (12–16) tidak menyamar sebagai hasil lengkap: OSV total gagal berhenti 502; EPSS/KEV gagal tetap 200 dengan `partial=true`, `sourceStatus` yang sesuai, dan warning Indonesia di banner Hasil.
+- Kondisi 17 dideteksi reaktif dari kegagalan `fetch` (kode `NETWORK`); aplikasi tidak memasang pemeriksaan jaringan preventif karena dependensi network-info tidak dipakai. Banner offline menyediakan tombol **Buka Riwayat**, dan Riwayat hanya membaca SQLite/memori sehingga tetap terbuka tanpa jaringan. Uji mode pesawat pada perangkat/emulator tetap perlu dilakukan pengembang.
+- Kondisi 21 tidak menghapus hasil: SQLite gagal → `saveScanResultSafely` mengembalikan `false`, hasil tetap di memori sesi, layar Hasil menampilkan banner, dan Riwayat menggabungkan hasil memori tersebut.
+- Kondisi 23 hanya ditampilkan dari warning `CLOUD_PERSIST_FAILED` yang dikirim server bersama `persisted=false`; banner cloud dipisahkan dari daftar warning lain agar tidak duplikat, dan hasil scan tidak pernah dibuang.

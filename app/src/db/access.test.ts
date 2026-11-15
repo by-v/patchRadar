@@ -136,6 +136,13 @@ describe('akses data lokal', () => {
     expect(history.map((scan) => scan.scanId)).toEqual(['scan-sesi', 'scan-tersimpan']);
   });
 
+  it('tetap membuka Riwayat tanpa database, mis. saat offline', async () => {
+    const remembered = scanResult({ scanId: 'scan-offline' });
+    rememberScanResult(remembered);
+
+    await expect(loadScansForHistory(null)).resolves.toEqual([remembered]);
+  });
+
   it('memakai hasil sesi bila database tidak tersedia atau gagal dibaca', async () => {
     const remembered = scanResult();
     rememberScanResult(remembered);

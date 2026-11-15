@@ -401,7 +401,9 @@ describe('requestScan — validasi dan kegagalan jaringan', () => {
     expect(result.ok).toBe(false);
     if (result.ok) return;
     expect(result.error.code).toBe('NETWORK');
-    expect(result.error.message).toBe('Tidak ada koneksi. Periksa jaringan lalu coba lagi.');
+    expect(result.error.message).toBe(
+      'Tidak ada koneksi. Hasil tersimpan tetap bisa dibuka dari Riwayat.',
+    );
     expect(result.error.retryable).toBe(true);
   });
 

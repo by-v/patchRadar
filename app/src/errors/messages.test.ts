@@ -99,6 +99,19 @@ describe('katalog pesan error PRD §12', () => {
     );
   });
 
+  it('memakai teks PRD untuk offline, simpan SQLite, dan simpan cloud', () => {
+    expect(OFFLINE_MESSAGE).toBe(
+      'Tidak ada koneksi. Hasil tersimpan tetap bisa dibuka dari Riwayat.',
+    );
+    expect(SQLITE_SAVE_FAILED_MESSAGE).toBe(
+      'Hasil berhasil dipindai, tetapi gagal disimpan di perangkat.',
+    );
+    expect(CLOUD_PERSIST_FAILED_MESSAGE).toBe(
+      'Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat.',
+    );
+    expect(SCAN_ERROR_MESSAGES.NETWORK).toBe(OFFLINE_MESSAGE);
+  });
+
   it('menambahkan requestId pada respons server yang tidak valid', () => {
     expect(invalidResponseMessage('req_123')).toBe(
       'Terjadi kesalahan saat membaca hasil. Coba lagi. Kode: req_123.',

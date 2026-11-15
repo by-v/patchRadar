@@ -1290,13 +1290,20 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji seluruh kondisi kelompok C, termasuk mode pesawat, dan perbarui bukti.
 - **Memenuhi:** `FR-24`, `NFR-02`, `NFR-07`, `NFR-08`, `R-11`
 - **Kriteria selesai (AC):**
-  - [ ] Kondisi 17–19 dan 21–23 memiliki pesan Indonesia serta perilaku yang benar.
-  - [ ] Riwayat tetap dapat dibuka saat offline atau sesi gagal.
-  - [ ] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
-  - [ ] Tidak ada crash pada seluruh kondisi kelompok C.
+  - [x] Kondisi 17–19 dan 21–23 memiliki pesan Indonesia serta perilaku yang benar.
+  - [x] Riwayat tetap dapat dibuka saat offline atau sesi gagal.
+  - [x] Tidak ada stack trace atau pesan Inggris pada kondisi yang diuji.
+  - [x] Tidak ada crash pada seluruh kondisi kelompok C.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Perubahan: `app/src/errors/messages.ts` (teks PRD baris 17), layar Pindai `app/src/app/(tabs)/index.tsx` (tombol **Buka Riwayat** pada banner offline dan kegagalan sesi), layar Hasil `app/src/app/scan/[scanId]/index.tsx` (konstanta SQLite dan banner khusus `CLOUD_PERSIST_FAILED`), serta tes `scan.test.ts`, `messages.test.ts`, dan `db/access.test.ts`. `docs/error-matrix.md` baris 17–19 dan 21–23 terisi bukti.
+  - Kondisi 17 (offline): pesan persis PRD "Tidak ada koneksi. Hasil tersimpan tetap bisa dibuka dari Riwayat."; banner inline menyediakan **Buka Riwayat**, tanpa retry otomatis. Deteksi bersifat reaktif dari kegagalan `fetch` karena dependensi network-info tidak dipakai; request baru tidak dikirim ulang otomatis. Riwayat hanya membaca SQLite/memori sehingga tetap terbuka tanpa jaringan (`access.test.ts`).
+  - Kondisi 18 (sesi anonim gagal): `canScan` mensyaratkan `sessionStatus === 'ready'` sehingga Pindai nonaktif; banner sesi menampilkan **Coba lagi** dan **Buka Riwayat**; tab Riwayat tetap aktif.
+  - Kondisi 19 (JWT kedaluwarsa): satu refresh otomatis lalu ulang sekali; bila refresh gagal, pesan baris 19 tampil dan pengguna menekan **Coba lagi** untuk menyiapkan sesi. Perilaku refresh (termasuk tidak menghapus sesi saat gangguan jaringan dan menghapus sesi saat refresh token ditolak) sudah diuji di `session.test.ts`.
+  - Kondisi 21 (gagal simpan SQLite): hasil tetap di memori sesi dan tetap ditampilkan; layar Hasil memakai teks PRD; Riwayat menggabungkan hasil memori sehingga tidak hilang. Kondisi 22 sudah memakai `requestId` pada pesan dan diuji untuk body tidak lengkap/non-JSON.
+  - Kondisi 23 (gagal simpan cloud): server tetap 200 `persisted=false` + warning `CLOUD_PERSIST_FAILED`; klien menerima sebagai hasil sah, menampilkan banner cloud terpisah, dan tidak menduplikasi warning. Penyimpanan SQLite tetap berjalan.
+  - Test app: **121 lulus** (14 suite); `npm run lint` dan `npm run typecheck` lulus. Test edge: **189 lulus**. Uji mode pesawat pada perangkat/emulator belum dapat dilakukan di environment ini dan tetap dicatat sebagai uji manual tertunda untuk pengembang.
 
 ### T-W3-08 — `[MANUAL]` Uji isolasi RLS dua pengguna anonim
 - **Tipe:** `[MANUAL]`
