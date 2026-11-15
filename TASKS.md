@@ -1319,15 +1319,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Dokumentasikan retensi log terstruktur.
 - **Memenuhi:** `NFR-12` (S), `NFR-06`
 - **Kriteria selesai (AC):**
-  - [ ] Metrik agregat dapat dihitung dari data yang tersimpan.
-  - [ ] Tidak ada data pribadi di metrik/log.
-  - [ ] `requestId` dan durasi per sumber tetap tersedia (bagian M).
+  - [x] Metrik agregat dapat dihitung dari data yang tersimpan — untuk metrik dengan kolom tersimpan: tingkat cache hit OSV, tingkat hasil parsial, jumlah scan/hari, distribusi label temuan (Q1–Q5, hasil pengembang 15 Nov 2026 di `docs/metrics.md`). **Rasio 429 terhadap total panggilan belum dapat dihitung** dari data tersimpan (penolakan 429/total request tidak dicatat; opsi tanpa migrasi dibuat dicatat di `docs/metrics.md` §2).
+  - [x] Tidak ada data pribadi di metrik/log. Query agregat tanpa `user_id`/repo/manifest/JWT/identitas pengguna; `ScanLogEntry`/logger (`handler.ts`) tanpa JWT/token/isi manifest/`user_id` (memuat `requestId`, `owner`/`repo` target, status, durasi per sumber, `sourceStatus`, `stages`).
+  - [x] `requestId` dan durasi per sumber tetap tersedia (bagian M). Terbukti dari struktur log dan log dashboard teramati (mis. `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`).
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `docs/metrics.md`: definisi metrik & sumber kolom/tabel, query SELECT agregat Q1–Q6, hasil pengukuran Q1–Q6 (pengembang), rasio 429 **belum dapat dihitung** (belum tersimpan; usulan opsi tanpa migrasi), `metrics.ts` tidak dibuat (tidak diperlukan), retensi log platform **[PERLU DIVERIFIKASI]** per plan dengan rujukan [Logs in Studio](https://supabase.com/docs/guides/platform/logs) dan [Pricing](https://supabase.com/pricing) (diakses 15 Nov 2026).
+  - Langkah 0 (transparansi deploy): `functions list` awal sesi Fase A tercatat v7 `updated_at` 1794752913378 (~14:28 UTC), satu `functions deploy` tercatat → v8 1794753073345 (~14:31 UTC, Δ160s), v6 terakhir 12 Nov. Asal v7 **tidak dapat diverifikasi** dari riwayat perintah sesi yang tersedia; tidak ada perintah deploy lain terbukti di keluaran tercatat sesi ini selain yang menghasilkan v8. `docs/due-diligence-log.md` dikoreksi. Catatan T-W3-08 tidak mengklaim deploy tak terlapor (tidak ada bukti). T-W3-12 ditunda (Catatan Keputusan).
 
 ### T-W3-12 — (S) Tema gelap dan kontras lanjutan
 - **Tipe:** `[AGENT]`
+- **Status:** `[ ]` — **ditunda** (prioritas S; dikerjakan hanya jika Minggu 4 selesai lebih awal).
 - **Tujuan:** Melengkapi bagian S dari aksesibilitas tanpa mengorbankan bagian M.
 - **Prasyarat:** `T-W2-07`
 - **File/folder:** `app/src/theme/`, komponen UI
@@ -1342,7 +1345,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [ ] Tidak ada regresi pada bagian M NFR-11.
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
-- **Catatan hasil:**
+- **Catatan hasil:** Ditunda per Catatan Keputusan 15 November 2026 (risiko regresi UI sebelum release candidate).
 
 ### T-W3-14 — (S) Tahap timed bernama untuk rate limit dan persist
 - **Tipe:** `[AGENT]`
@@ -1786,6 +1789,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 14 November 2026 | `T-W1-13` | Langkah tugas “cache miss atau tabel tidak tersedia tetap menghasilkan parsial” ditafsirkan sebagai **tidak boleh crash**, bukan `partial=true`. Cache miss normal dan kegagalan baca/tulis cache internal hanya menghasilkan warning informatif (`EPSS_CACHE_READ_FAILED`/`EPSS_CACHE_WRITE_FAILED`); `partial` tetap hanya dipicu kegagalan sumber EPSS (`EPSS_UNAVAILABLE`). TTL cache 24 jam dan hasil kosong ikut di-cache. Migrasi belum diterapkan dan fungsi belum di-deploy ke remote. | Konsisten dengan keputusan 10 November 2026 bahwa kegagalan cache internal tidak menyalakan `partial`; menyalakan `partial` pada scan pertama (cache kosong) akan menampilkan banner parsial meski data EPSS lengkap. TTL mengikuti `Cache-Control: max-age=86400`. | Implementasi lokal; izin perubahan remote belum diberikan |
 | 15 November 2026 | `T-W3-02`, `T-W3-03` | Selama Expo Go iOS dari App Store masih 58.0.5, perangkat uji utama dipindah ke Android; iPhone tetap dipakai sebagai pembanding dengan protokol tutup paksa Expo Go lalu scan ulang (atau tombol Reload pada red screen). Alternatif berbayar (`npx eas-cli@latest go`/TestFlight dan development build) ditolak untuk sementara. Keputusan ini hanya mengubah cara pengujian, bukan kode atau cakupan PRD. | Expo Go iOS 58.0.5 (versi terbaru di App Store, rilis 22 Oktober 2026) terkena bug reload expo/expo#52146: setiap full reload memunculkan `[runtime not ready] Cannot find native module 'ExpoAsset'`; perbaikan belum tersedia di App Store. PRD baris 26 dan NFR-10 memang menuntut uji pada perangkat Android fisik. | Ya — instruksi pengembang, 15 November 2026 |
 | 15 November 2026 | `T-W3-08` | Penyimpangan terkontrol: tugas bertanda `[MANUAL]` dikerjakan agent karena seluruh langkahnya berupa skrip, dengan izin terbatas hanya menjalankan `node --env-file=app/.env scripts/rls-check.mjs` (dua sesi anonim, satu scan A, baca/ubah/hapus/sisip via REST) tanpa `service_role`, deploy, `db push`, atau `secrets set`. Skrip tidak mencetak/menyimpan isi `app/.env`, kunci, token, atau JWT. Hasil: `persisted=false` dan REST `scans`/`findings` HTTP 404, sehingga uji tidak valid dan tugas ditandai `[!]`; pengembang akan memverifikasi policy lewat SQL dashboard. | Migrasi Minggu 3 belum diterapkan ke remote dan Edge Function belum di-deploy ulang dengan penyimpanan cloud; menerapkannya memerlukan izin yang tidak diberikan pada uji ini. Isolasi tidak boleh diklaim tanpa bukti baris nyata. | Ya — instruksi pengembang, 15 November 2026 |
+| 15 November 2026 | `T-W3-12` | Ditunda (prioritas S). Dikerjakan hanya jika Minggu 4 selesai lebih awal. Alasan: risiko regresi UI sebelum release candidate. | Menghindari perubahan visual menjelang rilis; fokus pada stabilitas Minggu 4. | Ya — instruksi pengembang, 15 November 2026 |
 
 
 ---
