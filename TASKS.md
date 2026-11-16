@@ -1412,12 +1412,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Perbaiki temuan kritis/tinggi atau catat penerimaan risiko.
 - **Memenuhi:** `NFR-03`, `NFR-04`, `NFR-05`, `NFR-06`, `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] Checklist keamanan terisi dengan bukti.
-  - [ ] Tidak ada temuan kritis/tinggi terbuka.
-  - [ ] Setiap temuan yang diterima memiliki alasan.
+  - [x] Checklist keamanan terisi dengan bukti.
+  - [x] Tidak ada temuan kritis/tinggi terbuka.
+  - [x] Setiap temuan yang diterima memiliki alasan.
 - **Estimasi:** 3 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Laporan baru: `docs/security-review.md` (checklist M1–M10, bukti perintah/keluaran mentah, daftar temuan, item belum diverifikasi).
+  - Secret/token: `git grep` tidak menemukan nilai secret; `git ls-files` hanya memuat `app/.env.example`; `app/.env` diabaikan `.gitignore`; audit export lokal `app/dist` (32 berkas) dan APK preview 13 November 2026 (dirujuk dari `docs/environment.md`) tidak menemukan `service_role`, `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`, `ghp_`, `github_pat_`, atau private key. Anon key publik ada sesuai desain.
+  - Autentikasi/RLS: remote `scan` v8 `verify_jwt=true`; RLS `scans`/`findings` hanya pemilik; bukti A3 `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0`, `scanId 14671da2-19a2-4bfa-aad7-c08a7a76d763`, `leakDetected=false`.
+  - Validasi/SSRF: klien dan server menolak host/path/skema tidak sah; redirect GitHub dibatasi satu hop ke `api.github.com`; token GitHub tidak dikirim ke raw. Suite Edge 16 November 2026: `tests 196, pass 196, fail 0` (termasuk allowlist host, redirect berbahaya, timeout, pemetaan 403/404/429). Suite app: `lint`/`typecheck` lulus, `121 passed, 0 fail`.
+  - Dependensi: `npm audit` JSON 30 total (1 low, 29 moderate, 0 high, 0 critical); `--omit=dev` 5 moderate pada tool build Expo. Tidak ada high/critical; risiko diterima dan dicatat.
+  - Temuan diterima: F-01 URL Supabase menerima `http://` (rendah), F-02 skema tautan referensi belum divalidasi (rendah), F-03 rate limit per pengguna anonim dapat diakali dengan sesi baru (sedang; FR-25b item S), F-04 SQLite lokal tidak terenkripsi (rendah; data publik), F-05 tanpa pinning/anti-root/obfuscation (rendah), F-06 moderate tool build (sedang), F-07 body tanpa `content-length` dibaca penuh sebelum batas 16 KB (rendah), F-08 fallback sesi web di `localStorage` (rendah). Alasan lengkap di `docs/security-review.md` §3.
+  - **Belum diverifikasi:** audit APK release candidate (menunggu `T-W4-02`), kebijakan cleartext manifest rilis, inspeksi environment EAS jarak jauh, dan uji ulang RLS pada build rilis (`T-W4-04`).
 
 ### T-W4-02 — `[MANUAL]` Build APK release candidate EAS
 - **Tipe:** `[MANUAL]`
