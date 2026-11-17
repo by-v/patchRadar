@@ -142,6 +142,79 @@ Catatan:
 - Build ini dibuat saat konfigurasi EAS masih berada di working tree. `T-W2-09` memakai ulang build ini tanpa rebuild dari commit bersih; rebuild tetap dijadwalkan pada `T-W4-02` sebelum rilis untuk memastikan reproduksibilitas.
 - `npx expo-doctor` melaporkan 19/20 pada 13 November 2026 karena 10 paket tertinggal versi patch (mis. `expo` 58.0.23 vs ~58.0.25). Ini kondisi yang sudah ada sebelum `T-W2-08` dan tidak menghalangi build; penyelarasan versi patch dapat menjadi commit terpisah.
 
+## Build APK Release Candidate (T-W4-02)
+
+Build release candidate Android dijalankan 17 November 2026 memakai profil `release` baru pada `app/eas.json` (APK, environment `production`, `autoIncrement`). Profil ini ditambahkan pada tugas ini agar artefak yang diuji memakai environment dan keystore production, bukan `preview`.
+
+| Item | Nilai |
+|---|---|
+| Build ID | `439654c8-b781-42d4-a612-a047912b502b` |
+| Halaman build | https://expo.dev/accounts/codebyv10/projects/patchradar/builds/439654c8-b781-42d4-a612-a047912b502b |
+| Status | `finished` |
+| Profil / distribusi | `release` / `store` (artefak APK karena `android.buildType: apk`) |
+| Mulai → selesai | 17 November 2026, 01.02.12 → 05.10.42 (waktu lokal mesin build) |
+| Commit saat build | `63e6aee` (working tree bersih) |
+| `appIdentifier` | `com.codebyv.patchradar` |
+| Versi / versionCode | `1.0.0` / `2` |
+| Fingerprint | `f60e40c0eba1f555c4404f2514fa6497f84b3612` |
+| APK | `D:\builds\patchradar-release-vc2.apk` — 109.322.643 byte (104,26 MB) |
+| SHA-256 APK | `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D` |
+| Keystore | EAS remote `Build Credentials EPkjlDM7tu` (tidak diunduh, tidak ada di repo) |
+| Environment build | EAS `production`: `EXPO_PUBLIC_SUPABASE_URL` dan `EXPO_PUBLIC_SUPABASE_ANON_KEY` (publik, visibility plain text) |
+| Perangkat uji | realme XT (Android 8, sesuai catatan `T-W2-08`) |
+
+Keluaran mentah `build:view`:
+
+```text
+ID                       439654c8-b781-42d4-a612-a047912b502b
+Platform                 Android
+Status                   finished
+Profile                  release
+Distribution             store
+SDK Version              58.0.0
+Version                  1.0.0
+Version code             2
+Commit                   63e6aee676507f7ea793ec3ccf8966ad3264f4b4
+Fingerprint              f60e40c0eba1f555c4404f2514fa6497f84b3612
+Started at               11/17/2026, 1:02:12 AM
+Finished at              11/17/2026, 5:10:42 AM
+Started by               codebyv10
+```
+
+Bukti hash artefak:
+
+```powershell
+Get-FileHash D:\builds\patchradar-release-vc2.apk -Algorithm SHA256
+```
+
+```text
+DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D
+```
+
+Hasil pemasangan dan verifikasi (dilaporkan pengembang, 17 November 2026):
+
+- APK terpasang di realme XT dan aplikasi berjalan.
+- Ikon launcher menampilkan badge PatchRadar hasil `e87cd03` (kucing + cincin radar + segitiga peringatan), bukan ikon default Expo.
+- Pergantian bentuk ikon (icon shape) tidak menampilkan cacat mask pada ikon adaptive.
+- Splash screen menampilkan badge dengan ukuran wajar pada latar `#DDD3CC`.
+- Satu pemindaian repo nyata berhasil, sehingga `EXPO_PUBLIC_*` terbukti tertanam di bundel.
+
+Bukti kredensial tidak masuk repo (dijalankan pada `63e6aee`):
+
+```text
+--- git status --short
+(kosong)
+
+--- git ls-files | Select-String '\.jks$|\.keystore$|\.p12$|\.pem$|\.key$|credentials\.json|service-account'
+(kosong)
+```
+
+Catatan:
+
+- URL unduhan artefak EAS bersifat bertanda tangan dan mengandung token, sehingga sengaja tidak dicatat; yang dicatat hanya build ID, halaman build, ukuran, dan SHA-256.
+- Antrean build memakan ±4 jam sebelum eksekusi (tier gratis); durasi eksekusi di sisi worker tidak tercatat terpisah.
+- Audit secret isi APK dan uji ulang RLS pada build ini belum dilakukan dan menjadi lingkup `T-W4-04`.
+
 ## Catatan Android
 
-Pengujian harian dilakukan di iPhone memakai Expo Go. APK Android dibangun lewat EAS dan sudah diuji pada realme XT (Android 8) di `T-W2-08`; pengujian ulang dengan build yang memuat fitur lengkap dijadwalkan pada `T-W4-03`.
+Pengujian harian dilakukan di iPhone memakai Expo Go. APK Android dibangun lewat EAS dan sudah diuji pada realme XT (Android 8) di `T-W2-08` dan pada build release candidate `439654c8` di `T-W4-02`; smoke test lengkap dijadwalkan pada `T-W4-03`.

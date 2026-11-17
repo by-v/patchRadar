@@ -1438,12 +1438,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Pastikan keystore tidak masuk repo.
 - **Memenuhi:** `NFR-10`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] APK release candidate berhasil dibuat.
-  - [ ] APK dapat dipasang di emulator Android atau HP Android pinjaman.
-  - [ ] Keystore dan kredensial tidak ada di repo.
+  - [x] APK release candidate berhasil dibuat.
+  - [x] APK dapat dipasang di emulator Android atau HP Android pinjaman.
+  - [x] Keystore dan kredensial tidak ada di repo.
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Profil `release` ditambahkan di `app/eas.json` (commit `63e6aee`): `environment: production`, `autoIncrement: true`, `android.buildType: apk`. Environment EAS `production` diisi `EXPO_PUBLIC_SUPABASE_URL` dan `EXPO_PUBLIC_SUPABASE_ANON_KEY` (publik, plain text) sebelum build; sebelumnya environment tersebut kosong.
+  - Build `439654c8-b781-42d4-a612-a047912b502b` (`finished`, commit `63e6aee`, versionCode `2`, fingerprint `f60e40c0eba1f555c4404f2514fa6497f84b3612`, 17 November 2026 01.02.12 → 05.10.42). Keystore EAS remote `Build Credentials EPkjlDM7tu`; tidak diunduh.
+  - APK `D:\builds\patchradar-release-vc2.apk` 109.322.643 byte (104,26 MB), SHA-256 `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D`, terpasang dan berjalan di realme XT (Android 8).
+  - Verifikasi visual pengembang: ikon launcher = badge PatchRadar (commit `e87cd03`), tidak cacat pada pergantian icon shape, splash wajar, dan satu pemindaian repo nyata berhasil.
+  - Bukti repo: `git status --short` kosong; `git ls-files | Select-String '\.jks$|\.keystore$|\.p12$|\.pem$|\.key$|credentials\.json|service-account'` kosong.
+  - Rincian lengkap di `docs/environment.md` §Build APK Release Candidate (T-W4-02). Audit secret isi APK, uji RLS rilis, dan rate limit rilis belum dilakukan (lingkup `T-W4-04`).
 
 ### T-W4-03 — `[MANUAL]` Smoke test APK di perangkat
 - **Tipe:** `[MANUAL]`
