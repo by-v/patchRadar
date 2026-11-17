@@ -298,6 +298,11 @@ function rawHeaders(): HeadersInit {
 
 export interface RepoMetadata {
   defaultBranch: string;
+  /**
+   * Repo privat/internal ditandai dari metadata karena `raw.githubusercontent.com`
+   * tidak menerima token dan selalu membalas 404 untuk repo privat.
+   */
+  isPrivate: boolean;
   durationMs: number;
 }
 
@@ -333,16 +338,23 @@ export async function fetchRepoMetadata(
     throw new ScanError('UPSTREAM_UNAVAILABLE', { cause: error });
   }
 
-  const defaultBranch =
-    parsed && typeof parsed === 'object' && 'default_branch' in parsed
-      ? (parsed as { default_branch?: unknown }).default_branch
-      : null;
+  const record =
+    parsed && typeof parsed === 'object' ? (parsed as Record<string, unknown>) : null;
+  const defaultBranch = record?.default_branch;
 
   if (typeof defaultBranch !== 'string' || defaultBranch.trim().length === 0) {
     throw new ScanError('UPSTREAM_UNAVAILABLE');
   }
 
-  return { defaultBranch, durationMs: Date.now() - started };
+  // PRD §12 baris 6: repo privat di luar MVP. Metadata diautentikasi token,
+  // sedangkan raw tanpa token selalu 404 untuk repo privat; tanpa tanda ini
+  // repo privat salah berakhir sebagai `NO_PACKAGE_JSON`.
+  const visibility = record?.visibility;
+  const isPrivate =
+    record?.private === true ||
+    (typeof visibility === 'string' && visibility !== 'public');
+
+  return { defaultBranch, isPrivate, durationMs: Date.now() - started };
 }
 
 /** Ambil file manifest. 404 mengembalikan null (mis. lockfile tidak ada). */

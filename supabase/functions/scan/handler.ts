@@ -310,6 +310,13 @@ export async function handleScanRequest(
     );
     githubMs += metadata.durationMs;
 
+    // PRD §12 baris 6: repo privat tidak didukung. Ditolak dari metadata agar
+    // tidak ada request manifest ke repo privat (raw tanpa token = 404) dan
+    // pengguna mendapat pesan privat, bukan `NO_PACKAGE_JSON`.
+    if (metadata.isPrivate) {
+      throw new ScanError('REPO_PRIVATE_OR_FORBIDDEN');
+    }
+
     const packageJson = await timed(timings, 'github.packageJson', () =>
       fetchRepoFile(owner as string, repo as string, metadata.defaultBranch, 'package.json', clientOptions),
     );

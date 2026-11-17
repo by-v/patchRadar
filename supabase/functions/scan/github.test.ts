@@ -73,7 +73,29 @@ test('metadata memakai api.github.com, token dikirim, dan default branch dibaca'
   assert.equal(seenInit?.redirect, 'manual');
   assert.equal(new Headers(seenInit?.headers).get('authorization'), 'Bearer token-rahasia-uji');
   assert.equal(result.defaultBranch, 'main');
+  assert.equal(result.isPrivate, false);
   assert.ok(result.durationMs >= 0);
+});
+
+test('metadata menandai repo privat/internal dari field private atau visibility', async () => {
+  async function readIsPrivate(body: unknown): Promise<boolean> {
+    const result = await fetchRepoMetadata('a', 'b', {
+      token: 'token-uji',
+      fetchImpl: async () => jsonResponse(body),
+    });
+    return result.isPrivate;
+  }
+
+  assert.equal(await readIsPrivate({ default_branch: 'main', private: true }), true);
+  assert.equal(
+    await readIsPrivate({ default_branch: 'main', private: false, visibility: 'private' }),
+    true,
+  );
+  assert.equal(await readIsPrivate({ default_branch: 'main', visibility: 'internal' }), true);
+  assert.equal(
+    await readIsPrivate({ default_branch: 'main', private: false, visibility: 'public' }),
+    false,
+  );
 });
 
 test('file raw tidak mengirim token dan memakai branch yang di-encode per segmen', async () => {

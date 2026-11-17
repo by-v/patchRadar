@@ -267,6 +267,32 @@ test('repo privat/forbidden menghasilkan 403', async () => {
   assert.equal((body.error as { code: string }).code, 'REPO_PRIVATE_OR_FORBIDDEN');
 });
 
+test('repo privat dari metadata menghasilkan 403 tanpa mengambil manifest', async () => {
+  const fake = makeFetch({ metadataBody: { default_branch: 'main', private: true } });
+  const response = await handleScanRequest(scanRequest(), {
+    token: TOKEN,
+    fetchImpl: fake.fetchImpl,
+  });
+  const body = await bodyOf(response);
+  assert.equal(response.status, 403);
+  assert.equal((body.error as { code: string }).code, 'REPO_PRIVATE_OR_FORBIDDEN');
+  assert.equal(fake.calls.length, 1, 'hanya metadata yang boleh diambil');
+  assert.ok(fake.calls[0]?.startsWith('https://api.github.com/repos/'));
+});
+
+test('repo dengan visibility privat juga ditolak 403', async () => {
+  const fake = makeFetch({
+    metadataBody: { default_branch: 'main', private: false, visibility: 'private' },
+  });
+  const response = await handleScanRequest(scanRequest(), {
+    token: TOKEN,
+    fetchImpl: fake.fetchImpl,
+  });
+  const body = await bodyOf(response);
+  assert.equal(response.status, 403);
+  assert.equal((body.error as { code: string }).code, 'REPO_PRIVATE_OR_FORBIDDEN');
+});
+
 test('repo tidak ada menghasilkan 404 dengan kode gabungan sesuai PRD', async () => {
   const fake = makeFetch({ metadataStatus: 404 });
   const response = await handleScanRequest(scanRequest(), {

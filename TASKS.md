@@ -1465,8 +1465,8 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   6. Catat perangkat/emulator, versi Android, versi APK, dan hasil setiap langkah.
 - **Memenuhi:** `NFR-01`, `NFR-07`, `NFR-10`, `NFR-13`, `FR-17`, `FR-20`, `R-06`, `R-14`
 - **Kriteria selesai (AC):**
-  - [ ] Alur utama lulus di APK rilis pada emulator Android atau HP Android pinjaman.
-  - [ ] Alur offline lulus.
+  - [x] Alur utama lulus di APK rilis pada emulator Android atau HP Android pinjaman.
+  - [x] Alur offline lulus.
   - [ ] Tidak ada crash pada langkah yang diuji.
   - [ ] p95 waktu ke hasil pada fixture 500 paket ≤ 15 detik, atau penyimpangan dicatat beserta tindakan.
   - [ ] Bukti uji tercatat.
@@ -1590,10 +1590,34 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [ ] Tugas selesai
 - **Catatan hasil:**
 
+### T-W4-09 — Perbaikan klasifikasi repo privat (temuan uji APK)
+- **Tipe:** `[AGENT]`
+- **Tujuan:** Repo privat yang dapat dilihat token server harus ditolak `403 REPO_PRIVATE_OR_FORBIDDEN`, bukan `422 NO_PACKAGE_JSON`.
+- **Prasyarat:** `T-W3-07a`, `T-W4-03`
+- **File/folder:** `supabase/functions/scan/github.ts`, `handler.ts`, `github.test.ts`, `handler.test.ts`, `docs/error-matrix.md`, `docs/due-diligence-log.md`
+- **Langkah:**
+  1. Baca `private`/`visibility` dari body metadata GitHub dan ekspos sebagai `RepoMetadata.isPrivate`.
+  2. Tolak repo privat di handler sebelum mengambil `package.json` (raw tanpa token selalu 404 untuk repo privat).
+  3. Tambah unit test metadata privat/internal dan handler 403 tanpa request manifest.
+  4. Deploy ulang `scan`, lalu uji repo privat nyata dan catat `requestId`.
+- **Memenuhi:** `FR-24`, `NFR-02`, `R-02`
+- **Kriteria selesai (AC):**
+  - [x] Metadata `private:true` atau `visibility` selain `public` ditandai privat.
+  - [x] Handler menolak repo privat dengan 403 sebelum request manifest (unit test).
+  - [ ] Uji remote repo privat `by-v/venue-booking-system` menghasilkan 403 + `requestId` (belum diverifikasi; menunggu deploy pengembang).
+- **Estimasi:** 0,5 jam
+- [ ] Tugas selesai
+- **Catatan hasil:**
+  - Temuan: uji APK 17 November 2026 pada repo privat `by-v/venue-booking-system` (token GitHub dibuat dari akun pemilik repo yang sama) menghasilkan HTTP 422 `NO_PACKAGE_JSON` `req_da3496e8c79640118c728d498ebe8b17`. Penyebab: metadata `api.github.com` diautentikasi token → 200 (repo dianggap ada), sedangkan `raw.githubusercontent.com` tidak menerima token → 404, sehingga `fetchRepoFile` mengembalikan `null` dan handler memakai `NO_PACKAGE_JSON` (PRD §12 baris 6 seharusnya 403).
+  - Perbaikan: `fetchRepoMetadata` mengembalikan `isPrivate` (`private === true` atau `visibility` bukan `public`, termasuk `internal`); `handler` melempar `REPO_PRIVATE_OR_FORBIDDEN` tepat setelah metadata sehingga tidak ada request manifest ke repo privat.
+  - Tes baru: `github.test.ts` "metadata menandai repo privat/internal dari field private atau visibility"; `handler.test.ts` "repo privat dari metadata menghasilkan 403 tanpa mengambil manifest" (assert hanya 1 panggilan fetch) dan "repo dengan visibility privat juga ditolak 403".
+  - Hasil lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 199, pass 199, fail 0`; typecheck strict Edge lulus; `npm run lint`, `npm run typecheck`, `npm test -- --ci` di `app/` → `14 passed, 121 passed`.
+  - Bukti remote "sesudah" **belum diverifikasi**; menunggu deploy oleh pengembang dan laporan `requestId` 403.
+
 ### T-W4-08 — `[GATE]` Gate rilis
 - **Tipe:** `[GATE]`
 - **Tujuan:** Memutuskan apakah build layak dirilis sebagai release candidate.
-- **Prasyarat:** `T-W4-01` s.d. `T-W4-07`; `T-W3-09`, `T-W3-10` bila fitur S dipertahankan
+- **Prasyarat:** `T-W4-01` s.d. `T-W4-07`; `T-W4-09`; `T-W3-09`, `T-W3-10` bila fitur S dipertahankan
 - **File/folder:** `docs/release-gate.md`
 - **Langkah:**
   1. Periksa seluruh DoD Minggu 4 PRD.
