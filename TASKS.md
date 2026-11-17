@@ -1467,12 +1467,17 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Kriteria selesai (AC):**
   - [x] Alur utama lulus di APK rilis pada emulator Android atau HP Android pinjaman.
   - [x] Alur offline lulus.
-  - [ ] Tidak ada crash pada langkah yang diuji.
+  - [x] Tidak ada crash pada langkah yang diuji.
   - [ ] p95 waktu ke hasil pada fixture 500 paket ≤ 15 detik, atau penyimpangan dicatat beserta tindakan.
-  - [ ] Bukti uji tercatat.
+  - [x] Bukti uji tercatat.
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
+  - Bukti 17 November 2026 tersedia di `docs/smoke-test.md`. Perangkat: APK 1.0.0, Android 8, Realme XT.
+  - UI kondisi privat sudah terbukti end-to-end: repo `by-v/venue-booking-system` → layar "Pemindaian gagal" + `Kode: req_0fb7577d0d864245aece0e417178bec` (dilaporkan 31 karakter; format server 32) + card merah pesan privat, tombol **Coba lagi** dan **kembali** (rincian `T-W4-09`).
+  - **Performa (bukti pendukung, bukan AC):** pengukuran API dari PC pada `koajs/koa` (363 paket unik, LOCKFILE v3) — 1 warm-up `req_6c08de9a986c4558849df04dd84ba3db` (wall 9517 ms) + 5 sampel sesi B: `req_065de6f83df64d4f989920c337b4f73e` 3690 ms, `req_cd101df55d1348c8832b0c80ff771574` 2872 ms, `req_f739962f5a0445d79928448dfc87ade4` 2767 ms, `req_a093980019c5480197a954ca795f0c12` 2962 ms, `req_8309421201b54357b614eceb551b5230` 2791 ms; wall **p95 3690 ms**, server `totalMs` **p95 3254 ms**. Konfirmasi paket `req_75f327a986214c52b0b0b7b50197477f` (363 paket, `totalMs` 4857).
+  - AC `p95 waktu ke hasil pada fixture 500 paket ≤ 15 detik` **tetap `[ ]`**: (a) repo uji 363 paket, bukan fixture 491 (`medium-500`), dan (b) diukur via API dari PC, bukan tap Pindai→Hasil di perangkat. Tindakan berikutnya tercatat di `docs/smoke-test.md` bagian "Yang masih diperlukan".
+  - Total 7 panggilan scan (3 sesi anonim A/B/C), tanpa 429; token/anon key tidak dicetak.
 
 ### T-W4-04 — Audit secret APK dan uji ulang RLS pada build rilis
 - **Tipe:** `[AGENT]`
