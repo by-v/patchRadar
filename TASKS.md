@@ -1604,15 +1604,15 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Kriteria selesai (AC):**
   - [x] Metadata `private:true` atau `visibility` selain `public` ditandai privat.
   - [x] Handler menolak repo privat dengan 403 sebelum request manifest (unit test).
-  - [ ] Uji remote repo privat `by-v/venue-booking-system` menghasilkan 403 + `requestId` (belum diverifikasi; menunggu deploy pengembang).
+  - [x] Uji remote repo privat `by-v/venue-booking-system` menghasilkan 403 + `requestId` (v9: 403 `REPO_PRIVATE_OR_FORBIDDEN` `req_1c90c314012340459dbafb1868149ba0`).
 - **Estimasi:** 0,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
   - Temuan: uji APK 17 November 2026 pada repo privat `by-v/venue-booking-system` (token GitHub dibuat dari akun pemilik repo yang sama) menghasilkan HTTP 422 `NO_PACKAGE_JSON` `req_da3496e8c79640118c728d498ebe8b17`. Penyebab: metadata `api.github.com` diautentikasi token → 200 (repo dianggap ada), sedangkan `raw.githubusercontent.com` tidak menerima token → 404, sehingga `fetchRepoFile` mengembalikan `null` dan handler memakai `NO_PACKAGE_JSON` (PRD §12 baris 6 seharusnya 403).
   - Perbaikan: `fetchRepoMetadata` mengembalikan `isPrivate` (`private === true` atau `visibility` bukan `public`, termasuk `internal`); `handler` melempar `REPO_PRIVATE_OR_FORBIDDEN` tepat setelah metadata sehingga tidak ada request manifest ke repo privat.
   - Tes baru: `github.test.ts` "metadata menandai repo privat/internal dari field private atau visibility"; `handler.test.ts` "repo privat dari metadata menghasilkan 403 tanpa mengambil manifest" (assert hanya 1 panggilan fetch) dan "repo dengan visibility privat juga ditolak 403".
   - Hasil lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 199, pass 199, fail 0`; typecheck strict Edge lulus; `npm run lint`, `npm run typecheck`, `npm test -- --ci` di `app/` → `14 passed, 121 passed`.
-  - Bukti remote "sesudah" **belum diverifikasi**; menunggu deploy oleh pengembang dan laporan `requestId` 403.
+  - Bukti remote: deploy oleh pengembang, `functions list` → `scan` VERSION **9**, `UPDATED_AT` **2026-11-17 13:58:25 UTC** (sebelumnya v8, 15 Nov). Unduh sumber deployed lalu SHA-256 vs lokal → **57/57 SAME, 0 DIFF** (`git status` bersih setelah pulihkan). Panggilan scan repo privat `by-v/venue-booking-system` dengan sesi anonim baru → **HTTP 403** `REPO_PRIVATE_OR_FORBIDDEN`, `req_1c90c314012340459dbafb1868149ba0`; sebelumnya 422 `NO_PACKAGE_JSON` `req_da3496e8c79640118c728d498ebe8b17`. Log `stages` per `requestId` **belum diverifikasi** (perlu dashboard); uji UI APK tetap dicatat di `T-W4-03`.
 
 ### T-W4-08 — `[GATE]` Gate rilis
 - **Tipe:** `[GATE]`
