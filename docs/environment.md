@@ -217,4 +217,4 @@ Catatan:
 
 ## Catatan Android
 
-Pengujian harian dilakukan di iPhone memakai Expo Go. APK Android dibangun lewat EAS dan sudah diuji pada realme XT (Android 8) di `T-W2-08` dan pada build release candidate `439654c8` di `T-W4-02`; smoke test lengkap dijadwalkan pada `T-W4-03`.
+Pengujian harian dilakukan di iPhone memakai Expo Go. APK Android dibangun lewat EAS dan sudah diuji pada realme XT (Android 8) di `T-W2-08` dan pada build release candidate `439654c8` di `T-W4-02`; smoke test lengkap dan pengukuran p95 perangkat dicatat di `docs/smoke-test.md` (`T-W4-03`, 17 November 2026).
