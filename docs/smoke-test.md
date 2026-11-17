@@ -59,7 +59,7 @@ Percobaan ke-6 pada 22:03:43 WIB (3 detik setelah run 5) ditolak:
  "totalMs":144,"sourceStatus":{"osv":null,"kev":null,"epss":null},"stages":[]}
 ```
 
-Ini bukti tambahan FR-25a di perangkat (5 scan berhasil, ke-6 ditolak). `retryAfter` tidak tertangkap pada uji ini sehingga masih **belum diverifikasi** untuk `T-W4-04`.
+Ini bukti tambahan FR-25a di perangkat (5 scan berhasil, ke-6 ditolak). `retryAfter` tidak tertangkap pada uji perangkat ini; bentuk `retryAfter` (header `retry-after` dan body `error.retryAfter`, keduanya `582`) serta penerimaan kembali setelah jendela 10 menit dibuktikan pada uji API `T-W4-04` (`req_fc2b0fdf2d3d42a0b4c02602a05cffee` → `req_79eab983ef5e402e8e6225ebcfa074e6`; `docs/due-diligence-log.md`).
 
 ## Performa p95 — pengukuran API (bukti pendukung, bukan perangkat)
 
@@ -107,7 +107,7 @@ Kedua penyimpangan tidak mengubah hasil keputusan: **p95 5621 ms ≤ 15.000 ms**
 
 ## Sisa yang belum diverifikasi
 
-1. `retryAfter` pada respons 429 perangkat tidak tertangkap (hanya status 429 + `requestId`); relevan untuk `T-W4-04`.
+1. `retryAfter` pada respons 429 **perangkat** tidak tertangkap (hanya status 429 + `requestId`); bentuk `retryAfter` dan penerimaan kembali setelah jendela sudah dibuktikan pada uji API `T-W4-04`.
 2. Waktu tap→render di perangkat hanya diamati (2–3 detik pada run cepat), tidak diinstrumentasi dengan stopwatch/frame counter.
 
 ## Catatan kuota

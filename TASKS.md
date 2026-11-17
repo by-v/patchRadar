@@ -1493,13 +1493,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   5. Catat hasil dan bukti.
 - **Memenuhi:** `NFR-03`, `NFR-05`, `NFR-06`, `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] Pencarian string pada APK tidak menemukan secret.
-  - [ ] Uji RLS dua pengguna lulus pada build rilis.
-  - [ ] Environment EAS bebas dari service role/token GitHub.
-  - [ ] Rate limit FR-25a: 429 memuat `retryAfter` (header/body) dan scan diterima kembali setelah jendela berlalu, dengan keluaran mentah.
+  - [x] Pencarian string pada APK tidak menemukan secret. (APK rilis `439654c8` / `DE535690…`, 1.326 entri: `service_role`/`SUPABASE_SERVICE_ROLE_KEY`/`SUPABASE_SERVICE_ROLE`/`GITHUB_TOKEN`/`ghp_`/`github_pat_`/`sbp_`/`sb_secret_`/`SUPABASE_SECRET`/`service_role_key`/`sk_live_`/blok private key semua 0; tidak ada berkas `.env`/keystore; hanya anon publishable key `sb_publishable_…` + host Supabase. Rincian `docs/security-review.md` §6.1.)
+  - [x] Uji RLS dua pengguna lulus pada build rilis. (`scripts/rls-check.mjs`, 17 Nov 2026: A `e73735b6` / B `827eff13`; scan A `req_18c5fa5d01f6460e9838c0b5bb824265` `persisted=true`; B 0 baris + 403/42501; anon 401/42501; `leakDetected=false`. Keluaran mentah `docs/rls-test.md`.)
+  - [x] Environment EAS bebas dari service role/token GitHub. (`eas env:list` production: hanya `EXPO_PUBLIC_SUPABASE_ANON_KEY` + `EXPO_PUBLIC_SUPABASE_URL`, keduanya PUBLIC; preview/development kosong; scope akun kosong; `eas secret:list` kosong.)
+  - [x] Rate limit FR-25a: 429 memuat `retryAfter` (header/body) dan scan diterima kembali setelah jendela berlalu, dengan keluaran mentah. (5 scan 200; ke-6 `429 RATE_LIMITED` `req_fc2b0fdf2d3d42a0b4c02602a05cffee`, `retry-after: 582` header & `error.retryAfter: 582` body; tunggu 610 s; scan berikutnya `200` `req_79eab983ef5e402e8e6225ebcfa074e6` `totalMs 5080`. `docs/due-diligence-log.md`.)
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - APK rilis: `D:\builds\patchradar-release-vc2.apk`, 109.322.643 byte, SHA-256 `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D`, build EAS `439654c8-b781-42d4-a612-a047912b502b` (profil `release`). Bundle Hermes `assets/index.android.bundle` (3.444.760 byte); pencarian pola di **seluruh entri arsip** (Latin-1, literal) → 0 kejadian secret; anon key publik ada (`contains_anon_mid20=True`, `contains_anon_tail20=True`). Keluaran mentah di `docs/security-review.md` §6.1.
+  - RLS diulang pada backend yang dipakai build rilis (v9, proyek `umldsfkvifqoqfbouhca`): RLS ditegakkan server, bukan APK; bukti A/B/anon lengkap dengan `requestId` dan `pgErrorCode` di `docs/rls-test.md`.
+  - EAS: `eas whoami` = `codebyv10@gmail.com` (Owner); production memuat 2 variabel PUBLIC, preview/development 0, scope akun 0, secret legacy 0. Tidak ada service role/token GitHub.
+  - Rate limit: sesi anon `71ab53da`, 5×200 pada `stylelint/stylelint` (453 paket) → 429 ke-6 dengan `retryAfter` 582 (header & body) → setelah 610 s scan 200 `req_79eab983ef5e402e8e6225ebcfa074e6`. Menutup sisa `T-W3-06` (`retryAfter` + pasca-jendela).
+  - **Belum diverifikasi:** `usesCleartextTraffic`/`networkSecurityConfig` pada `AndroidManifest.xml` biner (pencarian string mentah tidak konklusif; tidak ada bukti disetel eksplisit). Catatan: 429 perangkat `req_44df351c7d304de5b41e586b89668701` tidak menangkap `retryAfter` karena klien hanya menampilkan "Tunggu m:ss"; bentuk `retryAfter` terbukti lewat uji API.
+  - Token/anon key/JWT tidak dicetak ke log atau dokumen; `scripts/rls-check.mjs` dijalankan dengan `node --env-file=app/.env` tanpa `service_role`/deploy/`db push`.
 
 ### T-W4-05 — `[MANUAL]` Sesi validasi 5–10 orang
 - **Tipe:** `[MANUAL]`

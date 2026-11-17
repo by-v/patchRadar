@@ -108,3 +108,50 @@ Uji isolasi RLS di atas dijalankan terhadap remote pasca-deploy v8 dengan skenar
 ## Status
 
 Fase A (A1–A4) menghasilkan bukti bahwa persistensi cloud dan pembatas laju berfungsi pada remote v8 (scan A2/A3 `persisted=true`, findings tersimpan dan terbaca oleh pemilik, A4 ke-6 429). Verifikasi SQL baca-saja dan log dashboard untuk requestId scan A **menunggu jawaban pengembang** (Fase B).
+
+## Uji ulang pada build rilis — T-W4-04 (17 November 2026)
+
+Prasyarat `T-W4-02` terpenuhi: APK release candidate `439654c8-b781-42d4-a612-a047912b502b` (`release`, environment `production`, APK `D:\builds\patchradar-release-vc2.apk`, SHA-256 `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D`). APK ini memakai proyek Supabase produksi yang sama (`umldsfkvifqoqfbouhca`, Edge Function `scan` v9), sehingga uji isolasi dijalankan ulang terhadap backend yang dipakai build rilis tersebut. Penegasan: RLS ditegakkan di server (Postgres/PostgREST), bukan di dalam APK; build rilis tidak dapat mengubah kebijakan. Bukti di bawah membuktikan backend yang dipakai APK rilis masih menolak akses lintas pengguna.
+
+Perintah (tanpa kunci/token di keluaran):
+
+```powershell
+node --env-file=app/.env scripts/rls-check.mjs
+```
+
+Keluaran mentah, 17 November 2026 (sesi A `e73735b6`, sesi B `827eff13`):
+
+```json
+{"label":"signup_A","http":200,"rows":null,"requestId":null,"userId8":"e73735b6"}
+{"label":"signup_B","http":200,"rows":null,"requestId":null,"userId8":"827eff13"}
+{"label":"users_berbeda","http":200,"rows":null,"requestId":null,"userA8":"e73735b6","userB8":"827eff13","berbeda":true}
+{"label":"scan_A","http":200,"rows":1,"requestId":"req_18c5fa5d01f6460e9838c0b5bb824265","scanId":"3e9b3346-ac0b-40b8-aeae-8fb495247a88","persisted":true,"warningCodes":[]}
+{"label":"A_baca_scans","http":200,"rows":1,"requestId":null}
+{"label":"A_baca_findings_scan_A","http":200,"rows":1,"requestId":null}
+{"label":"A_baca_scan_A_by_id","http":200,"rows":1,"requestId":null}
+{"label":"validitas_scan_A","http":null,"rows":null,"requestId":"req_18c5fa5d01f6460e9838c0b5bb824265","valid":true}
+{"label":"B_baca_scans","http":200,"rows":0,"requestId":null}
+{"label":"B_baca_findings_scan_A","http":200,"rows":0,"requestId":null}
+{"label":"B_baca_scan_A_by_id","http":200,"rows":0,"requestId":null}
+{"label":"B_insert_scans_user_id_A","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"B_patch_scan_A","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"B_delete_scan_A","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"A_baca_scan_A_setelah_B","http":200,"rows":1,"requestId":null}
+{"label":"A_baca_findings_scan_A_setelah_B","http":200,"rows":1,"requestId":null}
+{"label":"anon_baca_scans","http":401,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"anon_baca_findings","http":401,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"B_baca_osv_cache","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"anon_baca_osv_cache","http":401,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"B_baca_kev_entries","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"anon_baca_kev_entries","http":401,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"B_baca_epss_cache","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"anon_baca_epss_cache","http":401,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"B_baca_rate_limit_events","http":403,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"anon_baca_rate_limit_events","http":401,"rows":null,"requestId":null,"pgErrorCode":"42501"}
+{"label":"selesai","http":200,"rows":null,"requestId":"req_18c5fa5d01f6460e9838c0b5bb824265","scanId":"3e9b3346-ac0b-40b8-aeae-8fb495247a88","userA8":"e73735b6","userB8":"827eff13","leakDetected":false,"dataUjiDibiarkan":true}
+```
+
+Hasil: scan A `persisted=true` (1 finding), A dapat membaca miliknya, B mendapat **0 baris** untuk semua SELECT dan **403/42501** untuk INSERT/PATCH/DELETE serta seluruh tabel internal; akses tanpa login **401/42501**; `leakDetected=false`. Kebijakan RLS remote tetap sama seperti yang tercatat di atas (tidak ada perubahan migrasi sejak v8).
+
+Catatan: `dataUjiDibiarkan=true` berarti baris uji A tetap ada di `scans`/`findings` (sesuai desain skrip; retensi 90 hari menangani pembersihan).
+

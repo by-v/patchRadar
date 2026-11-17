@@ -9,4 +9,4 @@ Daftar keterbatasan teramati/diketahui yang relevan untuk rilis dan validasi. It
 - **Tahap `timed` bernama untuk rate limit/persist belum ada di `stages` log** (teramati Fase A, handler v8). Efek terverifikasi lewat respons/DB (persisted, baris `rate_limit_events`/429), tetapi tidak sebagai stage bernama eksplisit. Ditunda sebagai tugas S (T-W3-14).
 
 ## RLS & rilis
-- Uji isolasi RLS pada skenario anon B vs A lulus di remote v8 (Fase A A3), namun **wajib diulang pada build rilis** (T-W4-04).
+- Uji isolasi RLS pada skenario anon B vs A lulus di remote v8 (Fase A A3) dan **diulang pada build rilis** 17 November 2026 (`T-W4-04`): B 0 baris, tulis 403/42501, anon 401/42501, `leakDetected=false` (`docs/rls-test.md`).

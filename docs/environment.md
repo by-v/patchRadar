@@ -213,7 +213,7 @@ Catatan:
 
 - URL unduhan artefak EAS bersifat bertanda tangan dan mengandung token, sehingga sengaja tidak dicatat; yang dicatat hanya build ID, halaman build, ukuran, dan SHA-256.
 - Antrean build memakan ±4 jam sebelum eksekusi (tier gratis); durasi eksekusi di sisi worker tidak tercatat terpisah.
-- Audit secret isi APK dan uji ulang RLS pada build ini belum dilakukan dan menjadi lingkup `T-W4-04`.
+- Audit secret isi APK dan uji ulang RLS pada build ini dilakukan 17 November 2026 pada `T-W4-04` (hasil di `docs/security-review.md` §6 dan `docs/rls-test.md`).
 
 ## Catatan Android
 

@@ -222,3 +222,80 @@ Lima temuan produksi berasal dari rantai tool/build Expo (`glob`, `minimatch`, `
 2. Tidak ada temuan **kritis** atau **tinggi** yang terbuka.
 3. Seluruh temuan yang diterima memiliki alasan dan rencana tindak lanjut; tidak ada temuan yang disembunyikan.
 4. Pemeriksaan build rilis (APK) tetap menjadi syarat pada `T-W4-02`/`T-W4-03`/`T-W4-04` dan dicatat sebagai **belum diverifikasi** di tugas ini.
+
+## 6. Audit build rilis — `T-W4-04` (17 November 2026)
+
+### 6.1 APK release candidate
+
+| Item | Nilai |
+|---|---|
+| Berkas | `D:\builds\patchradar-release-vc2.apk` |
+| Ukuran | 109.322.643 byte |
+| SHA-256 | `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D` |
+| Build EAS | `439654c8-b781-42d4-a612-a047912b502b` (profil `release`, environment `production`) |
+| Entri arsip | 1.326 |
+| Bundle | `assets/index.android.bundle` (3.444.760 byte, Hermes bytecode) |
+
+Pemeriksaan seluruh entri arsip (bukan hanya bundle) dengan basis byte Latin-1 dan pencocokan literal:
+
+```text
+suspicious_entry_names=(kosong)   # tidak ada .env/.jks/.p12/.key/keystore/secret
+pattern[service_role]=0
+pattern[SUPABASE_SERVICE_ROLE_KEY]=0
+pattern[SUPABASE_SERVICE_ROLE]=0
+pattern[GITHUB_TOKEN]=0
+pattern[ghp_]=0
+pattern[github_pat_]=0
+pattern[sbp_]=0
+pattern[sb_secret_]=0
+pattern[SUPABASE_SECRET]=0
+pattern[service_role_key]=0
+pattern[sk_live_]=0
+pattern[BEGIN PRIVATE KEY]=0
+pattern[BEGIN RSA PRIVATE KEY]=0
+pattern[BEGIN OPENSSH PRIVATE KEY]=0
+```
+
+Pemeriksaan anon key publik (tanpa mencetak nilainya):
+
+```text
+anon_len=46 anon_prefix_sb_publishable=True anon_prefix_sb_secret=False
+bundle=assets/index.android.bundle contains_anon_mid20=True
+bundle=assets/index.android.bundle contains_anon_tail20=True
+bundle=assets/index.android.bundle contains_supabase_host=True
+```
+
+Kesimpulan: tidak ada service role, token GitHub, private key, maupun berkas `.env` di APK rilis. Satu-satunya kredensial adalah anon **publishable** key (format `sb_publishable_…`) yang memang publik dan dilindungi RLS.
+
+### 6.2 Environment EAS
+
+`npx eas-cli@latest env:list <environment> --format long` (nilai tidak dicetak):
+
+```text
+=== production ===
+var[1] name=EXPO_PUBLIC_SUPABASE_ANON_KEY visibility=PUBLIC type=string
+var[2] name=EXPO_PUBLIC_SUPABASE_URL   visibility=PUBLIC type=string
+=== preview ===
+none
+=== development ===
+none
+=== account scope production ===
+account_none=True
+```
+
+`npx eas-cli@latest secret:list` (perintah lama, deprecated): daftar kosong — tidak ada secret legacy. Environment EAS bebas dari service role/token GitHub; hanya dua variabel publik.
+
+### 6.3 Uji RLS pada backend build rilis
+
+Rincian dan keluaran mentah di `docs/rls-test.md` bagian "Uji ulang pada build rilis — T-W4-04". Ringkasan: sesi A `e73735b6`, sesi B `827eff13`, scan A `req_18c5fa5d01f6460e9838c0b5bb824265` (`persisted=true`); B membaca 0 baris dan ditolak 403/42501 untuk tulis; akses anonim 401/42501; `leakDetected=false`.
+
+### 6.4 Rate limit FR-25a (429 dengan `retryAfter`)
+
+Rincian dan keluaran mentah di `docs/due-diligence-log.md` (baris 17 November 2026). Ringkasan: sesi anonim `71ab53da`, 5 scan diterima (`req_dc09458f4ca848028f97b623feb18256`, `req_5f4ff4b536be4730aabafa0cd37a9109`, `req_c9e71c2e215946b7b7de17c3913b3184`, `req_3837f19ea8544e36925ded9a750d018b`, `req_7f1f7b74fb944cfeaf931b0cbffdb72a`), scan ke-6 `429 RATE_LIMITED` `req_fc2b0fdf2d3d42a0b4c02602a05cffee` dengan `retry-after: 582` (header) dan `error.retryAfter: 582` (body). Setelah 610 detik, scan berikutnya diterima: `200` `req_79eab983ef5e402e8e6225ebcfa074e6` (`totalMs 5080`, 453 paket).
+
+### 6.5 Item §4 yang kini terverifikasi
+
+- APK release candidate: sudah dibangun (`T-W4-02`) dan diaudit di §6.1.
+- Environment EAS: diperiksa langsung lewat `eas env:list` di §6.2.
+- Uji RLS pada build rilis: diulang di §6.3.
+- **Masih belum diverifikasi:** atribut `usesCleartextTraffic`/`networkSecurityConfig` pada `AndroidManifest.xml` biner (pencarian string mentah tidak konklusif); tidak ada bukti bahwa nilai itu disetel eksplisit.
