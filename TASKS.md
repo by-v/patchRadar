@@ -1569,12 +1569,17 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Jelaskan riwayat anonim, `persisted=false`, dan hilangnya data setelah uninstall.
 - **Memenuhi:** `FR-26`, `R-10`, `R-11`
 - **Kriteria selesai (AC):**
-  - [ ] Tentang memuat disclaimer dan seluruh keterbatasan utama.
-  - [ ] Tidak ada klaim "aman" atau jaminan perbaikan.
-  - [ ] Seluruh teks berbahasa Indonesia.
+  - [x] Tentang memuat disclaimer dan seluruh keterbatasan utama. (`app/src/app/(tabs)/tentang.tsx`: kartu "Hasil bersifat potensial" + 15 butir keterbatasan, termasuk riwayat lokal/offline, `persisted=false`, kehilangan riwayat setelah uninstall, retensi server belum diterapkan, dan cakupan uji kegunaan terbatas; ringkasan `docs/limitations.md` §Tentang dan disclaimer.)
+  - [x] Tidak ada klaim "aman" atau jaminan perbaikan. (Teks menegaskan tidak menjamin proyek aman/tidak diserang dan perintah perbaikan tidak menjamin kerentanan hilang; tidak ada pernyataan "proyek aman".)
+  - [x] Seluruh teks berbahasa Indonesia. (Istilah asing yang tersisa hanya nama produk/teknis: GitHub, OSV, CISA KEV, EPSS, npm, `package-lock.json`, Yarn, pnpm, CVE, CVSS.)
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `app/src/app/(tabs)/tentang.tsx` diperbarui: bagian "Riwayat cloud" yang sudah usang ("riwayat hanya bertahan selama sesi aplikasi") diganti penjelasan riwayat perangkat + salinan server upaya terbaik + `persisted=false` + riwayat hilang setelah uninstall/clear data; kartu disclaimer ditambah "perintah perbaikan tidak menjamin kerentanan hilang"; 4 butir keterbatasan baru (salinan server tidak disinkronkan ulang, riwayat hilang tanpa pemulihan, retensi server belum diterapkan, uji kegunaan baru 2 perangkat).
+  - `docs/limitations.md` ditambah bagian **Tentang dan disclaimer** (`T-W4-07`) yang mencatat cakupan disclaimer, `persisted=false`, retensi server belum diterapkan (belum diverifikasi), dan batas cakupan validasi.
+  - Verifikasi: `npm run -s lint` → `LINT_EXIT=0`; `npm run -s typecheck` → `TYPECHECK_EXIT=0`; `npx jest --forceExit` → `Test Suites: 14 passed, 14 total`, `Tests: 121 passed, 121 total`, `TEST_EXIT=0`. Tidak ada panggilan jaringan sehingga tidak ada `requestId`.
+  - Layar Tentang bersifat statis (tanpa permintaan jaringan) sehingga dapat dibuka offline; perubahan belum diuji ulang di perangkat setelah edit (tidak ada build baru).
+  - Jalur berkas di deskripsi tugas tertulis `app/app/(tabs)/tentang.tsx`; berkas nyata ada di `app/src/app/(tabs)/tentang.tsx` — tidak ada berkas ganda.
 
 ### T-W3-09 — (S) Rate limit FR-25b per hash IP *(dipindah dari Minggu 3)*
 - **Tipe:** `[AGENT]`

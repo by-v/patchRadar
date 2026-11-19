@@ -58,6 +58,10 @@ const LIMITATIONS = [
   'Perintah perbaikan mengasumsikan proyek memakai npm dan belum mempertimbangkan konflik antar dependensi atau versi.',
   'Hasil bergantung pada ketersediaan GitHub, OSV, KEV, dan EPSS. Saat sumber gagal, aplikasi menampilkan hasil parsial atau data singgahan.',
   'Tidak ada notifikasi, pemantauan berkala, ekspor, atau perbandingan hasil pada versi ini.',
+  'Riwayat disimpan di perangkat dan tetap bisa dibuka tanpa koneksi. Salinan di server bersifat upaya terbaik: bila gagal, hasil tetap ada di perangkat dengan penanda bahwa riwayat di server gagal disimpan, dan versi ini tidak menyinkronkan ulang.',
+  'Menghapus aplikasi atau data aplikasi menghapus riwayat di perangkat. Riwayat tidak dapat dipulihkan; pindai ulang repositori untuk mendapatkan hasil baru.',
+  'Salinan di server tidak memiliki jaminan masa simpan yang tetap; kebijakan retensi belum diterapkan pada versi ini.',
+  'Uji kegunaan masih terbatas: versi ini baru diuji mandiri pada dua perangkat, belum pada 5–10 peserta, sehingga pemahaman label oleh pengguna luar belum terukur.',
   'Tidak ada jaminan bebas positif palsu atau negatif palsu. PatchRadar bukan pengganti audit keamanan profesional.',
 ];
 
@@ -110,7 +114,8 @@ export default function AboutScreen() {
         <Text style={styles.warningBody}>
           Label dan alasan adalah perkiraan berdasarkan data publik saat pemindaian. PatchRadar
           tidak menganalisis kode proyek dan tidak menjamin proyek aman atau tidak akan diserang.
-          Gunakan hasil ini sebagai bahan prioritas, bukan pengganti audit keamanan.
+          Perintah perbaikan juga tidak menjamin kerentanan hilang setelah dijalankan. Gunakan hasil
+          ini sebagai bahan prioritas, bukan pengganti audit keamanan.
         </Text>
       </GlassSurface>
 
@@ -122,9 +127,15 @@ export default function AboutScreen() {
             dikirim ke server PatchRadar untuk diproses.
           </Text>
           <Text style={styles.cardBody}>
-            Riwayat saat ini hanya bertahan selama sesi aplikasi. Setelah riwayat cloud aktif, data
-            terikat pada identitas anonim dan tidak dapat dipulihkan setelah aplikasi dihapus atau
-            data aplikasi dibersihkan. Pindai ulang repositori untuk mendapatkan hasil baru.
+            Riwayat pemindaian disimpan di perangkat dan tetap bisa dibuka tanpa koneksi. Salinan di
+            server bersifat upaya terbaik: bila penyimpanan di server gagal, hasil tetap tersedia di
+            perangkat dan aplikasi menampilkan pemberitahuan bahwa riwayat di server gagal disimpan.
+            Versi ini tidak menyinkronkan ulang, sehingga salinan di server bisa tidak lengkap.
+          </Text>
+          <Text style={styles.cardBody}>
+            Menghapus aplikasi atau data aplikasi menghapus riwayat di perangkat. Karena tidak ada
+            pemulihan otomatis, riwayat yang hilang tidak dapat dikembalikan; pindai ulang
+            repositori untuk mendapatkan hasil baru.
           </Text>
           <Text style={styles.cardBody}>
             Tidak ada telemetri produk pada versi ini; masukan validasi dikumpulkan secara manual

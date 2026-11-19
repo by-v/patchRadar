@@ -16,3 +16,9 @@ Daftar keterbatasan teramati/diketahui yang relevan untuk rilis dan validasi. It
 - **Banner/peringatan untuk repo >500 paket belum terverifikasi.** Repo `Orientasi-Jelajah-Aman` (862 paket) berhasil dipindai tanpa crash, tetapi apakah aplikasi menampilkan peringatan ukuran tidak dicatat pada sesi validasi.
 - **Pengukuran waktu ke hasil pada validasi memakai bukti lama.** Sesi 19 November 2026 tidak mengukur ulang tap→render; p95 5.621 ms berasal dari `T-W4-03` (453 paket, n=5), bukan pengukuran baru.
 - **Riwayat hilang setelah uninstall (R-10) tetap berlaku.** Riwayat lokal bertahan saat offline dan setelah aplikasi ditutup, tetapi tidak disinkronkan ulang pada MVP; uninstall menghapus riwayat perangkat.
+
+## Tentang dan disclaimer (`T-W4-07`)
+- **Layar Tentang memuat disclaimer dan keterbatasan utama** yang ditegaskan ulang di `app/src/app/(tabs)/tentang.tsx`: hasil bersifat potensial, tidak menjamin proyek aman, tidak menjamin perbaikan berhasil, dan bukan pengganti audit keamanan profesional.
+- **Riwayat cloud bersifat upaya terbaik (`persisted=false`).** Bila penyimpanan cloud gagal, hasil tetap di perangkat dan aplikasi menampilkan "Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat." MVP tidak menyinkronkan ulang sehingga salinan cloud dapat tidak lengkap.
+- **Retensi data cloud belum diterapkan.** PRD menyebut asumsi maksimum 90 hari untuk fitur S, tetapi tidak ada job pembersihan di `supabase/`; layar Tentang karena itu tidak menjanjikan masa simpan tertentu. Status: **belum diverifikasi**.
+- **Cakupan uji kegunaan terbatas.** Tentang menyatakan versi ini baru diuji mandiri pada dua perangkat dan belum pada 5–10 peserta, sehingga pemahaman label oleh pengguna luar belum terukur (lihat `docs/validation-results.md`).
