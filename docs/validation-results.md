@@ -64,11 +64,18 @@ Percobaan scan: web 5 percobaan (3 berhasil, 2 penolakan yang diharapkan), Andro
 - [ ] ≥70% merasa terbantu — **belum diverifikasi**
 - [x] Tidak ada peserta menyimpulkan "proyek saya pasti aman" — tidak ada peserta; ketiga repo memang punya temuan dengan label Pantau/Jadwalkan/Tambal sekarang
 
-## 7. Bug dan triase (input `T-W4-06`)
+## 7. Bug dan triase (`T-W4-06`)
 
-| # | Temuan | Perangkat | Tingkat | Tindakan |
+Triase 19 November 2026: **blocker 0**. Tidak ada bug fungsional yang menghalangi penggunaan; tidak ada perbaikan kode maupun regression test baru yang diperlukan.
+
+| # | Temuan | Perangkat | Tingkat | Keputusan |
 |---|---|---|---|---|
-| 1 | Tidak ada bug fungsional teramati | web + Android | — | tidak ada perbaikan blocker |
+| 1 | Tidak ada bug fungsional teramati pada alur yang diuji | web + Android | — | Ditutup; tidak ada perbaikan |
+| 2 | Uji validasi dijalankan tanpa peserta (bukan sesi 5–10 orang) | — | Non-blocker (proses) | Ditunda ke keputusan pengembang; dicatat di `TASKS.md` Catatan keputusan dan `docs/limitations.md` |
+| 3 | Build web adalah `expo start` (pengembangan), bukan paritas rilis | web | Non-blocker (bukti) | Dicatat sebagai keterbatasan bukti; paritas rilis dibuktikan di APK (T-W4-03) |
+| 4 | Waktu ke hasil tidak diukur ulang dengan stopwatch; p95 merujuk `T-W4-03` (5.621 ms) | web + Android | Non-blocker (pengukuran) | Dicatat di `docs/limitations.md` |
+| 5 | Perilaku banner/peringatan untuk repo >500 paket (862 paket) tidak dicatat | web + Android | Non-blocker (observasi) | Dicatat sebagai belum terverifikasi di `docs/limitations.md`; bukan bug terbukti |
+| 6 | Temuan transitif menampilkan panduan "Perbarui paket induk atau jalankan `npm audit fix`" | web + Android | Non-blocker (perilaku sesuai rancangan) | Tidak ada tindakan; jalur salin perintah dependensi langsung terbukti pada fixture `jquery` |
 
 ## 8. Penyimpangan dan keterbatasan
 
@@ -92,3 +99,34 @@ Pada 19 November 2026 pukul 20:30 WIB, aplikasi diuji mandiri di dua perangkat: 
 | `https://github.com/stylelint/stylelint` | publik, 453 paket |
 | `https://github.com/zalden-programmer/Orientasi-Jelajah-Aman` | publik, 862 paket |
 | `https://github.com/zalden-programmer/patchradar-fixnow-fixture` | fixture `jquery@3.4.1`, 1 paket, menghasilkan `FIX_NOW` + `SCHEDULE` |
+
+## 11. Verifikasi ulang setelah triase (`T-W4-06`)
+
+Tidak ada perubahan kode pada `T-W4-06` (blocker 0), sehingga `lint`, `typecheck`, dan `test` dijalankan sebagai konfirmasi bahwa basis kode tetap sehat. Semua perintah dijalankan di `app/` pada 19 November 2026 WIB. Tidak ada panggilan jaringan, sehingga tidak ada `requestId`.
+
+```
+$ npm run -s lint
+env: load .env
+env: export EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_SUPABASE_URL
+LINT_EXIT=0
+```
+
+```
+$ npm run -s typecheck
+TYPECHECK_EXIT=0
+```
+
+```
+$ npx jest --forceExit
+Test Suites: 14 passed, 14 total
+Tests:       121 passed, 121 total
+Snapshots:   0 total
+Time:        13.769 s
+Ran all test suites.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+TEST_EXIT=0
+```
+
+Catatan: pesan `Force exiting Jest` dan baris `node.exe :` pada awalnya adalah peringatan PowerShell atas keluaran stderr Jest, bukan kegagalan; kode keluar 0.
+
+Smoke test perangkat tidak diulang karena tidak ada perubahan kode dan APK rilis tidak dibangun ulang; bukti perangkat tetap merujuk `T-W4-03` dan `docs/smoke-test.md`.

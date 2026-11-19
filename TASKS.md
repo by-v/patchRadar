@@ -1546,12 +1546,17 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Catat keputusan untuk temuan yang ditunda.
 - **Memenuhi:** `NFR-16`, `R-11`, `R-13`
 - **Kriteria selesai (AC):**
-  - [ ] Blocker nol.
-  - [ ] Regression test untuk bug yang diperbaiki lulus.
-  - [ ] Temuan non-blocker masuk daftar keterbatasan/backlog.
+  - [x] Blocker nol. (Triase `docs/validation-results.md` §7: 0 blocker, 0 bug fungsional; tidak ada perbaikan kode.)
+  - [x] Regression test untuk bug yang diperbaiki lulus. (Tidak ada bug yang diperbaiki sehingga tidak ada regression test baru; suite yang ada tetap lulus: 14 suite/121 test, `docs/validation-results.md` §11.)
+  - [x] Temuan non-blocker masuk daftar keterbatasan/backlog. (5 temuan non-blocker dicatat di `docs/validation-results.md` §7 dan `docs/limitations.md` §Hasil validasi.)
 - **Estimasi:** 2 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Triase 19 November 2026 atas hasil `T-W4-05`: **blocker 0**. Tidak ada bug fungsional pada alur yang diuji; tidak ada perubahan kode dan tidak ada regression test baru.
+  - Non-blocker yang dicatat: (a) validasi tanpa 5–10 peserta, (b) build web adalah `expo start` bukan paritas rilis, (c) p95 tidak diukur ulang (merujuk `T-W4-03`), (d) perilaku banner repo >500 paket (862 paket) belum terverifikasi, (e) panduan perbaikan transitif "Perbarui paket induk atau jalankan `npm audit fix`" sesuai rancangan dan bukan bug.
+  - Verifikasi ulang (tanpa perubahan kode): `npm run -s lint` → `LINT_EXIT=0`; `npm run -s typecheck` → `TYPECHECK_EXIT=0`; `npx jest --forceExit` → `Test Suites: 14 passed, 14 total`, `Tests: 121 passed, 121 total`, `TEST_EXIT=0`. Tidak ada panggilan jaringan sehingga tidak ada `requestId`; keluaran mentah di `docs/validation-results.md` §11.
+  - Smoke test perangkat tidak diulang karena tidak ada perubahan kode dan APK tidak dibangun ulang; bukti perangkat tetap `T-W4-03`/`docs/smoke-test.md`.
+  - Prasyarat `T-W4-05` masih `[!]` (sesi peserta belum dilakukan); pekerjaan ini hanya menutup triase dan tidak mengubah status `T-W4-05`. Lihat Catatan keputusan 19 November 2026.
 
 ### T-W4-07 — Finalisasi Tentang, keterbatasan, dan disclaimer
 - **Tipe:** `[AGENT]`
@@ -1852,6 +1857,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 15 November 2026 | `T-W3-12` | Ditunda (prioritas S). Dikerjakan hanya jika Minggu 4 selesai lebih awal. Alasan: risiko regresi UI sebelum release candidate. | Menghindari perubahan visual menjelang rilis; fokus pada stabilitas Minggu 4. | Ya — instruksi pengembang, 15 November 2026 |
 | 17 November 2026 | `T-W4-03` | AC p95 perangkat diuji pada repo publik nyata `stylelint/stylelint` (453 paket unik, LOCKFILE v3), bukan fixture `medium-500` (491 paket). Metrik memakai durasi server (`timings.totalMs` log Edge Function, dicocokkan dengan `scans.duration_ms`) ditambah pengamatan pengembang 2–3 detik, bukan stopwatch tap→render. p95 = 5621 ms (≤15.000 ms). | Tidak ada repositori publik berisi fixture 491 paket dan agent tidak memiliki kredensial untuk membuat repo demo; rekaman 60 fps tidak tersedia. Penyimpangan dicatat sesuai bunyi AC ("atau penyimpangan dicatat beserta tindakan") dengan margin 9.379 ms. | Ya — instruksi pengembang, 17 November 2026 |
 | 19 November 2026 | `T-W4-05` | Sesi 5–10 peserta diganti uji mandiri 2 perangkat (Expo web + APK 1.0.0 vc2, 19 Nov 2026 20:30 WIB) karena peserta tidak tersedia. Metrik yang membutuhkan manusia (pemahaman label, keputusan terbantu) ditandai belum diverifikasi; AC "minimal 5 peserta" tidak dipenuhi sehingga tugas ditandai `[!]`, bukan `[x]`. | PRD §16.2 menuntut 5–10 peserta dan wawancara; uji mandiri tidak dapat membuktikan kriteria lulus §16.2 secara sah. | Ya — instruksi pengembang, 19 November 2026 |
+| 19 November 2026 | `T-W4-06` | Dikerjakan sebelum `T-W4-05` ditutup atas instruksi pengembang. Isi tugas hanya triase temuan validasi dan verifikasi ulang; daftar temuan sudah tersedia dari sesi 19 November 2026 sehingga triase dapat diselesaikan (blocker 0). Tidak ada perubahan kode; `T-W4-05` tetap `[!]`. | Prasyarat formal belum terpenuhi; tanpa triase ini temuan non-blocker tidak masuk daftar keterbatasan sebelum `T-W4-07`. | Ya — instruksi pengembang, 19 November 2026 |
 
 
 ---
