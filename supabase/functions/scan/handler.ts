@@ -33,8 +33,21 @@ import { assembleBaseFindings } from './findings.ts';
 import { fetchEpssScores } from './epss.ts';
 import { buildScanResponse, type ScanSuccessResponse, type SourceState } from './response.ts';
 import { persistScanResult, markCloudPersistFailed } from './persist.ts';
-import { enforceRateLimit } from './rate-limit.ts';
-import type { OsvCacheStore, KevStore, EpssCacheStore, ScanStore, RateLimitStore } from './store.ts';
+import {
+  clientIpFromRequest,
+  enforceIpRateLimit,
+  enforceRateLimit,
+  hashIp,
+} from './rate-limit.ts';
+import { runLazyRetention, RETENTION_DAYS, type RetentionRun } from './retention.ts';
+import type {
+  OsvCacheStore,
+  KevStore,
+  EpssCacheStore,
+  ScanStore,
+  RateLimitStore,
+  RetentionStore,
+} from './store.ts';
 
 export const MAX_REQUEST_BODY_BYTES = 16 * 1024;
 export const MAX_PACKAGES = 1_500;
@@ -60,6 +73,8 @@ export interface ScanLogEntry {
     epss: SourceState | null;
   };
   stages: Array<{ name: string; async: boolean; ms: number }>;
+  /** Hasil pembersihan retensi lazy; `null` bila dilewati/tidak aktif/gagal. */
+  retention: RetentionRun | null;
 }
 
 export type ScanLogger = (entry: ScanLogEntry) => void;
@@ -86,6 +101,16 @@ export interface ScanHandlerDependencies {
   epssStore?: EpssCacheStore;
   scanStore?: ScanStore;
   rateLimitStore?: RateLimitStore;
+  retentionStore?: RetentionStore;
+  /** Hari retensi cloud; `0`/negatif mematikan pembersihan. Default 90. */
+  retentionDays?: number;
+  retentionMaxRows?: number;
+  /** Abaikan throttle retensi; dipakai unit test. */
+  retentionForce?: boolean;
+  /** Garam hash IP FR-25b; kosong berarti fitur tidak aktif. */
+  ipHashSalt?: string | null;
+  /** IP klien; bila kosong dibaca dari header permintaan. */
+  clientIp?: string | null;
   /** Identitas pengguna dari JWT; unit test dapat menyuntik langsung. */
   userId?: string | null;
   registry?: RegistryResolver;
@@ -266,6 +291,7 @@ export async function handleScanRequest(
   let repo: string | null = null;
   let githubMs = 0;
   let response: ScanSuccessResponse | null = null;
+  let retention: RetentionRun | null = null;
 
   try {
     if (request.method !== 'POST') {
@@ -292,10 +318,23 @@ export async function handleScanRequest(
       });
     }
 
-    // FR-25a: batas ditegakkan di server sebelum pekerjaan eksternal apa pun.
+    // FR-25a/FR-25b: batas ditegakkan di server sebelum pekerjaan eksternal apa pun.
     if (dependencies.rateLimitStore) {
       if (!userId) throw new ScanError('UNAUTHENTICATED');
-      await enforceRateLimit({ store: dependencies.rateLimitStore, userId, now });
+      const ip = dependencies.clientIp ?? clientIpFromRequest(request);
+      const ipHash =
+        ip && dependencies.ipHashSalt
+          ? await hashIp(ip, dependencies.ipHashSalt)
+          : null;
+      if (ipHash) {
+        await enforceIpRateLimit({ store: dependencies.rateLimitStore, ipHash, now });
+      }
+      await enforceRateLimit({
+        store: dependencies.rateLimitStore,
+        userId,
+        ipHash,
+        now,
+      });
     }
 
     const clientOptions = {
@@ -425,6 +464,17 @@ export async function handleScanRequest(
       }
     }
     response.timings.totalMs = Math.round(now() - started);
+    const retentionDays = dependencies.retentionDays ?? RETENTION_DAYS;
+    if (dependencies.retentionStore && retentionDays > 0) {
+      retention = await runLazyRetention({
+        store: dependencies.retentionStore,
+        now,
+        days: retentionDays,
+        maxRows: dependencies.retentionMaxRows,
+        force: dependencies.retentionForce,
+      });
+    }
+    response.timings.totalMs = Math.round(now() - started);
     const serialized = await timed(timings, 'response.serialize', () => JSON.stringify(response));
 
     status = 200;
@@ -464,6 +514,7 @@ export async function handleScanRequest(
           epss: response?.sourceStatus.epss ?? null,
         },
         stages: timings.stages,
+        retention,
       });
     } catch {
       // Kegagalan logger tidak boleh mengubah respons.

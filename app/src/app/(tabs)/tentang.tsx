@@ -60,7 +60,7 @@ const LIMITATIONS = [
   'Tidak ada notifikasi, pemantauan berkala, ekspor, atau perbandingan hasil pada versi ini.',
   'Riwayat disimpan di perangkat dan tetap bisa dibuka tanpa koneksi. Salinan di server bersifat upaya terbaik: bila gagal, hasil tetap ada di perangkat dengan penanda bahwa riwayat di server gagal disimpan, dan versi ini tidak menyinkronkan ulang.',
   'Menghapus aplikasi atau data aplikasi menghapus riwayat di perangkat. Riwayat tidak dapat dipulihkan; pindai ulang repositori untuk mendapatkan hasil baru.',
-  'Salinan di server tidak memiliki jaminan masa simpan yang tetap; kebijakan retensi belum diterapkan pada versi ini.',
+  'Salinan di server disimpan paling lama 90 hari dan dibersihkan secara lazy saat pemindaian berikutnya. Pembersihan bersifat upaya terbaik, sehingga masa simpan dapat sedikit lebih lama bila pembersihan tertunda.',
   'Uji kegunaan masih terbatas: versi ini baru diuji mandiri pada dua perangkat, belum pada 5–10 peserta, sehingga pemahaman label oleh pengguna luar belum terukur.',
   'Tidak ada jaminan bebas positif palsu atau negatif palsu. PatchRadar bukan pengganti audit keamanan profesional.',
 ];

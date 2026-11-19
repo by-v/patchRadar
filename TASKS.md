@@ -1569,14 +1569,14 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Jelaskan riwayat anonim, `persisted=false`, dan hilangnya data setelah uninstall.
 - **Memenuhi:** `FR-26`, `R-10`, `R-11`
 - **Kriteria selesai (AC):**
-  - [x] Tentang memuat disclaimer dan seluruh keterbatasan utama. (`app/src/app/(tabs)/tentang.tsx`: kartu "Hasil bersifat potensial" + 15 butir keterbatasan, termasuk riwayat lokal/offline, `persisted=false`, kehilangan riwayat setelah uninstall, retensi server belum diterapkan, dan cakupan uji kegunaan terbatas; ringkasan `docs/limitations.md` §Tentang dan disclaimer.)
+  - [x] Tentang memuat disclaimer dan seluruh keterbatasan utama. (`app/src/app/(tabs)/tentang.tsx`: kartu "Hasil bersifat potensial" + 15 butir keterbatasan, termasuk riwayat lokal/offline, `persisted=false`, kehilangan riwayat setelah uninstall, retensi 90 hari yang belum diverifikasi di remote, dan cakupan uji kegunaan terbatas; ringkasan `docs/limitations.md` §Tentang dan disclaimer.)
   - [x] Tidak ada klaim "aman" atau jaminan perbaikan. (Teks menegaskan tidak menjamin proyek aman/tidak diserang dan perintah perbaikan tidak menjamin kerentanan hilang; tidak ada pernyataan "proyek aman".)
   - [x] Seluruh teks berbahasa Indonesia. (Istilah asing yang tersisa hanya nama produk/teknis: GitHub, OSV, CISA KEV, EPSS, npm, `package-lock.json`, Yarn, pnpm, CVE, CVSS.)
 - **Estimasi:** 1 jam
 - [x] Tugas selesai
 - **Catatan hasil:**
-  - `app/src/app/(tabs)/tentang.tsx` diperbarui: bagian "Riwayat cloud" yang sudah usang ("riwayat hanya bertahan selama sesi aplikasi") diganti penjelasan riwayat perangkat + salinan server upaya terbaik + `persisted=false` + riwayat hilang setelah uninstall/clear data; kartu disclaimer ditambah "perintah perbaikan tidak menjamin kerentanan hilang"; 4 butir keterbatasan baru (salinan server tidak disinkronkan ulang, riwayat hilang tanpa pemulihan, retensi server belum diterapkan, uji kegunaan baru 2 perangkat).
-  - `docs/limitations.md` ditambah bagian **Tentang dan disclaimer** (`T-W4-07`) yang mencatat cakupan disclaimer, `persisted=false`, retensi server belum diterapkan (belum diverifikasi), dan batas cakupan validasi.
+  - `app/src/app/(tabs)/tentang.tsx` diperbarui: bagian "Riwayat cloud" yang sudah usang ("riwayat hanya bertahan selama sesi aplikasi") diganti penjelasan riwayat perangkat + salinan server upaya terbaik + `persisted=false` + riwayat hilang setelah uninstall/clear data; kartu disclaimer ditambah "perintah perbaikan tidak menjamin kerentanan hilang"; 4 butir keterbatasan baru (salinan server tidak disinkronkan ulang, riwayat hilang tanpa pemulihan, retensi 90 hari lazy, uji kegunaan baru 2 perangkat).
+  - `docs/limitations.md` ditambah bagian **Tentang dan disclaimer** (`T-W4-07`) yang mencatat cakupan disclaimer, `persisted=false`, retensi 90 hari lazy yang belum diverifikasi di remote, dan batas cakupan validasi.
   - Verifikasi: `npm run -s lint` → `LINT_EXIT=0`; `npm run -s typecheck` → `TYPECHECK_EXIT=0`; `npx jest --forceExit` → `Test Suites: 14 passed, 14 total`, `Tests: 121 passed, 121 total`, `TEST_EXIT=0`. Tidak ada panggilan jaringan sehingga tidak ada `requestId`.
   - Layar Tentang bersifat statis (tanpa permintaan jaringan) sehingga dapat dibuka offline; perubahan belum diuji ulang di perangkat setelah edit (tidak ada build baru).
   - Jalur berkas di deskripsi tugas tertulis `app/app/(tabs)/tentang.tsx`; berkas nyata ada di `app/src/app/(tabs)/tentang.tsx` — tidak ada berkas ganda.
@@ -1592,12 +1592,17 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Pastikan fitur dapat dinonaktifkan tanpa mengubah FR-25a.
 - **Memenuhi:** `FR-25b`, `R-09`
 - **Kriteria selesai (AC):**
-  - [ ] Beberapa akun dari IP uji yang sama melewati batas menghasilkan 429.
-  - [ ] `ip_hash` boleh `NULL` dan tidak menyimpan IP mentah.
-  - [ ] Menonaktifkan FR-25b tidak memengaruhi AC FR-25a.
+  - [x] Beberapa akun dari IP uji yang sama melewati batas menghasilkan 429. (Unit test `handler.test.ts` "FR-25b: 20 scan dari IP yang sama lintas akun lalu ditolak 429": 20 scan dari `203.0.113.55` dengan 4 akun anonim berbeda, scan ke-21 → HTTP 429 `RATE_LIMITED`, `retryAfter=3600`.)
+  - [x] `ip_hash` boleh `NULL` dan tidak menyimpan IP mentah. (Kolom sudah nullable di migrasi T-W3-04; unit test memastikan `ipHash=null` saat garam kosong dan tidak ada IP mentah di catatan. Hash SHA-256 bergaram, panjang 64 hex.)
+  - [x] Menonaktifkan FR-25b tidak memengaruhi AC FR-25a. (`IP_HASH_SALT` kosong → `hashIp` mengembalikan `null`, `enforceIpRateLimit` tidak dipanggil; unit test FR-25a 5/10 menit tetap lulus.)
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `rate-limit.ts` ditambah `RATE_LIMIT_IP_MAX_SCANS=20`, `RATE_LIMIT_IP_WINDOW_MS=1 jam`, `clientIpFromRequest` (x-forwarded-for → x-real-ip → cf-connecting-ip), `hashIp` (SHA-256 `garam:ip`), dan `enforceIpRateLimit`. `enforceRateLimit` kini mencatat `ipHash` opsional per kejadian.
+  - `store.ts`/`supabase-store.ts`: `RateLimitEventRecord.ipHash`, `listRecentByIpHash`, kolom `ip_hash` dibaca/ditulis; memori store menyaring per hash.
+  - `handler.ts` memeriksa FR-25b lebih dulu, lalu FR-25a, sebelum pekerjaan eksternal; satu baris `rate_limit_events` mewakili satu scan. `composition.ts` membaca `IP_HASH_SALT` (trim; kosong = nonaktif); nilai garam tidak pernah dicatat.
+  - Migrasi `20261119000000_rate_limit_ip_hash_retention.sql`: indeks parsial `rate_limit_events (ip_hash, created_at desc) where ip_hash is not null`.
+  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 215, pass 215, fail 0`; typecheck strict berkas non-test lulus (`TSC_SRC_EXIT=0`). **Belum diverifikasi** di proyek Supabase remote: migrasi belum diterapkan dan Edge Function belum dideploy ulang.
 
 ### T-W3-10 — (S) Retensi cloud 90 hari dan pembersihan lazy *(dipindah dari Minggu 3)*
 - **Tipe:** `[AGENT]`
@@ -1611,12 +1616,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Dokumentasikan perilaku bila fitur S dipotong.
 - **Memenuhi:** `NFR-14`, `NFR-15`, `R-08`
 - **Kriteria selesai (AC):**
-  - [ ] Data uji bertanggal > 90 hari terhapus setelah scan berikutnya.
-  - [ ] Tidak ada cron/scheduler baru.
-  - [ ] Waktu pembersihan dan ukuran database tercatat di log.
+  - [x] Data uji bertanggal > 90 hari terhapus setelah scan berikutnya. (Unit test `retention.test.ts` memastikan cutoff `now − 90 hari`, `purgeOlderThan(cutoff, 1000)`, dan `deletedScans/deletedFindings` dikembalikan. RPC `purge_old_scans` menghapus `scans` lebih tua dari cutoff; `findings` terhapus via `on delete cascade`.)
+  - [x] Tidak ada cron/scheduler baru. (`retention.ts` dijalankan inline setelah respons sukses, maksimal sekali per jam per instance. Migrasi hanya membuat RPC; tidak ada `pg_cron`/scheduler.)
+  - [x] Waktu pembersihan dan ukuran database tercatat di log. (`ScanLogEntry.retention` memuat `ms`, `cutoffIso`, `deletedScans`, `deletedFindings`, `dbSizeBeforeBytes`, `dbSizeAfterBytes`; unit test handler memverifikasi nilai ini muncul di log.)
 - **Estimasi:** 1 jam
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - `retention.ts` baru: `RETENTION_DAYS=90`, `RETENTION_MAX_ROWS=1000`, `RETENTION_INTERVAL_MS=1 jam`, `runLazyRetention` (throttle per instance, menangkap semua error → `null`, tidak pernah menggagalkan scan).
+  - `store.ts`: `RetentionPurgeResult`/`RetentionStore` + `createMemoryRetentionStore`; `supabase-store.ts`: `createSupabaseRetentionStore` memanggil RPC `purge_old_scans` dan `scan_storage_stats`.
+  - `handler.ts` menjalankan retensi setelah persist sukses; `RETENTION_DAYS=0|off` menonaktifkan; `composition.ts` membaca `RETENTION_DAYS` (default 90, angka 1–3650) tanpa mencatat nilai env.
+  - Migrasi `20261119000000_rate_limit_ip_hash_retention.sql`: RPC `purge_old_scans(cutoff, max_rows)` (security definer, `for update skip locked`, batas 1–10.000 baris), RPC `scan_storage_stats()`, dan `revoke` dari `anon`/`authenticated` + `grant execute` ke `service_role`.
+  - Bila fitur S dipotong: set `RETENTION_DAYS=off`; data tersimpan sampai pembersihan manual dan risiko kuota mengikuti R-08 (didokumentasikan di `docs/limitations.md`).
+  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 215, pass 215, fail 0`; typecheck strict berkas non-test lulus. **Belum diverifikasi** di proyek remote: migrasi belum diterapkan, RPC belum dijalankan pada data nyata, dan ukuran database nyata belum tercatat.
 
 ### T-W4-09 — Perbaikan klasifikasi repo privat (temuan uji APK)
 - **Tipe:** `[AGENT]`

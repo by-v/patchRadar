@@ -4,6 +4,7 @@ import { strict as assert } from 'node:assert';
 import {
   buildScanDependencies,
   logScanMisconfiguration,
+  parseRetentionDays,
   scanMisconfiguredError,
 } from './composition.ts';
 import { handleScanRequest } from './handler.ts';
@@ -179,6 +180,41 @@ test('buildScanDependencies: env lengkap merakit store nyata dan token', () => {
   assert.ok(result.dependencies.epssStore);
   assert.ok(result.dependencies.scanStore);
   assert.ok(result.dependencies.rateLimitStore);
+  assert.ok(result.dependencies.retentionStore);
+  assert.equal(result.dependencies.retentionDays, 90);
+  assert.equal(result.dependencies.ipHashSalt, null);
+});
+
+test('buildScanDependencies: IP_HASH_SALT dan RETENTION_DAYS dibaca tanpa membocorkan nilai', () => {
+  const env: Record<string, string | undefined> = {
+    GITHUB_TOKEN: 'gh-token',
+    SUPABASE_URL: 'https://project.supabase.co',
+    SUPABASE_SERVICE_ROLE_KEY: 'service-role-key',
+    IP_HASH_SALT: '  garam-rahasia  ',
+    RETENTION_DAYS: '30',
+  };
+  const result = buildScanDependencies((name) => env[name], {
+    storeOptions: { fetchImpl: async () => new Response('[]', { status: 200 }) },
+  });
+  assert.equal(result.ok, true);
+  if (!result.ok) return;
+  assert.equal(result.dependencies.ipHashSalt, 'garam-rahasia');
+  assert.equal(result.dependencies.retentionDays, 30);
+
+  env.RETENTION_DAYS = 'off';
+  const off = buildScanDependencies((name) => env[name]);
+  assert.equal(off.ok, true);
+  if (!off.ok) return;
+  assert.equal(off.dependencies.retentionDays, 0);
+});
+
+test('parseRetentionDays: default 90 untuk nilai tidak dikenal', () => {
+  assert.equal(parseRetentionDays(undefined), 90);
+  assert.equal(parseRetentionDays('90'), 90);
+  assert.equal(parseRetentionDays('0'), 0);
+  assert.equal(parseRetentionDays('off'), 0);
+  assert.equal(parseRetentionDays('abc'), 90);
+  assert.equal(parseRetentionDays('5000'), 90);
 });
 
 test('buildScanDependencies: env Supabase kurang ditolak sebagai misconfig', () => {

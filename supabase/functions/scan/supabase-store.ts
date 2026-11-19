@@ -19,6 +19,8 @@ import type {
   OsvCacheStore,
   RateLimitEventRecord,
   RateLimitStore,
+  RetentionPurgeResult,
+  RetentionStore,
   ScanRecord,
   ScanStore,
 } from './store.ts';
@@ -417,33 +419,52 @@ export function createSupabaseRateLimitStore(options: SupabaseStoreOptions): Rat
   const timeoutMs = options.timeoutMs ?? 8_000;
   const auth = headers(options.serviceRoleKey);
 
+  async function listWhere(filter: string): Promise<RateLimitEventRecord[]> {
+    const query =
+      'rate_limit_events?select=user_id,kind,created_at,ip_hash' +
+      filter +
+      '&order=created_at.asc';
+    const response = await request(
+      fetchImpl,
+      endpoint(options.url, query),
+      { method: 'GET', headers: auth },
+      timeoutMs,
+    );
+    if (!response.ok) {
+      throw new Error(`Supabase rate_limit_events GET gagal (${response.status}).`);
+    }
+
+    const rows = (await response.json()) as PostgrestRow[];
+    const events: RateLimitEventRecord[] = [];
+    for (const row of rows) {
+      const eventUserId = asString(row.user_id);
+      const createdAt = asString(row.created_at);
+      if (!eventUserId || !createdAt) continue;
+      events.push({
+        userId: eventUserId,
+        kind: asString(row.kind),
+        createdAt,
+        ipHash: typeof row.ip_hash === 'string' ? row.ip_hash : null,
+      });
+    }
+    return events;
+  }
+
   return {
     async listRecent(userId, kind, sinceIso) {
-      const query =
-        'rate_limit_events?select=user_id,kind,created_at' +
+      return listWhere(
         `&user_id=eq.${encodeURIComponent(userId)}` +
-        `&kind=eq.${encodeURIComponent(kind)}` +
-        `&created_at=gte.${encodeURIComponent(sinceIso)}` +
-        '&order=created_at.asc';
-      const response = await request(
-        fetchImpl,
-        endpoint(options.url, query),
-        { method: 'GET', headers: auth },
-        timeoutMs,
+          `&kind=eq.${encodeURIComponent(kind)}` +
+          `&created_at=gte.${encodeURIComponent(sinceIso)}`,
       );
-      if (!response.ok) {
-        throw new Error(`Supabase rate_limit_events GET gagal (${response.status}).`);
-      }
+    },
 
-      const rows = (await response.json()) as PostgrestRow[];
-      const events: RateLimitEventRecord[] = [];
-      for (const row of rows) {
-        const eventUserId = asString(row.user_id);
-        const createdAt = asString(row.created_at);
-        if (!eventUserId || !createdAt) continue;
-        events.push({ userId: eventUserId, kind: asString(row.kind), createdAt });
-      }
-      return events;
+    async listRecentByIpHash(ipHash, kind, sinceIso) {
+      return listWhere(
+        `&ip_hash=eq.${encodeURIComponent(ipHash)}` +
+          `&kind=eq.${encodeURIComponent(kind)}` +
+          `&created_at=gte.${encodeURIComponent(sinceIso)}`,
+      );
     },
 
     async record(event) {
@@ -458,6 +479,7 @@ export function createSupabaseRateLimitStore(options: SupabaseStoreOptions): Rat
               user_id: event.userId,
               kind: event.kind,
               created_at: event.createdAt,
+              ip_hash: event.ipHash ?? null,
             },
           ]),
         },
@@ -466,6 +488,53 @@ export function createSupabaseRateLimitStore(options: SupabaseStoreOptions): Rat
       if (!response.ok) {
         throw new Error(`Supabase rate_limit_events insert gagal (${response.status}).`);
       }
+    },
+  };
+}
+
+/**
+ * Retensi cloud (NFR-14): pembersihan lazy lewat RPC `purge_old_scans` dan
+ * statistik `scan_storage_stats`. Keduanya hanya dapat dipanggil service role.
+ */
+export function createSupabaseRetentionStore(options: SupabaseStoreOptions): RetentionStore {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const timeoutMs = options.timeoutMs ?? 8_000;
+  const auth = headers(options.serviceRoleKey);
+
+  async function rpc<T>(name: string, body: unknown): Promise<T> {
+    const response = await request(
+      fetchImpl,
+      endpoint(options.url, `rpc/${name}`),
+      { method: 'POST', headers: auth, body: JSON.stringify(body) },
+      timeoutMs,
+    );
+    if (!response.ok) {
+      throw new Error(`Supabase rpc ${name} gagal (${response.status}).`);
+    }
+    return (await response.json()) as T;
+  }
+
+  async function dbSizeBytes(): Promise<number | null> {
+    const rows = await rpc<PostgrestRow[]>('scan_storage_stats', {});
+    const value = Array.isArray(rows) ? rows[0]?.db_size_bytes : undefined;
+    return typeof value === 'number' ? value : asNumeric(value ?? null);
+  }
+
+  return {
+    async purgeOlderThan(cutoffIso, limit) {
+      const before = await dbSizeBytes();
+      const rows = await rpc<PostgrestRow[]>('purge_old_scans', {
+        cutoff: cutoffIso,
+        max_rows: limit,
+      });
+      const row = Array.isArray(rows) ? rows[0] : undefined;
+      const result: RetentionPurgeResult = {
+        deletedScans: asNumeric(row?.deleted_scans ?? null) ?? 0,
+        deletedFindings: asNumeric(row?.deleted_findings ?? null) ?? 0,
+        dbSizeBeforeBytes: before,
+        dbSizeAfterBytes: await dbSizeBytes(),
+      };
+      return result;
     },
   };
 }

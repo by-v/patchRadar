@@ -199,12 +199,20 @@ export interface RateLimitEventRecord {
   userId: string;
   kind: string;
   createdAt: string;
+  /** Hash IP FR-25b; `null`/tidak ada berarti fitur tidak aktif. */
+  ipHash?: string | null;
 }
 
-/** Catatan pemakaian untuk rate limit FR-25a (hanya service role). */
+/** Catatan pemakaian untuk rate limit FR-25a/FR-25b (hanya service role). */
 export interface RateLimitStore {
   /** Kejadian pada/atau setelah `sinceIso`, urut lama → baru. */
   listRecent(userId: string, kind: string, sinceIso: string): Promise<RateLimitEventRecord[]>;
+  /** Kejadian dengan hash IP yang sama pada/atau setelah `sinceIso`. */
+  listRecentByIpHash(
+    ipHash: string,
+    kind: string,
+    sinceIso: string,
+  ): Promise<RateLimitEventRecord[]>;
   record(event: RateLimitEventRecord): Promise<void>;
 }
 
@@ -225,8 +233,58 @@ export function createMemoryRateLimitStore(
         .filter((event) => event.userId === userId && event.kind === kind && event.createdAt >= sinceIso)
         .sort((left, right) => left.createdAt.localeCompare(right.createdAt));
     },
+    async listRecentByIpHash(ipHash, kind, sinceIso) {
+      this.listCalls += 1;
+      return this.events
+        .filter(
+          (event) =>
+            event.ipHash === ipHash && event.kind === kind && event.createdAt >= sinceIso,
+        )
+        .sort((left, right) => left.createdAt.localeCompare(right.createdAt));
+    },
     async record(event) {
       this.events.push(event);
+    },
+  };
+}
+
+/** Pembersihan retensi cloud (NFR-14). */
+export interface RetentionPurgeResult {
+  deletedScans: number;
+  deletedFindings: number;
+  dbSizeBeforeBytes: number | null;
+  dbSizeAfterBytes: number | null;
+}
+
+export interface RetentionStore {
+  /** Hapus scan (beserta findings) yang lebih tua dari `cutoffIso`, terbatas `limit`. */
+  purgeOlderThan(cutoffIso: string, limit: number): Promise<RetentionPurgeResult>;
+}
+
+export interface MemoryRetentionStore extends RetentionStore {
+  readonly purges: Array<{ cutoffIso: string; limit: number }>;
+  deletedScans: number;
+  failWith: Error | null;
+}
+
+export function createMemoryRetentionStore(options: {
+  deletedScans?: number;
+  dbSizeBeforeBytes?: number | null;
+  dbSizeAfterBytes?: number | null;
+} = {}): MemoryRetentionStore {
+  return {
+    purges: [],
+    deletedScans: options.deletedScans ?? 0,
+    failWith: null,
+    async purgeOlderThan(cutoffIso, limit) {
+      this.purges.push({ cutoffIso, limit });
+      if (this.failWith) throw this.failWith;
+      return {
+        deletedScans: this.deletedScans,
+        deletedFindings: this.deletedScans,
+        dbSizeBeforeBytes: options.dbSizeBeforeBytes ?? null,
+        dbSizeAfterBytes: options.dbSizeAfterBytes ?? null,
+      };
     },
   };
 }

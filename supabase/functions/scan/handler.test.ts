@@ -5,7 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { handleScanRequest, type ScanLogEntry } from './handler.ts';
 import { scanErrorResponse } from './errors.ts';
 import { isAllowedGithubUrl } from './github.ts';
-import { createMemoryEpssCacheStore, createMemoryKevStore, createMemoryRateLimitStore, createMemoryScanStore, type EpssCacheStore, type RateLimitStore, type ScanStore } from './store.ts';
+import { createMemoryEpssCacheStore, createMemoryKevStore, createMemoryRateLimitStore, createMemoryRetentionStore, createMemoryScanStore, type EpssCacheStore, type RateLimitStore, type ScanStore } from './store.ts';
+import { resetRetentionThrottle } from './retention.ts';
 
 const FIXTURES = new URL('../../../fixtures/lockfiles/', import.meta.url);
 const TOKEN = 'token-rahasia-yang-tidak-boleh-bocor';
@@ -569,6 +570,11 @@ async function runPipeline(options: {
   epssStore?: EpssCacheStore;
   scanStore?: ScanStore;
   rateLimitStore?: RateLimitStore;
+  retentionStore?: ReturnType<typeof createMemoryRetentionStore>;
+  retentionDays?: number;
+  retentionForce?: boolean;
+  ipHashSalt?: string | null;
+  clientIp?: string | null;
   userId?: string;
   epssCalls?: { count: number };
 } = {}) {
@@ -592,6 +598,11 @@ async function runPipeline(options: {
     epssStore: options.epssStore,
     scanStore: options.scanStore,
     rateLimitStore: options.rateLimitStore,
+    retentionStore: options.retentionStore,
+    retentionDays: options.retentionDays,
+    retentionForce: options.retentionForce,
+    ipHashSalt: options.ipHashSalt,
+    clientIp: options.clientIp,
     userId:
       options.userId ??
       (options.scanStore || options.rateLimitStore ? E2E_USER_ID : undefined),
@@ -837,6 +848,83 @@ test('pengguna anonim lain tidak terkena kuota pengguna pertama', async () => {
     userId: '00000000-0000-4000-8000-0000000000bb',
   });
   assert.equal(other.response.status, 200);
+});
+
+test('FR-25b: 20 scan dari IP yang sama lintas akun lalu ditolak 429', async () => {
+  resetRetentionThrottle();
+  const rateLimitStore = createMemoryRateLimitStore();
+  const salt = 'garam-uji';
+  const users = [
+    '00000000-0000-4000-8000-0000000000c1',
+    '00000000-0000-4000-8000-0000000000c2',
+    '00000000-0000-4000-8000-0000000000c4',
+    '00000000-0000-4000-8000-0000000000c5',
+  ];
+
+  for (let index = 0; index < 20; index += 1) {
+    const result = await runPipeline({
+      rateLimitStore,
+      ipHashSalt: salt,
+      clientIp: '203.0.113.55',
+      userId: users[index % users.length]!,
+    });
+    assert.equal(result.response.status, 200);
+  }
+
+  const blocked = await runPipeline({
+    rateLimitStore,
+    ipHashSalt: salt,
+    clientIp: '203.0.113.55',
+    userId: '00000000-0000-4000-8000-0000000000c3',
+  });
+  const error = blocked.body.error as { code: string; retryAfter: number; message: string };
+  assert.equal(blocked.response.status, 429);
+  assert.equal(error.code, 'RATE_LIMITED');
+  assert.equal(error.retryAfter, 3_600);
+  assert.match(error.message, /jaringan/);
+});
+
+test('FR-25b nonaktif tanpa garam: IP mentah tidak disimpan dan FR-25a tetap jalan', async () => {
+  resetRetentionThrottle();
+  const rateLimitStore = createMemoryRateLimitStore();
+  const first = await runPipeline({ rateLimitStore, clientIp: '203.0.113.55' });
+  assert.equal(first.response.status, 200);
+  assert.ok(rateLimitStore.events.every((event) => event.ipHash === null));
+  assert.ok(!JSON.stringify(rateLimitStore.events).includes('203.0.113.55'));
+});
+
+test('retensi lazy mencatat waktu dan ukuran DB pada log scan berikutnya', async () => {
+  resetRetentionThrottle();
+  const retentionStore = createMemoryRetentionStore({
+    deletedScans: 4,
+    dbSizeBeforeBytes: 5_000_000,
+    dbSizeAfterBytes: 4_500_000,
+  });
+
+  const { response, logs } = await runPipeline({
+    retentionStore,
+    retentionForce: true,
+    retentionDays: 90,
+  });
+
+  assert.equal(response.status, 200);
+  assert.equal(retentionStore.purges.length, 1);
+  assert.equal(logs.length, 1);
+  const retention = logs[0]!.retention;
+  assert.ok(retention);
+  assert.equal(retention!.deletedScans, 4);
+  assert.equal(retention!.dbSizeBeforeBytes, 5_000_000);
+  assert.equal(retention!.dbSizeAfterBytes, 4_500_000);
+  assert.match(retention!.cutoffIso, /^\d{4}-\d{2}-\d{2}T/);
+  assert.equal(typeof retention!.ms, 'number');
+});
+
+test('retensi nonaktif (retentionDays=0) tidak memanggil purge', async () => {
+  resetRetentionThrottle();
+  const retentionStore = createMemoryRetentionStore();
+  const { logs } = await runPipeline({ retentionStore, retentionDays: 0 });
+  assert.equal(retentionStore.purges.length, 0);
+  assert.equal(logs[0]!.retention, null);
 });
 
 

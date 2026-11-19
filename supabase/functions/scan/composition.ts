@@ -13,9 +13,11 @@ import {
   createSupabaseKevStore,
   createSupabaseOsvCacheStore,
   createSupabaseRateLimitStore,
+  createSupabaseRetentionStore,
   createSupabaseScanStore,
   type SupabaseStoreOptions,
 } from './supabase-store.ts';
+import { RETENTION_DAYS } from './retention.ts';
 
 export type EnvReader = (name: string) => string | undefined;
 
@@ -45,6 +47,19 @@ export interface ScanDependenciesMisconfigured {
 export type BuildScanDependenciesResult = ScanDependenciesOk | ScanDependenciesMisconfigured;
 
 const REQUIRED_STORE_ENV = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'] as const;
+
+/**
+ * `RETENTION_DAYS`: angka hari (1–3650) atau `off`/`0` untuk mematikan.
+ * Nilai tidak dikenal memakai default 90 agar data tetap dibersihkan.
+ */
+export function parseRetentionDays(value: string | undefined): number {
+  if (value === undefined) return RETENTION_DAYS;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'off' || normalized === '0') return 0;
+  if (!/^\d+$/.test(normalized)) return RETENTION_DAYS;
+  const days = Number(normalized);
+  return days >= 1 && days <= 3650 ? days : RETENTION_DAYS;
+}
 
 /**
  * Rakit dependensi handler. Tidak pernah mengembalikan/menyimpan nilai env.
@@ -80,6 +95,9 @@ export function buildScanDependencies(
     ...options.storeOptions,
   };
 
+  // FR-25b nonaktif bila garam tidak diset; FR-25a tetap berjalan.
+  const ipHashSalt = getEnv('IP_HASH_SALT')?.trim() || null;
+
   return {
     ok: true,
     missing: [],
@@ -90,6 +108,9 @@ export function buildScanDependencies(
       epssStore: createSupabaseEpssCacheStore(storeBase),
       scanStore: createSupabaseScanStore(storeBase),
       rateLimitStore: createSupabaseRateLimitStore(storeBase),
+      retentionStore: createSupabaseRetentionStore(storeBase),
+      retentionDays: parseRetentionDays(getEnv('RETENTION_DAYS')),
+      ipHashSalt,
     },
   };
 }

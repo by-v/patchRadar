@@ -4,6 +4,7 @@ import {
   createSupabaseEpssCacheStore,
   createSupabaseOsvCacheStore,
   createSupabaseRateLimitStore,
+  createSupabaseRetentionStore,
   createSupabaseScanStore,
   EPSS_CACHE_READ_BATCH_SIZE,
   OSV_CACHE_READ_BATCH_SIZE,
@@ -309,7 +310,12 @@ test('RateLimitStore membaca jendela per pengguna dan mencatat scan', async () =
   const events = await store.listRecent(SCAN_RECORD.userId, 'scan', since);
 
   assert.deepEqual(events, [
-    { userId: SCAN_RECORD.userId, kind: 'scan', createdAt: '2026-11-15T09:55:00.000Z' },
+    {
+      userId: SCAN_RECORD.userId,
+      kind: 'scan',
+      createdAt: '2026-11-15T09:55:00.000Z',
+      ipHash: null,
+    },
   ]);
   const listUrl = calls[0]!.url;
   assert.ok(listUrl.includes('/rest/v1/rate_limit_events?'));
@@ -329,6 +335,98 @@ test('RateLimitStore membaca jendela per pengguna dan mencatat scan', async () =
       user_id: SCAN_RECORD.userId,
       kind: 'scan',
       created_at: '2026-11-15T10:00:00.000Z',
+      ip_hash: null,
     },
   ]);
+});
+
+test('RateLimitStore FR-25b: listRecentByIpHash memfilter ip_hash dan menulis hash', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  const ipHash = 'a'.repeat(64);
+  const store = createSupabaseRateLimitStore({
+    url: 'https://contoh.supabase.co',
+    serviceRoleKey: 'kunci-uji',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      if (init?.method === 'GET') {
+        return new Response(
+          JSON.stringify([
+            {
+              user_id: SCAN_RECORD.userId,
+              kind: 'scan',
+              created_at: '2026-11-15T09:55:00.000Z',
+              ip_hash: ipHash,
+            },
+          ]),
+          { status: 200, headers: { 'content-type': 'application/json' } },
+        );
+      }
+      return new Response(null, { status: 201 });
+    },
+  });
+
+  const since = '2026-11-15T09:00:00.000Z';
+  const events = await store.listRecentByIpHash(ipHash, 'scan', since);
+  assert.equal(events.length, 1);
+  assert.equal(events[0]!.ipHash, ipHash);
+  assert.ok(calls[0]!.url.includes(`ip_hash=eq.${ipHash}`));
+  assert.ok(calls[0]!.url.includes('created_at=gte.2026-11-15T09%3A00%3A00.000Z'));
+
+  await store.record({
+    userId: SCAN_RECORD.userId,
+    kind: 'scan',
+    createdAt: '2026-11-15T10:00:00.000Z',
+    ipHash,
+  });
+  assert.deepEqual(JSON.parse(String(calls[1]!.init?.body)), [
+    {
+      user_id: SCAN_RECORD.userId,
+      kind: 'scan',
+      created_at: '2026-11-15T10:00:00.000Z',
+      ip_hash: ipHash,
+    },
+  ]);
+});
+
+test('RetentionStore memanggil RPC purge_old_scans dan mencatat ukuran DB', async () => {
+  const calls: Array<{ url: string; init?: RequestInit }> = [];
+  let statsCalls = 0;
+  const store = createSupabaseRetentionStore({
+    url: 'https://contoh.supabase.co',
+    serviceRoleKey: 'kunci-uji',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init });
+      if (url.includes('/rpc/scan_storage_stats')) {
+        statsCalls += 1;
+        return new Response(JSON.stringify([{ db_size_bytes: statsCalls === 1 ? 2_000 : 1_500 }]), {
+          status: 200,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      return new Response(
+        JSON.stringify([{ deleted_scans: 7, deleted_findings: 9 }]),
+        { status: 200, headers: { 'content-type': 'application/json' } },
+      );
+    },
+  });
+
+  const cutoff = '2026-08-21T00:00:00.000Z';
+  const result = await store.purgeOlderThan(cutoff, 500);
+
+  assert.deepEqual(result, {
+    deletedScans: 7,
+    deletedFindings: 9,
+    dbSizeBeforeBytes: 2_000,
+    dbSizeAfterBytes: 1_500,
+  });
+  const purgeCall = calls.find((call) => call.url.includes('/rpc/purge_old_scans'));
+  assert.ok(purgeCall);
+  assert.deepEqual(JSON.parse(String(purgeCall!.init?.body)), {
+    cutoff,
+    max_rows: 500,
+  });
+  assert.equal(
+    (purgeCall!.init?.headers as Record<string, string>).authorization.startsWith('Bearer '),
+    true,
+  );
 });
