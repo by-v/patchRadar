@@ -1520,13 +1520,19 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Memenuhi:** `NFR-06`, `R-10`, `R-11`; metrik PRD §16
 - **Perhitungan estimasi:** 8 peserta × 0,5 jam sesi = 4 jam; pencatatan dan analisis 2 jam; koordinasi/jadwal 1 jam; total 7 jam.
 - **Kriteria selesai (AC):**
-  - [ ] Minimal 5 peserta menyelesaikan sesi.
-  - [ ] Metrik PRD §16.1 tercatat.
-  - [ ] Tidak ada data pribadi/isi repo tersimpan.
-  - [ ] Ringkasan hasil ditulis.
+  - [ ] Minimal 5 peserta menyelesaikan sesi. (**Tidak terpenuhi** — diganti uji mandiri 2 perangkat.)
+  - [ ] Metrik PRD §16.1 tercatat. (**Sebagian** — 7 dari 9 metrik; pemahaman label dan keputusan terbantu belum diverifikasi karena butuh peserta.)
+  - [x] Tidak ada data pribadi/isi repo tersimpan. (Hanya metadata paket, jumlah temuan, dan tautan repo publik; `docs/validation-results.md` §8.)
+  - [x] Ringkasan hasil ditulis. (`docs/validation-results.md` §9.)
 - **Estimasi:** 7 jam
+- [!] Tugas terblokir: sesi 5–10 peserta belum dilakukan; status `[!]` menunggu keputusan pengembang (catatan keputusan 19 November 2026).
 - [ ] Tugas selesai
 - **Catatan hasil:**
+  - Bukti: `docs/validation-results.md`. Uji mandiri 19 Nov 2026 mulai 20:30 WIB: Expo web (laptop) + APK 1.0.0 vc2 (Realme XT).
+  - Terukur: crash-free 2/2; scan jalur normal 6/6 (termasuk jalur error 6/9); `stylelint/stylelint` 453 paket/2 temuan (Pantau ×2); `Orientasi-Jelajah-Aman` 862 paket/8 paket bertemuan/31 temuan (Jadwalkan 14, Pantau 17, FIX_NOW 0); fixture `zalden-programmer/patchradar-fixnow-fixture` (`jquery@3.4.1`, 1 paket) menghasilkan `FIX_NOW` + `SCHEDULE`; repo privat dan repo Python memberi pesan error sesuai; Riwayat→Hasil→Detail offline 2/2 lulus; salin perintah dari `FIX_NOW` berhasil pada percobaan pertama di kedua perangkat (`npm install jquery@3.5.0`).
+  - p95 waktu ke hasil tidak diukur ulang; merujuk `T-W4-03` (5.621 ms, 453 paket, n=5).
+  - **Belum terpenuhi:** AC 5 peserta; pemahaman label dan keputusan terbantu belum diverifikasi (tanpa peserta); jam selesai sesi dan urutan prioritas yang dipilih tidak dicatat.
+  - Status: **`[!]`** — menunggu keputusan pengembang (uji mandiri sebagai pengganti sementara), lihat Catatan keputusan.
 
 ### T-W4-06 — Perbaikan blocker hasil validasi dan regression test
 - **Tipe:** `[AGENT]`
@@ -1845,6 +1851,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 15 November 2026 | `T-W3-08` | Penyimpangan terkontrol: tugas bertanda `[MANUAL]` dikerjakan agent karena seluruh langkahnya berupa skrip, dengan izin terbatas hanya menjalankan `node --env-file=app/.env scripts/rls-check.mjs` (dua sesi anonim, satu scan A, baca/ubah/hapus/sisip via REST) tanpa `service_role`, deploy, `db push`, atau `secrets set`. Skrip tidak mencetak/menyimpan isi `app/.env`, kunci, token, atau JWT. Hasil: `persisted=false` dan REST `scans`/`findings` HTTP 404, sehingga uji tidak valid dan tugas ditandai `[!]`; pengembang akan memverifikasi policy lewat SQL dashboard. | Migrasi Minggu 3 belum diterapkan ke remote dan Edge Function belum di-deploy ulang dengan penyimpanan cloud; menerapkannya memerlukan izin yang tidak diberikan pada uji ini. Isolasi tidak boleh diklaim tanpa bukti baris nyata. | Ya — instruksi pengembang, 15 November 2026 |
 | 15 November 2026 | `T-W3-12` | Ditunda (prioritas S). Dikerjakan hanya jika Minggu 4 selesai lebih awal. Alasan: risiko regresi UI sebelum release candidate. | Menghindari perubahan visual menjelang rilis; fokus pada stabilitas Minggu 4. | Ya — instruksi pengembang, 15 November 2026 |
 | 17 November 2026 | `T-W4-03` | AC p95 perangkat diuji pada repo publik nyata `stylelint/stylelint` (453 paket unik, LOCKFILE v3), bukan fixture `medium-500` (491 paket). Metrik memakai durasi server (`timings.totalMs` log Edge Function, dicocokkan dengan `scans.duration_ms`) ditambah pengamatan pengembang 2–3 detik, bukan stopwatch tap→render. p95 = 5621 ms (≤15.000 ms). | Tidak ada repositori publik berisi fixture 491 paket dan agent tidak memiliki kredensial untuk membuat repo demo; rekaman 60 fps tidak tersedia. Penyimpangan dicatat sesuai bunyi AC ("atau penyimpangan dicatat beserta tindakan") dengan margin 9.379 ms. | Ya — instruksi pengembang, 17 November 2026 |
+| 19 November 2026 | `T-W4-05` | Sesi 5–10 peserta diganti uji mandiri 2 perangkat (Expo web + APK 1.0.0 vc2, 19 Nov 2026 20:30 WIB) karena peserta tidak tersedia. Metrik yang membutuhkan manusia (pemahaman label, keputusan terbantu) ditandai belum diverifikasi; AC "minimal 5 peserta" tidak dipenuhi sehingga tugas ditandai `[!]`, bukan `[x]`. | PRD §16.2 menuntut 5–10 peserta dan wawancara; uji mandiri tidak dapat membuktikan kriteria lulus §16.2 secara sah. | Ya — instruksi pengembang, 19 November 2026 |
 
 
 ---
