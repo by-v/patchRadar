@@ -1,6 +1,6 @@
 import { StyleSheet, Text } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type WordmarkProps = {
   /** `light` untuk latar terang, `dark` untuk kartu gelap. */
@@ -12,7 +12,8 @@ type WordmarkProps = {
  * Tidak memakai aset gambar agar tetap tajam di semua kerapatan layar.
  */
 export function Wordmark({ tone = 'light' }: WordmarkProps) {
-  const color = tone === 'dark' ? Colors.light.textOnDark : Colors.light.text;
+  const theme = useTheme();
+  const color = tone === 'dark' ? theme.textOnDark : theme.text;
 
   return (
     <Text accessible={false} maxFontSizeMultiplier={1.4} style={[styles.base, { color }]}>

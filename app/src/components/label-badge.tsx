@@ -2,7 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ComponentProps } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 import { PRIORITY_LABELS } from '@/lib/labels';
 import type { PriorityLabel } from '@/types/scan';
 
@@ -14,31 +15,16 @@ type LabelBadgeProps = {
   count?: number;
 };
 
-const CONFIG: Readonly<
-  Record<PriorityLabel, { background: string; color: string; icon: IoniconName; iconColor: string }>
-> = {
-  FIX_NOW: {
-    background: Colors.light.darkCard,
-    color: Colors.light.textOnDark,
-    icon: 'flame',
-    iconColor: Colors.light.textOnDark,
-  },
-  SCHEDULE: {
-    background: Colors.light.warningSurface,
-    color: Colors.light.text,
-    icon: 'calendar-outline',
-    iconColor: Colors.light.warning,
-  },
-  MONITOR: {
-    background: Colors.light.infoSurface,
-    color: Colors.light.text,
-    icon: 'eye-outline',
-    iconColor: Colors.light.textSecondary,
-  },
+type LabelConfig = {
+  background: string;
+  color: string;
+  icon: IoniconName;
+  iconColor: string;
 };
 
 export function LabelBadge({ label, count }: LabelBadgeProps) {
-  const config = CONFIG[label];
+  const theme = useTheme();
+  const config = labelConfig(theme)[label];
   const text = PRIORITY_LABELS[label];
 
   return (
@@ -53,6 +39,29 @@ export function LabelBadge({ label, count }: LabelBadgeProps) {
       </Text>
     </View>
   );
+}
+
+function labelConfig(theme: Theme): Record<PriorityLabel, LabelConfig> {
+  return {
+    FIX_NOW: {
+      background: theme.darkCard,
+      color: theme.textOnDark,
+      icon: 'flame',
+      iconColor: theme.textOnDark,
+    },
+    SCHEDULE: {
+      background: theme.warningSurface,
+      color: theme.text,
+      icon: 'calendar-outline',
+      iconColor: theme.warning,
+    },
+    MONITOR: {
+      background: theme.infoSurface,
+      color: theme.text,
+      icon: 'eye-outline',
+      iconColor: theme.textSecondary,
+    },
+  };
 }
 
 const styles = StyleSheet.create({

@@ -6,11 +6,11 @@ Dokumen ini menerjemahkan arah visual aplikasi menjadi aturan yang dapat diimple
 
 | Item | Nilai |
 |---|---|
-| Versi dokumen | 1.1 |
-| Tanggal | 12 November 2026 |
-| Status | Disetujui dan diimplementasikan pada `T-W2-01` |
+| Versi dokumen | 1.2 |
+| Tanggal | 20 November 2026 |
+| Status | Disetujui pada `T-W2-01`; tema gelap ditambahkan pada `T-W3-12` |
 | Sumber desain | Hasil uji prompt Figma, disetujui pengembang (tanpa tautan; spesifikasi lengkap ada di dokumen ini) |
-| Cakupan | Light mode saja (dark mode opsional, prioritas S) |
+| Cakupan | Terang dan gelap; skema dipilih otomatis dari pengaturan sistem (`app.json` `userInterfaceStyle: "automatic"`) |
 | Bahasa UI | Indonesia; istilah teknis (KEV, EPSS, CVSS, OSV, CVE) tetap Inggris |
 
 Rujukan silang:
@@ -76,6 +76,26 @@ Dipakai sebagai isi pill dengan teks putih; setiap badge wajib punya ikon dan te
 Bentuk ikon per level: Critical = segitiga penuh, High = segitiga garis, Medium = lingkaran separuh, Low = lingkaran garis, Unknown = tanda tanya.
 
 Status umum: sukses `#3F6212`, peringatan `#92690B`, error `#B3261E`. Banner memakai latar tint 12% dari warna tersebut di atas panel kaca, dengan teks `textPrimary`.
+
+### 3.4 Palet gelap (`T-W3-12`)
+
+Skema gelap dipilih otomatis oleh `useTheme()` dari `useColorScheme()`; seluruh komponen dan layar memakai token tema aktif, bukan `Colors.light` langsung. Palet terang di §3.1–§3.3 tidak diubah.
+
+| Token | Nilai gelap | Catatan |
+|---|---|---|
+| `canvasTop` / `canvasMid` / `canvasBottom` | `#1B1714` / `#141110` / `#0C0A09` | Gradient latar gelap |
+| `background` / `backgroundElement` | `#171412` / `#221E1B` | Permukaan dan kaca opaque saat transparansi dikurangi |
+| `glassFill` / `glassFillStrong` | `rgba(255,255,255,0.05)` / `rgba(255,255,255,0.10)` | Panel kaca gelap |
+| `glassBorder` / `inputBorder` / `inputBorderFocus` | `rgba(255,255,255,0.14)` / `0.18` / `0.38` | Garis tepi |
+| `hairline` | `#4A443F` | Pemisah |
+| `text` / `textSecondary` | `#F2EDE8` / `#C0B2A7` | Teks utama dan sekunder |
+| `textOnDark` / `textMutedOnDark` | `#F2EDE8` / `#A2958B` | Teks di atas `darkCard` `#0B0908` |
+| `textOnStatus` | `#1E1E1E` | Teks pada pill status yang memakai aksen terang |
+| `linkPrimary` | `#9CC4FF` (gelap), `#1E40AF` (terang) | Tautan berwarna |
+| Status | sukses `#A3E635`, peringatan `#FACC15`, error `#FF8A80` | Latar tint 14% |
+| Severity | `#FF8A80` / `#FB923C` / `#FACC15` / `#A3E635` / `#C0B2A7` | Kritikal s.d. tidak diketahui |
+
+Rasio kontras diuji otomatis oleh `app/src/constants/theme.test.ts` memakai `app/src/lib/contrast.ts` (WCAG). Pasangan terendah: teks sekunder di `canvasTop` 8,62:1; teks pada status kritikal 7,30:1; teks muda di `darkCard` 6,82:1 — semuanya lulus AA (≥4,5:1). Status tetap disertai ikon dan teks, tidak bergantung pada warna saja.
 
 ## 4. Tipografi
 
@@ -253,5 +273,5 @@ Seluruh keputusan terbuka pada versi 1.0 sudah ditutup pada `T-W2-01`:
 3. **`hairline` `#6B605A`** — dipakai untuk batas input dan pemisah (≥3:1).
 4. **Tab bar kaca** — memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom.
 5. **Efek kaca Android** — tanpa `expo-blur`; memakai panel semi-opaque.
-6. **Mode gelap** — tidak diaktifkan pada MVP; `app.json` dikunci ke `light`.
+6. **Mode gelap** — awalnya dinonaktifkan (`light`); dibatalkan pada 20 November 2026 dan kini mengikuti skema sistem lewat `userInterfaceStyle: "automatic"` (`T-W3-12`). Palet gelap memakai aksen status terang dengan teks gelap agar tetap lulus AA.
 7. **Web** — `react-native-web` tidak menyediakan `AccessibilityInfo.isReduceTransparencyEnabled`. `useReduceTransparency` mendeteksi kemampuan lewat `app/src/lib/reduce-transparency.ts` dan memakai fallback opaque di web. Web juga memakai SPA (`web.output = "single"`) agar ikon font tidak memicu hydration mismatch, dan seluruh dialog memakai `Banner` karena `Alert.alert` tidak berfungsi di web.

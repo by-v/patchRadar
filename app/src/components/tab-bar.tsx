@@ -3,7 +3,8 @@ import type { BottomTabBarProps } from 'expo-router/js-tabs';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { GlassSurface } from '@/components/glass-surface';
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 
@@ -24,6 +25,8 @@ const FALLBACK_LABELS: Record<string, string> = {
  * tidak dapat dibentuk menjadi pill mengambang.
  */
 export function TabBar({ state, descriptors, emitter, navigateToTab, insets }: BottomTabBarProps) {
+  const theme = useTheme();
+
   return (
     <View
       pointerEvents="box-none"
@@ -56,15 +59,21 @@ export function TabBar({ state, descriptors, emitter, navigateToTab, insets }: B
               onPress={onPress}
               style={({ pressed }) => [
                 styles.item,
-                focused && styles.itemActive,
+                focused && { backgroundColor: theme.darkAccent },
                 pressed && styles.pressed,
               ]}>
               <Ionicons
-                color={focused ? Colors.light.textOnDark : Colors.light.textSecondary}
+                color={focused ? theme.textOnDark : theme.textSecondary}
                 name={icon}
                 size={22}
               />
-              <Text style={[styles.label, focused && styles.labelActive]}>{label}</Text>
+              <Text
+                style={[
+                  styles.label,
+                  { color: focused ? theme.textOnDark : theme.textSecondary },
+                ]}>
+                {label}
+              </Text>
             </Pressable>
           );
         })}
@@ -99,15 +108,8 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.two,
     borderRadius: Radius.pill,
   },
-  itemActive: {
-    backgroundColor: Colors.light.darkAccent,
-  },
   label: {
     ...Typography.tabLabel,
-    color: Colors.light.textSecondary,
-  },
-  labelActive: {
-    color: Colors.light.textOnDark,
   },
   pressed: {
     opacity: 0.7,

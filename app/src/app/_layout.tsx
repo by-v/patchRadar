@@ -1,33 +1,39 @@
-import { DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import '@/global.css';
+
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useTheme } from '@/hooks/use-theme';
 
 SplashScreen.preventAutoHideAsync();
 
-const navigationTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: Colors.light.text,
-    background: Colors.light.canvasTop,
-    card: Colors.light.canvasTop,
-    text: Colors.light.text,
-    border: 'transparent',
-  },
-};
-
 export default function RootLayout() {
+  const theme = useTheme();
+  const scheme = useColorScheme();
+  const baseTheme = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const navigationTheme = {
+    ...baseTheme,
+    colors: {
+      ...baseTheme.colors,
+      primary: theme.text,
+      background: theme.canvasTop,
+      card: theme.canvasTop,
+      text: theme.text,
+      border: 'transparent',
+    },
+  };
+
   return (
     <ThemeProvider value={navigationTheme}>
-      <StatusBar style="dark" />
+      <StatusBar style="auto" />
       <AnimatedSplashOverlay />
       <Stack
         screenOptions={{
           headerShown: false,
-          contentStyle: { backgroundColor: Colors.light.canvasTop },
+          contentStyle: { backgroundColor: theme.canvasTop },
         }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="scan" />

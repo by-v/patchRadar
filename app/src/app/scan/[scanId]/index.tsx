@@ -11,8 +11,9 @@ import { LabelBadge } from '@/components/label-badge';
 import { MetaChip } from '@/components/meta-chip';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
 import { loadScanForDisplay, openDatabaseSafely, type LoadedScan } from '@/db/access';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 import {
   CLOUD_PERSIST_FAILED_MESSAGE,
   SQLITE_SAVE_FAILED_MESSAGE,
@@ -33,6 +34,8 @@ type LoadState =
 
 export default function ScanResultScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const { scanId, saveFailed } = useLocalSearchParams<{
     scanId?: string;
     saveFailed?: string;
@@ -120,7 +123,7 @@ export default function ScanResultScreen() {
             hitSlop={8}
             onPress={goToScan}
             style={({ pressed }) => [styles.headerAction, pressed && styles.pressed]}>
-            <Ionicons color={Colors.light.text} name="refresh" size={18} />
+            <Ionicons color={theme.text} name="refresh" size={18} />
           </Pressable>
         }
         subtitle={`Dipindai ${formatRelativeTime(result.scannedAt)}`}
@@ -227,73 +230,75 @@ export default function ScanResultScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  loading: {
-    ...Typography.body,
-    color: Colors.light.textSecondary,
-  },
-  cacheRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  cacheTime: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  headerAction: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: Spacing.one,
-    backgroundColor: Colors.light.glassFill,
-    borderWidth: 1,
-    borderColor: Colors.light.glassBorder,
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  summary: {
-    padding: Spacing.four,
-    gap: Spacing.three,
-    borderRadius: Radius.card,
-  },
-  summaryTop: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: Spacing.three,
-  },
-  summaryNumberBlock: {
-    gap: Spacing.half,
-  },
-  summaryEyebrow: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  summaryNumber: {
-    ...Typography.displayNumber,
-    color: Colors.light.text,
-  },
-  summaryChips: {
-    flex: 1,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end',
-    gap: Spacing.one,
-  },
-  summaryText: {
-    ...Typography.body,
-    color: Colors.light.text,
-    fontWeight: '500',
-  },
-  list: {
-    gap: Spacing.gap,
-  },
-  listTitle: {
-    ...Typography.sectionTitle,
-    color: Colors.light.text,
-  },
-});
+function createStyles(theme: Theme) {
+    return StyleSheet.create({
+    loading: {
+      ...Typography.body,
+      color: theme.textSecondary,
+    },
+    cacheRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: Spacing.two,
+    },
+    cacheTime: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    headerAction: {
+      width: 40,
+      height: 40,
+      borderRadius: 20,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: Spacing.one,
+      backgroundColor: theme.glassFill,
+      borderWidth: 1,
+      borderColor: theme.glassBorder,
+    },
+    pressed: {
+      opacity: 0.7,
+    },
+    summary: {
+      padding: Spacing.four,
+      gap: Spacing.three,
+      borderRadius: Radius.card,
+    },
+    summaryTop: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: Spacing.three,
+    },
+    summaryNumberBlock: {
+      gap: Spacing.half,
+    },
+    summaryEyebrow: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    summaryNumber: {
+      ...Typography.displayNumber,
+      color: theme.text,
+    },
+    summaryChips: {
+      flex: 1,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'flex-end',
+      gap: Spacing.one,
+    },
+    summaryText: {
+      ...Typography.body,
+      color: theme.text,
+      fontWeight: '500',
+    },
+    list: {
+      gap: Spacing.gap,
+    },
+    listTitle: {
+      ...Typography.sectionTitle,
+      color: theme.text,
+    },
+  });
+}

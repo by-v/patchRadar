@@ -2,12 +2,9 @@
  * Token desain PatchRadar.
  *
  * Acuan lengkap: `docs/ui-design.md` §3–§5.
- * Aplikasi hanya memakai mode terang pada MVP, sehingga `Colors.dark`
- * sengaja menyalin nilai terang agar tipe `ThemeColor` dan hook `useTheme`
- * tetap bekerja tanpa perilaku mode gelap.
+ * Mode gelap mengikuti pengaturan sistem (`app.json` `userInterfaceStyle:
+ * "automatic"`); `useTheme` memilih `Colors.light`/`Colors.dark`.
  */
-
-import '@/global.css';
 
 import { Platform } from 'react-native';
 import type { TextStyle } from 'react-native';
@@ -20,6 +17,8 @@ const lightColors = {
   textMutedOnDark: '#A2958B',
   /** Teks pada pil status berwarna; putih murni sesuai `docs/ui-design.md` §3.3. */
   textOnStatus: '#FFFFFF',
+  /** Tautan berwarna pada permukaan terang (rasio ≥4,5:1 di `canvasTop`). */
+  linkPrimary: '#1E40AF',
 
   // Permukaan
   background: '#DDD3CC',
@@ -55,9 +54,58 @@ const lightColors = {
   severityUnknown: '#544B45',
 } as const;
 
+/**
+ * Palet gelap. Nilai teks/aksen lebih terang agar rasio kontras terhadap
+ * permukaan gelap tetap ≥4,5:1; kartu tanda tangan (`darkCard`) tetap gelap
+ * dengan teks `textOnDark`. Pemeriksaan rasio otomatis: `theme.test.ts`.
+ */
+const darkColors = {
+  // Teks
+  text: '#F2EDE8',
+  textSecondary: '#C0B2A7',
+  textOnDark: '#F2EDE8',
+  textMutedOnDark: '#A2958B',
+  /** Teks pada pil status berwarna terang di mode gelap. */
+  textOnStatus: '#1E1E1E',
+  linkPrimary: '#9CC4FF',
+
+  // Permukaan
+  background: '#171412',
+  backgroundElement: '#221E1B',
+  backgroundSelected: '#F2EDE8',
+  canvasTop: '#1B1714',
+  canvasMid: '#141110',
+  canvasBottom: '#0C0A09',
+  glassFill: 'rgba(255, 255, 255, 0.05)',
+  glassFillStrong: 'rgba(255, 255, 255, 0.10)',
+  glassBorder: 'rgba(255, 255, 255, 0.14)',
+  inputFill: 'rgba(255, 255, 255, 0.07)',
+  inputBorder: 'rgba(255, 255, 255, 0.18)',
+  inputBorderFocus: 'rgba(255, 255, 255, 0.38)',
+  hairline: '#4A443F',
+  darkCard: '#0B0908',
+  darkAccent: '#2C2723',
+
+  // Status
+  success: '#A3E635',
+  warning: '#FACC15',
+  danger: '#FF8A80',
+  successSurface: 'rgba(163, 230, 53, 0.14)',
+  warningSurface: 'rgba(250, 204, 21, 0.14)',
+  dangerSurface: 'rgba(255, 138, 128, 0.14)',
+  infoSurface: 'rgba(255, 255, 255, 0.06)',
+
+  // Severity
+  severityCritical: '#FF8A80',
+  severityHigh: '#FB923C',
+  severityMedium: '#FACC15',
+  severityLow: '#A3E635',
+  severityUnknown: '#C0B2A7',
+} as const;
+
 export const Colors = {
   light: lightColors,
-  dark: lightColors,
+  dark: darkColors,
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;

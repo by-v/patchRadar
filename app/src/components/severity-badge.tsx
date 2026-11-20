@@ -2,7 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ComponentProps } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 import { SEVERITY_LABELS } from '@/lib/labels';
 import type { SeverityLevel } from '@/types/scan';
 
@@ -12,28 +13,38 @@ type SeverityBadgeProps = {
   level: SeverityLevel;
 };
 
-const CONFIG: Readonly<Record<SeverityLevel, { background: string; icon: IoniconName }>> = {
-  CRITICAL: { background: Colors.light.severityCritical, icon: 'alert' },
-  HIGH: { background: Colors.light.severityHigh, icon: 'warning-outline' },
-  MEDIUM: { background: Colors.light.severityMedium, icon: 'contrast-outline' },
-  LOW: { background: Colors.light.severityLow, icon: 'ellipse-outline' },
-  UNKNOWN: { background: Colors.light.severityUnknown, icon: 'help-circle-outline' },
+const ICONS: Record<SeverityLevel, IoniconName> = {
+  CRITICAL: 'alert',
+  HIGH: 'warning-outline',
+  MEDIUM: 'contrast-outline',
+  LOW: 'ellipse-outline',
+  UNKNOWN: 'help-circle-outline',
 };
 
 /** Severity selalu ditampilkan dengan ikon + teks, bukan warna saja. */
 export function SeverityBadge({ level }: SeverityBadgeProps) {
-  const config = CONFIG[level];
+  const theme = useTheme();
   const label = SEVERITY_LABELS[level];
 
   return (
     <View
       accessibilityLabel={`Tingkat keparahan ${label}`}
       accessibilityRole="text"
-      style={[styles.badge, { backgroundColor: config.background }]}>
-      <Ionicons color={Colors.light.textOnStatus} name={config.icon} size={13} />
-      <Text style={styles.text}>{label}</Text>
+      style={[styles.badge, { backgroundColor: severityBackground(theme)[level] }]}>
+      <Ionicons color={theme.textOnStatus} name={ICONS[level]} size={13} />
+      <Text style={[styles.text, { color: theme.textOnStatus }]}>{label}</Text>
     </View>
   );
+}
+
+function severityBackground(theme: Theme): Record<SeverityLevel, string> {
+  return {
+    CRITICAL: theme.severityCritical,
+    HIGH: theme.severityHigh,
+    MEDIUM: theme.severityMedium,
+    LOW: theme.severityLow,
+    UNKNOWN: theme.severityUnknown,
+  };
 }
 
 const styles = StyleSheet.create({
@@ -50,6 +61,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     fontWeight: '600',
-    color: Colors.light.textOnStatus,
   },
 });

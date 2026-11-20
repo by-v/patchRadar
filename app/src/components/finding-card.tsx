@@ -5,7 +5,8 @@ import { GlassSurface } from '@/components/glass-surface';
 import { LabelBadge } from '@/components/label-badge';
 import { MetaChip } from '@/components/meta-chip';
 import { SeverityBadge } from '@/components/severity-badge';
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 import { PRIORITY_LABELS, SEVERITY_LABELS } from '@/lib/labels';
 import { formatEpss } from '@/lib/scan-summary';
 import type { ScanFinding } from '@/types/scan';
@@ -17,6 +18,7 @@ type FindingCardProps = {
 
 /** Kartu temuan pada layar Hasil (FR-17). */
 export function FindingCard({ finding, onPress }: FindingCardProps) {
+  const theme = useTheme();
   const label = PRIORITY_LABELS[finding.priority.label];
   const severity = SEVERITY_LABELS[finding.severity.level];
   const packageText = `${finding.package.name}@${finding.package.installedVersion}`;
@@ -35,11 +37,13 @@ export function FindingCard({ finding, onPress }: FindingCardProps) {
         </View>
 
         <View style={styles.packageRow}>
-          <Text numberOfLines={2} style={styles.packageName}>
+          <Text numberOfLines={2} style={[styles.packageName, { color: theme.text }]}>
             {finding.package.name}
-            <Text style={styles.version}>@{finding.package.installedVersion}</Text>
+            <Text style={[styles.version, { color: theme.textSecondary }]}>
+              @{finding.package.installedVersion}
+            </Text>
           </Text>
-          <Ionicons color={Colors.light.textSecondary} name="chevron-forward" size={18} />
+          <Ionicons color={theme.textSecondary} name="chevron-forward" size={18} />
         </View>
 
         <View style={styles.chips}>
@@ -62,7 +66,7 @@ export function FindingCard({ finding, onPress }: FindingCardProps) {
           ) : null}
         </View>
 
-        <Text numberOfLines={3} style={styles.reason}>
+        <Text numberOfLines={3} style={[styles.reason, { color: theme.textSecondary }]}>
           {finding.priority.reason}
         </Text>
       </GlassSurface>
@@ -96,12 +100,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     lineHeight: 24,
     fontWeight: '600',
-    color: Colors.light.text,
   },
   version: {
     fontSize: 16,
     fontWeight: '400',
-    color: Colors.light.textSecondary,
   },
   chips: {
     flexDirection: 'row',
@@ -110,6 +112,5 @@ const styles = StyleSheet.create({
   },
   reason: {
     ...Typography.body,
-    color: Colors.light.textSecondary,
   },
 });

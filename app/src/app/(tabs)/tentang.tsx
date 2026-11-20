@@ -5,7 +5,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { GlassSurface } from '@/components/glass-surface';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
-import { Colors, Spacing, Typography } from '@/constants/theme';
+import { Spacing, Typography } from '@/constants/theme';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 
 const LABELS = [
   {
@@ -67,6 +68,8 @@ const LIMITATIONS = [
 
 export default function AboutScreen() {
   const version = Constants.expoConfig?.version ?? '1.0.0';
+  const theme = useTheme();
+  const styles = createStyles(theme);
 
   return (
     <Screen>
@@ -160,6 +163,9 @@ export default function AboutScreen() {
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <View style={styles.section}>
       <Text accessibilityRole="header" style={styles.sectionTitle}>
@@ -170,57 +176,59 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-const styles = StyleSheet.create({
-  intro: {
-    ...Typography.body,
-    color: Colors.light.textSecondary,
-  },
-  section: {
-    gap: Spacing.two,
-  },
-  sectionTitle: {
-    ...Typography.sectionTitle,
-    color: Colors.light.text,
-  },
-  cards: {
-    gap: Spacing.gap,
-  },
-  card: {
-    padding: Spacing.three,
-    gap: Spacing.one,
-  },
-  cardTitle: {
-    ...Typography.sectionTitle,
-    color: Colors.light.text,
-  },
-  cardBody: {
-    ...Typography.body,
-    color: Colors.light.textSecondary,
-  },
-  cardMeta: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  warningCard: {
-    padding: Spacing.three,
-    gap: Spacing.one,
-    borderWidth: 1,
-    borderColor: Colors.light.warning,
-  },
-  warningTitle: {
-    ...Typography.sectionTitle,
-    color: Colors.light.text,
-  },
-  warningBody: {
-    ...Typography.body,
-    color: Colors.light.text,
-  },
-  bullet: {
-    ...Typography.body,
-    color: Colors.light.textSecondary,
-  },
-  version: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-});
+function createStyles(theme: Theme) {
+  return StyleSheet.create({
+    intro: {
+      ...Typography.body,
+      color: theme.textSecondary,
+    },
+    section: {
+      gap: Spacing.two,
+    },
+    sectionTitle: {
+      ...Typography.sectionTitle,
+      color: theme.text,
+    },
+    cards: {
+      gap: Spacing.gap,
+    },
+    card: {
+      padding: Spacing.three,
+      gap: Spacing.one,
+    },
+    cardTitle: {
+      ...Typography.sectionTitle,
+      color: theme.text,
+    },
+    cardBody: {
+      ...Typography.body,
+      color: theme.textSecondary,
+    },
+    cardMeta: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    warningCard: {
+      padding: Spacing.three,
+      gap: Spacing.one,
+      borderWidth: 1,
+      borderColor: theme.warning,
+    },
+    warningTitle: {
+      ...Typography.sectionTitle,
+      color: theme.text,
+    },
+    warningBody: {
+      ...Typography.body,
+      color: theme.text,
+    },
+    bullet: {
+      ...Typography.body,
+      color: theme.textSecondary,
+    },
+    version: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+  });
+}

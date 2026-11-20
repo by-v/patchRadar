@@ -1,18 +1,20 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, View } from 'react-native';
 
-import { Colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 /**
- * Latar hangat PatchRadar: gradient tiga titik dengan dua blob cahaya lembut.
+ * Latar PatchRadar: gradient tiga titik dengan dua blob cahaya lembut.
  * Blob dibuat dari `View` beradius besar, bukan blur runtime, agar tetap
  * ringan di perangkat Android kelas bawah.
  */
 export function ScreenBackground() {
+  const theme = useTheme();
+
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       <LinearGradient
-        colors={[Colors.light.canvasTop, Colors.light.canvasMid, Colors.light.canvasBottom]}
+        colors={[theme.canvasTop, theme.canvasMid, theme.canvasBottom]}
         locations={[0, 0.55, 1]}
         start={{ x: 0.1, y: 0 }}
         end={{ x: 0.9, y: 1 }}

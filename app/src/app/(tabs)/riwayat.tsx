@@ -9,8 +9,9 @@ import { LabelBadge } from '@/components/label-badge';
 import { MetaChip } from '@/components/meta-chip';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
-import { Colors, Spacing, Typography } from '@/constants/theme';
+import { Spacing, Typography } from '@/constants/theme';
 import { loadScansForHistory, openDatabaseSafely } from '@/db/access';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 import { PRIORITY_LABELS } from '@/lib/labels';
 import { listRememberedScans } from '@/lib/scan-session';
 import { highestPriorityLabel } from '@/lib/scan-summary';
@@ -23,6 +24,8 @@ function findingsText(count: number): string {
 
 export default function HistoryScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const [scans, setScans] = useState<ScanResult[]>(listRememberedScans);
 
   // SQLite adalah sumber utama; hasil sesi dipakai sementara/ketika database
@@ -80,6 +83,8 @@ export default function HistoryScreen() {
 }
 
 function HistoryCard({ scan, onPress }: { scan: ScanResult; onPress: () => void }) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const highest = highestPriorityLabel(scan.findings);
   const time = formatLocalDateTime(scan.scannedAt);
   const findings = findingsText(scan.summary.findingCount);
@@ -100,7 +105,7 @@ function HistoryCard({ scan, onPress }: { scan: ScanResult; onPress: () => void 
             {scan.repo.owner}/{scan.repo.name}
           </Text>
           <Ionicons
-            color={Colors.light.textSecondary}
+            color={theme.textSecondary}
             name="chevron-forward"
             size={18}
             style={styles.chevron}
@@ -116,42 +121,44 @@ function HistoryCard({ scan, onPress }: { scan: ScanResult; onPress: () => void 
   );
 }
 
-const styles = StyleSheet.create({
-  list: {
-    gap: Spacing.gap,
-  },
-  note: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  card: {
-    padding: Spacing.three,
-    gap: Spacing.two,
-  },
-  cardTop: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: Spacing.two,
-  },
-  repo: {
-    ...Typography.sectionTitle,
-    flex: 1,
-    color: Colors.light.text,
-  },
-  chevron: {
-    marginTop: Spacing.half,
-  },
-  meta: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: Spacing.one,
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-});
+function createStyles(theme: Theme) {
+  return StyleSheet.create({
+    list: {
+      gap: Spacing.gap,
+    },
+    note: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    card: {
+      padding: Spacing.three,
+      gap: Spacing.two,
+    },
+    cardTop: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      gap: Spacing.two,
+    },
+    repo: {
+      ...Typography.sectionTitle,
+      flex: 1,
+      color: theme.text,
+    },
+    chevron: {
+      marginTop: Spacing.half,
+    },
+    meta: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    chips: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: Spacing.one,
+    },
+    pressed: {
+      opacity: 0.7,
+    },
+  });
+}

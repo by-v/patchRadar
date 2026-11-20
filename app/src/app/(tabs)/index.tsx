@@ -11,8 +11,9 @@ import { PillInput } from '@/components/pill-input';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
 import { Wordmark } from '@/components/wordmark';
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
 import { openDatabaseSafely, saveScanResultSafely } from '@/db/access';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 import {
   isBlockingScanError,
   offersHistory,
@@ -34,6 +35,8 @@ const SLOW_HINT_DELAY_MS = 5_000;
 
 export default function ScanScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const [url, setUrl] = useState('');
   const [scope, setScope] = useState<ScanScope>('production');
   const [showError, setShowError] = useState(false);
@@ -369,101 +372,103 @@ export default function ScanScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  heading: {
-    gap: Spacing.two,
-  },
-  title: {
-    ...Typography.screenTitle,
-    color: Colors.light.text,
-  },
-  subtitle: {
-    ...Typography.body,
-    color: Colors.light.textSecondary,
-  },
-  form: {
-    gap: Spacing.two,
-  },
-  preview: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-    paddingHorizontal: Spacing.three,
-  },
-  scope: {
-    flexDirection: 'row',
-    gap: Spacing.one,
-    padding: 4,
-    borderRadius: Radius.pill,
-    backgroundColor: Colors.light.inputFill,
-    borderWidth: 1,
-    borderColor: Colors.light.inputBorder,
-  },
-  scopeItem: {
-    flex: 1,
-    minHeight: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: Radius.pill,
-    paddingHorizontal: Spacing.two,
-  },
-  scopeItemActive: {
-    backgroundColor: Colors.light.darkAccent,
-  },
-  scopeLabel: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  scopeLabelActive: {
-    color: Colors.light.textOnDark,
-    fontWeight: '600',
-  },
-  note: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  sessionBlock: {
-    gap: Spacing.two,
-    alignItems: 'flex-start',
-  },
-  inlineError: {
-    gap: Spacing.two,
-    alignItems: 'flex-start',
-  },
-  errorBlock: {
-    gap: Spacing.three,
-  },
-  errorActions: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  primaryButton: {
-    minHeight: 44,
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.three,
-    borderRadius: Radius.pill,
-    backgroundColor: Colors.light.darkAccent,
-  },
-  primaryText: {
-    ...Typography.body,
-    fontWeight: '600',
-    color: Colors.light.textOnDark,
-  },
-  retryButton: {
-    minHeight: 44,
-    justifyContent: 'center',
-    paddingHorizontal: Spacing.three,
-    borderRadius: Radius.pill,
-    borderWidth: 1,
-    borderColor: Colors.light.hairline,
-  },
-  retryText: {
-    ...Typography.body,
-    fontWeight: '600',
-    color: Colors.light.text,
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-});
+function createStyles(theme: Theme) {
+    return StyleSheet.create({
+    heading: {
+      gap: Spacing.two,
+    },
+    title: {
+      ...Typography.screenTitle,
+      color: theme.text,
+    },
+    subtitle: {
+      ...Typography.body,
+      color: theme.textSecondary,
+    },
+    form: {
+      gap: Spacing.two,
+    },
+    preview: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+      paddingHorizontal: Spacing.three,
+    },
+    scope: {
+      flexDirection: 'row',
+      gap: Spacing.one,
+      padding: 4,
+      borderRadius: Radius.pill,
+      backgroundColor: theme.inputFill,
+      borderWidth: 1,
+      borderColor: theme.inputBorder,
+    },
+    scopeItem: {
+      flex: 1,
+      minHeight: 44,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: Radius.pill,
+      paddingHorizontal: Spacing.two,
+    },
+    scopeItemActive: {
+      backgroundColor: theme.darkAccent,
+    },
+    scopeLabel: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    scopeLabelActive: {
+      color: theme.textOnDark,
+      fontWeight: '600',
+    },
+    note: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    sessionBlock: {
+      gap: Spacing.two,
+      alignItems: 'flex-start',
+    },
+    inlineError: {
+      gap: Spacing.two,
+      alignItems: 'flex-start',
+    },
+    errorBlock: {
+      gap: Spacing.three,
+    },
+    errorActions: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: Spacing.two,
+    },
+    primaryButton: {
+      minHeight: 44,
+      justifyContent: 'center',
+      paddingHorizontal: Spacing.three,
+      borderRadius: Radius.pill,
+      backgroundColor: theme.darkAccent,
+    },
+    primaryText: {
+      ...Typography.body,
+      fontWeight: '600',
+      color: theme.textOnDark,
+    },
+    retryButton: {
+      minHeight: 44,
+      justifyContent: 'center',
+      paddingHorizontal: Spacing.three,
+      borderRadius: Radius.pill,
+      borderWidth: 1,
+      borderColor: theme.hairline,
+    },
+    retryText: {
+      ...Typography.body,
+      fontWeight: '600',
+      color: theme.text,
+    },
+    pressed: {
+      opacity: 0.7,
+    },
+  });
+}

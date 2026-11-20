@@ -1,7 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Radius, Shadows, Spacing, Typography } from '@/constants/theme';
+import { Radius, Shadows, Spacing, Typography } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type DarkCallToActionProps = {
   /** Label kecil di atas judul. */
@@ -24,6 +25,8 @@ export function DarkCallToAction({
   accessibilityHint,
   accessibilityLabel,
 }: DarkCallToActionProps) {
+  const theme = useTheme();
+
   return (
     <Pressable
       accessibilityHint={accessibilityHint}
@@ -35,18 +38,19 @@ export function DarkCallToAction({
       style={({ pressed }) => [
         styles.card,
         Shadows.glass,
+        { backgroundColor: theme.darkCard },
         disabled && !loading && styles.disabled,
         pressed && styles.pressed,
       ]}>
       <View style={styles.texts}>
-        <Text style={styles.eyebrow}>{eyebrow}</Text>
-        <Text style={styles.title}>{title}</Text>
+        <Text style={[styles.eyebrow, { color: theme.textMutedOnDark }]}>{eyebrow}</Text>
+        <Text style={[styles.title, { color: theme.textOnDark }]}>{title}</Text>
       </View>
-      <View style={styles.arrow}>
+      <View style={[styles.arrow, { backgroundColor: theme.textOnDark }]}>
         {loading ? (
-          <ActivityIndicator color={Colors.light.text} size="small" />
+          <ActivityIndicator color={theme.darkCard} size="small" />
         ) : (
-          <Ionicons color={Colors.light.text} name="arrow-forward" size={20} />
+          <Ionicons color={theme.darkCard} name="arrow-forward" size={20} />
         )}
       </View>
     </Pressable>
@@ -61,7 +65,6 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
     padding: Spacing.four,
     borderRadius: Radius.card,
-    backgroundColor: Colors.light.darkCard,
   },
   texts: {
     flex: 1,
@@ -69,11 +72,9 @@ const styles = StyleSheet.create({
   },
   eyebrow: {
     ...Typography.meta,
-    color: Colors.light.textMutedOnDark,
   },
   title: {
     ...Typography.darkCardTitle,
-    color: Colors.light.textOnDark,
   },
   arrow: {
     width: 44,
@@ -81,7 +82,6 @@ const styles = StyleSheet.create({
     borderRadius: Radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.light.textOnDark,
   },
   disabled: {
     opacity: 0.55,

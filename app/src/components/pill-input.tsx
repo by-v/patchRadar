@@ -11,7 +11,8 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type IoniconName = React.ComponentProps<typeof Ionicons>['name'];
 
@@ -34,6 +35,7 @@ export function PillInput({
   ...inputProps
 }: PillInputProps) {
   const [focused, setFocused] = useState(false);
+  const theme = useTheme();
 
   return (
     <View style={styles.wrapper}>
@@ -41,15 +43,16 @@ export function PillInput({
         style={[
           styles.container,
           {
+            backgroundColor: theme.inputFill,
             borderColor: error
-              ? Colors.light.danger
+              ? theme.danger
               : focused
-                ? Colors.light.inputBorderFocus
-                : Colors.light.inputBorder,
+                ? theme.inputBorderFocus
+                : theme.inputBorder,
           },
           containerStyle,
         ]}>
-        {icon ? <Ionicons color={Colors.light.textSecondary} name={icon} size={20} /> : null}
+        {icon ? <Ionicons color={theme.textSecondary} name={icon} size={20} /> : null}
         <TextInput
           accessibilityLabel={accessibilityLabel}
           ref={inputRef}
@@ -61,13 +64,13 @@ export function PillInput({
             setFocused(true);
             onFocus?.(event);
           }}
-          placeholderTextColor={Colors.light.textSecondary}
-          style={styles.input}
+          placeholderTextColor={theme.textSecondary}
+          style={[styles.input, { color: theme.text }]}
           {...inputProps}
         />
       </View>
       {error ? (
-        <Text accessibilityRole="alert" style={styles.error}>
+        <Text accessibilityRole="alert" style={[styles.error, { color: theme.danger }]}>
           {error}
         </Text>
       ) : null}
@@ -87,17 +90,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.three,
     borderRadius: Radius.pill,
     borderWidth: 1,
-    backgroundColor: Colors.light.inputFill,
   },
   input: {
     flex: 1,
     paddingVertical: Spacing.two,
-    color: Colors.light.text,
     ...Typography.body,
   },
   error: {
     ...Typography.meta,
-    color: Colors.light.danger,
     paddingHorizontal: Spacing.three,
   },
 });

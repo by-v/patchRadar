@@ -1328,26 +1328,36 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [x] Tugas selesai
 - **Catatan hasil:**
   - `docs/metrics.md`: definisi metrik & sumber kolom/tabel, query SELECT agregat Q1–Q6, hasil pengukuran Q1–Q6 (pengembang), rasio 429 **belum dapat dihitung** (belum tersimpan; usulan opsi tanpa migrasi), `metrics.ts` tidak dibuat (tidak diperlukan), retensi log platform **[PERLU DIVERIFIKASI]** per plan dengan rujukan [Logs in Studio](https://supabase.com/docs/guides/platform/logs) dan [Pricing](https://supabase.com/pricing) (diakses 15 Nov 2026).
-  - Langkah 0 (transparansi deploy): `functions list` awal sesi Fase A tercatat v7 `updated_at` 1794752913378 (~14:28 UTC), satu `functions deploy` tercatat → v8 1794753073345 (~14:31 UTC, Δ160s), v6 terakhir 12 Nov. Asal v7 **tidak dapat diverifikasi** dari riwayat perintah sesi yang tersedia; tidak ada perintah deploy lain terbukti di keluaran tercatat sesi ini selain yang menghasilkan v8. `docs/due-diligence-log.md` dikoreksi. Catatan T-W3-08 tidak mengklaim deploy tak terlapor (tidak ada bukti). T-W3-12 ditunda (Catatan Keputusan).
+  - Langkah 0 (transparansi deploy): `functions list` awal sesi Fase A tercatat v7 `updated_at` 1794752913378 (~14:28 UTC), satu `functions deploy` tercatat → v8 1794753073345 (~14:31 UTC, Δ160s), v6 terakhir 12 Nov. Asal v7 **tidak dapat diverifikasi** dari riwayat perintah sesi yang tersedia; tidak ada perintah deploy lain terbukti di keluaran tercatat sesi ini selain yang menghasilkan v8. `docs/due-diligence-log.md` dikoreksi. Catatan T-W3-08 tidak mengklaim deploy tak terlapor (tidak ada bukti). T-W3-12 semula ditunda (Catatan Keputusan 15 November 2026), lalu dibatalkan dan diselesaikan 20 November 2026.
 
 ### T-W3-12 — (S) Tema gelap dan kontras lanjutan
 - **Tipe:** `[AGENT]`
-- **Status:** `[ ]` — **ditunda** (prioritas S; dikerjakan hanya jika Minggu 4 selesai lebih awal).
+- **Status:** `[x]` — penundaan 15 November 2026 dibatalkan 20 November 2026 atas instruksi pengembang; dikerjakan dan diselesaikan sebelum build rilis.
 - **Tujuan:** Melengkapi bagian S dari aksesibilitas tanpa mengorbankan bagian M.
 - **Prasyarat:** `T-W2-07`
-- **File/folder:** `app/src/theme/`, komponen UI
+- **File/folder:** `app/app.json`, `app/src/constants/theme.ts`, `app/src/hooks/use-theme.ts`, `app/src/lib/contrast.ts`, `app/src/constants/theme.test.ts`, seluruh komponen dan layar `app/src/`, `docs/ui-design.md` §3.4/§13
 - **Langkah:**
   1. Tambahkan palet gelap yang mengikuti pengaturan sistem.
   2. Periksa kontras teks dan badge label.
   3. Pastikan teks Indonesia, label aksesibel, dan ukuran font sistem tetap berfungsi.
 - **Memenuhi:** `NFR-11` (S)
 - **Kriteria selesai (AC):**
-  - [ ] Tema gelap mengikuti pengaturan sistem.
-  - [ ] Kontras teks/badge lulus pemeriksaan visual.
-  - [ ] Tidak ada regresi pada bagian M NFR-11.
+  - [x] Tema gelap mengikuti pengaturan sistem. (`app.json` `userInterfaceStyle: "automatic"`; `useTheme()` memilih `Colors.light`/`Colors.dark` dari `useColorScheme()`; `StatusBar style="auto"`; `ThemeProvider` memakai `DarkTheme`/`DefaultTheme`. Render web headless dengan `prefers-color-scheme: dark` menghasilkan piksel latar `RGB(27,23,20)` = `canvasTop #1B1714` dan teks `RGB(242,237,232)` = `text #F2EDE8`.)
+  - [x] Kontras teks/badge lulus pemeriksaan. (`theme.test.ts` 27 kasus rasio WCAG lulus AA ≥4,5:1 untuk teks, badge severity, label status, tautan, dan teks di kartu gelap. Pemeriksaan render otomatis: piksel teks terang di atas latar gelap. Inspeksi mata manusia per layar belum diverifikasi.)
+  - [x] Tidak ada regresi pada bagian M NFR-11. (Palet terang yang terdokumentasi diuji `toMatchObject` tidak berubah; seluruh teks UI dan `accessibilityLabel`/`accessibilityRole` tidak diubah; `maxFontSizeMultiplier` pada `Wordmark` tetap 1,4. `lint`, `typecheck`, dan 148 test aplikasi lulus.)
 - **Estimasi:** 1,5 jam
-- [ ] Tugas selesai
-- **Catatan hasil:** Ditunda per Catatan Keputusan 15 November 2026 (risiko regresi UI sebelum release candidate).
+- [x] Tugas selesai
+- **Catatan hasil:**
+  - 20 November 2026: `Colors.dark` tidak lagi menyalin `Colors.light`; palet gelap memakai teks `#F2EDE8`/`#C0B2A7`, kanvas `#1B1714`/`#141110`/`#0C0A09`, `darkCard #0B0908`, aksen status terang dengan `textOnStatus #1E1E1E`. Semua komponen/layar memakai `theme` aktif (tidak ada lagi `Colors.light.*` di `app/src`). `linkPrimary` terang diganti `#3C87F7`→`#1E40AF` agar lulus AA di `canvasTop` (token baru, tidak dipakai di UI saat ini).
+  - `import '@/global.css'` dipindah dari `constants/theme.ts` ke `src/app/_layout.tsx` agar modul token dapat diuji Jest tanpa parser CSS; perilaku aplikasi tidak berubah (global CSS tetap dimuat sekali di root layout).
+  - Keluaran mentah uji lokal (tanpa `requestId` karena bukan panggilan API):
+    - `npm run -s lint` → `LINT_EXIT=0`
+    - `npm run -s typecheck` → `TYPECHECK_EXIT=0`
+    - `npx jest --forceExit` (percobaan pertama gagal: `global.css` tidak dapat diurai; diperbaiki seperti di atas) → `Test Suites: 15 passed, 15 total`, `Tests: 148 passed, 148 total`, `JEST_EXIT=0`
+    - `node --test "supabase/functions/scan/**/*.test.ts"` → `ℹ tests 216`, `ℹ pass 216`, `ℹ fail 0`, `EDGE_TEST_EXIT=0`
+  - Keluaran mentah render gelap (Expo web `localhost:8081`, Chrome headless `--force-dark-mode`, `--window-size=430,932`): `x=5 y=5 => R=27 G=23 B=20`, `x=215 y=120 => R=25 G=21 B=19`, `x=215 y=600 => R=20 G=17 B=16`; sampel teks terang `x=26 y=24 => R=242 G=237 B=232`. Screenshot: `C:\Users\Lenovo\AppData\Local\Temp\opencode\patchradar-dark.png`.
+  - Keluaran mentah render terang (CDP `Emulation.setEmulatedMedia` `prefers-color-scheme: light`, `PREFERS_DARK=false`): `x=5 y=5 => R=221 G=211 B=203` = `canvasTop #DDD3CC`, `x=215 y=600 => R=196 G=184 B=175` (gradient). Screenshot: `C:\Users\Lenovo\AppData\Local\Temp\opencode\patchradar-light-cdp.png`. Mode terang tidak berubah.
+  - `docs/ui-design.md` naik ke 1.2: §1 cakupan terang+gelap, §3.4 palet gelap dan rasio terendah, §13 keputusan 6 direvisi. `T-W3-12` tidak mengubah kode Edge/Supabase, sehingga deploy `scan` v11 tetap berlaku tanpa deploy ulang.
 
 ### T-W3-14 — (S) Tahap timed bernama untuk rate limit dan persist
 - **Tipe:** `[AGENT]`
@@ -1375,7 +1385,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 ### T-W3-13 — `[GATE]` Gate Minggu 3
 - **Tipe:** `[GATE]`
 - **Tujuan:** Memastikan offline, cloud, RLS, rate limit, dan penanganan error siap masuk minggu rilis.
-- **Prasyarat:** `T-W3-01` s.d. `T-W3-06`, `T-W3-07a` s.d. `T-W3-07c`, `T-W3-08`; `T-W1-13`, `T-W3-11`, `T-W3-12` bila fitur S dipertahankan (T-W3-12 ditunda/tidak dipertahankan)
+- **Prasyarat:** `T-W3-01` s.d. `T-W3-06`, `T-W3-07a` s.d. `T-W3-07c`, `T-W3-08`; `T-W1-13`, `T-W3-11`, `T-W3-12` bila fitur S dipertahankan (T-W3-12 semula ditunda; diselesaikan 20 November 2026)
 - **File/folder:** `docs/week3-gate.md`
 - **Langkah:**
   1. Uji alur offline penuh.
@@ -1393,7 +1403,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] 23 kondisi error teruji tanpa crash. **Ditutup berdasarkan attestasi manual pengembang** (15 Nov 2026, Android, opsi 1): pengembang menyatakan 23 kondisi diuji sesuai rencana tanpa crash (rincian per-kondisi/screenshot/keluaran mentah UI tidak dilampirkan). Didukung `docs/error-matrix.md` + T-W3-07a/b/c & suite lulus (edge 196, app 121, 15 Nov 2026); beberapa kondisi layanan nyata tetap **belum diverifikasi** di lingkungan nyata (tertutup uji handler/tiruan).
   - [x] `persisted=false` dan warning tampil benar. **Ditutup berdasarkan attestasi manual + simulasi terkontrol** (16 Nov 2026, Android realme XT, Expo Go, axios; `app/src/api/scan.ts` dimodifikasi sementara: `persisted=false`, warning `CLOUD_PERSIST_FAILED`): banner "Riwayat cloud — Riwayat cloud gagal disimpan; hasil tetap tersedia di perangkat" tampil, hasil/temuan tetap tampil (deskripsi spesifik tidak dirinci), tanpa crash. **Tanpa screenshot**. Kontrak/test server tetap mendukung (200, `persisted=false`, `CLOUD_PERSIST_FAILED`, hasil tak berubah). Catatan: laporan `Cannot find native module ExpoSQLite` adalah isu lingkungan terpisah, bukan bukti AC5. Mock sementara tidak ditemukan di `app/src/api/scan.ts` (16 Nov 2026).
   - [x] Scan ke-6 menghasilkan 429. (A4 remote v8: scan ke-6 429 `RATE_LIMITED` `req_c937fcfcecfc45daaa768587dfca3822`, 5 sebelumnya 404 `REPO_NOT_FOUND_OR_PRIVATE`, `rate_limit_events` konsisten; sisa T-W3-06 `retryAfter`/pasca-jendela → T-W4-04.)
-  - [x] p95 hangat dan CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat. p95 hangat terukur 15 Nov 2026 (axios/axios): warmup `req_a4f6f1d897f443a18f1f9014c33d1d81` 5713ms; warm 1–4 200 `req_22ad076a2d314edea401c79fd69bf896` 3440ms, `req_a9c8709547ee488f993878b3153f1c5b` 4006ms, `req_88a9e6de716d4a7c904751d60bcdc4c7` 3084ms, `req_c655d6c1c68b4ae9b45aee1ec63ed327` 2919ms; warm 5 429 `req_bb74e537dd214eda835ba31aa6e6a9e6`; **p50 3084ms, p95 4006ms (<6s)**. CPU/execution dashboard fungsi `scan` (Edge Functions > scan > Metrics, 24 jam terakhir per 16 Nov 2026, dilaporkan pengembang): Avg Exec 3578ms, Max 13762ms, Avg CPU 70ms, Max 179ms, Avg Mem 9.2MB. **Keputusan R-15/optimasi S:** tidak diaktifkan saat ini (p95 hangat < 6s; CPU 70/179ms jauh di bawah ~1.400ms); T-W3-12/14 tetap ditunda.
+  - [x] p95 hangat dan CPU dashboard diukur ulang; keputusan R-15/optimasi S dicatat. p95 hangat terukur 15 Nov 2026 (axios/axios): warmup `req_a4f6f1d897f443a18f1f9014c33d1d81` 5713ms; warm 1–4 200 `req_22ad076a2d314edea401c79fd69bf896` 3440ms, `req_a9c8709547ee488f993878b3153f1c5b` 4006ms, `req_88a9e6de716d4a7c904751d60bcdc4c7` 3084ms, `req_c655d6c1c68b4ae9b45aee1ec63ed327` 2919ms; warm 5 429 `req_bb74e537dd214eda835ba31aa6e6a9e6`; **p50 3084ms, p95 4006ms (<6s)**. CPU/execution dashboard fungsi `scan` (Edge Functions > scan > Metrics, 24 jam terakhir per 16 Nov 2026, dilaporkan pengembang): Avg Exec 3578ms, Max 13762ms, Avg CPU 70ms, Max 179ms, Avg Mem 9.2MB. **Keputusan R-15/optimasi S:** tidak diaktifkan saat ini (p95 hangat < 6s; CPU 70/179ms jauh di bawah ~1.400ms); T-W3-12/14 tetap ditunda. **Addendum 20 November 2026:** keputusan "ditunda" itu dicatat pada 15–16 November dan tidak mengubah pengukuran di atas; `T-W3-14` dan `T-W3-12` kemudian diaktifkan kembali atas instruksi pengembang dan diselesaikan sebelum build rilis (lihat masing-masing tugas).
   - [x] Verdict Go/No-Go tercatat. (**Go bersyarat**, `docs/week3-gate.md`; syarat: RLS ulang build rilis & sisa T-W3-06 di T-W4-04, lengkapi bukti AC5 UI & AC7 CPU dashboard.)
 - **Estimasi:** 2 jam
 - [x] Tugas selesai — gate Minggu 3 dievaluasi, AC 1–8 `[x]` sesuai bukti/keterangan yang tersedia, verdict **Go (bersyarat)** tercatat. `docs/week3-gate.md` dibuat/diperbarui.
@@ -1886,6 +1896,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 19 November 2026 | `T-W4-05` | Sesi 5–10 peserta diganti uji mandiri 2 perangkat (Expo web + APK 1.0.0 vc2, 19 Nov 2026 20:30 WIB) karena peserta tidak tersedia. Metrik yang membutuhkan manusia (pemahaman label, keputusan terbantu) ditandai belum diverifikasi; AC "minimal 5 peserta" tidak dipenuhi sehingga tugas ditandai `[!]`, bukan `[x]`. | PRD §16.2 menuntut 5–10 peserta dan wawancara; uji mandiri tidak dapat membuktikan kriteria lulus §16.2 secara sah. | Ya — instruksi pengembang, 19 November 2026 |
 | 20 November 2026 | `T-W4-05` | **Cakupan PRD diubah resmi:** `docs/PRD.md` naik ke **1.2**. §16.2 menetapkan validasi MVP = uji mandiri terstruktur dua perangkat (Expo web + APK Android) dan memindahkan studi 5–10 peserta ke Tahap 2. Metrik pemahaman label dan keputusan terbantu menjadi target Tahap 2 dan ditandai belum terukur. `T-W4-05` ditutup dengan bukti uji mandiri 19 November 2026. | Peserta tidak tersedia pada jendela MVP; uji mandiri tetap memvalidasi alur utama, error, offline, dan salin perintah. Perubahan dicatat agar Gate Rilis tidak mengklaim validasi yang tidak dilakukan. | Ya — instruksi pengembang, 20 November 2026 |
 | 20 November 2026 | `T-W3-14` | **Diaktifkan kembali** dari status "jangan dikerjakan" dan dikerjakan sebelum deploy `T-W3-09`/`T-W3-10`. Tahap bernama `rate_limit`, `persist`, dan `retention` ditambahkan ke log `stages`. | `AGENTS.md` butir 5 mewajibkan bukti `stages` memuat tahap rate limit dan persist setelah deploy; prasyarat `T-W3-06` sudah ditutup dengan bukti `T-W4-04`. Pekerjaan hanya 0,5 jam dan tanpa perubahan perilaku. | Ya — instruksi pengembang, 20 November 2026 |
+| 20 November 2026 | `T-W3-12` | **Penundaan 15 November dibatalkan**; tema gelap dikerjakan dan diselesaikan sebelum build APK final, bukan setelahnya. `userInterfaceStyle` berubah `light`→`automatic`; palet gelap dan uji kontras WCAG ditambahkan; build final harus berasal dari commit `T-W3-12`. | Pengembang meminta tugas ini diselesaikan lebih dulu agar APK rilis tidak perlu dibangun ulang. Risiko regresi UI dimitigasi oleh test kontras otomatis, render web headless, serta `lint`/`typecheck`/`jest` yang lulus. | Ya — instruksi pengembang, 20 November 2026 |
 | 19 November 2026 | `T-W4-06` | Dikerjakan sebelum `T-W4-05` ditutup atas instruksi pengembang. Isi tugas hanya triase temuan validasi dan verifikasi ulang; daftar temuan sudah tersedia dari sesi 19 November 2026 sehingga triase dapat diselesaikan (blocker 0). Tidak ada perubahan kode; `T-W4-05` tetap `[!]`. | Prasyarat formal belum terpenuhi; tanpa triase ini temuan non-blocker tidak masuk daftar keterbatasan sebelum `T-W4-07`. | Ya — instruksi pengembang, 19 November 2026 |
 
 

@@ -2,8 +2,9 @@ import { GlassView, isGlassEffectAPIAvailable, isLiquidGlassAvailable } from 'ex
 import type { ReactNode } from 'react';
 import { Platform, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { Colors, Radius, Shadows } from '@/constants/theme';
+import { Radius, Shadows } from '@/constants/theme';
 import { useReduceTransparency } from '@/hooks/use-reduce-transparency';
+import { useTheme } from '@/hooks/use-theme';
 
 type GlassSurfaceProps = {
   children?: ReactNode;
@@ -29,12 +30,13 @@ export function GlassSurface({
   radius = Radius.card,
 }: GlassSurfaceProps) {
   const reduceTransparency = useReduceTransparency();
+  const theme = useTheme();
 
   if (supportsNativeGlass && !reduceTransparency) {
     return (
       <GlassView
         glassEffectStyle="regular"
-        tintColor={variant === 'strong' ? Colors.light.glassFillStrong : Colors.light.glassFill}
+        tintColor={variant === 'strong' ? theme.glassFillStrong : theme.glassFill}
         style={[{ borderRadius: radius }, style]}>
         {children}
       </GlassView>
@@ -51,11 +53,11 @@ export function GlassSurface({
         {
           borderRadius: radius,
           backgroundColor: opaque
-            ? Colors.light.backgroundElement
+            ? theme.backgroundElement
             : variant === 'strong'
-              ? Colors.light.glassFillStrong
-              : Colors.light.glassFill,
-          borderColor: opaque ? Colors.light.hairline : Colors.light.glassBorder,
+              ? theme.glassFillStrong
+              : theme.glassFill,
+          borderColor: opaque ? theme.hairline : theme.glassBorder,
         },
         style,
       ]}>

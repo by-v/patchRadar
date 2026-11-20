@@ -2,7 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ComponentProps } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 
 type IoniconName = ComponentProps<typeof Ionicons>['name'];
 
@@ -12,32 +13,16 @@ type MetaChipProps = {
   tone?: 'neutral' | 'danger' | 'warning' | 'success';
 };
 
-const CONFIG = {
-  neutral: {
-    background: Colors.light.glassFill,
-    border: Colors.light.hairline,
-    color: Colors.light.text,
-  },
-  danger: {
-    background: Colors.light.dangerSurface,
-    border: Colors.light.danger,
-    color: Colors.light.text,
-  },
-  warning: {
-    background: Colors.light.warningSurface,
-    border: Colors.light.warning,
-    color: Colors.light.text,
-  },
-  success: {
-    background: Colors.light.successSurface,
-    border: Colors.light.success,
-    color: Colors.light.text,
-  },
-} as const;
+type ToneConfig = {
+  background: string;
+  border: string;
+  color: string;
+};
 
 /** Chip kecil untuk KEV, EPSS, dan tag paket. */
 export function MetaChip({ label, icon, tone = 'neutral' }: MetaChipProps) {
-  const config = CONFIG[tone];
+  const theme = useTheme();
+  const config = toneConfig(theme)[tone];
 
   return (
     <View
@@ -48,6 +33,31 @@ export function MetaChip({ label, icon, tone = 'neutral' }: MetaChipProps) {
       <Text style={[styles.text, { color: config.color }]}>{label}</Text>
     </View>
   );
+}
+
+function toneConfig(theme: Theme): Record<MetaChipProps['tone'] & {}, ToneConfig> {
+  return {
+    neutral: {
+      background: theme.glassFill,
+      border: theme.hairline,
+      color: theme.text,
+    },
+    danger: {
+      background: theme.dangerSurface,
+      border: theme.danger,
+      color: theme.text,
+    },
+    warning: {
+      background: theme.warningSurface,
+      border: theme.warning,
+      color: theme.text,
+    },
+    success: {
+      background: theme.successSurface,
+      border: theme.success,
+      color: theme.text,
+    },
+  };
 }
 
 const styles = StyleSheet.create({

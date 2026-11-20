@@ -1,7 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Radius, Spacing, Typography } from '@/constants/theme';
+import { Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 
 export type BannerVariant = 'info' | 'warning' | 'error' | 'success';
 
@@ -11,35 +12,19 @@ type BannerProps = {
   title?: string;
 };
 
-const VARIANTS = {
-  info: {
-    icon: 'information-circle-outline',
-    accent: Colors.light.text,
-    surface: Colors.light.infoSurface,
-  },
-  warning: {
-    icon: 'warning-outline',
-    accent: Colors.light.warning,
-    surface: Colors.light.warningSurface,
-  },
-  error: {
-    icon: 'alert-circle-outline',
-    accent: Colors.light.danger,
-    surface: Colors.light.dangerSurface,
-  },
-  success: {
-    icon: 'checkmark-circle-outline',
-    accent: Colors.light.success,
-    surface: Colors.light.successSurface,
-  },
-} as const;
+type BannerVariantConfig = {
+  icon: React.ComponentProps<typeof Ionicons>['name'];
+  accent: string;
+  surface: string;
+};
 
 /**
  * Pemberitahuan dalam aplikasi. Dipakai sebagai pengganti `Alert.alert`,
  * yang tidak diimplementasikan oleh React Native Web.
  */
 export function Banner({ message, variant = 'info', title }: BannerProps) {
-  const config = VARIANTS[variant];
+  const theme = useTheme();
+  const config = variantConfig(theme)[variant];
 
   return (
     <View
@@ -48,11 +33,28 @@ export function Banner({ message, variant = 'info', title }: BannerProps) {
       style={[styles.container, { backgroundColor: config.surface }]}>
       <Ionicons color={config.accent} name={config.icon} size={20} style={styles.icon} />
       <View style={styles.texts}>
-        {title ? <Text style={styles.title}>{title}</Text> : null}
-        <Text style={styles.message}>{message}</Text>
+        {title ? <Text style={[styles.title, { color: theme.text }]}>{title}</Text> : null}
+        <Text style={[styles.message, { color: theme.text }]}>{message}</Text>
       </View>
     </View>
   );
+}
+
+function variantConfig(theme: Theme): Record<BannerVariant, BannerVariantConfig> {
+  return {
+    info: { icon: 'information-circle-outline', accent: theme.text, surface: theme.infoSurface },
+    warning: {
+      icon: 'warning-outline',
+      accent: theme.warning,
+      surface: theme.warningSurface,
+    },
+    error: { icon: 'alert-circle-outline', accent: theme.danger, surface: theme.dangerSurface },
+    success: {
+      icon: 'checkmark-circle-outline',
+      accent: theme.success,
+      surface: theme.successSurface,
+    },
+  };
 }
 
 const styles = StyleSheet.create({
@@ -71,10 +73,8 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Typography.sectionTitle,
-    color: Colors.light.text,
   },
   message: {
     ...Typography.body,
-    color: Colors.light.text,
   },
 });

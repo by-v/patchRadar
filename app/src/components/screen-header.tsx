@@ -2,7 +2,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { Colors, Spacing, Typography } from '@/constants/theme';
+import { Spacing, Typography } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type ScreenHeaderProps = {
   title: string;
@@ -16,6 +17,8 @@ type ScreenHeaderProps = {
 };
 
 export function ScreenHeader({ title, subtitle, onBack, right, eyebrow }: ScreenHeaderProps) {
+  const theme = useTheme();
+
   return (
     <View style={styles.container}>
       {eyebrow}
@@ -26,15 +29,21 @@ export function ScreenHeader({ title, subtitle, onBack, right, eyebrow }: Screen
             accessibilityRole="button"
             hitSlop={8}
             onPress={onBack}
-            style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
-            <Ionicons color={Colors.light.text} name="chevron-back" size={20} />
+            style={({ pressed }) => [
+              styles.backButton,
+              { backgroundColor: theme.glassFill, borderColor: theme.glassBorder },
+              pressed && styles.pressed,
+            ]}>
+            <Ionicons color={theme.text} name="chevron-back" size={20} />
           </Pressable>
         ) : null}
         <View style={styles.titles}>
-          <Text accessibilityRole="header" style={styles.title}>
+          <Text accessibilityRole="header" style={[styles.title, { color: theme.text }]}>
             {title}
           </Text>
-          {subtitle ? <Text style={styles.subtitle}>{subtitle}</Text> : null}
+          {subtitle ? (
+            <Text style={[styles.subtitle, { color: theme.textSecondary }]}>{subtitle}</Text>
+          ) : null}
         </View>
         {right}
       </View>
@@ -57,11 +66,9 @@ const styles = StyleSheet.create({
   },
   title: {
     ...Typography.screenTitle,
-    color: Colors.light.text,
   },
   subtitle: {
     ...Typography.body,
-    color: Colors.light.textSecondary,
   },
   backButton: {
     width: 40,
@@ -69,9 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.light.glassFill,
     borderWidth: 1,
-    borderColor: Colors.light.glassBorder,
     marginTop: Spacing.one,
   },
   pressed: {

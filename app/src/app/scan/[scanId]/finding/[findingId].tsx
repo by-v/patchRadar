@@ -12,7 +12,8 @@ import { MetaChip } from '@/components/meta-chip';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
 import { SeverityBadge } from '@/components/severity-badge';
-import { Colors, Fonts, Radius, Spacing, Typography } from '@/constants/theme';
+import { Fonts, Radius, Spacing, Typography } from '@/constants/theme';
+import { useTheme, type Theme } from '@/hooks/use-theme';
 import {
   loadFindingForDisplay,
   openDatabaseSafely,
@@ -52,6 +53,9 @@ type DataCardProps = {
 
 /** Sel kecil pada grid data temuan. */
 function DataCard({ label, children }: DataCardProps) {
+  const theme = useTheme();
+  const styles = createStyles(theme);
+
   return (
     <GlassSurface style={styles.dataCard}>
       <Text style={styles.dataLabel}>{label}</Text>
@@ -67,6 +71,8 @@ type LoadState =
 
 export default function FindingDetailScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const styles = createStyles(theme);
   const { scanId, findingId } = useLocalSearchParams<{
     scanId?: string;
     findingId?: string;
@@ -170,7 +176,7 @@ export default function FindingDetailScreen() {
             {result.manifest.estimated ? (
               <View style={styles.identityPill}>
                 <Ionicons
-                  color={Colors.light.textOnDark}
+                  color={theme.textOnDark}
                   name="calculator-outline"
                   size={13}
                 />
@@ -238,7 +244,7 @@ export default function FindingDetailScreen() {
                 onPress={() => handleOpenReference(KEV_CATALOG_URL)}
                 style={({ pressed }) => [styles.inlineLink, pressed && styles.pressed]}>
                 <Text style={styles.inlineLinkText}>Buka katalog KEV</Text>
-                <Ionicons color={Colors.light.text} name="open-outline" size={14} />
+                <Ionicons color={theme.text} name="open-outline" size={14} />
               </Pressable>
             ) : null}
           </DataCard>
@@ -267,7 +273,7 @@ export default function FindingDetailScreen() {
               accessibilityRole="button"
               onPress={() => handleCopy(advice.command)}
               style={({ pressed }) => [styles.copyButton, pressed && styles.pressed]}>
-              <Ionicons color={Colors.light.textOnDark} name="copy-outline" size={16} />
+              <Ionicons color={theme.textOnDark} name="copy-outline" size={16} />
               <Text style={styles.copyButtonText}>Salin perintah</Text>
             </Pressable>
             {copyState === 'copied' ? (
@@ -343,7 +349,7 @@ export default function FindingDetailScreen() {
                   {reference.url}
                 </Text>
               </View>
-              <Ionicons color={Colors.light.textSecondary} name="open-outline" size={16} />
+              <Ionicons color={theme.textSecondary} name="open-outline" size={16} />
             </Pressable>
           ))
         )}
@@ -352,185 +358,187 @@ export default function FindingDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  loading: {
-    ...Typography.body,
-    color: Colors.light.textSecondary,
-  },
-  cacheRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: Spacing.two,
-  },
-  cacheTime: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  identity: {
-    padding: Spacing.four,
-    gap: Spacing.two,
-    borderRadius: Radius.card,
-    backgroundColor: Colors.light.darkCard,
-  },
-  identityTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: Spacing.two,
-    flexWrap: 'wrap',
-  },
-  identityPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    borderRadius: Radius.pill,
-    paddingHorizontal: Spacing.two,
-    paddingVertical: Spacing.one,
-    backgroundColor: Colors.light.darkAccent,
-    borderWidth: 1,
-    borderColor: Colors.light.textMutedOnDark,
-  },
-  identityPills: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: Spacing.one,
-  },
-  identityPillText: {
-    ...Typography.meta,
-    fontWeight: '600',
-    color: Colors.light.textOnDark,
-  },
-  identityScore: {
-    ...Typography.meta,
-    color: Colors.light.textMutedOnDark,
-  },
-  identityPackage: {
-    ...Typography.darkCardTitle,
-    color: Colors.light.textOnDark,
-  },
-  identityVersion: {
-    fontSize: 20,
-    lineHeight: 28,
-    color: Colors.light.textMutedOnDark,
-  },
-  identityReason: {
-    ...Typography.body,
-    color: Colors.light.textMutedOnDark,
-  },
-  section: {
-    gap: Spacing.gap,
-  },
-  sectionTitle: {
-    ...Typography.sectionTitle,
-    color: Colors.light.text,
-  },
-  sectionCard: {
-    padding: Spacing.four,
-    gap: Spacing.two,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.gap,
-  },
-  dataCard: {
-    flexBasis: '46%',
-    flexGrow: 1,
-    padding: Spacing.three,
-    gap: Spacing.one,
-  },
-  dataLabel: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  dataValue: {
-    ...Typography.body,
-    fontWeight: '600',
-    color: Colors.light.text,
-  },
-  dataMeta: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  inlineLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.one,
-    minHeight: 24,
-  },
-  inlineLinkText: {
-    ...Typography.meta,
-    fontWeight: '600',
-    color: Colors.light.text,
-    textDecorationLine: 'underline',
-  },
-  body: {
-    ...Typography.body,
-    color: Colors.light.text,
-  },
-  note: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  fixCard: {
-    padding: Spacing.four,
-    gap: Spacing.two,
-  },
-  commandBox: {
-    padding: Spacing.three,
-    borderRadius: Radius.banner,
-    backgroundColor: Colors.light.darkAccent,
-  },
-  commandText: {
-    ...Typography.code,
-    fontFamily: Fonts?.mono,
-    color: Colors.light.textOnDark,
-  },
-  copyButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.two,
-    minHeight: 44,
-    paddingHorizontal: Spacing.three,
-    borderRadius: Radius.pill,
-    backgroundColor: Colors.light.darkCard,
-  },
-  copyButtonText: {
-    ...Typography.body,
-    fontWeight: '600',
-    color: Colors.light.textOnDark,
-  },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: Spacing.one,
-  },
-  reference: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.two,
-    minHeight: 44,
-    paddingVertical: Spacing.two,
-    borderTopWidth: 1,
-    borderTopColor: Colors.light.hairline,
-  },
-  referenceTexts: {
-    flex: 1,
-    gap: Spacing.half,
-  },
-  referenceLabel: {
-    ...Typography.body,
-    fontWeight: '500',
-    color: Colors.light.text,
-  },
-  referenceUrl: {
-    ...Typography.meta,
-    color: Colors.light.textSecondary,
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-});
+function createStyles(theme: Theme) {
+    return StyleSheet.create({
+    loading: {
+      ...Typography.body,
+      color: theme.textSecondary,
+    },
+    cacheRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: Spacing.two,
+    },
+    cacheTime: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    identity: {
+      padding: Spacing.four,
+      gap: Spacing.two,
+      borderRadius: Radius.card,
+      backgroundColor: theme.darkCard,
+    },
+    identityTop: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: Spacing.two,
+      flexWrap: 'wrap',
+    },
+    identityPill: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: Spacing.one,
+      borderRadius: Radius.pill,
+      paddingHorizontal: Spacing.two,
+      paddingVertical: Spacing.one,
+      backgroundColor: theme.darkAccent,
+      borderWidth: 1,
+      borderColor: theme.textMutedOnDark,
+    },
+    identityPills: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+      gap: Spacing.one,
+    },
+    identityPillText: {
+      ...Typography.meta,
+      fontWeight: '600',
+      color: theme.textOnDark,
+    },
+    identityScore: {
+      ...Typography.meta,
+      color: theme.textMutedOnDark,
+    },
+    identityPackage: {
+      ...Typography.darkCardTitle,
+      color: theme.textOnDark,
+    },
+    identityVersion: {
+      fontSize: 20,
+      lineHeight: 28,
+      color: theme.textMutedOnDark,
+    },
+    identityReason: {
+      ...Typography.body,
+      color: theme.textMutedOnDark,
+    },
+    section: {
+      gap: Spacing.gap,
+    },
+    sectionTitle: {
+      ...Typography.sectionTitle,
+      color: theme.text,
+    },
+    sectionCard: {
+      padding: Spacing.four,
+      gap: Spacing.two,
+    },
+    grid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: Spacing.gap,
+    },
+    dataCard: {
+      flexBasis: '46%',
+      flexGrow: 1,
+      padding: Spacing.three,
+      gap: Spacing.one,
+    },
+    dataLabel: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    dataValue: {
+      ...Typography.body,
+      fontWeight: '600',
+      color: theme.text,
+    },
+    dataMeta: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    inlineLink: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: Spacing.one,
+      minHeight: 24,
+    },
+    inlineLinkText: {
+      ...Typography.meta,
+      fontWeight: '600',
+      color: theme.text,
+      textDecorationLine: 'underline',
+    },
+    body: {
+      ...Typography.body,
+      color: theme.text,
+    },
+    note: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    fixCard: {
+      padding: Spacing.four,
+      gap: Spacing.two,
+    },
+    commandBox: {
+      padding: Spacing.three,
+      borderRadius: Radius.banner,
+      backgroundColor: theme.darkAccent,
+    },
+    commandText: {
+      ...Typography.code,
+      fontFamily: Fonts?.mono,
+      color: theme.textOnDark,
+    },
+    copyButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: Spacing.two,
+      minHeight: 44,
+      paddingHorizontal: Spacing.three,
+      borderRadius: Radius.pill,
+      backgroundColor: theme.darkCard,
+    },
+    copyButtonText: {
+      ...Typography.body,
+      fontWeight: '600',
+      color: theme.textOnDark,
+    },
+    chips: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: Spacing.one,
+    },
+    reference: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: Spacing.two,
+      minHeight: 44,
+      paddingVertical: Spacing.two,
+      borderTopWidth: 1,
+      borderTopColor: theme.hairline,
+    },
+    referenceTexts: {
+      flex: 1,
+      gap: Spacing.half,
+    },
+    referenceLabel: {
+      ...Typography.body,
+      fontWeight: '500',
+      color: theme.text,
+    },
+    referenceUrl: {
+      ...Typography.meta,
+      color: theme.textSecondary,
+    },
+    pressed: {
+      opacity: 0.7,
+    },
+  });
+}
