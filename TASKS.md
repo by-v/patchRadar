@@ -1350,7 +1350,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W3-14 — (S) Tahap timed bernama untuk rate limit dan persist
 - **Tipe:** `[AGENT]`
-- **Status:** `[ ]` — **jangan dikerjakan** (prioritas S, ditunda).
+- **Status:** `[x]` — diaktifkan kembali 20 November 2026 (lihat Catatan keputusan) dan selesai.
 - **Tujuan:** Menambahkan tahap `timed` bernama untuk rate limit dan persist agar terlihat di `stages` log dashboard.
 - **Prasyarat:** `T-W3-05`, `T-W3-06`
 - **File/folder:** `supabase/functions/scan/handler.ts`, `rate-limit.ts`, `persist.ts`, test terkait
@@ -1360,11 +1360,14 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   3. Perbarui test dan bukti log dashboard bila dikerjakan.
 - **Memenuhi:** `NFR-12` (S)
 - **Kriteria selesai (AC):**
-  - [ ] Log `stages` memuat tahap bernama eksplisit untuk rate limit dan persist.
-  - [ ] Tidak ada perubahan perilaku fungsional/rate limit/persist.
+  - [x] Log `stages` memuat tahap bernama eksplisit untuk rate limit dan persist. (`handler.ts` membungkus pemeriksaan FR-25a/FR-25b dengan `timed(timings, 'rate_limit', …)` dan penyimpanan cloud dengan `timed(timings, 'persist', …)`; retensi lazy juga memakai `timed(timings, 'retention', …)`. Unit test `handler.test.ts` "T-W3-14: log stages memuat rate_limit, persist, dan retention tanpa ubah hasil" memverifikasi urutan dan kategori async.)
+  - [x] Tidak ada perubahan perilaku fungsional/rate limit/persist. (Hanya pembungkusan pengukuran; seluruh 216 test Edge lulus, termasuk 429 FR-25a/FR-25b, `persisted=true/false`, `CLOUD_PERSIST_FAILED`, dan retensi.)
 - **Estimasi:** 0,5 jam
-- [ ] Tugas selesai
-- **Catatan hasil:** Belum dikerjakan; dicatat karena Fase A menunjukkan tidak ada stage bernama eksplisit untuk rate limit/persist di log dashboard.
+- [x] Tugas selesai
+- **Catatan hasil:**
+  - `handler.ts`: `rate_limit` mencakup hash IP + `enforceIpRateLimit` + `enforceRateLimit`; `persist` mencakup `persistScanResult`/`markCloudPersistFailed`; `retention` mencakup `runLazyRetention`. Nama muncul di `stages` setiap log `ScanLogEntry`, termasuk saat 429 (tanpa `github.metadata`).
+  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 216, pass 216, fail 0`; typecheck strict berkas non-test lulus. **Belum diverifikasi** di dashboard remote: stage baru baru terlihat setelah `scan` dideploy ulang.
+  - Tidak ada perubahan pada respons klien; `timings` pada body respons tidak memuat stage internal (hanya log server).
 
 ### T-W3-13 — `[GATE]` Gate Minggu 3
 - **Tipe:** `[GATE]`
@@ -1874,6 +1877,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 17 November 2026 | `T-W4-03` | AC p95 perangkat diuji pada repo publik nyata `stylelint/stylelint` (453 paket unik, LOCKFILE v3), bukan fixture `medium-500` (491 paket). Metrik memakai durasi server (`timings.totalMs` log Edge Function, dicocokkan dengan `scans.duration_ms`) ditambah pengamatan pengembang 2–3 detik, bukan stopwatch tap→render. p95 = 5621 ms (≤15.000 ms). | Tidak ada repositori publik berisi fixture 491 paket dan agent tidak memiliki kredensial untuk membuat repo demo; rekaman 60 fps tidak tersedia. Penyimpangan dicatat sesuai bunyi AC ("atau penyimpangan dicatat beserta tindakan") dengan margin 9.379 ms. | Ya — instruksi pengembang, 17 November 2026 |
 | 19 November 2026 | `T-W4-05` | Sesi 5–10 peserta diganti uji mandiri 2 perangkat (Expo web + APK 1.0.0 vc2, 19 Nov 2026 20:30 WIB) karena peserta tidak tersedia. Metrik yang membutuhkan manusia (pemahaman label, keputusan terbantu) ditandai belum diverifikasi; AC "minimal 5 peserta" tidak dipenuhi sehingga tugas ditandai `[!]`, bukan `[x]`. | PRD §16.2 menuntut 5–10 peserta dan wawancara; uji mandiri tidak dapat membuktikan kriteria lulus §16.2 secara sah. | Ya — instruksi pengembang, 19 November 2026 |
 | 20 November 2026 | `T-W4-05` | **Cakupan PRD diubah resmi:** `docs/PRD.md` naik ke **1.2**. §16.2 menetapkan validasi MVP = uji mandiri terstruktur dua perangkat (Expo web + APK Android) dan memindahkan studi 5–10 peserta ke Tahap 2. Metrik pemahaman label dan keputusan terbantu menjadi target Tahap 2 dan ditandai belum terukur. `T-W4-05` ditutup dengan bukti uji mandiri 19 November 2026. | Peserta tidak tersedia pada jendela MVP; uji mandiri tetap memvalidasi alur utama, error, offline, dan salin perintah. Perubahan dicatat agar Gate Rilis tidak mengklaim validasi yang tidak dilakukan. | Ya — instruksi pengembang, 20 November 2026 |
+| 20 November 2026 | `T-W3-14` | **Diaktifkan kembali** dari status "jangan dikerjakan" dan dikerjakan sebelum deploy `T-W3-09`/`T-W3-10`. Tahap bernama `rate_limit`, `persist`, dan `retention` ditambahkan ke log `stages`. | `AGENTS.md` butir 5 mewajibkan bukti `stages` memuat tahap rate limit dan persist setelah deploy; prasyarat `T-W3-06` sudah ditutup dengan bukti `T-W4-04`. Pekerjaan hanya 0,5 jam dan tanpa perubahan perilaku. | Ya — instruksi pengembang, 20 November 2026 |
 | 19 November 2026 | `T-W4-06` | Dikerjakan sebelum `T-W4-05` ditutup atas instruksi pengembang. Isi tugas hanya triase temuan validasi dan verifikasi ulang; daftar temuan sudah tersedia dari sesi 19 November 2026 sehingga triase dapat diselesaikan (blocker 0). Tidak ada perubahan kode; `T-W4-05` tetap `[!]`. | Prasyarat formal belum terpenuhi; tanpa triase ini temuan non-blocker tidak masuk daftar keterbatasan sebelum `T-W4-07`. | Ya — instruksi pengembang, 19 November 2026 |
 
 

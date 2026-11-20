@@ -784,6 +784,33 @@ test('penyimpanan cloud berhasil menulis scans dan findings lalu persisted=true'
   assert.equal(body.partial, false);
 });
 
+test('T-W3-14: log stages memuat rate_limit, persist, dan retention tanpa ubah hasil', async () => {
+  const store = createMemoryScanStore();
+  const rateLimitStore = createMemoryRateLimitStore();
+  const retentionStore = createMemoryRetentionStore();
+  const { response, body, logs } = await runPipeline({
+    scanStore: store,
+    rateLimitStore,
+    retentionStore,
+    retentionForce: true,
+  });
+
+  assert.equal(response.status, 200);
+  assert.equal(body.persisted, true);
+  assert.equal(store.saveCalls, 1);
+
+  const names = logs[0]!.stages.map((stage) => stage.name);
+  for (const expected of ['rate_limit', 'persist', 'retention']) {
+    assert.ok(names.includes(expected), `stage ${expected} harus ada`);
+  }
+  const postPersist = names.indexOf('persist');
+  assert.ok(names.indexOf('rate_limit') < names.indexOf('github.metadata'));
+  assert.ok(postPersist > names.indexOf('response.build'));
+  const rateStage = logs[0]!.stages.find((stage) => stage.name === 'rate_limit')!;
+  assert.equal(rateStage.async, true);
+  assert.ok(rateStage.ms >= 0);
+});
+
 test('kegagalan simpan cloud tetap 200, persisted=false, satu warning, hasil tidak berubah', async () => {
   const success = await runPipeline({ scanStore: createMemoryScanStore() });
 
@@ -842,6 +869,9 @@ test('pengguna anonim lain tidak terkena kuota pengguna pertama', async () => {
   }
   const blocked = await runPipeline({ rateLimitStore });
   assert.equal(blocked.response.status, 429);
+  const blockedStages = blocked.logs[0]!.stages.map((stage) => stage.name);
+  assert.ok(blockedStages.includes('rate_limit'));
+  assert.ok(!blockedStages.includes('github.metadata'));
 
   const other = await runPipeline({
     rateLimitStore,

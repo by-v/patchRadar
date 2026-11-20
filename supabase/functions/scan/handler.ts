@@ -321,19 +321,21 @@ export async function handleScanRequest(
     // FR-25a/FR-25b: batas ditegakkan di server sebelum pekerjaan eksternal apa pun.
     if (dependencies.rateLimitStore) {
       if (!userId) throw new ScanError('UNAUTHENTICATED');
-      const ip = dependencies.clientIp ?? clientIpFromRequest(request);
-      const ipHash =
-        ip && dependencies.ipHashSalt
-          ? await hashIp(ip, dependencies.ipHashSalt)
-          : null;
-      if (ipHash) {
-        await enforceIpRateLimit({ store: dependencies.rateLimitStore, ipHash, now });
-      }
-      await enforceRateLimit({
-        store: dependencies.rateLimitStore,
-        userId,
-        ipHash,
-        now,
+      await timed(timings, 'rate_limit', async () => {
+        const ip = dependencies.clientIp ?? clientIpFromRequest(request);
+        const ipHash =
+          ip && dependencies.ipHashSalt
+            ? await hashIp(ip, dependencies.ipHashSalt)
+            : null;
+        if (ipHash) {
+          await enforceIpRateLimit({ store: dependencies.rateLimitStore!, ipHash, now });
+        }
+        await enforceRateLimit({
+          store: dependencies.rateLimitStore!,
+          userId,
+          ipHash,
+          now,
+        });
       });
     }
 
@@ -457,22 +459,29 @@ export async function handleScanRequest(
 
     response.timings.totalMs = Math.round(now() - started);
     if (dependencies.scanStore) {
-      if (userId) {
-        await persistScanResult(response, userId, dependencies.scanStore);
-      } else {
-        markCloudPersistFailed(response);
-      }
+      const store = dependencies.scanStore;
+      const current = response;
+      await timed(timings, 'persist', async () => {
+        if (userId) {
+          await persistScanResult(current, userId, store);
+        } else {
+          markCloudPersistFailed(current);
+        }
+      });
     }
     response.timings.totalMs = Math.round(now() - started);
     const retentionDays = dependencies.retentionDays ?? RETENTION_DAYS;
     if (dependencies.retentionStore && retentionDays > 0) {
-      retention = await runLazyRetention({
-        store: dependencies.retentionStore,
-        now,
-        days: retentionDays,
-        maxRows: dependencies.retentionMaxRows,
-        force: dependencies.retentionForce,
-      });
+      const store = dependencies.retentionStore;
+      retention = await timed(timings, 'retention', () =>
+        runLazyRetention({
+          store,
+          now,
+          days: retentionDays,
+          maxRows: dependencies.retentionMaxRows,
+          force: dependencies.retentionForce,
+        }),
+      );
     }
     response.timings.totalMs = Math.round(now() - started);
     const serialized = await timed(timings, 'response.serialize', () => JSON.stringify(response));
