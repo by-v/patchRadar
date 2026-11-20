@@ -1186,7 +1186,6 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ### T-W3-06 — Rate limit FR-25a per pengguna anonim
 - **Tipe:** `[AGENT]`
-- **Status:** `[~]` — sebagian terbukti di remote; `retryAfter` dan penerimaan setelah jendela berlalu belum dibuktikan mentah di Fase A.
 - **Tujuan:** Membatasi penyalahgunaan scan per sesi anonim di backend.
 - **Prasyarat:** `T-W3-04`
 - **File/folder:** `supabase/functions/scan/rate-limit.ts`, migrasi indeks, `rate-limit.test.ts`
@@ -1197,13 +1196,15 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   4. Uji bahwa pembatasan berjalan di server, bukan hanya UI.
 - **Memenuhi:** `FR-25a`, `NFR-08`, `R-09`
 - **Kriteria selesai (AC):**
-  - [!] Scan ke-6 dalam 10 menit menghasilkan 429 dengan `retryAfter`. **Sebagian terbukti**: A4 (anon C `041ed725`, repo tak ada) scan_C_1..5 → 404 `REPO_NOT_FOUND_OR_PRIVATE` (req `cdfbecf2..,9e11d95a..,e5f50ffe..,cb545f75..,9ac82220..`), scan_C_6 → 429 `RATE_LIMITED` (`req_c937fcfcecfc45daaa768587dfca3822`). Field `retryAfter` pada respons tidak ditangkap di keluaran mentah A4 — **belum diverifikasi**.
-  - [!] Setelah jendela berlalu, scan diterima. **Belum diuji** di remote pada Fase A.
+  - [x] Scan ke-6 dalam 10 menit menghasilkan 429 dengan `retryAfter`. A4: scan_C_1..5 → 404 `REPO_NOT_FOUND_OR_PRIVATE`, scan_C_6 → 429 `RATE_LIMITED` (`req_c937fcfcecfc45daaa768587dfca3822`). `retryAfter` terbukti pada build rilis: ke-6 `429` `req_fc2b0fdf2d3d42a0b4c02602a05cffee`, header `retry-after: 582`, body `error.retryAfter: 582` (`T-W4-04`).
+  - [x] Setelah jendela berlalu, scan diterima. Tunggu 610 detik → scan `200` `req_79eab983ef5e402e8e6225ebcfa074e6` `totalMs 5080` (`T-W4-04`, `docs/due-diligence-log.md`).
   - [x] UI menampilkan hitung mundur; backend tetap menolak walau UI dilewati.
   - [x] Tidak ada akun baru yang dibuat untuk mengakali batas.
 - **Estimasi:** 2 jam
+- [x] Tugas selesai
 - **Catatan hasil:**
-  - Kode baru belum ter-deploy pada 15 November 2026; sebagian terselesaikan 15 November 2026 setelah deploy `scan` v8. Bukti: A4 (429 ke-6) dan SQL pengembang `rate_limit_events` = 7 (min 2026-11-15 14:32:07.514+00, max 2026-11-15 14:34:57.843+00) konsisten dengan A2+A3+5 panggilan A4 yang dihitung. Catatan A4: panggilan 404 repo tak ada tetap terhitung terhadap kuota (teramati). `docs/rls-test.md`, `docs/due-diligence-log.md`.
+  - Kode baru belum ter-deploy pada 15 November 2026; sebagian terselesaikan setelah deploy `scan` v8. Bukti: A4 (429 ke-6) dan SQL pengembang `rate_limit_events` = 7 (min 2026-11-15 14:32:07.514+00, max 2026-11-15 14:34:57.843+00) konsisten dengan A2+A3+5 panggilan A4 yang dihitung. Catatan A4: panggilan 404 repo tak ada tetap terhitung terhadap kuota (teramati). `docs/rls-test.md`, `docs/due-diligence-log.md`.
+  - Sisa AC ditutup oleh `T-W4-04` pada build rilis: `retryAfter` 582 (header + body) dan scan diterima kembali setelah 610 detik (200 `req_79eab983ef5e402e8e6225ebcfa074e6`). Status `[~]` dihapus 20 November 2026; tidak ada perubahan kode pada penutupan ini.
 
 ### T-W3-07a — Matriks error kelompok A: masukan dan manifest (kondisi 1–10)
 - **Tipe:** `[AGENT]`
