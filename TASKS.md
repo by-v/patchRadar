@@ -1366,7 +1366,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [x] Tugas selesai
 - **Catatan hasil:**
   - `handler.ts`: `rate_limit` mencakup hash IP + `enforceIpRateLimit` + `enforceRateLimit`; `persist` mencakup `persistScanResult`/`markCloudPersistFailed`; `retention` mencakup `runLazyRetention`. Nama muncul di `stages` setiap log `ScanLogEntry`, termasuk saat 429 (tanpa `github.metadata`).
-  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 216, pass 216, fail 0`; typecheck strict berkas non-test lulus. **Belum diverifikasi** di dashboard remote: stage baru baru terlihat setelah `scan` dideploy ulang.
+  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 216, pass 216, fail 0`; typecheck strict berkas non-test lulus.
+  - **Deploy 20 November 2026 (v11):** `scan` v11 `updated_at` **2026-11-20 12:44:01 UTC`; sumber deployed vs lokal **30/30 SAME, 0 DIFF**, sehingga kode yang menghasilkan stage bernama identik dengan yang lulus unit test. Scan live `req_82dbd947bf4a42d388e71a7db1d2a490` (200) dan 429 FR-25b `req_f81e119e34ed48a2bdc1941d1a3f06d9`.
+  - **Belum diverifikasi:** baris `stages` pada log dashboard belum dibaca langsung (CLI tidak menyediakan `functions logs`); perlu konfirmasi pengembang di dashboard bahwa `rate_limit`/`persist` muncul.
   - Tidak ada perubahan pada respons klien; `timings` pada body respons tidak memuat stage internal (hanya log server).
 
 ### T-W3-13 — `[GATE]` Gate Minggu 3
@@ -1605,7 +1607,10 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - `store.ts`/`supabase-store.ts`: `RateLimitEventRecord.ipHash`, `listRecentByIpHash`, kolom `ip_hash` dibaca/ditulis; memori store menyaring per hash.
   - `handler.ts` memeriksa FR-25b lebih dulu, lalu FR-25a, sebelum pekerjaan eksternal; satu baris `rate_limit_events` mewakili satu scan. `composition.ts` membaca `IP_HASH_SALT` (trim; kosong = nonaktif); nilai garam tidak pernah dicatat.
   - Migrasi `20261119000000_rate_limit_ip_hash_retention.sql`: indeks parsial `rate_limit_events (ip_hash, created_at desc) where ip_hash is not null`.
-  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 215, pass 215, fail 0`; typecheck strict berkas non-test lulus (`TSC_SRC_EXIT=0`). **Belum diverifikasi** di proyek Supabase remote: migrasi belum diterapkan dan Edge Function belum dideploy ulang.
+  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 215, pass 215, fail 0`; typecheck strict berkas non-test lulus (`TSC_SRC_EXIT=0`).
+  - **Deploy 20 November 2026 (v11):** migrasi `20261119000000_rate_limit_ip_hash_retention.sql` diterapkan (`migration list` → remote `20261119000000`), secrets `IP_HASH_SALT` + `RETENTION_DAYS=90` diset, `scan` v11 `updated_at` **2026-11-20 12:44:01 UTC**, sumber deployed vs lokal **30/30 SAME, 0 DIFF**.
+  - **Uji live FR-25b:** setelah 1 scan fixture (`req_82dbd947bf4a42d388e71a7db1d2a490`, 200 `persisted=true`), 20 panggilan dari 5 sesi anonim berbeda (repo tidak ada) → panggilan ke-20 (sesi 5, percobaan 4) **HTTP 429 `RATE_LIMITED`** `req_f81e119e34ed48a2bdc1941d1a3f06d9`, `retryAfter` **3546** (header dan body). Panggilan 404 tetap dihitung terhadap kuota (teramati). Catatan: IP pengujian terkunci FR-25b ±59 menit setelah uji.
+  - **Belum diverifikasi:** isi `ip_hash` aktual di tabel (hanya service role) dan tampilan `stages` di dashboard; tidak ada IP mentah yang dicetak.
 
 ### T-W3-10 — (S) Retensi cloud 90 hari dan pembersihan lazy *(dipindah dari Minggu 3)*
 - **Tipe:** `[AGENT]`
@@ -1630,7 +1635,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - `handler.ts` menjalankan retensi setelah persist sukses; `RETENTION_DAYS=0|off` menonaktifkan; `composition.ts` membaca `RETENTION_DAYS` (default 90, angka 1–3650) tanpa mencatat nilai env.
   - Migrasi `20261119000000_rate_limit_ip_hash_retention.sql`: RPC `purge_old_scans(cutoff, max_rows)` (security definer, `for update skip locked`, batas 1–10.000 baris), RPC `scan_storage_stats()`, dan `revoke` dari `anon`/`authenticated` + `grant execute` ke `service_role`.
   - Bila fitur S dipotong: set `RETENTION_DAYS=off`; data tersimpan sampai pembersihan manual dan risiko kuota mengikuti R-08 (didokumentasikan di `docs/limitations.md`).
-  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 215, pass 215, fail 0`; typecheck strict berkas non-test lulus. **Belum diverifikasi** di proyek remote: migrasi belum diterapkan, RPC belum dijalankan pada data nyata, dan ukuran database nyata belum tercatat.
+  - Verifikasi lokal: `node --test "supabase/functions/scan/**/*.test.ts"` → `tests 215, pass 215, fail 0`; typecheck strict berkas non-test lulus.
+  - **Deploy 20 November 2026 (v11):** RPC `purge_old_scans` dan `scan_storage_stats` ada di remote (`migration list` → `20261119000000`), `scan` v11 `updated_at` **2026-11-20 12:44:01 UTC**, sumber deployed vs lokal **30/30 SAME**. Panggilan anon ke kedua RPC → **HTTP 401, kode `42501`** (hanya service role).
+  - **Belum diverifikasi:** eksekusi retensi nyata pada data > 90 hari dan nilai `dbSizeBeforeBytes`/`dbSizeAfterBytes` di log dashboard — perlu data uji berumur > 90 hari atau akses dashboard; retensi juga hanya berjalan setelah scan sukses pertama pasca-deploy (scan `req_82dbd947bf4a42d388e71a7db1d2a490` memicu jalur ini, tetapi hasil `retention` tidak terekspos ke klien).
 
 ### T-W4-09 — Perbaikan klasifikasi repo privat (temuan uji APK)
 - **Tipe:** `[AGENT]`
