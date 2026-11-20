@@ -32,14 +32,14 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 | Fase | Jumlah tugas | Estimasi | `[ ]` | `[~]` | `[x]` | `[!]` |
 |---|---:|---:|---:|---:|---:|---:|
-| Hari 0 — Persiapan | 7 | 9 jam | 7 | 0 | 0 | 0 |
-| Minggu 1 — Pipeline backend | 17 | 28 jam | 17 | 0 | 0 | 0 |
-| Minggu 2 — Aplikasi Expo | 10 | 20,5 jam | 10 | 0 | 0 | 0 |
-| Minggu 3 — Offline, cloud, error | 14 | 27,5 jam | 14 | 0 | 0 | 0 |
-| Minggu 4 — Uji, keamanan, rilis, validasi | 10 | 22,5 jam | 10 | 0 | 0 | 0 |
+| Hari 0 — Persiapan | 7 | 9 jam | 0 | 0 | 7 | 0 |
+| Minggu 1 — Pipeline backend | 17 | 28 jam | 0 | 0 | 17 | 0 |
+| Minggu 2 — Aplikasi Expo | 10 | 20,5 jam | 0 | 0 | 10 | 0 |
+| Minggu 3 — Offline, cloud, error | 15 | 28 jam | 0 | 0 | 15 | 0 |
+| Minggu 4 — Uji, keamanan, rilis, validasi | 12 | 24 jam | 1 | 0 | 11 | 0 |
 | **Buffer (cadangan)** | **—** | **16 jam** | **—** | **—** | **—** | **—** |
 | Final dan Laporan | 4 | 8 jam | 4 | 0 | 0 | 0 |
-| **Total** | **62** | **115,5 jam + 16 jam buffer** | **62** | **0** | **0** | **0** |
+| **Total** | **65** | **117,5 jam + 16 jam buffer** | **5** | **0** | **60** | **0** |
 
 > Estimasi adalah target perencanaan, bukan komitmen. Jika sebuah tugas melebihi 3 jam, pecah menjadi tugas baru dan perbarui tabel ini — kecuali tugas `[MANUAL]` sesi validasi, yang dihitung dari jumlah peserta (lihat `T-W4-05`).
 >
@@ -1675,10 +1675,81 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - Bukti remote: deploy oleh pengembang, `functions list` → `scan` VERSION **9**, `UPDATED_AT` **2026-11-17 13:58:25 UTC** (sebelumnya v8, 15 Nov). Unduh sumber deployed lalu SHA-256 vs lokal → **57/57 SAME, 0 DIFF** (`git status` bersih setelah pulihkan). Panggilan scan repo privat `by-v/venue-booking-system` dengan sesi anonim baru → **HTTP 403** `REPO_PRIVATE_OR_FORBIDDEN`, `req_1c90c314012340459dbafb1868149ba0`; sebelumnya 422 `NO_PACKAGE_JSON` `req_da3496e8c79640118c728d498ebe8b17`. Log `stages` per `requestId` **belum diverifikasi** (perlu dashboard); uji UI APK tetap dicatat di `T-W4-03`.
   - Bukti UI APK (laporan pengembang, 17 November 2026): APK **1.0.0**, **Android 8**, perangkat **Realme XT**. Pindai repo privat → layar "Pemindaian gagal" + subtitle `Kode: req_0fb7577d0d864245aece0e417178bec` + card merah pesan privat; tombol **Coba lagi** dan **kembali** tampil sesuai, tanpa tawaran login. Catatan: nilai `requestId` dilaporkan **31 karakter**, sedangkan format server `req_` + 32 hex, sehingga **perlu dikonfirmasi ulang**; status 403 pada UI sudah sesuai PRD §12 baris 6. Log `stages` per `requestId` **belum diverifikasi**.
 
+### T-W4-10 — Pilihan tema Gelap/Terang manual
+- **Tipe:** `[AGENT]`
+- **Status:** `[x]` — selesai 20 November 2026; dikerjakan sebelum gate `T-W4-08` sesuai instruksi pengembang.
+- **Tujuan:** Memberi pengguna dua pilihan tema (**Gelap**/**Terang**) yang tersimpan di perangkat dan tidak mengikuti skema sistem.
+- **Prasyarat:** `T-W3-12`
+- **File/folder:** `app/src/lib/theme-preference.ts`, `app/src/lib/theme-preference.test.ts`, `app/src/providers/theme-mode-provider.tsx`, `app/src/components/theme-selector.tsx`, `app/src/hooks/use-theme.ts`, `app/src/app/_layout.tsx`, `app/src/app/(tabs)/tentang.tsx`, `app/src/constants/theme.ts`, `app/src/hooks/use-color-scheme.ts` (dihapus), `app/src/hooks/use-color-scheme.web.ts` (dihapus), `docs/ui-design.md`
+- **Langkah:**
+  1. Simpan preferensi tema memakai abstraksi `secureStorage` yang sudah ada; tidak menambah dependensi atau secret.
+  2. Buat penyedia tema yang memakai `Appearance.setColorScheme()` untuk elemen native dan menyediakan mode lewat context.
+  3. Ubah `useTheme()` agar membaca mode dari context, bukan `useColorScheme()`.
+  4. Tambahkan pilihan **Gelap**/**Terang** di layar Tentang dengan label aksesibel berbahasa Indonesia.
+  5. Perbarui `StatusBar`, tema navigasi, dan dokumentasi desain; uji preferensi dengan unit test.
+- **Memenuhi:** `NFR-11` (S)
+- **Kriteria selesai (AC):**
+  - [x] Hanya dua opsi (**Gelap**, **Terang**) yang tersedia; tidak ada opsi “Ikuti sistem”, dengan teks dan label aksesibel berbahasa Indonesia. (Smoke STEP2: dua `role="radio"` berlabel `Tema Gelap`/`Tema Terang` dengan `aria-checked` `true`/`false`; teks bantuan “Pilihan ini tidak mengikuti pengaturan tema perangkat.” hadir.)
+  - [x] Pilihan dipakai oleh seluruh UI, `StatusBar`, dan tema navigasi; perubahan skema sistem tidak mengubah tampilan aplikasi. (`useTheme` tanpa `useColorScheme`; `grep` di `app/src` nol kecocokan; `_layout.tsx` memakai `mode === 'dark' ? DarkTheme : DefaultTheme` dan `StatusBar style={mode === 'dark' ? 'light' : 'dark'}`. Smoke STEP1/STEP3/STEP4: sistem tetap `dark` sementara kanvas berubah sesuai pilihan. Tampilan `StatusBar` di perangkat **belum diverifikasi**.)
+  - [x] Pilihan tersimpan di perangkat, dipakai ulang setelah aplikasi dibuka lagi, dan nilai rusak jatuh ke **Gelap**. (Smoke STEP4: setelah reload, `tersimpan:"light"` dan kanvas tetap `rgb(221, 211, 204)`; STEP5: `tersimpan:"dark"` dan kanvas `rgb(27, 23, 20)`. Unit test 12/12 mencakup `null`, `undefined`, `''`, `'DARK'`, `'system'`, dan JSON rusak → `dark`. Persistensi `expo-secure-store` setelah force-stop **belum diverifikasi** di perangkat.)
+  - [x] Unit test preferensi tema lulus; `lint`, `typecheck`, dan `test` aplikasi lulus. (Keluaran mentah di Catatan hasil.)
+  - [x] Tidak ada dependensi/secret baru; tidak ada perubahan atau deploy Edge Function. (`git diff -- app/package.json app/app.json supabase/` kosong.)
+- **Estimasi:** 1 jam
+- [x] Tugas selesai
+- **Catatan hasil:**
+  - Implementasi: `app/src/lib/theme-preference.ts` (`ThemeMode`, `normalizeThemeMode`, `readThemeMode`, `saveThemeMode` memakai `SecureStorage` yang sudah ada), `app/src/providers/theme-mode-provider.tsx` (context + `Appearance.setColorScheme`), `app/src/components/theme-selector.tsx` di layar Tentang, `useTheme()` dari context, `_layout.tsx` memakai mode eksplisit. `app/src/hooks/use-color-scheme.ts` dan `.web.ts` dihapus. `app.json` tetap `userInterfaceStyle: "automatic"` agar kedua skema diizinkan native; override runtime menjaga pilihan pengguna.
+  - Keluaran mentah `npm run -s lint` dan `npm run -s typecheck` di `app/`:
+    ```
+    env: load .env
+    env: export EXPO_PUBLIC_SUPABASE_ANON_KEY EXPO_PUBLIC_SUPABASE_URL
+    LINT_EXIT=0
+    TYPECHECK_EXIT=0
+    ```
+  - Keluaran mentah `npx jest --forceExit` di `app/`:
+    ```
+    Test Suites: 16 passed, 16 total
+    Tests:       160 passed, 160 total
+    Snapshots:   0 total
+    Time:        9.576 s
+    Ran all test suites.
+    Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
+    JEST_EXIT=0
+    ```
+  - Keluaran mentah per test preferensi (`npx jest src/lib/theme-preference.test.ts --forceExit --json --outputFile=...`, lalu dibaca dengan Node):
+    ```
+    success= true numTotalTests= 12
+    passed | preferensi tema menormalkan "dark" menjadi "dark"
+    passed | preferensi tema menormalkan "light" menjadi "light"
+    passed | preferensi tema menormalkan null menjadi "dark"
+    passed | preferensi tema menormalkan undefined menjadi "dark"
+    passed | preferensi tema menormalkan "" menjadi "dark"
+    passed | preferensi tema menormalkan "DARK" menjadi "dark"
+    passed | preferensi tema menormalkan "system" menjadi "dark"
+    passed | preferensi tema menormalkan "{\"mode\":\"light\"}" menjadi "dark"
+    passed | preferensi tema memakai tema gelap sebagai default
+    passed | preferensi tema membaca preferensi tersimpan
+    passed | preferensi tema jatuh ke tema gelap bila penyimpanan kosong atau berisi nilai rusak
+    passed | preferensi tema menyimpan pilihan ke kunci yang sama
+    JSON_EXIT=0
+    ```
+  - Keluaran mentah smoke test Expo Web headless (Chrome `--force-dark-mode`, `localhost:8081`, CDP; naskah `C:\Users\Lenovo\AppData\Local\Temp\opencode\theme-smoke.cjs`):
+    ```
+    STEP1 sistem=gelap, tanpa preferensi => {"sistem":"dark","latarKanvas":"rgb(27, 23, 20)"}
+    STEP2 opsi di Tentang => {"adaTampilan":true,"adaTeksBantuan":true,"opsi":[{"label":"Tema Gelap","checked":"true","html":"<div aria-checked=\"true\" aria-label=\"Tema Gelap\" role=\"radio\" tabindex=\"0\" class=\"css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73 r-alignItems-1awozwy r-borderRadius-y47klf r-flexDirection-18u37iz r-gap-1cmwbt1 r-minHeight-adacv r-padding-edyy15\" style=\"background-color: r"},{"label":"Tema Terang","checked":"false","html":"<div aria-checked=\"false\" aria-label=\"Tema Terang\" role=\"radio\" tabindex=\"0\" class=\"css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73 r-alignItems-1awozwy r-borderRadius-y47klf r-flexDirection-18u37iz r-gap-1cmwbt1 r-minHeight-adacv r-padding-edyy15\"><div"}],"latarKanvas":"rgb(27, 23, 20)"}
+    STEP3 setelah pilih Terang => {"sistem":"dark","opsi":[{"label":"Tema Gelap","checked":"false","html":"<div aria-checked=\"false\" aria-label=\"Tema Gelap\" role=\"radio\" tabindex=\"0\" class=\"css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73 r-alignItems-1awozwy r-borderRadius-y47klf r-flexDirection-18u37iz r-gap-1cmwbt1 r-minHeight-adacv r-padding-edyy15\" style\":"},{"label":"Tema Terang","checked":"true","html":"<div aria-checked=\"true\" aria-label=\"Tema Terang\" role=\"radio\" tabindex=\"0\" class=\"css-view-g5y9jx r-cursor-1loqt21 r-touchAction-1otgn73 r-alignItems-1awozwy r-borderRadius-y47klf r-flexDirection-18u37iz r-gap-1cmwbt1 r-minHeight-adacv r-padding-edyy15\" style"}],"latarKanvas":"rgb(221, 211, 204)","tersimpan":"light"}
+    SCREENSHOT_TERANG= C:\Users\Lenovo\AppData\Local\Temp\opencode\patchradar-theme-light.png
+    STEP4 setelah reload, sistem tetap gelap => {"sistem":"dark","opsi":[{"label":"Tema Gelap","checked":"false"},{"label":"Tema Terang","checked":"true"}],"tersimpan":"light","latarKanvas":"rgb(221, 211, 204)"}
+    STEP5 setelah pilih Gelap => {"sistem":"dark","opsi":[{"label":"Tema Gelap","checked":"true"},{"label":"Tema Terang","checked":"false"}],"tersimpan":"dark","latarKanvas":"rgb(27, 23, 20)"}
+    SMOKE_EXIT=0
+    ```
+    Catatan: kolom `html` sudah dipotong menjadi 260 karakter oleh naskah probe; `rgb(27, 23, 20)` = `canvasTop #1B1714` (gelap), `rgb(221, 211, 204)` = `canvasTop #DDD3CC` (terang).
+  - `requestId`: **tidak ada**. Seluruh uji di atas berupa lint/typecheck/Jest lokal dan render Expo Web headless; tidak ada panggilan API PatchRadar/Supabase yang dibuat, sehingga tidak ada `requestId` yang dapat dicantumkan.
+  - **Belum diverifikasi:** tampilan `StatusBar` native, penyimpanan `expo-secure-store` setelah force-stop, dan build APK dari commit ini. Verifikasi perangkat diserahkan ke pengembang sebelum `T-W4-08`.
+
 ### T-W4-08 — `[GATE]` Gate rilis
 - **Tipe:** `[GATE]`
 - **Tujuan:** Memutuskan apakah build layak dirilis sebagai release candidate.
-- **Prasyarat:** `T-W4-01` s.d. `T-W4-07`; `T-W4-09`; `T-W3-09`, `T-W3-10` bila fitur S dipertahankan
+- **Prasyarat:** `T-W4-01` s.d. `T-W4-07`; `T-W4-09`; `T-W4-10`; `T-W3-09`, `T-W3-10` bila fitur S dipertahankan
 - **File/folder:** `docs/release-gate.md`
 - **Langkah:**
   1. Periksa seluruh DoD Minggu 4 PRD.
@@ -1827,7 +1898,7 @@ Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requi
 | NFR-09 | `T-W1-06`, `T-W1-14`, `T-W3-07a` |
 | NFR-10 | `T-D0-04`, `T-W2-08`, `T-W4-02`, `T-W4-03` |
 | NFR-11 (M) | `T-W2-01`, `T-W2-07` |
-| NFR-11 (S) | `T-W3-12` |
+| NFR-11 (S) | `T-W3-12`, `T-W4-10` |
 | NFR-12 (M) | `T-W1-11`, `T-W1-12d` |
 | NFR-12 (S) | `T-W3-11` |
 | NFR-13 | `T-D0-04`, `T-D0-05`, `T-W2-01`, `T-W2-07`, `T-W2-08`, `T-W2-09`, `T-W4-03`, `T-W4-08` |
@@ -1898,6 +1969,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 20 November 2026 | `T-W3-14` | **Diaktifkan kembali** dari status "jangan dikerjakan" dan dikerjakan sebelum deploy `T-W3-09`/`T-W3-10`. Tahap bernama `rate_limit`, `persist`, dan `retention` ditambahkan ke log `stages`. | `AGENTS.md` butir 5 mewajibkan bukti `stages` memuat tahap rate limit dan persist setelah deploy; prasyarat `T-W3-06` sudah ditutup dengan bukti `T-W4-04`. Pekerjaan hanya 0,5 jam dan tanpa perubahan perilaku. | Ya — instruksi pengembang, 20 November 2026 |
 | 20 November 2026 | `T-W3-12` | **Penundaan 15 November dibatalkan**; tema gelap dikerjakan dan diselesaikan sebelum build APK final, bukan setelahnya. `userInterfaceStyle` berubah `light`→`automatic`; palet gelap dan uji kontras WCAG ditambahkan; build final harus berasal dari commit `T-W3-12`. | Pengembang meminta tugas ini diselesaikan lebih dulu agar APK rilis tidak perlu dibangun ulang. Risiko regresi UI dimitigasi oleh test kontras otomatis, render web headless, serta `lint`/`typecheck`/`jest` yang lulus. | Ya — instruksi pengembang, 20 November 2026 |
 | 19 November 2026 | `T-W4-06` | Dikerjakan sebelum `T-W4-05` ditutup atas instruksi pengembang. Isi tugas hanya triase temuan validasi dan verifikasi ulang; daftar temuan sudah tersedia dari sesi 19 November 2026 sehingga triase dapat diselesaikan (blocker 0). Tidak ada perubahan kode; `T-W4-05` tetap `[!]`. | Prasyarat formal belum terpenuhi; tanpa triase ini temuan non-blocker tidak masuk daftar keterbatasan sebelum `T-W4-07`. | Ya — instruksi pengembang, 19 November 2026 |
+| 20 November 2026 | `T-W4-10` | Perilaku `T-W3-12` diubah: tema tidak lagi mengikuti `useColorScheme()`/skema sistem. Pengguna memilih **Gelap** atau **Terang** secara manual di layar Tentang; default **Gelap**; pilihan disimpan di perangkat. `app.json` tetap `userInterfaceStyle: "automatic"` agar kedua skema diizinkan native, dengan override `Appearance.setColorScheme()` saat runtime. Tugas baru dikerjakan sebelum gate `T-W4-08` dan sebelum build APK final. | Pengembang meminta dua opsi manual dan menolak pengikutan otomatis ke perangkat. Perubahan ini masih dalam ruang `NFR-11` (S), tidak menambah fitur Backlog Tahap 2, dan hanya menyentuh aplikasi sehingga deploy `scan` v11 tidak berubah. | Ya — instruksi pengembang, 20 November 2026 |
 
 
 ---

@@ -5,6 +5,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { GlassSurface } from '@/components/glass-surface';
 import { Screen } from '@/components/screen';
 import { ScreenHeader } from '@/components/screen-header';
+import { ThemeSelector } from '@/components/theme-selector';
 import { Spacing, Typography } from '@/constants/theme';
 import { useTheme, type Theme } from '@/hooks/use-theme';
 
@@ -82,6 +83,13 @@ export default function AboutScreen() {
         PatchRadar memeriksa dependensi repositori GitHub dan mengurutkan temuan berdasarkan risiko
         yang dapat ditindaklanjuti. Hasilnya berupa bahan prioritas, bukan keputusan akhir.
       </Text>
+
+      <Section title="Tampilan">
+        <ThemeSelector />
+        <Text style={styles.settingHint}>
+          Pilihan ini tidak mengikuti pengaturan tema perangkat.
+        </Text>
+      </Section>
 
       <Section title="Arti label">
         <View style={styles.cards}>
@@ -180,6 +188,10 @@ function createStyles(theme: Theme) {
   return StyleSheet.create({
     intro: {
       ...Typography.body,
+      color: theme.textSecondary,
+    },
+    settingHint: {
+      ...Typography.meta,
       color: theme.textSecondary,
     },
     section: {

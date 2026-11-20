@@ -5,15 +5,24 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import { useColorScheme } from '@/hooks/use-color-scheme';
 import { useTheme } from '@/hooks/use-theme';
+import { ThemeModeProvider, useThemeMode } from '@/providers/theme-mode-provider';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  return (
+    <ThemeModeProvider>
+      <RootLayoutContent />
+    </ThemeModeProvider>
+  );
+}
+
+function RootLayoutContent() {
   const theme = useTheme();
-  const scheme = useColorScheme();
-  const baseTheme = scheme === 'dark' ? DarkTheme : DefaultTheme;
+  const { mode } = useThemeMode();
+  const baseTheme = mode === 'dark' ? DarkTheme : DefaultTheme;
+  const statusBarStyle = mode === 'dark' ? 'light' : 'dark';
   const navigationTheme = {
     ...baseTheme,
     colors: {
@@ -28,7 +37,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={navigationTheme}>
-      <StatusBar style="auto" />
+      <StatusBar style={statusBarStyle} />
       <AnimatedSplashOverlay />
       <Stack
         screenOptions={{

@@ -2,8 +2,8 @@
  * Token desain PatchRadar.
  *
  * Acuan lengkap: `docs/ui-design.md` §3–§5.
- * Mode gelap mengikuti pengaturan sistem (`app.json` `userInterfaceStyle:
- * "automatic"`); `useTheme` memilih `Colors.light`/`Colors.dark`.
+ * Tema dipilih pengguna lewat `ThemeModeProvider`; `useTheme` memilih
+ * `Colors.light`/`Colors.dark` tanpa mengikuti pengaturan sistem.
  */
 
 import { Platform } from 'react-native';

@@ -6,11 +6,11 @@ Dokumen ini menerjemahkan arah visual aplikasi menjadi aturan yang dapat diimple
 
 | Item | Nilai |
 |---|---|
-| Versi dokumen | 1.2 |
+| Versi dokumen | 1.3 |
 | Tanggal | 20 November 2026 |
-| Status | Disetujui pada `T-W2-01`; tema gelap ditambahkan pada `T-W3-12` |
+| Status | Disetujui pada `T-W2-01`; tema gelap ditambahkan pada `T-W3-12`; pilihan manual ditambahkan pada `T-W4-10` |
 | Sumber desain | Hasil uji prompt Figma, disetujui pengembang (tanpa tautan; spesifikasi lengkap ada di dokumen ini) |
-| Cakupan | Terang dan gelap; skema dipilih otomatis dari pengaturan sistem (`app.json` `userInterfaceStyle: "automatic"`) |
+| Cakupan | Terang dan gelap; skema dipilih manual oleh pengguna (**Gelap**/**Terang**), default **Gelap**, dan tidak mengikuti pengaturan sistem |
 | Bahasa UI | Indonesia; istilah teknis (KEV, EPSS, CVSS, OSV, CVE) tetap Inggris |
 
 Rujukan silang:
@@ -79,7 +79,7 @@ Status umum: sukses `#3F6212`, peringatan `#92690B`, error `#B3261E`. Banner mem
 
 ### 3.4 Palet gelap (`T-W3-12`)
 
-Skema gelap dipilih otomatis oleh `useTheme()` dari `useColorScheme()`; seluruh komponen dan layar memakai token tema aktif, bukan `Colors.light` langsung. Palet terang di §3.1–§3.3 tidak diubah.
+Skema dipilih oleh pengguna lewat `ThemeModeProvider` dan dipakai `useTheme()`; seluruh komponen dan layar memakai token tema aktif, bukan `Colors.light` langsung. Tidak ada opsi “Ikuti sistem”. Palet terang di §3.1–§3.3 tidak diubah.
 
 | Token | Nilai gelap | Catatan |
 |---|---|---|
@@ -273,5 +273,5 @@ Seluruh keputusan terbuka pada versi 1.0 sudah ditutup pada `T-W2-01`:
 3. **`hairline` `#6B605A`** — dipakai untuk batas input dan pemisah (≥3:1).
 4. **Tab bar kaca** — memakai `Tabs` dari `expo-router/js-tabs` dengan `tabBar` kustom.
 5. **Efek kaca Android** — tanpa `expo-blur`; memakai panel semi-opaque.
-6. **Mode gelap** — awalnya dinonaktifkan (`light`); dibatalkan pada 20 November 2026 dan kini mengikuti skema sistem lewat `userInterfaceStyle: "automatic"` (`T-W3-12`). Palet gelap memakai aksen status terang dengan teks gelap agar tetap lulus AA.
+6. **Mode gelap** — awalnya dinonaktifkan (`light`); dibatalkan pada 20 November 2026 (`T-W3-12`). Pada `T-W4-10` perilaku diubah menjadi pilihan manual **Gelap**/**Terang** di layar Tentang, default **Gelap**, tanpa opsi sistem. `app.json` tetap `userInterfaceStyle: "automatic"` agar kedua skema diizinkan native; override `Appearance.setColorScheme()` menjaga elemen native mengikuti pilihan pengguna. Palet gelap memakai aksen status terang dengan teks gelap agar tetap lulus AA.
 7. **Web** — `react-native-web` tidak menyediakan `AccessibilityInfo.isReduceTransparencyEnabled`. `useReduceTransparency` mendeteksi kemampuan lewat `app/src/lib/reduce-transparency.ts` dan memakai fallback opaque di web. Web juga memakai SPA (`web.output = "single"`) agar ikon font tidak memicu hydration mismatch, dan seluruh dialog memakai `Banner` karena `Alert.alert` tidak berfungsi di web.
