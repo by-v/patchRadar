@@ -299,3 +299,111 @@ Rincian dan keluaran mentah di `docs/due-diligence-log.md` (baris 17 November 20
 - Environment EAS: diperiksa langsung lewat `eas env:list` di §6.2.
 - Uji RLS pada build rilis: diulang di §6.3.
 - **Masih belum diverifikasi:** atribut `usesCleartextTraffic`/`networkSecurityConfig` pada `AndroidManifest.xml` biner (pencarian string mentah tidak konklusif); tidak ada bukti bahwa nilai itu disetel eksplisit.
+
+## 7. Audit ulang berbasis sumber — HEAD `7fd6288` (20 November 2026)
+
+Bagian ini mengulang pemeriksaan sumber setelah perubahan tema manual `T-W4-10`. Tidak ada perubahan dependensi, Edge Function, atau konfigurasi build sejak `T-W4-01`; audit **level APK tidak diulang** karena build final belum dijalankan. Temuan F-01 s.d. F-08 pada §3 tetap berlaku.
+
+### 7.1 Keluaran mentah
+
+Perintah di bawah dijalankan di root repo, kecuali `npm audit` yang dijalankan di `app/`. Nilai secret tidak dicetak.
+
+```text
+HEAD=7fd6288482a70a3b412f47da1bd007aee0832ca4
+STATUS=
+SECRET_HITS_RL=
+supabase/config.toml
+supabase/functions/scan/composition.test.ts
+supabase/functions/scan/composition.ts
+supabase/migrations/20261110000000_osv_cache.sql
+supabase/migrations/20261110000100_kev_entries.sql
+supabase/migrations/20261114000000_epss_cache.sql
+supabase/migrations/20261115000000_scans_findings_rate_limit.sql
+supabase/migrations/20261119000000_rate_limit_ip_hash_retention.sql
+SECRET_HITS_EXIT=0
+TRACKED_SENSITIVE=
+
+app/.env.example
+IGNORE_RULE=
+.gitignore:5:.env*	app/.env
+DEP_DIFF_SINCE_REVIEW=
+DEP_DIFF_END
+```
+
+Rincian kecocokan pola pada sembilan berkas tersebut (semua adalah nama variabel, placeholder test, komentar, atau `grant ... to service_role`, bukan nilai rahasia):
+
+```text
+supabase/config.toml:20:# `postgres` are reachable through the Data API roles (`anon`, `authenticated`, `service_role`)
+supabase/functions/scan/composition.test.ts:167:      if (name === 'GITHUB_TOKEN') return 'gh-token';
+supabase/functions/scan/composition.test.ts:169:      if (name === 'SUPABASE_SERVICE_ROLE_KEY') return 'service-role-key';
+supabase/functions/scan/composition.test.ts:190:    GITHUB_TOKEN: 'gh-token',
+supabase/functions/scan/composition.test.ts:192:    SUPABASE_SERVICE_ROLE_KEY: 'service-role-key',
+supabase/functions/scan/composition.test.ts:222:    if (name === 'GITHUB_TOKEN') return 'gh-token';
+supabase/functions/scan/composition.test.ts:223:    if (name === 'SUPABASE_SERVICE_ROLE_KEY') return 'service-role-key';
+supabase/functions/scan/composition.test.ts:231:    if (name === 'GITHUB_TOKEN') return 'gh-token';
+supabase/functions/scan/composition.test.ts:237:  assert.deepEqual(missingKey.missing, ['SUPABASE_SERVICE_ROLE_KEY']);
+supabase/functions/scan/composition.test.ts:240:    if (name === 'GITHUB_TOKEN') return 'gh-token';
+supabase/functions/scan/composition.test.ts:245:  assert.deepEqual(missingBoth.missing, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
+supabase/functions/scan/composition.test.ts:255:    logScanMisconfiguration(['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
+supabase/functions/scan/composition.test.ts:262:  assert.deepEqual(parsed.missing, ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY']);
+supabase/functions/scan/composition.test.ts:284:      if (name === 'GITHUB_TOKEN') return 'github-token';
+supabase/functions/scan/composition.test.ts:286:      if (name === 'SUPABASE_SERVICE_ROLE_KEY') return SERVICE_ROLE;
+supabase/functions/scan/composition.test.ts:381:      if (name === 'GITHUB_TOKEN') return 'github-token';
+supabase/functions/scan/composition.test.ts:383:      if (name === 'SUPABASE_SERVICE_ROLE_KEY') return SERVICE_ROLE;
+supabase/functions/scan/composition.ts:49:const REQUIRED_STORE_ENV = ['SUPABASE_URL', 'SUPABASE_SERVICE_ROLE_KEY'] as const;
+supabase/functions/scan/composition.ts:67: * - `GITHUB_TOKEN` hilang: tidak dianggap misconfig di sini; handler tetap
+supabase/functions/scan/composition.ts:69: * - `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` hilang: misconfig (tidak boleh
+supabase/functions/scan/composition.ts:76:  const token = getEnv('GITHUB_TOKEN') ?? null;
+supabase/functions/scan/composition.ts:78:  const serviceRoleKey = getEnv('SUPABASE_SERVICE_ROLE_KEY');
+supabase/migrations/20261110000000_osv_cache.sql:28:grant all on table public.osv_cache to service_role;
+supabase/migrations/20261110000100_kev_entries.sql:28:grant all on table public.kev_entries to service_role;
+supabase/migrations/20261114000000_epss_cache.sql:36:grant all on table public.epss_cache to service_role;
+supabase/migrations/20261115000000_scans_findings_rate_limit.sql:147:grant all on table public.scans to service_role;
+supabase/migrations/20261115000000_scans_findings_rate_limit.sql:148:grant all on table public.findings to service_role;
+supabase/migrations/20261115000000_scans_findings_rate_limit.sql:149:grant all on table public.rate_limit_events to service_role;
+supabase/migrations/20261119000000_rate_limit_ip_hash_retention.sql:77:grant execute on function public.purge_old_scans(timestamptz, integer) to service_role;
+supabase/migrations/20261119000000_rate_limit_ip_hash_retention.sql:78:grant execute on function public.scan_storage_stats() to service_role;
+GREP_DETAIL_EXIT=0
+```
+
+Audit dependensi produksi (`npm audit --omit=dev --json`, diringkas dengan `ConvertFrom-Json`):
+
+```text
+AUDIT_METADATA=
+
+info     : 0
+low      : 0
+moderate : 5
+high     : 0
+critical : 0
+total    : 5
+
+
+AUDIT_PACKAGES_TOTAL=1
+AUDIT_EXIT=1
+```
+
+`AUDIT_EXIT=1` adalah perilaku `npm audit` ketika temuan masih ada; tidak ada temuan high/critical, sesuai F-06.
+
+Pemeriksaan konfigurasi terkait tema (kutipan keluaran mentah):
+
+```text
+THEME_STORAGE_KEYS=
+app/src/storage/secure.ts:18:const WEB_PREFIX = 'patchradar.secure.';
+```
+
+`app.json` tetap memakai `userInterfaceStyle: "automatic"` dan plugin `expo-secure-store`; `eas.json` tetap memakai profil `release` dengan `environment: "production"` dan `autoIncrement: true`. Tidak ada perubahan pada kedua berkas itu sejak audit `T-W4-01`.
+
+### 7.2 Kesimpulan audit ulang
+
+1. Tidak ada nilai secret, token GitHub, service role, atau private key yang ditemukan di sumber terlacak. Kecocokan pola seluruhnya berupa identifier, placeholder, atau grant database.
+2. Hanya `app/.env.example` yang terlacak; `app/.env` dikecualikan oleh `.gitignore:5:.env*`.
+3. Tidak ada perubahan `app/package.json` maupun `app/package-lock.json` sejak HEAD `9738945` saat `T-W4-01` diaudit.
+4. Preferensi tema memakai abstraksi `SecureStorage` yang sudah ada; tidak menambah dependensi, secret, atau kunci rahasia baru.
+5. Tidak ada temuan kritis atau tinggi baru. F-01 s.d. F-08 tetap diterima dengan alasan yang sama.
+
+### 7.3 Batas bukti
+
+`requestId`: **tidak ada**. Seluruh pemeriksaan pada bagian ini adalah perintah Git dan `npm audit` lokal, tanpa panggilan API PatchRadar/Supabase.
+
+**Masih belum diverifikasi:** audit string dan manifest APK dari commit `7fd6288` (build final belum dibuat), atribut `usesCleartextTraffic`/`networkSecurityConfig` pada manifest biner, inspeksi environment EAS ulang, dan uji perangkat untuk `StatusBar` serta persistensi tema setelah force-stop. Bagian §6 tetap menjadi bukti untuk APK `vc2`, bukan untuk build final.

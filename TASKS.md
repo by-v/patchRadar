@@ -1765,6 +1765,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Estimasi:** 1,5 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
+  - **Persiapan gate 20 November 2026 (belum menutup tugas):** audit ulang berbasis sumber pada HEAD `7fd6288482a70a3b412f47da1bd007aee0832ca4` tercatat di `docs/security-review.md` §7. Keluaran mentah: `STATUS=` (bersih); `git grep -I -l` untuk pola secret pada `app`/`supabase` menghasilkan 9 berkas yang setelah diperiksa baris per baris seluruhnya berupa nama variabel, placeholder test, komentar, atau `grant ... to service_role` — bukan nilai rahasia; `TRACKED_SENSITIVE=` hanya `app/.env.example`; `IGNORE_RULE=.gitignore:5:.env* app/.env`; `git diff 9738945..HEAD -- app/package.json app/package-lock.json` kosong; `npm audit --omit=dev --json` → `info 0, low 0, moderate 5, high 0, critical 0, total 5`, `AUDIT_PACKAGES_TOTAL=1`, `AUDIT_EXIT=1` (exit 1 karena temuan moderate, bukan high/critical); `THEME_STORAGE_KEYS` hanya `app/src/storage/secure.ts:18:const WEB_PREFIX = 'patchradar.secure.';`. `requestId`: **tidak ada** (seluruhnya perintah Git/`npm audit` lokal). Tidak ada temuan kritis/tinggi baru.
+  - `README.md` (root) dan `app/README.md` diperbarui sebagai artefak pendukung `T-F-02` lebih awal sesuai instruksi pengembang 20 November 2026; rincian di Catatan keputusan.
+  - **Belum diverifikasi:** build APK dari `7fd6288`, smoke test perangkat (alur utama, offline, perpindahan tema, dan persistensi setelah force-stop), audit string/manifest APK final, inspeksi environment EAS ulang, verdict Go/No-Go, dan keempat AC gate lainnya.
 
 ---
 
@@ -1807,6 +1810,9 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Estimasi:** 2 jam
 - [ ] Tugas selesai
 - **Catatan hasil:**
+  - `README.md` (root) dibuat dan `app/README.md` yang masih boilerplate Expo diganti dengan petunjuk aplikasi pada 20 November 2026 atas instruksi pengembang. README memuat gambaran produk, struktur repo, cara menjalankan, variabel publik, perintah uji, build EAS, dan peta dokumentasi; tidak memuat nilai secret maupun variabel `EXPO_PUBLIC_*` yang sebenarnya.
+  - Perintah build di README mengikuti dokumentasi Expo Build (`eas build --platform android`, `--profile` dari `eas.json`) dengan awalan `npx eas-cli@latest` sesuai aturan `app/AGENTS.md`.
+  - **Masih kurang untuk menutup tugas:** skrip demo langkah demi langkah, fallback jaringan, daftar artefak final, dan uji jalankan skrip dari awal. Semuanya menunggu APK final dari `7fd6288` serta penutupan `T-W4-08`.
 
 ### T-F-03 — Audit akhir cakupan PRD dan konsistensi dokumen
 - **Tipe:** `[AGENT]`
@@ -1970,6 +1976,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 20 November 2026 | `T-W3-12` | **Penundaan 15 November dibatalkan**; tema gelap dikerjakan dan diselesaikan sebelum build APK final, bukan setelahnya. `userInterfaceStyle` berubah `light`→`automatic`; palet gelap dan uji kontras WCAG ditambahkan; build final harus berasal dari commit `T-W3-12`. | Pengembang meminta tugas ini diselesaikan lebih dulu agar APK rilis tidak perlu dibangun ulang. Risiko regresi UI dimitigasi oleh test kontras otomatis, render web headless, serta `lint`/`typecheck`/`jest` yang lulus. | Ya — instruksi pengembang, 20 November 2026 |
 | 19 November 2026 | `T-W4-06` | Dikerjakan sebelum `T-W4-05` ditutup atas instruksi pengembang. Isi tugas hanya triase temuan validasi dan verifikasi ulang; daftar temuan sudah tersedia dari sesi 19 November 2026 sehingga triase dapat diselesaikan (blocker 0). Tidak ada perubahan kode; `T-W4-05` tetap `[!]`. | Prasyarat formal belum terpenuhi; tanpa triase ini temuan non-blocker tidak masuk daftar keterbatasan sebelum `T-W4-07`. | Ya — instruksi pengembang, 19 November 2026 |
 | 20 November 2026 | `T-W4-10` | Perilaku `T-W3-12` diubah: tema tidak lagi mengikuti `useColorScheme()`/skema sistem. Pengguna memilih **Gelap** atau **Terang** secara manual di layar Tentang; default **Gelap**; pilihan disimpan di perangkat. `app.json` tetap `userInterfaceStyle: "automatic"` agar kedua skema diizinkan native, dengan override `Appearance.setColorScheme()` saat runtime. Tugas baru dikerjakan sebelum gate `T-W4-08` dan sebelum build APK final. | Pengembang meminta dua opsi manual dan menolak pengikutan otomatis ke perangkat. Perubahan ini masih dalam ruang `NFR-11` (S), tidak menambah fitur Backlog Tahap 2, dan hanya menyentuh aplikasi sehingga deploy `scan` v11 tidak berubah. | Ya — instruksi pengembang, 20 November 2026 |
+| 20 November 2026 | `T-W4-08`, `T-F-02` | Pekerjaan pendukung gate (audit ulang keamanan berbasis sumber pada `7fd6288` dan penyusunan README) dilakukan sebelum build APK final. `T-W4-08` tetap `[ ]` dan `T-F-02` tetap `[ ]`: keduanya baru ditutup setelah APK final terpasang, smoke test perangkat, skrip demo, dan daftar artefak tersedia. | Pengembang meminta penutupan celah dokumen yang murah terlebih dahulu, sementara uji perangkat tetap menjadi tanggung jawab pengembang. Tidak ada perubahan kode, dependensi, atau Edge Function; bukti lama tidak diklaim sebagai bukti build final. | Ya — instruksi pengembang, 20 November 2026 |
 
 
 ---
