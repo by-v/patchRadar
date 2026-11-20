@@ -406,4 +406,109 @@ app/src/storage/secure.ts:18:const WEB_PREFIX = 'patchradar.secure.';
 
 `requestId`: **tidak ada**. Seluruh pemeriksaan pada bagian ini adalah perintah Git dan `npm audit` lokal, tanpa panggilan API PatchRadar/Supabase.
 
-**Masih belum diverifikasi:** audit string dan manifest APK dari commit `7fd6288` (build final belum dibuat), atribut `usesCleartextTraffic`/`networkSecurityConfig` pada manifest biner, inspeksi environment EAS ulang, dan uji perangkat untuk `StatusBar` serta persistensi tema setelah force-stop. Bagian §6 tetap menjadi bukti untuk APK `vc2`, bukan untuk build final.
+**Masih belum diverifikasi pada saat §7 ditulis:** audit string dan manifest APK dari commit `7fd6288` (build final belum dibuat), atribut `usesCleartextTraffic`/`networkSecurityConfig` pada manifest biner, inspeksi environment EAS ulang, dan uji perangkat untuk `StatusBar` serta persistensi tema setelah force-stop. Bagian §6 tetap menjadi bukti untuk APK `vc2`, bukan untuk build final. **Tindak lanjut: build final telah dibuat dan diaudit pada §8.**
+
+## 8. Audit APK final `vc3` — 20 November 2026
+
+### 8.1 Identitas build
+
+| Item | Nilai |
+|---|---|
+| Build ID | `91ee200a-aa2f-449b-a6e8-fa8a99e747d6` |
+| Halaman build | `https://expo.dev/accounts/codebyv10/projects/patchradar/builds/91ee200a-aa2f-449b-a6e8-fa8a99e747d6` |
+| Commit sumber | `11d1def6e4cd630af6dc796857ad2101bd7baaf5` |
+| `appVersion` / `versionCode` | `1.0.0` / `3` (naik dari `2`) |
+| Profil / environment | `release` / `production` |
+| Berkas | `D:\builds\patchradar-release-vc3.apk` |
+| Ukuran | 109.333.379 byte |
+| SHA-256 | `B685959AD3A0AA9D962E8FF31031C3A46C47148B4F1489BEC12B00EE1DCC7800` |
+| Entri arsip | 1.326 |
+| Bundle | `assets/index.android.bundle` (3.455.488 byte) |
+
+### 8.2 Keluaran mentah build dan unduh
+
+```text
+NODE=v24.21.0
+EAS_VERSION=eas-cli/27.11.0 win32-x64 node-v24.21.0
+WHOAMI=
+codebyv10
+codebyv10@gmail.com
+WHOAMI_EXIT=0
+
+Environment variables with visibility "Plain text" and "Sensitive" loaded from the "production" environment on EAS: EXPO_PUBLIC_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL.
+
+- Incrementing versionCode from 2 to 3.
+✔ Incremented versionCode from 2 to 3.
+✔ Using remote Android credentials (Expo server)
+✔ Using Keystore from configuration: Build Credentials EPkjlDM7tu (default)
+✔ Uploaded to EAS 15s
+✔ Computed project fingerprint
+See logs: https://expo.dev/accounts/codebyv10/projects/patchradar/builds/91ee200a-aa2f-449b-a6e8-fa8a99e747d6
+✔ Build finished
+
+🤖 Android app:
+https://expo.dev/artifacts/eas/RTB180pXwrTxKUDkcDHX5Ye8OmvrtBn8eq8UWRGt5UY.apk
+BUILD_EXIT=0
+
+✔ 🎯 Found build 91ee200a-aa2f-449b-a6e8-fa8a99e747d6 on EAS servers.
+- Downloading app (0 / 104 MB)
+✔ Successfully downloaded app 1m 34s
+DOWNLOAD_EXIT=0
+
+APK_PATH=D:\builds\patchradar-release-vc3.apk
+APK_SIZE=109333379
+SHA256=B685959AD3A0AA9D962E8FF31031C3A46C47148B4F1489BEC12B00EE1DCC7800
+
+VIEW_KEYS=id,status,platform,artifacts,fingerprint,initiatingActor,logFiles,app,distribution,buildProfile,appIdentifier,sdkVersion,appVersion,appBuildVersion,gitCommitHash,gitCommitMessage,priority,createdAt,updatedAt,message,completedAt,expirationDate,isForIosSimulator,metrics
+
+id              : 91ee200a-aa2f-449b-a6e8-fa8a99e747d6
+status          : FINISHED
+appVersion      : 1.0.0
+appBuildVersion : 3
+gitCommitHash   : 11d1def6e4cd630af6dc796857ad2101bd7baaf5
+createdAt       : 2026-11-20T15:32:07.994Z
+
+ARTIFACT_URL=https://expo.dev/artifacts/eas/RTB180pXwrTxKUDkcDHX5Ye8OmvrtBn8eq8UWRGt5UY.apk
+```
+
+### 8.3 Audit string dan entri APK
+
+Pencocokan literal dilakukan terhadap seluruh byte APK (Latin-1) dan nama entri arsip.
+
+```text
+service_role=0
+SUPABASE_SERVICE_ROLE_KEY=0
+GITHUB_TOKEN=0
+ghp_=0
+github_pat_=0
+sb_secret_=0
+sb_publishable_=1
+BEGIN PRIVATE KEY=0
+Tema Gelap=0
+Tema Terang=0
+ENTRIES=1326
+SUSPICIOUS_ENTRY_NAMES=
+BUNDLE_BYTES=3455488
+```
+
+Pencocokan lanjutan untuk memastikan pilihan tema masuk ke bundel (Hermes menyimpan string secara terpisah sehingga frasa lengkap tidak selalu berurutan):
+
+```text
+LATIN1[Tema]=1 UNICODE[Tema]=0
+LATIN1[Gelap]=1 UNICODE[Gelap]=0
+LATIN1[Terang]=1 UNICODE[Terang]=0
+LATIN1[Tampilan]=1 UNICODE[Tampilan]=0
+LATIN1[setColorScheme]=3 UNICODE[setColorScheme]=0
+LATIN1[patchradar.secure]=0 UNICODE[patchradar.secure]=0
+LATIN1[Appearance]=482 UNICODE[Appearance]=0
+LATIN1[Pilihan ini tidak mengikuti]=1 UNICODE[Pilihan ini tidak mengikuti]=0
+OLD_BUNDLE_BYTES=3444760 NEW_BUNDLE_BYTES=3455488 DELTA=10728
+```
+
+Kesimpulan: tidak ada service role, token GitHub, private key, atau berkas `.env`/keystore di APK final. Satu-satunya kredensial adalah anon publishable key (format `sb_publishable_…`) yang bersifat publik. Kata **Gelap**, **Terang**, **Tampilan**, teks bantuan tema, dan `setColorScheme` hadir di bundel; ukuran bundle naik 10.728 byte dari APK `vc2`, sehingga perubahan tema memang ikut ter-build.
+
+### 8.4 Batas bukti
+
+`requestId`: **tidak ada**. Build EAS, unduh, dan audit APK tidak membuat panggilan API PatchRadar/Supabase.
+
+**Masih belum diverifikasi:** atribut `usesCleartextTraffic`/`networkSecurityConfig` pada `AndroidManifest.xml` biner (pencarian string tidak konklusif, sama seperti §6.5), pemasangan APK di perangkat, dan smoke test perangkat termasuk `StatusBar` serta persistensi tema setelah force-stop. `git status` setelah build tetap bersih; tidak ada direktori `android/` atau `ios/` yang dibuat di repo.
