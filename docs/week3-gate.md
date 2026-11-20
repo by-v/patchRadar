@@ -2,7 +2,7 @@
 
 **Tanggal evaluasi:** 15 November 2026  
 **Ruang lingkup:** kesiapan offline, cloud, RLS, rate limit, dan penanganan error untuk masuk Minggu 4 (rilis).  
-**Prasyarat (TASKS):** `T-W3-01` s.d. `T-W3-06`, `T-W3-07a` s.d. `T-W3-07c`, `T-W3-08`, `T-W1-13`, `T-W3-11` terpenuhi sesuai status/catatan tugas; `T-W3-12` (S) **ditunda/tidak dipertahankan** (Catatan Keputusan 15 Nov 2026) sehingga tidak menjadi syarat gate. `T-W3-14` (S) ditunda/tidak dikerjakan.
+**Prasyarat (TASKS):** `T-W3-01` s.d. `T-W3-06`, `T-W3-07a` s.d. `T-W3-07c`, `T-W3-08`, `T-W1-13`, `T-W3-11` terpenuhi sesuai status/catatan tugas; `T-W3-12` (S) **ditunda/tidak dipertahankan** (Catatan Keputusan 15 Nov 2026) sehingga tidak menjadi syarat gate. `T-W3-14` (S) ditunda/tidak dikerjakan (lihat Addendum 20 November 2026 di bagian akhir).
 
 > Catatan bukti: setiap klaim merujuk keluaran mentah/test/requestId/dokumen yang tersedia. Item tanpa bukti memadai ditandai **belum diverifikasi** dan tidak dicentang `[x]`.
 
@@ -89,3 +89,17 @@
 **Syarat/keharusan tindak lanjut:** (1) uji ulang isolasi RLS pada build rilis (**T-W4-04**) termasuk pembuktian sisa T-W3-06 (`retryAfter`, pasca-jendela) sebagaimana direncanakan; (2) pertahankan sikap jujur "belum diverifikasi"/keterbatasan bukti untuk item tanpa bukti mentah (attestasi tanpa screenshot, kondisi layanan nyata tertentu, metrik dashboard tanpa screenshot).
 
 **Keputusan masuk Minggu 4:** **Go bersyarat** — pekerjaan Minggu 4 dapat dimulai. T-W3-13 ditandai selesai (`[x]`) di TASKS karena AC 1–8 terpenuhi sesuai bukti/keterangan yang tersedia, dengan sisa risiko tindak lanjut di atas (terutama T-W4-04).
+
+## Addendum — 20 November 2026
+
+> Verdict 15 November 2026 di atas **tidak diubah** dan tetap berlaku sebagai catatan historis gate. Addendum ini hanya mencatat status per 20 November 2026 agar tidak ada klaim yang usang.
+
+| Item yang dulu terbuka/ditunda | Status 20 November 2026 | Bukti |
+|---|---|---|
+| `T-W3-06` `retryAfter` & scan diterima setelah jendela | **Tertutup** | `T-W4-04`: 429 `retryAfter` **582** (header + body) `req_fc2b0fdf2d3d42a0b4c02602a05cffee`; scan 200 `req_79eab983ef5e402e8e6225ebcfa074e6` `totalMs` 5080 setelah tunggu 610 detik. Lihat `TASKS.md` `T-W3-06`. |
+| `T-W3-14` (S) ditunda/tidak dikerjakan | **Diaktifkan kembali dan selesai**, commit `ed69073` | `handler.ts` membungkus `rate_limit`, `persist`, dan `retention` dengan `timed`; deploy `scan` v11 `updated_at` 2026-11-20 12:44:01 UTC; sumber deployed 30/30 SAME. Stage di dashboard **belum dibaca langsung** (dicatat "belum diverifikasi"). |
+| `T-W3-09`/`T-W3-10` (S) | **Sudah dideploy** (`scan` v11) | Migrasi `20261119000000` remote; secrets `IP_HASH_SALT` + `RETENTION_DAYS=90`; uji live FR-25b 429 `req_f81e119e34ed48a2bdc1941d1a3f06d9` `retryAfter` 3546. Lihat `TASKS.md` `T-W3-09`/`T-W3-10`. |
+| `T-W3-12` (S) tema gelap | **Tetap ditunda/dipotong** | Catatan Keputusan 15 November 2026; tidak memblokir MVP. |
+| Uji ulang RLS pada build rilis | **Tertutup** di `T-W4-04` | `TASKS.md` `T-W4-04` (build rilis `scan` v9/versi berikutnya). |
+
+Catatan: AC 7 (p95 hangat dan CPU dashboard) tetap merujuk pada pengukuran 15–16 November 2026; tidak ada pengukuran ulang pada addendum ini.

@@ -673,7 +673,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
   - [x] Endpoint remote Supabase mengembalikan 200 untuk repo uji. — socket.io 1.179 paket, axios 679, lodash 27, express 44; `requestId` cocok dengan header `X-Request-Id`.
   - [x] EPSS gagal menghasilkan 200, `partial=true`, dan warning yang benar. — Alami pada scan 07:13–07:19 UTC: `epss=FAILED`, warning `EPSS_UNAVAILABLE`, `partial=true`.
   - [x] OSV gagal total menghasilkan 502. — `scan-faulttest?mode=osv-fail` mengembalikan `requestId req_a325466ea90f49829c367306168bd506` dan kode `UPSTREAM_UNAVAILABLE`; fungsi uji sudah dihapus.
-  - [ ] OSV gagal total tidak meninggalkan baris scan sukses. — **Ditunda (10 November 2026) ke `T-W3-05`**: tabel `scans` baru dibuat di Minggu 3, sehingga tidak dapat diuji di 12d; AC sudah ditambahkan ke tugas persistensi.
+  - [x] OSV gagal total tidak meninggalkan baris scan sukses. — **Dipindahkan (10 November 2026) ke `T-W3-05`** karena tabel `scans` baru dibuat di Minggu 3; **tertutup** lewat unit test `handler.test.ts` (`saveCalls=0` pada 502 `UPSTREAM_UNAVAILABLE`, lulus 15 November 2026) + bukti remote 502 `req_a325466ea90f49829c367306168bd506` (lihat `T-W3-05`).
   - [x] KEV tidak tersedia menghasilkan parsial atau `STALE`, bukan crash. — `scan-faulttest?mode=kev-empty` → 200 `kev=EMPTY` + `KEV_UNAVAILABLE`; `mode=kev-stale` → 200 `kev=STALE` + `KEV_STALE`. Hasil berupa ringkasan tanpa `requestId`; fungsi uji sudah dihapus.
   - [x] Log memuat durasi per sumber; CPU platform dicatat dari agregat Management API (`functions.combined-stats`) beserta keterbatasannya, dan batas atas CPU pipeline dihitung dari jumlah wall time sinkron. — `function_logs` memuat `githubMs`/`registryMs`/`osvMs`/`kevMs`/`epssMs`; CPU per scan **tidak ada** di `function_logs`, dan `max_cpu_time_used` 345 ms adalah agregat per jam yang tidak boleh disajikan sebagai CPU per scan; batas atas dihitung dari `syncMs` 1–18 ms.
   - [x] Log wall time per tahap sinkron: parse KEV, pencocokan alias, penyusunan findings, skor/label, dan serialisasi respons; jumlah wall time tahap sinkron dihitung dan dicatat sebagai batas atas CPU pipeline. — `syncMs` 1–18 ms; rincian tahap tersimpan di `docs/scan-12d-logs.json` dan `T-W1-12d_test_table.md`; `labelMs` di log = `response.build` (skor/label dihitung di dalamnya), bukan tahap terpisah.
@@ -696,6 +696,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
     - **RLS:** GET anon ke `osv_cache` → 401 `42501 permission denied for table osv_cache`.
   - **2. Ditunda (10 November 2026)**
     - AC "OSV gagal total tidak meninggalkan baris scan sukses" dipindahkan ke `T-W3-05` karena tabel `scans` baru ada di Minggu 3. Ini bukan blocker 12d dan tidak mengubah status tugas.
+    - **Penutupan 20 November 2026:** AC tersebut sudah dibuktikan di `T-W3-05` (unit test `saveCalls=0` + remote 502 `req_a325466ea90f49829c367306168bd506`), sehingga AC di atas ditandai `[x]` dengan rujukan; tidak ada uji baru pada penutupan ini.
   - **3. Terbuka untuk gerbang `T-W1-14`**
     - (a) `LOCKFILE_PARTIAL` pada nestjs/nest: 21 entri dilewati (10 `link/workspace node_modules/@nestjs/*` + 11 `non-node_modules packages/*`); tentukan paket terlewat dan kesesuaian `partial=true` dengan PRD §9.
     - (b) Penyebab EPSS gagal 11 ms pada 07:13–07:19: log hanya memuat status `FAILED` dan `epssMs` 8–14 ms tanpa pesan error/status HTTP.
@@ -1307,7 +1308,7 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - [x] Tugas selesai
 - **Catatan hasil:**
   - Kode baru belum ter-deploy pada 15 November 2026; terselesaikan 15 November 2026 setelah deploy `scan` v8 dan bukti Fase A (A1–A4) + konfirmasi SQL/log dashboard pengembang. Laporan keliru sebelumnya (`persisted=false`, req `req_ee37185154ac4383bd1767091ab3b902`) telah dikoreksi di `docs/rls-test.md`/log.
-  - Bukti: `scripts/rls-check.mjs`, `docs/rls-test.md`, `docs/due-diligence-log.md`. Log dashboard scan A `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0` memuat stages `registry.resolve`/manifest/github/osv/kev/epss/response (tidak ada tahap bernama eksplisit rate limit/persist — belum diverifikasi sebagai stage name; efek terverifikasi via persist/rate-limit behavior). Uji RLS diulang pada build rilis di T-W4-04.
+  - Bukti: `scripts/rls-check.mjs`, `docs/rls-test.md`, `docs/due-diligence-log.md`. Log dashboard scan A `req_29bdf45c091b48d6a2a7ae4fa0f9cfa0` (v8, 15 Nov 2026) memuat stages `registry.resolve`/manifest/github/osv/kev/epss/response; saat itu belum ada tahap bernama eksplisit rate limit/persist. **Diperbarui 20 November 2026:** `T-W3-14` menambahkan `timed('rate_limit')`, `timed('persist')`, dan `timed('retention')` ke `handler.ts`, dan kode tersebut sudah dideploy sebagai `scan` v11 (sumber deployed 30/30 SAME). Efek perilaku tetap terverifikasi terpisah via uji rate limit dan `persisted`. Uji RLS diulang pada build rilis di T-W4-04.
 
 ### T-W3-11 — (S) Agregasi metrik operasional dan retensi log
 - **Tipe:** `[AGENT]`
