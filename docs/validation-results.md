@@ -1,7 +1,7 @@
 # Hasil Validasi — `T-W4-05` (uji mandiri 2 perangkat)
 
-Uji mandiri (self-test) sebagai pengganti sementara sesi 5–10 peserta PRD §16.2.
-Status: **sebagian** — validasi perangkat selesai; validasi peserta dan sebagian metrik wawancara **belum terpenuhi**.
+Uji mandiri (self-test) sesuai cakupan validasi PRD **§16.2 versi 1.2** (studi 5–10 peserta ditunda ke Tahap 2).
+Status: **selesai untuk cakupan MVP versi 1.2**; metrik pemahaman label dan keputusan terbantu **belum terukur** dan menjadi target Tahap 2.
 
 ## 1. Metode
 
@@ -56,13 +56,13 @@ Percobaan scan: web 5 percobaan (3 berhasil, 2 penolakan yang diharapkan), Andro
 - `Orientasi-Jelajah-Aman` melebihi ambang 500 paket (862). Perilaku banner/peringatan ukuran tidak dicatat pada sesi ini.
 - Dua repo pertama (stylelint dan Orientasi) tidak menghasilkan `FIX_NOW`; jalur "Tambal sekarang" baru teruji lewat fixture.
 
-## 6. Kriteria lulus PRD §16.2
+## 6. Kriteria lulus PRD §16.2 (versi 1.2)
 
 - [x] Tidak ada bug blocker (tidak ada crash; T1, T4, T5, salin perintah, dan jalur error berjalan)
-- [ ] ≥80% menyelesaikan T1 dan T5 — T5 **lulus 2/2**, tetapi persentase peserta **tidak dapat dihitung** (n=2 perangkat)
-- [ ] ≥80% benar menjelaskan tiga label — **belum diverifikasi**
-- [ ] ≥70% merasa terbantu — **belum diverifikasi**
-- [x] Tidak ada peserta menyimpulkan "proyek saya pasti aman" — tidak ada peserta; ketiga repo memang punya temuan dengan label Pantau/Jadwalkan/Tambal sekarang
+- [x] T1 dan T5 berhasil di kedua perangkat — T5 **lulus 2/2**; T1 berhasil 6/6 jalur normal
+- [ ] Pemahaman tiga label ≥80% — **belum terukur**; target studi Tahap 2, bukan syarat MVP versi 1.2
+- [ ] Keputusan terbantu ≥70% — **belum terukur**; target studi Tahap 2, bukan syarat MVP versi 1.2
+- [x] Disclaimer tidak menyimpulkan "proyek saya pasti aman" — teks Tentang menyatakan PatchRadar tidak menjamin proyek aman; ketiga repo memang punya temuan dengan label Pantau/Jadwalkan/Tambal sekarang
 
 ## 7. Bug dan triase (`T-W4-06`)
 
@@ -71,7 +71,7 @@ Triase 19 November 2026: **blocker 0**. Tidak ada bug fungsional yang menghalang
 | # | Temuan | Perangkat | Tingkat | Keputusan |
 |---|---|---|---|---|
 | 1 | Tidak ada bug fungsional teramati pada alur yang diuji | web + Android | — | Ditutup; tidak ada perbaikan |
-| 2 | Uji validasi dijalankan tanpa peserta (bukan sesi 5–10 orang) | — | Non-blocker (proses) | Ditunda ke keputusan pengembang; dicatat di `TASKS.md` Catatan keputusan dan `docs/limitations.md` |
+| 2 | Uji validasi dijalankan tanpa peserta (bukan sesi 5–10 orang) | — | Non-blocker (proses) | Cakupan PRD diubah ke versi 1.2 (20 Nov 2026); studi peserta menjadi Tahap 2; dicatat di `TASKS.md` Catatan keputusan dan `docs/limitations.md` |
 | 3 | Build web adalah `expo start` (pengembangan), bukan paritas rilis | web | Non-blocker (bukti) | Dicatat sebagai keterbatasan bukti; paritas rilis dibuktikan di APK (T-W4-03) |
 | 4 | Waktu ke hasil tidak diukur ulang dengan stopwatch; p95 merujuk `T-W4-03` (5.621 ms) | web + Android | Non-blocker (pengukuran) | Dicatat di `docs/limitations.md` |
 | 5 | Perilaku banner/peringatan untuk repo >500 paket (862 paket) tidak dicatat | web + Android | Non-blocker (observasi) | Dicatat sebagai belum terverifikasi di `docs/limitations.md`; bukan bug terbukti |
@@ -79,8 +79,8 @@ Triase 19 November 2026: **blocker 0**. Tidak ada bug fungsional yang menghalang
 
 ## 8. Penyimpangan dan keterbatasan
 
-- Peserta 5–10 diganti uji mandiri 2 perangkat; AC "minimal 5 peserta" **tidak terpenuhi**.
-- Metrik wawancara (pemahaman label, keputusan terbantu) **tidak diukur**; tidak diklaim lulus.
+- Peserta 5–10 diganti uji mandiri 2 perangkat sesuai PRD §16.2 versi 1.2; studi peserta menjadi Tahap 2.
+- Metrik wawancara (pemahaman label, keputusan terbantu) **belum terukur**; tidak diklaim lulus.
 - Build web adalah build pengembangan (`expo start`), bukan paritas rilis APK.
 - Waktu ke hasil tidak diukur ulang dengan stopwatch; angka p95 berasal dari `T-W4-03`.
 - Jam selesai sesi dan urutan prioritas yang dipilih tidak dicatat.
@@ -88,7 +88,7 @@ Triase 19 November 2026: **blocker 0**. Tidak ada bug fungsional yang menghalang
 
 ## 9. Ringkasan
 
-Pada 19 November 2026 pukul 20:30 WIB, aplikasi diuji mandiri di dua perangkat: Expo web di laptop dan APK 1.0.0 (vc2) di Realme XT. Alur utama berjalan tanpa crash di keduanya dengan hasil identik; jalur error repo privat dan repo tanpa `package.json` menampilkan pesan yang sesuai; Riwayat → Hasil → Detail tetap berjalan tanpa koneksi di kedua perangkat. Dari tiga repo npm valid, semuanya menghasilkan temuan (2, 31, dan 2 temuan). Fixture `jquery@3.4.1` menghasilkan satu `FIX_NOW` dan satu `SCHEDULE`, dan perintah `npm install jquery@3.5.0` berhasil disalin serta ditempel dari layar Detail pada kedua perangkat. Metrik yang membutuhkan peserta manusia (pemahaman label dan keputusan terbantu) tetap belum terverifikasi, sehingga `T-W4-05` belum dapat ditutup.
+Pada 19 November 2026 pukul 20:30 WIB, aplikasi diuji mandiri di dua perangkat: Expo web di laptop dan APK 1.0.0 (vc2) di Realme XT. Alur utama berjalan tanpa crash di keduanya dengan hasil identik; jalur error repo privat dan repo tanpa `package.json` menampilkan pesan yang sesuai; Riwayat → Hasil → Detail tetap berjalan tanpa koneksi di kedua perangkat. Dari tiga repo npm valid, semuanya menghasilkan temuan (2, 31, dan 2 temuan). Fixture `jquery@3.4.1` menghasilkan satu `FIX_NOW` dan satu `SCHEDULE`, dan perintah `npm install jquery@3.5.0` berhasil disalin serta ditempel dari layar Detail pada kedua perangkat. Metrik yang membutuhkan peserta manusia (pemahaman label dan keputusan terbantu) tetap belum terukur dan menjadi target studi Tahap 2; `T-W4-05` ditutup dengan cakupan PRD versi 1.2.
 
 ## 10. Repo uji
 

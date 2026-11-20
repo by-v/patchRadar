@@ -3,8 +3,8 @@
 | Atribut | Nilai |
 |---|---|
 | Nama produk | PatchRadar |
-| Versi dokumen | 1.1 |
-| Tanggal | 8 November 2026 |
+| Versi dokumen | 1.2 |
+| Tanggal | 20 November 2026 |
 | Status | Final untuk MVP |
 | Pemilik | Pengembang tunggal (mahasiswa) |
 | Platform | Android, Expo / React Native, TypeScript |
@@ -961,25 +961,27 @@ Semua baris berstatus **belum diverifikasi** kecuali dinyatakan lain. Verifikasi
 
 Catatan: metrik "repo dengan temuan" dan "Tambal sekarang" tidak ditargetkan karena bergantung pada repo yang dipilih; keduanya dilaporkan sebagai temuan validasi.
 
+Catatan validasi MVP (revisi 1.2): metrik **Pemahaman label** dan **Keputusan terbantu** memerlukan peserta luar sehingga **belum terukur** pada MVP. Target ≥ 80% dan ≥ 70% tetap berlaku sebagai target studi kegunaan Tahap 2, bukan syarat Gate Rilis.
+
 ### 16.2 Rencana validasi (Minggu 4)
 
-**Peserta:** 5–10 teman/mahasiswa/junior developer yang memiliki repo GitHub publik berisi proyek npm. Rekrutmen purposif; tidak diklaim representatif.
+**Peserta (revisi 1.2):** validasi MVP dilakukan sebagai **uji mandiri terstruktur pada dua perangkat** — Expo web di laptop dan APK Android di Realme XT (Android 8) — dijalankan pengembang yang sama tanpa bantuan luar. Studi kegunaan dengan 5–10 teman/mahasiswa/junior developer ditunda ke Tahap 2 karena peserta tidak tersedia pada jendela MVP; hasilnya tidak diklaim representatif.
 
-**Skenario 30 menit (moderated, think-aloud):**
+**Skenario validasi mandiri (5 tugas, ±30 menit per perangkat):**
 
-1. Penguji membuka aplikasi tanpa penjelasan fitur.
+1. Pengembang membuka aplikasi tanpa penjelasan fitur.
 2. Tugas 1: pindai repo sendiri (atau repo contoh bila tidak punya).
 3. Tugas 2: jelaskan perbedaan tiga label dengan kata sendiri.
 4. Tugas 3: temukan satu temuan `FIX_NOW` dan satu `SCHEDULE`, lalu tentukan mana yang ditangani lebih dulu.
 5. Tugas 4: salin perintah perbaikan untuk dependensi langsung.
 6. Tugas 5: aktifkan mode pesawat, buka Riwayat → Hasil → Detail.
-7. Wawancara: apa yang membingungkan, apakah penjelasan membantu, apakah ada klaim yang terasa berlebihan.
+7. Catatan: kekeliruan, error yang muncul, dan klaim yang terasa berlebihan.
 
-**Data yang dicatat:** durasi tiap tugas, keberhasilan tanpa bantuan, error yang muncul, kutipan pengguna, jumlah repo dengan temuan, jumlah `FIX_NOW`, kendala salin perintah. Tidak merekam isi repo atau data pribadi.
+**Data yang dicatat:** durasi tiap tugas, keberhasilan tanpa bantuan, error yang muncul, jumlah repo dengan temuan, jumlah `FIX_NOW`, kendala salin perintah, dan status crash. Tidak merekam isi repo atau data pribadi.
 
-**Kriteria lulus validasi:** tidak ada bug blocker; ≥ 80% menyelesaikan Tugas 1 dan 5; ≥ 80% benar menjelaskan label; ≥ 70% merasa terbantu; tidak ada peserta yang menyimpulkan "proyek saya pasti aman".
+**Kriteria lulus validasi MVP:** tidak ada bug blocker; Tugas 1 dan 5 berhasil di kedua perangkat; alur offline Riwayat → Hasil → Detail berhasil 100%; tidak ada crash; disclaimer tidak menyimpulkan "proyek saya pasti aman". Metrik pemahaman label dan keputusan terbantu **tidak diukur pada MVP** dan menjadi target studi Tahap 2.
 
-**Tindak lanjut:** jika pemahaman label < 80%, perbaiki teks Tentang/alasan sebelum menambah fitur. Jika p95 > 15 detik pada fixture 500 paket atau CPU time > 70% batas, optimalkan parser/chunk sebelum rilis. Jika RLS gagal, blokir rilis.
+**Tindak lanjut:** jika p95 > 15 detik pada fixture 500 paket atau CPU time > 70% batas, optimalkan parser/chunk sebelum rilis. Jika RLS gagal, blokir rilis. Temuan kegunaan dari studi Tahap 2 dipakai untuk menyempurnakan teks Tentang/alasan sebelum menambah fitur.
 
 ---
 
@@ -990,7 +992,7 @@ Catatan: metrik "repo dengan temuan" dan "Tambal sekarang" tidak ditargetkan kar
 | **1** | Pipeline backend | Edge Function `scan` dengan GitHub, parser lockfile, fallback package.json, OSV batch, KEV, EPSS, skor/label, cache, rate limit dasar; fixture respons nyata | Kontrak bagian 9 stabil; 3 fixture (lockfile v3, tanpa lockfile, tanpa package.json) lulus; unit test parser/severity/label; uji timeout dan parsial; respons nyata OSV/KEV/EPSS tersimpan; uji performa tiga fixture ±100/±500/±1.500 paket dan catat hasil uji CPU time (≥400/≥1.500 paket) terhadap batas platform; gerbang due diligence bagian 13 diputuskan |
 | **2** | Aplikasi Expo | Tab Pindai/Riwayat/Tentang, rute Hasil/Detail, validasi URL, panggilan `scan`, loading/error, tampilan label dan perbaikan; build internal pertama | Alur Pindai→Hasil→Detail berjalan di perangkat Android fisik; validasi URL menolak semua kasus FR-01; kartu hasil memuat semua field FR-17; indikator progres repo besar tampil; tidak ada secret di bundle; build EAS percobaan berhasil |
 | **3** | Offline, cloud, error | SQLite riwayat+detail, anonymous auth, penyimpanan `scans`/`findings`, RLS, rate limit FR-25a (dan FR-25b bila dipertahankan), seluruh matriks error, cache offline | Riwayat dan Detail terbuka mode pesawat; dua pengguna anonim terisolasi; 23 kondisi error diuji; hasil parsial tampil dengan banner; simulasi gagal simpan cloud menghasilkan `persisted=false` + warning; scan ke-6 kena 429 (FR-25a); tidak ada crash |
-| **4** | Pengujian, keamanan, rilis, validasi | Tinjauan OWASP Mobile, APK release candidate EAS, perbaikan blocker, sesi validasi 5–10 orang, laporan singkat | APK terpasang dan lulus smoke test; checklist keamanan tanpa temuan kritis; RLS diuji ulang pada build rilis; validasi memenuhi kriteria bagian 16; blocker nol; dokumen demo dan catatan keterbatasan siap |
+| **4** | Pengujian, keamanan, rilis, validasi | Tinjauan OWASP Mobile, APK release candidate EAS, perbaikan blocker, validasi mandiri terstruktur 2 perangkat (studi 5–10 orang ditunda ke Tahap 2), laporan singkat | APK terpasang dan lulus smoke test; checklist keamanan tanpa temuan kritis; RLS diuji ulang pada build rilis; validasi memenuhi kriteria bagian 16 versi 1.2; blocker nol; dokumen demo dan catatan keterbatasan siap |
 
 **Aturan scope:** jika Minggu 1–3 meleset, potong item pada daftar Prioritas S (bagian 17.1), bukan fitur **M**, dan pertahankan alur utama + RLS + offline. Jangan menambah fitur dari Backlog Tahap 2 sebelum seluruh DoD Minggu 4 terpenuhi.
 
@@ -1108,6 +1110,10 @@ Tidak ada pertanyaan yang memblokir implementasi; keputusan sementara di bawah d
 ---
 
 ## Riwayat Perubahan
+
+### 1.2 — 20 November 2026
+
+1. **Cakupan validasi MVP:** sesi 5–10 peserta pada §16.2 diganti uji mandiri terstruktur dua perangkat (Expo web + APK Android); metrik pemahaman label dan keputusan terbantu menjadi target studi Tahap 2 dan ditandai belum terukur pada MVP. DoD Minggu 4 disesuaikan.
 
 ### 1.1 — 8 November 2026
 

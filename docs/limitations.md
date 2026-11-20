@@ -12,7 +12,7 @@ Daftar keterbatasan teramati/diketahui yang relevan untuk rilis dan validasi. It
 - Uji isolasi RLS pada skenario anon B vs A lulus di remote v8 (Fase A A3) dan **diulang pada build rilis** 17 November 2026 (`T-W4-04`): B 0 baris, tulis 403/42501, anon 401/42501, `leakDetected=false` (`docs/rls-test.md`).
 
 ## Hasil validasi (`T-W4-05`, `T-W4-06`)
-- **Validasi belum memakai 5–10 peserta.** Sesi PRD §16.2 diganti uji mandiri 2 perangkat (Expo web + APK 1.0.0 vc2) pada 19 November 2026; metrik pemahaman label dan keputusan terbantu **belum terverifikasi**. Blocker 0 pada alur yang diuji. Rincian `docs/validation-results.md`.
+- **Validasi MVP memakai uji mandiri 2 perangkat (PRD 1.2).** Sesi 5–10 peserta ditunda ke Tahap 2; metrik pemahaman label dan keputusan terbantu **belum terukur**. Blocker 0 pada alur yang diuji. Rincian `docs/validation-results.md`.
 - **Banner/peringatan untuk repo >500 paket belum terverifikasi.** Repo `Orientasi-Jelajah-Aman` (862 paket) berhasil dipindai tanpa crash, tetapi apakah aplikasi menampilkan peringatan ukuran tidak dicatat pada sesi validasi.
 - **Pengukuran waktu ke hasil pada validasi memakai bukti lama.** Sesi 19 November 2026 tidak mengukur ulang tap→render; p95 5.621 ms berasal dari `T-W4-03` (453 paket, n=5), bukan pengukuran baru.
 - **Riwayat hilang setelah uninstall (R-10) tetap berlaku.** Riwayat lokal bertahan saat offline dan setelah aplikasi ditutup, tetapi tidak disinkronkan ulang pada MVP; uninstall menghapus riwayat perangkat.

@@ -1520,19 +1520,18 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 - **Memenuhi:** `NFR-06`, `R-10`, `R-11`; metrik PRD §16
 - **Perhitungan estimasi:** 8 peserta × 0,5 jam sesi = 4 jam; pencatatan dan analisis 2 jam; koordinasi/jadwal 1 jam; total 7 jam.
 - **Kriteria selesai (AC):**
-  - [ ] Minimal 5 peserta menyelesaikan sesi. (**Tidak terpenuhi** — diganti uji mandiri 2 perangkat.)
-  - [ ] Metrik PRD §16.1 tercatat. (**Sebagian** — 7 dari 9 metrik; pemahaman label dan keputusan terbantu belum diverifikasi karena butuh peserta.)
+  - [x] Validasi MVP selesai sesuai PRD §16.2 versi 1.2: uji mandiri terstruktur pada dua perangkat. (Expo web laptop + APK 1.0.0 vc2 Realme XT Android 8, 19 Nov 2026; Tugas 1–5 dijalankan; rincian `docs/validation-results.md`.)
+  - [x] Metrik PRD §16.1 tercatat sesuai cakupan versi 1.2. (7 dari 9 metrik terukur: scan berhasil 6/6 jalur normal, crash-free 2/2, offline 2/2, salin perintah berhasil, RLS 0 kebocoran dari T-W4-04, p95 5.621 ms dari T-W4-03. Pemahaman label dan keputusan terbantu ditandai **belum terukur** dan menjadi target studi Tahap 2 sesuai PRD §16.2 versi 1.2.)
   - [x] Tidak ada data pribadi/isi repo tersimpan. (Hanya metadata paket, jumlah temuan, dan tautan repo publik; `docs/validation-results.md` §8.)
   - [x] Ringkasan hasil ditulis. (`docs/validation-results.md` §9.)
 - **Estimasi:** 7 jam
-- [!] Tugas terblokir: sesi 5–10 peserta belum dilakukan; status `[!]` menunggu keputusan pengembang (catatan keputusan 19 November 2026).
-- [ ] Tugas selesai
+- [x] Tugas selesai
 - **Catatan hasil:**
+  - Cakupan diubah atas keputusan pengembang 20 November 2026: PRD dinaikkan ke **1.2**, §16.2 memakai uji mandiri terstruktur dua perangkat; studi 5–10 peserta dan dua metrik wawancara ditunda ke Tahap 2. Tidak ada klaim bahwa hasil uji mandiri representatif.
   - Bukti: `docs/validation-results.md`. Uji mandiri 19 Nov 2026 mulai 20:30 WIB: Expo web (laptop) + APK 1.0.0 vc2 (Realme XT).
   - Terukur: crash-free 2/2; scan jalur normal 6/6 (termasuk jalur error 6/9); `stylelint/stylelint` 453 paket/2 temuan (Pantau ×2); `Orientasi-Jelajah-Aman` 862 paket/8 paket bertemuan/31 temuan (Jadwalkan 14, Pantau 17, FIX_NOW 0); fixture `zalden-programmer/patchradar-fixnow-fixture` (`jquery@3.4.1`, 1 paket) menghasilkan `FIX_NOW` + `SCHEDULE`; repo privat dan repo Python memberi pesan error sesuai; Riwayat→Hasil→Detail offline 2/2 lulus; salin perintah dari `FIX_NOW` berhasil pada percobaan pertama di kedua perangkat (`npm install jquery@3.5.0`).
   - p95 waktu ke hasil tidak diukur ulang; merujuk `T-W4-03` (5.621 ms, 453 paket, n=5).
-  - **Belum terpenuhi:** AC 5 peserta; pemahaman label dan keputusan terbantu belum diverifikasi (tanpa peserta); jam selesai sesi dan urutan prioritas yang dipilih tidak dicatat.
-  - Status: **`[!]`** — menunggu keputusan pengembang (uji mandiri sebagai pengganti sementara), lihat Catatan keputusan.
+  - **Belum terukur:** pemahaman label dan keputusan terbantu (tanpa peserta luar); jam selesai sesi dan urutan prioritas yang dipilih tidak dicatat. Keduanya tercatat sebagai keterbatasan, bukan blocker.
 
 ### T-W4-06 — Perbaikan blocker hasil validasi dan regression test
 - **Tipe:** `[AGENT]`
@@ -1873,6 +1872,7 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 15 November 2026 | `T-W3-12` | Ditunda (prioritas S). Dikerjakan hanya jika Minggu 4 selesai lebih awal. Alasan: risiko regresi UI sebelum release candidate. | Menghindari perubahan visual menjelang rilis; fokus pada stabilitas Minggu 4. | Ya — instruksi pengembang, 15 November 2026 |
 | 17 November 2026 | `T-W4-03` | AC p95 perangkat diuji pada repo publik nyata `stylelint/stylelint` (453 paket unik, LOCKFILE v3), bukan fixture `medium-500` (491 paket). Metrik memakai durasi server (`timings.totalMs` log Edge Function, dicocokkan dengan `scans.duration_ms`) ditambah pengamatan pengembang 2–3 detik, bukan stopwatch tap→render. p95 = 5621 ms (≤15.000 ms). | Tidak ada repositori publik berisi fixture 491 paket dan agent tidak memiliki kredensial untuk membuat repo demo; rekaman 60 fps tidak tersedia. Penyimpangan dicatat sesuai bunyi AC ("atau penyimpangan dicatat beserta tindakan") dengan margin 9.379 ms. | Ya — instruksi pengembang, 17 November 2026 |
 | 19 November 2026 | `T-W4-05` | Sesi 5–10 peserta diganti uji mandiri 2 perangkat (Expo web + APK 1.0.0 vc2, 19 Nov 2026 20:30 WIB) karena peserta tidak tersedia. Metrik yang membutuhkan manusia (pemahaman label, keputusan terbantu) ditandai belum diverifikasi; AC "minimal 5 peserta" tidak dipenuhi sehingga tugas ditandai `[!]`, bukan `[x]`. | PRD §16.2 menuntut 5–10 peserta dan wawancara; uji mandiri tidak dapat membuktikan kriteria lulus §16.2 secara sah. | Ya — instruksi pengembang, 19 November 2026 |
+| 20 November 2026 | `T-W4-05` | **Cakupan PRD diubah resmi:** `docs/PRD.md` naik ke **1.2**. §16.2 menetapkan validasi MVP = uji mandiri terstruktur dua perangkat (Expo web + APK Android) dan memindahkan studi 5–10 peserta ke Tahap 2. Metrik pemahaman label dan keputusan terbantu menjadi target Tahap 2 dan ditandai belum terukur. `T-W4-05` ditutup dengan bukti uji mandiri 19 November 2026. | Peserta tidak tersedia pada jendela MVP; uji mandiri tetap memvalidasi alur utama, error, offline, dan salin perintah. Perubahan dicatat agar Gate Rilis tidak mengklaim validasi yang tidak dilakukan. | Ya — instruksi pengembang, 20 November 2026 |
 | 19 November 2026 | `T-W4-06` | Dikerjakan sebelum `T-W4-05` ditutup atas instruksi pengembang. Isi tugas hanya triase temuan validasi dan verifikasi ulang; daftar temuan sudah tersedia dari sesi 19 November 2026 sehingga triase dapat diselesaikan (blocker 0). Tidak ada perubahan kode; `T-W4-05` tetap `[!]`. | Prasyarat formal belum terpenuhi; tanpa triase ini temuan non-blocker tidak masuk daftar keterbatasan sebelum `T-W4-07`. | Ya — instruksi pengembang, 19 November 2026 |
 
 
