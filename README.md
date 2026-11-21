@@ -205,16 +205,6 @@ See [`docs/limitations.md`](docs/limitations.md) for the complete list.
 | Security | [`docs/security-review.md`](docs/security-review.md), [`docs/rls-test.md`](docs/rls-test.md) |
 | Testing and release | [`docs/smoke-test.md`](docs/smoke-test.md), [`docs/validation-results.md`](docs/validation-results.md), [`docs/error-matrix.md`](docs/error-matrix.md), [`docs/due-diligence-log.md`](docs/due-diligence-log.md) |
 
-## Contributing
-
-This repository follows the workflow in [`AGENTS.md`](AGENTS.md):
-
-- Work on one task at a time from [`TASKS.md`](TASKS.md).
-- Run lint, typecheck, and tests before committing.
-- Use commit messages in the form `T-xx: short summary`.
-- Never commit `.env` files, tokens, service-role keys, keystores, or build artifacts.
-- Keep UI text in Indonesian and code identifiers in English.
-
 ## License
 
 No license has been chosen for PatchRadar yet. The `app/LICENSE` file is the MIT license inherited from the Expo template and does not apply to this project.
