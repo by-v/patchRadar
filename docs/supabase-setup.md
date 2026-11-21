@@ -1,6 +1,6 @@
 # Supabase Setup - Patchradar
 
-- **Project Ref:** `umldsfkvifqoqfbouhca`
+- **Project Ref:** `<project-ref>` (nilai asli sengaja tidak dicatat di repositori publik)
 - **Region:** Northeast Asia (Tokyo)
 - **Supabase CLI Version:** [3.0.0] (dipakai lewat `npx`)
 - **Tanggal Pengecekan Kuota:** 8 November 2026

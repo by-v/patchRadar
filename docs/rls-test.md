@@ -6,7 +6,7 @@ Laporan 15 November 2026 pukul 14:10 UTC sebelumnya dinyatakan **keliru** (tanpa
 
 - Working tree bersih, HEAD: `bf95432367c7bfdf44254c07520f497a0c70f4b8` (`bf95432 T-W3-0x: sambungkan komposisi produksi dan test penyambungan`), branch `main` ahead `origin/main` by 14 (tidak di-push). Tidak ada perubahan `TASKS.md` tak terkait.
 
-Raw `npx supabase functions deploy scan --use-api --yes` (ringkasan): sukses deploy ke project `patchRadar (umldsfkvifqoqfbouhca)` production, upload asset scan termasuk `composition.ts`, dashboard functions URL dilaporkan. `exit=0`.
+Raw `npx supabase functions deploy scan --use-api --yes` (ringkasan): sukses deploy ke project `patchRadar (<project-ref>)` production, upload asset scan termasuk `composition.ts`, dashboard functions URL dilaporkan. `exit=0`.
 
 Raw `npx supabase functions list` (sebelum deploy ulang Fase A): versi 7, `updated_at` 1794752913378, `verify_jwt` true, `ezbr_sha256` `5d865a8c28190ea9be236b6906aa0d7e587c8c6416ef9d61596c5809c5db6e46`.
 Raw `npx supabase functions list` (sesudah deploy Fase A): versi 8 (naik dari 6), `updated_at` 1794753073345 (baru), `verify_jwt` true, `ezbr_sha256` sama (`5d865a8c...`), status ACTIVE.
@@ -111,7 +111,7 @@ Fase A (A1–A4) menghasilkan bukti bahwa persistensi cloud dan pembatas laju be
 
 ## Uji ulang pada build rilis — T-W4-04 (17 November 2026)
 
-Prasyarat `T-W4-02` terpenuhi: APK release candidate `439654c8-b781-42d4-a612-a047912b502b` (`release`, environment `production`, APK `D:\builds\patchradar-release-vc2.apk`, SHA-256 `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D`). APK ini memakai proyek Supabase produksi yang sama (`umldsfkvifqoqfbouhca`, Edge Function `scan` v9), sehingga uji isolasi dijalankan ulang terhadap backend yang dipakai build rilis tersebut. Penegasan: RLS ditegakkan di server (Postgres/PostgREST), bukan di dalam APK; build rilis tidak dapat mengubah kebijakan. Bukti di bawah membuktikan backend yang dipakai APK rilis masih menolak akses lintas pengguna.
+Prasyarat `T-W4-02` terpenuhi: APK release candidate `439654c8-b781-42d4-a612-a047912b502b` (`release`, environment `production`, APK `<artifacts>\patchradar-release-vc2.apk`, SHA-256 `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D`). APK ini memakai proyek Supabase produksi yang sama (`<project-ref>`, Edge Function `scan` v9), sehingga uji isolasi dijalankan ulang terhadap backend yang dipakai build rilis tersebut. Penegasan: RLS ditegakkan di server (Postgres/PostgREST), bukan di dalam APK; build rilis tidak dapat mengubah kebijakan. Bukti di bawah membuktikan backend yang dipakai APK rilis masih menolak akses lintas pengguna.
 
 Perintah (tanpa kunci/token di keluaran):
 

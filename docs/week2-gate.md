@@ -25,7 +25,7 @@ Build yang diuji adalah build EAS percobaan `d4c8dfa1-9003-4d13-826e-5c778ca255d
 | Versi / versionCode | `1.0.0` / `1` |
 | Fingerprint | `dfa68b417ba936d07c54a4d947706f7c5814d63d` |
 | SDK tercatat EAS | `58.0.0`; proyek memakai Expo `~58.0.23` |
-| APK | `D:\builds\patchradar-preview.apk` — 101.327.543 byte (96,63 MB) |
+| APK | `<artifacts>\patchradar-preview.apk` — 101.327.543 byte (96,63 MB) |
 | SHA-256 APK | `63E1AD6AD36B810CD89D330E868E235353B579B9750D790CADC8191393113F3A` |
 | Environment build | EAS `preview`: `EXPO_PUBLIC_SUPABASE_URL` dan `EXPO_PUBLIC_SUPABASE_ANON_KEY` (publik) |
 

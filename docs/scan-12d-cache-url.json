@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-11-10T07:21:45.974Z",
-  "base": "https://umldsfkvifqoqfbouhca.supabase.co/rest/v1/osv_cache?select=cache_key,payload,fetched_at&cache_key=in.(",
+  "base": "https://<project-ref>.supabase.co/rest/v1/osv_cache?select=cache_key,payload,fetched_at&cache_key=in.(",
   "results": [
     {
       "repo": "axios/axios",

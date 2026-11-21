@@ -229,7 +229,7 @@ Lima temuan produksi berasal dari rantai tool/build Expo (`glob`, `minimatch`, `
 
 | Item | Nilai |
 |---|---|
-| Berkas | `D:\builds\patchradar-release-vc2.apk` |
+| Berkas | `<artifacts>\patchradar-release-vc2.apk` |
 | Ukuran | 109.322.643 byte |
 | SHA-256 | `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D` |
 | Build EAS | `439654c8-b781-42d4-a612-a047912b502b` (profil `release`, environment `production`) |
@@ -419,7 +419,7 @@ app/src/storage/secure.ts:18:const WEB_PREFIX = 'patchradar.secure.';
 | Commit sumber | `11d1def6e4cd630af6dc796857ad2101bd7baaf5` |
 | `appVersion` / `versionCode` | `1.0.0` / `3` (naik dari `2`) |
 | Profil / environment | `release` / `production` |
-| Berkas | `D:\builds\patchradar-release-vc3.apk` |
+| Berkas | `<artifacts>\patchradar-release-vc3.apk` |
 | Ukuran | 109.333.379 byte |
 | SHA-256 | `B685959AD3A0AA9D962E8FF31031C3A46C47148B4F1489BEC12B00EE1DCC7800` |
 | Entri arsip | 1.326 |
@@ -432,7 +432,7 @@ NODE=v24.21.0
 EAS_VERSION=eas-cli/27.11.0 win32-x64 node-v24.21.0
 WHOAMI=
 codebyv10
-codebyv10@gmail.com
+<email-redacted>
 WHOAMI_EXIT=0
 
 Environment variables with visibility "Plain text" and "Sensitive" loaded from the "production" environment on EAS: EXPO_PUBLIC_SUPABASE_ANON_KEY, EXPO_PUBLIC_SUPABASE_URL.
@@ -455,7 +455,7 @@ BUILD_EXIT=0
 ✔ Successfully downloaded app 1m 34s
 DOWNLOAD_EXIT=0
 
-APK_PATH=D:\builds\patchradar-release-vc3.apk
+APK_PATH=<artifacts>\patchradar-release-vc3.apk
 APK_SIZE=109333379
 SHA256=B685959AD3A0AA9D962E8FF31031C3A46C47148B4F1489BEC12B00EE1DCC7800
 

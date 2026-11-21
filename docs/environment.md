@@ -33,14 +33,14 @@ Catatan versi lingkungan pengembangan dan perangkat uji. Diperbarui saat verifik
 ## Cara Menjalankan
 
 ```powershell
-cd "D:\code by-v\patchRadar\app"
+cd app
 npx expo start --lan
 ```
 
-- Server Metro berjalan di `exp://192.168.1.27:8081` melalui LAN.
+- Server Metro berjalan di `exp://<lan-ip>:8081` melalui LAN.
 - Buka aplikasi dengan memindai QR memakai **aplikasi Kamera iPhone**, lalu ketuk “Buka di Expo Go”.
 - Expo Go iOS mensyaratkan Expo CLI dan Expo Go login ke akun Expo yang sama (`codebyv10`).
-- Opsi “Enter URL manually” tidak tersedia pada Expo Go iOS versi ini; gunakan pemindaian QR atau buka `exp://192.168.1.27:8081` lewat Safari.
+- Opsi “Enter URL manually” tidak tersedia pada Expo Go iOS versi ini; gunakan pemindaian QR atau buka `exp://<lan-ip>:8081` lewat Safari.
 
 ## Konfigurasi Aplikasi (`app/.env`)
 
@@ -119,7 +119,7 @@ Build percobaan Android dijalankan 13 November 2026 memakai profil `preview` pad
 | `appIdentifier` | `com.codebyv.patchradar` |
 | Versi / versionCode | `1.0.0` / `1` |
 | Fingerprint | `dfa68b417ba936d07c54a4d947706f7c5814d63d` |
-| APK | `D:\builds\patchradar-preview.apk` — 101.327.543 byte (96,63 MB) |
+| APK | `<artifacts>\patchradar-preview.apk` — 101.327.543 byte (96,63 MB) |
 | SHA-256 APK | `63E1AD6AD36B810CD89D330E868E235353B579B9750D790CADC8191393113F3A` |
 | Environment build | EAS `preview`: `EXPO_PUBLIC_SUPABASE_URL` dan `EXPO_PUBLIC_SUPABASE_ANON_KEY` (publik) |
 | Perangkat uji | realme XT, Android 8 (dilaporkan pengembang) |
@@ -132,7 +132,7 @@ Hasil pemasangan dan uji:
 Audit secret pada APK (13 November 2026):
 
 ```powershell
-Get-FileHash D:\builds\patchradar-preview.apk -Algorithm SHA256
+Get-FileHash <artifacts>\patchradar-preview.apk -Algorithm SHA256
 ```
 
 Isi APK diperiksa dengan membuka `assets/index.android.bundle` (3.303.852 byte) langsung dari arsip. Hasil: tidak ada `service_role`, `SUPABASE_SERVICE_ROLE_KEY`, `GITHUB_TOKEN`, `ghp_`, `github_pat_`, `sk_live_`, maupun blok private key; tidak ada berkas `.env` di dalam APK. Anon publishable key dan host Supabase ada di bundle sesuai desain (publik, dilindungi RLS).
@@ -157,7 +157,7 @@ Build release candidate Android dijalankan 17 November 2026 memakai profil `rele
 | `appIdentifier` | `com.codebyv.patchradar` |
 | Versi / versionCode | `1.0.0` / `2` |
 | Fingerprint | `f60e40c0eba1f555c4404f2514fa6497f84b3612` |
-| APK | `D:\builds\patchradar-release-vc2.apk` — 109.322.643 byte (104,26 MB) |
+| APK | `<artifacts>\patchradar-release-vc2.apk` — 109.322.643 byte (104,26 MB) |
 | SHA-256 APK | `DE535690DACA9D15F77539F3039F17872AE3DAF6E874580C2F81C55CDAB3088D` |
 | Keystore | EAS remote `Build Credentials EPkjlDM7tu` (tidak diunduh, tidak ada di repo) |
 | Environment build | EAS `production`: `EXPO_PUBLIC_SUPABASE_URL` dan `EXPO_PUBLIC_SUPABASE_ANON_KEY` (publik, visibility plain text) |
@@ -184,7 +184,7 @@ Started by               codebyv10
 Bukti hash artefak:
 
 ```powershell
-Get-FileHash D:\builds\patchradar-release-vc2.apk -Algorithm SHA256
+Get-FileHash <artifacts>\patchradar-release-vc2.apk -Algorithm SHA256
 ```
 
 ```text
