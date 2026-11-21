@@ -192,7 +192,7 @@ See [`docs/limitations.md`](docs/limitations.md) for the complete list.
 | `app/` | Expo Router application, components, hooks, SQLite access, tests. |
 | `supabase/functions/scan/` | Scan Edge Function and its unit tests. |
 | `supabase/migrations/` | Schema, indexes, RLS policies, retention function. |
-| `fixtures/`, `patchradar-fixture-large/` | Real API responses and lockfile fixtures used by tests. |
+| `fixtures/` | Real API responses and lockfile fixtures used by tests. |
 | `scripts/` | CLI probes for external APIs, package counting, and RLS checks. |
 | `docs/` | PRD, design, setup, security, validation, and release evidence. |
 
