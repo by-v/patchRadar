@@ -1,5 +1,5 @@
-import { useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { TextInputInstance } from 'react-native';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -19,6 +19,7 @@ import {
   offersHistory,
 } from '@/errors/messages';
 import { formatCountdown } from '@/lib/countdown';
+import { takePendingRepoUrl } from '@/lib/repo-picker';
 import { rememberScanResult } from '@/lib/scan-session';
 import { parseRepoLink } from '@/lib/url';
 import type { ScanFailure } from '@/types/scan';
@@ -51,6 +52,23 @@ export default function ScanScreen() {
   const [retryDeadline, setRetryDeadline] = useState<number | null>(null);
   const [clockNow, setClockNow] = useState(() => Date.now());
   const inputRef = useRef<TextInputInstance>(null);
+
+  // Repo tersimpan menitipkan tautan di memori; konsumsi sekali setiap layar
+  // kembali fokus agar kolom langsung terisi tanpa efek render berantai.
+  useFocusEffect(
+    useCallback(() => {
+      const pending = takePendingRepoUrl();
+      if (!pending) return;
+
+      const parsed = parseRepoLink(pending);
+      if (!parsed.ok) return;
+
+      setUrl(parsed.value.url);
+      setShowError(false);
+      // Hitung mundur 429 tetap berjalan; hanya error lain yang dibersihkan.
+      setScanError((current) => (current?.code === 'RATE_LIMITED' ? current : null));
+    }, []),
+  );
 
   const validation = parseRepoLink(url);
   const error = showError && !validation.ok ? validation.error.message : undefined;

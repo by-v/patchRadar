@@ -6,7 +6,7 @@
  * mencatat apakah penyimpanan cloud berhasil.
  */
 
-export const LOCAL_SCHEMA_VERSION = 1;
+export const LOCAL_SCHEMA_VERSION = 2;
 
 export const LOCAL_SCHEMA_SQL = `
 create table if not exists local_scans (
@@ -43,6 +43,18 @@ create table if not exists local_meta (
   key text primary key not null,
   value text not null
 );
+
+create table if not exists saved_repos (
+  id text primary key not null,
+  repo_full_name text not null,
+  repo_url text not null unique,
+  note text not null default '',
+  created_at text not null,
+  updated_at text not null
+);
+
+create index if not exists saved_repos_updated_at_idx
+  on saved_repos (updated_at desc);
 `;
 
 /** Parameter yang aman di-bind ke SQLite (tanpa objek bernama). */
@@ -91,4 +103,14 @@ export interface LocalFindingRow {
 export interface LocalMetaRow {
   key: string;
   value: string;
+}
+
+/** Baris daftar repo tersimpan lokal (fitur di luar MVP). */
+export interface SavedRepoRow {
+  id: string;
+  repo_full_name: string;
+  repo_url: string;
+  note: string;
+  created_at: string;
+  updated_at: string;
 }

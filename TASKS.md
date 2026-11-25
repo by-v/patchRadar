@@ -39,7 +39,8 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 | Minggu 4 — Uji, keamanan, rilis, validasi | 12 | 24 jam | 1 | 0 | 11 | 0 |
 | **Buffer (cadangan)** | **—** | **16 jam** | **—** | **—** | **—** | **—** |
 | Final dan Laporan | 4 | 8 jam | 4 | 0 | 0 | 0 |
-| **Total** | **65** | **117,5 jam + 16 jam buffer** | **5** | **0** | **60** | **0** |
+| Tambahan di luar MVP | 1 | 4 jam | 0 | 0 | 1 | 0 |
+| **Total** | **66** | **121,5 jam + 16 jam buffer** | **5** | **0** | **61** | **0** |
 
 > Estimasi adalah target perencanaan, bukan komitmen. Jika sebuah tugas melebihi 3 jam, pecah menjadi tugas baru dan perbarui tabel ini — kecuali tugas `[MANUAL]` sesi validasi, yang dihitung dari jumlah peserta (lihat `T-W4-05`).
 >
@@ -1855,6 +1856,41 @@ Dokumen ini adalah rencana eksekusi turunan dari `docs/PRD.md` v1.1. PRD tetap m
 
 ---
 
+## Tambahan di Luar MVP
+
+### T-X-01 — Floating Help Widget: daftar repo tersimpan
+- **Tipe:** `[AGENT]`
+- **Tujuan:** Menyediakan tombol mengambang berlogo PatchRadar untuk menyimpan tautan repo dan catatan singkat di perangkat, lalu memakainya kembali tanpa membuka GitHub.
+- **Prasyarat:** —
+- **File/folder:** `app/src/db/schema.ts`, `app/src/db/repository.ts`, `app/src/lib/saved-repo.ts`, `app/src/components/floating-help-widget.tsx`, `app/src/components/saved-repo-card.tsx`, `app/src/app/saved-repos.tsx`, `app/src/app/_layout.tsx`, `app/src/app/(tabs)/_layout.tsx`, `app/src/app/(tabs)/index.tsx`, `app/src/components/screen.tsx`
+- **Langkah:**
+  1. Tambah tabel `saved_repos` dan naikkan versi skema lokal.
+  2. Implementasikan validasi, normalisasi, deteksi duplikat, dan CRUD repo tersimpan.
+  3. Tambah FAB dan layar modal daftar repo tersimpan.
+  4. Hubungkan aksi **Gunakan** ke kolom Pindai lewat penampung memori sekali pakai.
+  5. Jalankan `lint`, `typecheck`, dan `test`; catat hasil apa adanya.
+- **Memenuhi:** — (fitur di luar MVP; dikerjakan atas instruksi pengembang)
+- **Kriteria selesai (AC):**
+  - [x] FAB tampil di layar tab dan membuka daftar repo tersimpan.
+  - [x] Repo dapat ditambah, diubah, disalin, dipakai di Pindai, dan dihapus.
+  - [x] Data tetap ada setelah aplikasi ditutup dan dibuka kembali.
+  - [x] Tautan tidak valid dan duplikat ditolak dengan pesan bahasa Indonesia.
+  - [x] `lint`, `typecheck`, dan `test` lulus.
+  - [x] Uji manual di perangkat/emulator dicatat dengan keluaran mentah.
+- **Estimasi:** 4 jam
+- [x] Tugas selesai
+- **Catatan hasil:**
+  - Implementasi selesai dan di-commit 25 November 2026 sebagai `T-X-01`; fitur berada di luar MVP.
+  - FAB final adalah tombol **tetap** di kanan atas tab bar. Percobaan versi yang dapat digeser (gestur + `GestureHandlerRootView`) dibatalkan atas permintaan pengembang; berkas `fab-position.ts`/test-nya dan pembungkus root view dihapus.
+  - Uji perangkat oleh pengembang 25 November 2026 (Expo Go di Android dan web): FAB tampil, modal buka/tutup, tambah/ubah/salin/pakai/hapus repo, serta data bertahan setelah aplikasi ditutup — tidak ditemukan error. Bukti berupa konfirmasi pengembang; log mentah tidak tersedia. Penyimpangan dari `AGENTS.md` butir 3 dicatat di tabel keputusan.
+  - Keluaran mentah `npm test -- --runInBand`: `Test Suites: 18 passed, 18 total`, `Tests: 172 passed, 172 total`, `Time: 8.357 s`. `requestId`: tidak ada (perintah lokal).
+  - Keluaran mentah `npm run lint`: selesai tanpa error (exit 0); `requestId`: tidak ada.
+  - Keluaran mentah `npm run typecheck`: selesai tanpa error (exit 0); `requestId`: tidak ada.
+  - Keluaran mentah `npx expo export --platform web --output-dir .expo/typegen`: `Web Bundled 7286ms node_modules\expo-router\entry.js (1303 modules)`, `Exported: .expo/typegen`; `requestId`: tidak ada.
+  - Verifikasi ulang sebelum commit (26 November 2026): `Test Suites: 18 passed, 18 total`, `Tests: 172 passed, 172 total`, `Time: 21.69 s`; `lint` dan `typecheck` selesai tanpa error (exit 0).
+
+---
+
 ## Matriks Cakupan
 
 Setiap requirement PRD harus memiliki minimal satu tugas. Tanda `(S)` pada requirement berarti prioritas S.
@@ -1980,6 +2016,9 @@ Catatan penyimpangan atau perubahan keputusan terhadap PRD. Wajib diisi sebelum 
 | 20 November 2026 | `T-W4-10` | Perilaku `T-W3-12` diubah: tema tidak lagi mengikuti `useColorScheme()`/skema sistem. Pengguna memilih **Gelap** atau **Terang** secara manual di layar Tentang; default **Gelap**; pilihan disimpan di perangkat. `app.json` tetap `userInterfaceStyle: "automatic"` agar kedua skema diizinkan native, dengan override `Appearance.setColorScheme()` saat runtime. Tugas baru dikerjakan sebelum gate `T-W4-08` dan sebelum build APK final. | Pengembang meminta dua opsi manual dan menolak pengikutan otomatis ke perangkat. Perubahan ini masih dalam ruang `NFR-11` (S), tidak menambah fitur Backlog Tahap 2, dan hanya menyentuh aplikasi sehingga deploy `scan` v11 tidak berubah. | Ya — instruksi pengembang, 20 November 2026 |
 | 20 November 2026 | `T-W4-08`, `T-F-02` | Pekerjaan pendukung gate (audit ulang keamanan berbasis sumber pada `7fd6288` dan penyusunan README) dilakukan sebelum build APK final. `T-W4-08` tetap `[ ]` dan `T-F-02` tetap `[ ]`: keduanya baru ditutup setelah APK final terpasang, smoke test perangkat, skrip demo, dan daftar artefak tersedia. | Pengembang meminta penutupan celah dokumen yang murah terlebih dahulu, sementara uji perangkat tetap menjadi tanggung jawab pengembang. Tidak ada perubahan kode, dependensi, atau Edge Function; bukti lama tidak diklaim sebagai bukti build final. | Ya — instruksi pengembang, 20 November 2026 |
 | 20 November 2026 | `T-W4-02`, `T-W4-08` | Agent menjalankan perintah EAS build (`npx eas-cli@latest build --profile release --platform android`) atas instruksi eksplisit pengembang, menghasilkan `vc3` dari commit `11d1def`. Tugas `[MANUAL]` tetap tidak dianggap selesai oleh agent: pemasangan APK dan smoke test di Realme XT dilakukan pengembang, bukan disimulasikan. | Pengembang meminta agent yang menjalankan build setelah sebelumnya diberi panduan. Kredensial EAS sudah login (`codebyv10`) dan keystore dikelola EAS; tidak ada secret di repo. Gate rilis tidak ditutup sebelum bukti perangkat diterima. | Ya — instruksi pengembang, 20 November 2026 |
+| 25 November 2026 | `T-X-01` | **Percobaan FAB dapat digeser dibatalkan:** FAB kembali menjadi tombol tetap di kanan atas tab bar. Berkas batas gerak (`fab-position.ts` + test) dan `GestureHandlerRootView` di root layout dihapus. | Pengembang meminta fitur geser dikembalikan ke semula setelah uji perangkat memunculkan error `GestureDetector must be used as a descendant of GestureHandlerRootView`. Tidak ada perubahan data, backend, atau dependensi. | Ya — instruksi pengembang, 25 November 2026 |
+| 25 November 2026 | `T-X-01` | **Penutupan dengan bukti pengembang:** AC uji perangkat dicentang berdasarkan konfirmasi pengembang dari uji Expo Go di Android dan web (25 November 2026), bukan keluaran mentah. | `AGENTS.md` butir 3 mewajibkan keluaran mentah untuk mencentang AC; pengembang meminta tugas ditutup dan menyatakan pengujian lulus tanpa error. Penyimpangan dicatat agar status ini tidak disalahartikan sebagai bukti otomatis. | Ya — instruksi pengembang, 25 November 2026 |
+| 25 November 2026 | `T-X-01` | **Fitur baru di luar MVP:** Floating Help Widget berupa tombol mengambang berlogo PatchRadar yang membuka daftar repo tersimpan lokal (tautan repo + catatan singkat), dengan aksi Gunakan/Salin/Edit/Hapus dan penyimpanan SQLite tanpa sinkronisasi cloud. Dikerjakan sebelum gate `T-W4-08` sebagai pengecualian; laporan final wajib menyesuaikan cakupan dan keterbatasan fitur ini. | Pengembang meminta fitur ini langsung dikerjakan dan akan menguji sendiri sebelum commit. Fitur tidak mengubah backend, tidak menambah dependensi, dan tidak mengirim data ke jaringan. | Ya — instruksi pengembang, 25 November 2026 |
 
 
 ---

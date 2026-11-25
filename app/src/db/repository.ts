@@ -7,9 +7,15 @@
  * sebagai parameter, bukan disisipkan ke SQL.
  */
 
+import type { SavedRepo } from '@/lib/saved-repo';
 import type { ScanFinding, ScanResult } from '@/types/scan';
 
-import type { LocalFindingRow, LocalScanRow, SqliteDatabase } from './schema';
+import type {
+  LocalFindingRow,
+  LocalScanRow,
+  SavedRepoRow,
+  SqliteDatabase,
+} from './schema';
 
 function parsePayload<T>(payloadJson: string): T | null {
   try {
@@ -167,4 +173,51 @@ export async function deleteScanResult(db: SqliteDatabase, scanId: string): Prom
     await db.runAsync('delete from local_findings where scan_id = ?', [scanId]);
     await db.runAsync('delete from local_scans where scan_id = ?', [scanId]);
   });
+}
+
+function mapSavedRepoRow(row: SavedRepoRow): SavedRepo {
+  return {
+    id: row.id,
+    repoFullName: row.repo_full_name,
+    repoUrl: row.repo_url,
+    note: row.note,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
+
+/** Daftar repo tersimpan, terbaru diperbarui lebih dulu. */
+export async function listSavedRepos(db: SqliteDatabase): Promise<SavedRepo[]> {
+  const rows = await db.getAllAsync<SavedRepoRow>(
+    'select id, repo_full_name, repo_url, note, created_at, updated_at from saved_repos order by updated_at desc, id desc',
+  );
+  return rows.map(mapSavedRepoRow);
+}
+
+/** Tambah satu repo tersimpan. Tautan duplikat ditolak oleh constraint unik. */
+export async function saveSavedRepo(db: SqliteDatabase, repo: SavedRepo): Promise<void> {
+  await db.runAsync(
+    `insert into saved_repos (
+       id, repo_full_name, repo_url, note, created_at, updated_at
+     ) values (?, ?, ?, ?, ?, ?)`,
+    [repo.id, repo.repoFullName, repo.repoUrl, repo.note, repo.createdAt, repo.updatedAt],
+  );
+}
+
+/** Perbarui repo tersimpan berdasarkan `id`. */
+export async function updateSavedRepo(db: SqliteDatabase, repo: SavedRepo): Promise<void> {
+  await db.runAsync(
+    `update saved_repos set
+       repo_full_name = ?,
+       repo_url = ?,
+       note = ?,
+       updated_at = ?
+     where id = ?`,
+    [repo.repoFullName, repo.repoUrl, repo.note, repo.updatedAt, repo.id],
+  );
+}
+
+/** Hapus satu repo tersimpan. */
+export async function deleteSavedRepo(db: SqliteDatabase, id: string): Promise<void> {
+  await db.runAsync('delete from saved_repos where id = ?', [id]);
 }

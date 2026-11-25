@@ -46,6 +46,7 @@ function RootLayoutContent() {
         }}>
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="scan" />
+        <Stack.Screen name="saved-repos" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
   );

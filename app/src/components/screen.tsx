@@ -32,7 +32,11 @@ export function Screen({
   contentStyle,
 }: ScreenProps) {
   const insets = useSafeAreaInsets();
-  const paddingBottom = (hasTabBar ? TabBarHeight + Spacing.three : 0) + insets.bottom + Spacing.four;
+  // Ruang tambahan agar tombol repo tersimpan tidak menutupi konten terakhir.
+  const paddingBottom =
+    (hasTabBar ? TabBarHeight + Spacing.three + Spacing.six : 0) +
+    insets.bottom +
+    Spacing.four;
 
   const body = scroll ? (
     <ScrollView

@@ -5,13 +5,14 @@
 ![Platform](https://img.shields.io/badge/platform-Android-3DDC84?logo=android&logoColor=white)
 ![Expo SDK](https://img.shields.io/badge/Expo_SDK-58-000020?logo=expo&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
 ![Status](https://img.shields.io/badge/status-MVP-orange)
 
 PatchRadar is an Android-first Expo application that scans a public GitHub repository for npm dependency vulnerabilities and turns the results into a short, prioritized action list. Paste a repository URL; PatchRadar reads the manifest, matches packages against OSV.dev, enriches findings with CISA KEV and EPSS, and labels each finding **Fix now** (*Tambal sekarang*), **Schedule** (*Jadwalkan*), or **Monitor** (*Pantau*).
 
 The application interface and materials under `docs/` are in Indonesian. This README and all code identifiers are in English.
 
-> **Project status:** the MVP is functionally complete. The release gate (`T-W4-08`), final report, demo, and artifact handover are still open. See [`TASKS.md`](TASKS.md) for task-level status and evidence.
+> **Project status (v1.0.0):** the MVP is functionally complete and an out-of-MVP add-on (`T-X-01`, saved repositories) is implemented and device-tested by the developer. The release gate (`T-W4-08`), final report, demo, and artifact handover are still open. See [`TASKS.md`](TASKS.md) for task-level status and evidence.
 
 ## Why PatchRadar
 
@@ -30,6 +31,17 @@ PatchRadar narrows the question to: **"From this public repository, which depend
 - **Actionable findings** — every finding includes severity, a one-sentence reason in Indonesian, references, and a copyable upgrade command for direct dependencies.
 - **Offline history** — scans and details are stored in SQLite, so History → Result → Detail still works in airplane mode.
 - **Graceful degradation** — partial results are shown with a banner when KEV or EPSS is unavailable; unexpected failures return a stable error code and a `requestId`.
+
+### Saved repositories (out of MVP)
+
+A floating PatchRadar button on the tab screens opens a local **Repo tersimpan** list:
+
+- Save a GitHub repository URL with an optional note (up to 280 characters, 50 repositories).
+- **Gunakan** fills the Scan field and switches to the Scan tab; **Salin**, **Ubah**, and **Hapus** manage each entry.
+- Invalid URLs and case-insensitive duplicates are rejected with Indonesian messages.
+- Data lives only in the on-device SQLite database (schema v2, `saved_repos` table). It is never sent to Supabase or any other server, and it is lost on uninstall.
+
+This add-on is outside the MVP scope and is tracked as `T-X-01` in [`TASKS.md`](TASKS.md).
 
 ## How it works
 
@@ -147,7 +159,7 @@ Run backend checks from the repository root:
 node --test "supabase/functions/scan/**/*.test.ts"
 ```
 
-**Last verified:** 22 November 2026 at commit `cc4c4be` — 16 app suites / 160 tests passed, 216 backend tests passed, and ESLint plus TypeScript `strict` checks passed.
+**Last verified:** 26 November 2026 — 18 app suites / 172 tests passed, and ESLint plus TypeScript `strict` checks passed. The backend suite (216 tests) was last verified on 22 November 2026 at commit `cc4c4be` and was not re-run for the `T-X-01` change.
 
 The backend suite covers URL validation, lockfile parsing, semver resolution, OSV/KEV/EPSS behavior, priority rules, rate limits, RLS-facing persistence, retention, and end-to-end handler responses.
 
@@ -180,6 +192,7 @@ Full review: [`docs/security-review.md`](docs/security-review.md) and [`docs/rls
 - Only public GitHub repositories, the default branch, and the npm ecosystem are supported. Yarn/pnpm lockfiles are not primary inputs; without a lockfile, only direct dependencies are scanned and results are marked **estimated**.
 - Limits per scan: 1,500 unique packages and a 5 MB manifest. Rate limits: 5 scans per 10 minutes per anonymous user, plus 20 scans per hour per hashed IP when enabled. Requests that end in 404 still count toward the quota.
 - Local history is not restored after uninstall. Cloud copies are best-effort and are not re-synced to the device in this MVP; retention cleanup depends on a later successful scan, and a real purge of data older than 90 days has not been verified.
+- Saved repositories (`T-X-01`, out of MVP) are stored only on the device. They are not synced, exported, or restored after uninstall, and they do not affect scans or the backend.
 - Validation used a two-device self-test, so label comprehension and decision-support metrics are not yet measured. Measured p95 time to result was 5,621 ms for a 453-package repository (n=5, `T-W4-03`) and was not re-measured during final validation.
 - Out of scope: GitHub login, private repositories, notifications, scheduled monitoring, pull requests, NVD, PDF export, scan comparison, and team dashboards.
 

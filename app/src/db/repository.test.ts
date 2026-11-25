@@ -2,13 +2,19 @@ import { DatabaseSync } from 'node:sqlite';
 
 import type { ScanFinding, ScanResult } from '@/types/scan';
 
+import type { SavedRepo } from '@/lib/saved-repo';
+
 import {
+  deleteSavedRepo,
   deleteScanResult,
   getScanFinding,
   getScanResult,
+  listSavedRepos,
   listScanFindings,
   listScanResults,
+  saveSavedRepo,
   saveScanResult,
+  updateSavedRepo,
 } from './repository';
 import { getSchemaVersion, getStoredSchemaVersion, migrateLocalDatabase } from './migrations';
 import type { SqliteDatabase, SqliteParam } from './schema';
@@ -111,7 +117,7 @@ describe('migrasi SQLite lokal', () => {
       "select name from sqlite_master where type = 'table'",
     );
     expect(tables.map((table) => table.name).sort()).toEqual(
-      expect.arrayContaining(['local_findings', 'local_meta', 'local_scans']),
+      expect.arrayContaining(['local_findings', 'local_meta', 'local_scans', 'saved_repos']),
     );
 
     const columns = await db.getAllAsync<{ name: string }>('pragma table_info(local_scans)');
@@ -124,8 +130,8 @@ describe('migrasi SQLite lokal', () => {
     await migrateLocalDatabase(db);
     await expect(migrateLocalDatabase(db)).resolves.toBeUndefined();
 
-    await expect(getSchemaVersion(db)).resolves.toBe(1);
-    await expect(getStoredSchemaVersion(db)).resolves.toBe('1');
+    await expect(getSchemaVersion(db)).resolves.toBe(2);
+    await expect(getStoredSchemaVersion(db)).resolves.toBe('2');
   });
 });
 
@@ -213,5 +219,103 @@ describe('repository SQLite lokal', () => {
   it('mengembalikan null untuk scan atau temuan yang tidak ada', async () => {
     await expect(getScanResult(db, 'tidak-ada')).resolves.toBeNull();
     await expect(getScanFinding(db, 'tidak-ada', 'tidak-ada')).resolves.toBeNull();
+  });
+});
+
+function savedRepo(overrides: Partial<SavedRepo> = {}): SavedRepo {
+  return {
+    id: 'saved-1',
+    repoFullName: 'expressjs/express',
+    repoUrl: 'https://github.com/expressjs/express',
+    note: 'Repo latihan',
+    createdAt: '2026-11-14T10:00:00.000Z',
+    updatedAt: '2026-11-14T10:00:00.000Z',
+    ...overrides,
+  };
+}
+
+describe('repository repo tersimpan', () => {
+  let db: TestDatabase;
+
+  beforeEach(async () => {
+    db = createTestDatabase();
+    await migrateLocalDatabase(db);
+  });
+
+  afterEach(() => {
+    db.close();
+  });
+
+  it('menyimpan lalu membaca kembali repo tersimpan', async () => {
+    const repo = savedRepo();
+    await saveSavedRepo(db, repo);
+
+    await expect(listSavedRepos(db)).resolves.toEqual([repo]);
+  });
+
+  it('mengurutkan dari waktu pembaruan terbaru', async () => {
+    await saveSavedRepo(
+      db,
+      savedRepo({
+        id: 'saved-lama',
+        repoUrl: 'https://github.com/lama/repo',
+        repoFullName: 'lama/repo',
+        updatedAt: '2026-11-14T10:00:00.000Z',
+      }),
+    );
+    await saveSavedRepo(
+      db,
+      savedRepo({
+        id: 'saved-baru',
+        repoUrl: 'https://github.com/baru/repo',
+        repoFullName: 'baru/repo',
+        updatedAt: '2026-11-15T10:00:00.000Z',
+      }),
+    );
+
+    const repos = await listSavedRepos(db);
+    expect(repos.map((repo) => repo.id)).toEqual(['saved-baru', 'saved-lama']);
+  });
+
+  it('memperbarui catatan dan tautan tanpa membuat baris baru', async () => {
+    const repo = savedRepo();
+    await saveSavedRepo(db, repo);
+
+    const updated = savedRepo({
+      repoFullName: 'expressjs/express-js',
+      repoUrl: 'https://github.com/expressjs/express-js',
+      note: 'Catatan baru',
+      updatedAt: '2026-11-15T10:00:00.000Z',
+    });
+    await updateSavedRepo(db, updated);
+
+    const repos = await listSavedRepos(db);
+    expect(repos).toHaveLength(1);
+    expect(repos[0]).toEqual(updated);
+  });
+
+  it('menolak tautan duplikat dan menghapus tanpa menyentuh baris lain', async () => {
+    const kept = savedRepo({ id: 'saved-1' });
+    const removed = savedRepo({
+      id: 'saved-2',
+      repoUrl: 'https://github.com/lain/repo',
+      repoFullName: 'lain/repo',
+    });
+    await saveSavedRepo(db, kept);
+    await saveSavedRepo(db, removed);
+
+    await expect(
+      saveSavedRepo(
+        db,
+        savedRepo({
+          id: 'saved-3',
+          note: 'Duplikat',
+        }),
+      ),
+    ).rejects.toThrow();
+
+    await deleteSavedRepo(db, removed.id);
+
+    await expect(listSavedRepos(db)).resolves.toEqual([kept]);
   });
 });

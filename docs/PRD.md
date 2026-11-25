@@ -1027,6 +1027,8 @@ Disusun setelah MVP lulus. Urutan memakai nilai (1–5), usaha (1–5), dan rasi
 
 Urutan eksekusi yang disarankan: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 → 10, dengan 4 dan 5 dikerjakan berurutan karena ketergantungan. Setiap fitur baru wajib memperbarui PRD dan menambah acceptance criteria.
 
+> **Catatan 25 November 2026:** Floating Help Widget berupa daftar repo tersimpan lokal (tautan repo + catatan singkat, dengan aksi Gunakan/Salin/Edit/Hapus) dikerjakan atas instruksi pengembang sebelum gate MVP ditutup. Fitur ini **di luar cakupan MVP** dan tidak mengubah alur pemindaian, backend, maupun RLS. Tombol mengambangnya bersifat tetap di kanan atas tab bar; percobaan versi yang dapat digeser dibatalkan. Acceptance criteria dan catatan keputusan dicatat di `TASKS.md` sebagai `T-X-01`; laporan final wajib mencantumkan status uji dan keterbatasannya.
+
 ---
 
 ## 19. Pertanyaan Terbuka dan Asumsi
